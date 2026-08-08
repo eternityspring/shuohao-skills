@@ -18,6 +18,9 @@ import {
   STYLE_PRESETS,
   SUPPORTED_STYLES,
   needsUiTranslation,
+  DEFAULT_LANG,
+  isChinese,
+  isTraditionalChinese,
   slug,
   stylePreset,
   strings,
@@ -27,7 +30,10 @@ import {
 
 const here = dirname(fileURLToPath(import.meta.url));
 const examples = join(here, '..', 'examples');
-const SOURCE = readFileSync(join(examples, '渡口.txt'), 'utf8');
+// 正规化换行：Windows 上 git 会把样例 checkout 成 CRLF，而 chunkText 内部
+// 已经把 \r\n 换成 \n。不在这里对齐，断言就会拿 CRLF 原文去比对 LF 的块，
+// 在 Windows 全线报错，在 macOS／Linux 却看不出来。
+const SOURCE = readFileSync(join(examples, '渡口.txt'), 'utf8').replace(/\r\n/g, '\n');
 const CAST = JSON.parse(readFileSync(join(examples, '渡口-cast.json'), 'utf8')).characters;
 
 let passed = 0;
@@ -162,7 +168,12 @@ eq(validateCast(CAST, null).length, 0, '不给原文时跳过引文校验');
 const md = renderMarkdown(CAST, '渡口');
 ok(md.includes('# 渡口 — 角色表'), 'Markdown 有标题');
 for (const c of CAST) ok(md.includes(`## ${c.name}`), `Markdown 包含 ${c.name}`);
-ok(md.includes('角色设定图提示词'), 'Markdown 含设定图提示词');
+// 默认语言是 zh-TW，所以不传 lang 时界面文案该是正体
+ok(md.includes('角色設定圖提示詞'), 'Markdown 默认用正体界面文案');
+ok(
+  renderMarkdown(CAST, '渡口', '', 'zh').includes('角色设定图提示词'),
+  'Markdown 显式指定 zh 时用简体界面文案',
+);
 ok(renderMarkdown(CAST, 'Ferry', '', 'en').includes('# Ferry — Cast'), 'Markdown 跟随语言参数');
 
 const html = renderHtml(CAST, '渡口');
@@ -263,7 +274,28 @@ ok(fr.includes('lang="fr"'), '未知语言码仍写进 html lang');
 ok(fr.includes('Synopsis') || !fr.includes('故事摘要'), '未知语言码用英文界面骨架');
 eq(strings('zh').synopsis, '故事摘要', 'strings(zh)');
 eq(strings('nope').synopsis, strings('en').synopsis, 'strings 未知码退回 en');
-for (const l of ['zh', 'en', 'ja']) ok(SUPPORTED_UI_LANGS.includes(l), `内置 ${l} 界面`);
+for (const l of ['zh-TW', 'zh', 'en', 'ja']) ok(SUPPORTED_UI_LANGS.includes(l), `内置 ${l} 界面`);
+
+// 台湾正体内置
+const tw = renderHtml(CAST, '渡口', DOC.summary, 'zh-TW');
+ok(tw.includes('lang="zh-TW"'), 'zh-TW 报告的 html lang 正确');
+ok(tw.includes('角色設定集') && !tw.includes('角色设定集'), 'zh-TW 界面用正体字');
+ok(tw.includes('搜尋角色'), 'zh-TW 用「搜尋」而不是「搜索」');
+ok(tw.includes('負向提示詞'), 'zh-TW 用「負向提示詞」而不是「反向提示词」');
+ok(tw.includes('尚未生圖') || tw.includes('生圖提示詞'), 'zh-TW 用「生圖」而不是「出图」');
+ok(tw.includes('依戲份排序'), 'zh-TW 用「依戲份排序」');
+// 字体要跟着换，Songti SC 那串在台湾机器上多半没装
+ok(tw.includes('Songti TC') && !tw.includes('Songti SC'), 'zh-TW 挑 TC 字体');
+ok(zh.includes('Songti SC') && !zh.includes('Songti TC'), 'zh 仍挑 SC 字体');
+ok(en.includes('Songti SC'), '非中文沿用原字体栈');
+// 地区变体都算正体，但只有 zh-TW 有内置文案
+ok(isTraditionalChinese('zh-HK') && isTraditionalChinese('zh-Hant'), 'zh-HK／zh-Hant 算正体');
+ok(!isTraditionalChinese('zh') && !isTraditionalChinese('ja'), 'zh／ja 不算正体');
+ok(isChinese('zh-TW') && isChinese('zh') && !isChinese('ja'), 'isChinese 认地区变体');
+eq(DEFAULT_LANG, 'zh-TW', '默认语言是台湾正体');
+eq(strings('zh-TW').synopsis, '故事摘要', 'strings(zh-TW)');
+// zh 的各地区变体走同一条中文校验，不该因为语言码带地区就报错
+eq(validateCast(CAST, SOURCE, 'zh-TW').length, 0, 'zh-TW 校验通过');
 
 // 日语内置
 const ja = renderHtml(CAST, '渡し場', 'あらすじの本文', 'ja');
@@ -354,14 +386,17 @@ ok(
 
 /* ---------------- 画风预设 ---------------- */
 
-for (const id of ['realistic', 'ghibli']) ok(SUPPORTED_STYLES.includes(id), `内置 ${id} 预设`);
+for (const id of ['realistic', 'ghibli', 'photoreal']) {
+  ok(SUPPORTED_STYLES.includes(id), `内置 ${id} 预设`);
+}
 eq(stylePreset('nope').render, STYLE_PRESETS.realistic.render, '未知风格退回默认');
 // 每个预设都要五块齐全，缺一块就会跟另一个预设混搭出四不像
 for (const [id, p] of Object.entries(STYLE_PRESETS)) {
   for (const k of ['render', 'surface', 'lighting', 'negative', 'tags']) {
     ok(p[k] && p[k].length, `${id} 预设有 ${k}`);
   }
-  ok(p.label.zh && p.label.en && p.label.ja, `${id} 预设有三语标签`);
+  // 内置几套界面文案，标签就得给几套，否则那个语言的报告会露出别的语言
+  for (const l of SUPPORTED_UI_LANGS) ok(p.label[l], `${id} 预设有 ${l} 标签`);
 }
 // 这是整件事最容易搞反的地方：两个预设的反向提示词几乎相反
 ok(!/photorealistic|3d render/i.test(STYLE_PRESETS.realistic.negative), 'realistic 不禁写实');
@@ -370,6 +405,30 @@ ok(/photorealistic/i.test(STYLE_PRESETS.ghibli.negative), 'ghibli 必须禁写�
 ok(/visible pores/i.test(STYLE_PRESETS.realistic.surface), 'realistic 要毛孔');
 ok(/no pores/i.test(STYLE_PRESETS.ghibli.surface), 'ghibli 明确不要毛孔');
 ok(STYLE_PRESETS.realistic.surface !== STYLE_PRESETS.ghibli.surface, '两个预设的表面处理不同');
+
+// photoreal 跟 realistic 站同一边（都要真实感），但禁的东西相反：
+// realistic 仍是画出来的，photoreal 恰恰要禁「画出来的」
+ok(!/photorealistic|3d render/i.test(STYLE_PRESETS.photoreal.negative), 'photoreal 不禁写实');
+ok(
+  /illustration/i.test(STYLE_PRESETS.photoreal.negative) &&
+    /painting/i.test(STYLE_PRESETS.photoreal.negative) &&
+    /anime/i.test(STYLE_PRESETS.photoreal.negative),
+  'photoreal 必须禁 illustration／painting／anime',
+);
+ok(!/illustration/i.test(STYLE_PRESETS.realistic.negative), 'realistic 不禁 illustration——它本来就是画');
+ok(/visible pores/i.test(STYLE_PRESETS.photoreal.surface), 'photoreal 要毛孔');
+ok(
+  STYLE_PRESETS.photoreal.render !== STYLE_PRESETS.realistic.render &&
+    STYLE_PRESETS.photoreal.surface !== STYLE_PRESETS.realistic.surface,
+  'photoreal 与 realistic 是两套，不是同一套',
+);
+// 版面规则不随风格变：三个预设都得分区打光
+for (const id of SUPPORTED_STYLES) {
+  const p = STYLE_PRESETS[id];
+  const zoned = /LEFT ZONE/.test(p.lighting) && /RIGHT ZONE/.test(p.lighting);
+  const flat = /whole sheet/.test(p.lighting);
+  ok(zoned || flat, `${id} 的打光要么分区要么明确全图平光`);
+}
 
 // 校验器要能抓住风格与反向提示词搞反
 const wrongStyle = clone();
@@ -384,6 +443,25 @@ ok(
   'realistic 却禁 photorealistic 会报错',
 );
 eq(validateCast(CAST, SOURCE, 'zh', 'realistic').length, 0, '样例按 realistic 校验通过');
+
+// photoreal：负向提示词漏了「画出来的」那几个词要报错，否则模型交插画
+const photorealCast = clone();
+for (const c of photorealCast) {
+  c.image.negativePrompt = STYLE_PRESETS.photoreal.negative;
+  c.image.sheet = `${STYLE_PRESETS.photoreal.render}. ${c.image.sheet}`;
+}
+eq(validateCast(photorealCast, SOURCE, 'zh-TW', 'photoreal').length, 0, 'photoreal 角色卡校验通过');
+ok(
+  validateCast(clone(), SOURCE, 'zh', 'photoreal').some((x) => x.includes('必须禁 illustration')),
+  '样例的负向提示词没禁 illustration，按 photoreal 校验会报错',
+);
+// photoreal 的 sheet 里必须带自己的渲染句，否则画风会飘回插画
+const photorealNoRender = clone();
+for (const c of photorealNoRender) c.image.negativePrompt = STYLE_PRESETS.photoreal.negative;
+ok(
+  validateCast(photorealNoRender, SOURCE, 'zh', 'photoreal').some((x) => x.includes('没有 style=photoreal')),
+  'photoreal 的 sheet 缺渲染句会报错',
+);
 
 /* ---------------- 真实感 ---------------- */
 

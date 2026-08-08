@@ -116,12 +116,19 @@ export function slug(name) {
 /* i18n                                                                */
 /* ------------------------------------------------------------------ */
 /*
- * 报告语言。默认 zh。
- * 内置 zh / en 两套界面文案；给了其他语言码就用 en 的界面骨架，
+ * 报告语言。默认 zh-TW（台湾正体）。
+ * 内置 zh-TW / zh / en / ja 四套界面文案；给了其他语言码就用 en 的界面骨架，
  * 但角色内容仍按那个语言生成——界面词没翻译总比整篇乱掉强。
  */
 
-export const DEFAULT_LANG = 'zh';
+export const DEFAULT_LANG = 'zh-TW';
+
+/** 中文语言码（含各地区变体），决定人类可读字段该不该是汉字。 */
+export const isChinese = (lang) => typeof lang === 'string' && /^zh(-|$)/i.test(lang);
+
+/** 正体／繁体中文——只影响字体挑选，用词差异由生成阶段负责。 */
+export const isTraditionalChinese = (lang) =>
+  typeof lang === 'string' && /^zh-(tw|hk|mo|hant)/i.test(lang);
 
 /* ------------------------------------------------------------------ */
 /* 画风预设                                                             */
@@ -129,9 +136,11 @@ export const DEFAULT_LANG = 'zh';
 /*
  * 换风格是整套换，不是只换一句「画风」。
  *
- * 最容易踩的坑：两个预设的 negativePrompt 几乎是相反的。写实那套刚把
+ * 最容易踩的坑：各预设的 negativePrompt 立场是相反的。写实那套刚把
  * photorealistic 从反向词里删掉，吉卜力恰恰要禁它。毛孔、皮下散射、
  * 顺表情肌的皱纹在写实里是加分项，在吉卜力里是反效果。
+ * photoreal 又反过来：它跟 realistic 一样绝不能禁 photorealistic，
+ * 但必须禁 illustration / painting / anime——它要的是照片，不是画。
  *
  * 所以每个预设自带五块：render / surface / lighting / negative / tags，
  * 生成角色卡时整块取用，不要混搭。
@@ -141,7 +150,7 @@ export const DEFAULT_STYLE = 'realistic';
 
 export const STYLE_PRESETS = {
   realistic: {
-    label: { zh: '半写实厚涂', en: 'Semi-realistic painterly', ja: '半写実・厚塗り' },
+    label: { zh: '半写实厚涂', 'zh-TW': '半寫實厚塗', en: 'Semi-realistic painterly', ja: '半写実・厚塗り' },
     render:
       'Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded',
     surface:
@@ -156,7 +165,7 @@ export const STYLE_PRESETS = {
   },
 
   ghibli: {
-    label: { zh: '吉卜力动画', en: 'Ghibli-like animation', ja: 'ジブリ風アニメ' },
+    label: { zh: '吉卜力动画', 'zh-TW': '吉卜力動畫', en: 'Ghibli-like animation', ja: 'ジブリ風アニメ' },
     render:
       'Hand-painted anime cel illustration in the manner of classic Studio Ghibli feature animation: clean confident ink linework of even weight, simple flat cel shading with a single soft shadow tone, gentle rounded forms, warm naturalistic palette, watercolour-like softness',
     // 写实那套的表面细节在这里全是反效果，整块换掉
@@ -169,6 +178,32 @@ export const STYLE_PRESETS = {
     negative:
       'photorealistic, 3d render, hyperrealistic skin texture, visible pores, subsurface scattering, harsh contrast, heavy painterly rendering, muddy or desaturated colours, gritty texture overlay, extra fingers, malformed hands, text, watermark, signature, busy or patterned background',
     tags: ['ghibli-like', 'cel shading', 'hand-painted', 'character sheet', 'flat daylight'],
+  },
+
+  /*
+   * 拟真实拍。跟 realistic 的差别不是「更写实一点」，是根本不同的东西：
+   * realistic 仍是画出来的（painterly、笔触、厚涂），photoreal 要的是
+   * 「剧组试装定妆照」——真人、真相机、真镜头、真布料。
+   *
+   * 所以 negative 的重点从「别画得太塑胶」变成「别画」：illustration /
+   * painting / anime / CGI 全禁。但跟 realistic 一样，photorealistic 与
+   * 3d render 里的 photorealistic 绝不能禁——那是这个预设要的东西本身。
+   *
+   * 版面不变：16:9 三区、左半身像右三视图，照样分区打光。
+   */
+  photoreal: {
+    label: { zh: '拟真实拍', 'zh-TW': '擬真實拍', en: 'Live-action photography', ja: '実写風' },
+    render:
+      'Live-action photography, not illustration: a real wardrobe camera-test photograph of a real human being on a film production, shot on a full-frame cinema camera with a 50-85mm lens at a moderate aperture against a neutral warm-gray seamless studio backdrop, the finish and honesty of a costume-department test still',
+    surface:
+      'True photographic skin: real visible pores, fine vellus hair, uneven natural tone, faint capillaries at the nostrils and ear rims, genuine subsurface scattering, moles and freckles left in place, no beauty retouching and no skin smoothing; eyes with a real catchlight from the key light, moist lower lid, resolvable iris fibres and a limbal ring; eyebrows and eyelids honestly asymmetric; loose individual hair strands catching the light and breaking the silhouette. Real garments with true cloth weight, visible weave, stitched seams and hems, natural drape, self-shadowing folds and honest wear at cuffs, elbows and knees',
+    // 跟 realistic 同一套分区逻辑：左栏要体积，右侧要能量比例、好抠图
+    lighting:
+      'LIGHTING IN THE LEFT ZONE ONLY: a large soft-box key from the upper left with a gentle bounce fill on the shadow side, real ambient occlusion under the chin, in the eye sockets and where the collar meets the neck, so the head reads as an actually photographed head with volume. LIGHTING IN THE RIGHT ZONES: flat even frontal studio light with no directional key and no cast shadows on the backdrop, so the figures stay measurable and cleanly cut out',
+    // 这里禁的是「画出来的」，不是「真实的」——photorealistic 绝不能进这一串
+    negative:
+      'illustration, painting, drawing, sketch, anime, manga, cartoon, cel shading, digital painting brush strokes, CGI, 3d game render, plastic or waxy skin, doll skin, beauty-filter retouching, poreless airbrushed complexion, perfectly symmetrical face, dead flat eyes without a catchlight, wig-like helmet hair with no loose strands, flat untextured costume fabric, cheap cosplay-shop garment, stiff mannequin posing, extra fingers, malformed hands, text, watermark, signature, busy or patterned background, harsh cast shadows on the backdrop',
+    tags: ['live-action', 'photographic', 'wardrobe camera test', 'character sheet', 'real skin texture', '85mm lens'],
   },
 };
 
@@ -219,6 +254,53 @@ const STRINGS = {
     zoomImage: '放大查看',
     copyImage: '复制图片',
     closeImage: '关闭',
+  },
+  // 台湾正体。跟 zh 的差别不只在字形——用词也照台湾习惯换过：
+  // 「生圖」不是「出图」、「負向提示詞」不是「反向提示词」、「搜尋」不是「搜索」。
+  // 只换字形不换用词，读起来还是像翻译腔的简体。
+  'zh-TW': {
+    kicker: '角色設定集',
+    titleTail: ' · 角色',
+    docTitle: (s) => `${s} · 角色設定集`,
+    counts: (n, shots) => `${n} 位角色${shots ? ` · ${shots} 張設定圖` : ''} · 依戲份排序`,
+    synopsis: '故事摘要',
+    indexLabel: '角色索引',
+    aka: '又稱',
+    groups: { persona: '人物側寫', image: '造型', voice: '聲音' },
+    persona: {
+      gender: '性別', ageRange: '年齡', identity: '身分',
+      appearance: '外貌', temperament: '性情', motivation: '動機',
+      arc: '角色弧線', relationships: '人物關係', evidence: '原文依據',
+    },
+    image: {
+      style: '畫風', copyTags: '複製標籤',
+      prompt: '生圖提示詞 EN', promptLocal: '生圖提示詞',
+      negative: '負向提示詞', sheet: '角色設定圖提示詞 EN',
+    },
+    voice: {
+      timbre: '音色', pitch: '音高', pace: '語速', accent: '口音',
+      emotion: '情緒', referenceHint: '類比',
+      prompt: '配音提示詞 EN', promptLocal: '配音提示詞',
+    },
+    importance: { protagonist: '主角', major: '主要角色', supporting: '配角', minor: '跑龍套' },
+    copy: '複製', copied: '已複製', copyFailed: '複製失敗', copyJson: '複製整份角色 JSON',
+    sheetCaption: '左：半身像　右：全身三視圖',
+    noImage: '尚未生圖',
+    noImageHint: '用下方提示詞生成',
+    colophonA: '人物側寫與提示詞由模型依據原文生成，',
+    colophonB: '標記處為原文未明說、為了實用而補上的內容。',
+    mdTitle: (s) => `# ${s} — 角色表`,
+    mdCast: (n, names) => `共 ${n} 位角色：${names}`,
+    mdSynopsis: '## 故事摘要',
+    searchPlaceholder: '搜尋角色、特質、身分',
+    rosterTitle: '角色 · 依戲份排序',
+    footnote: '標註（推斷）的條目為原文未明寫、依據文本推演而來。',
+    noMatch: '沒有符合的角色',
+    voiceTag: 'VOICE',
+    expandAll: '全部展開',
+    zoomImage: '放大檢視',
+    copyImage: '複製圖片',
+    closeImage: '關閉',
   },
   en: {
     kicker: 'CHARACTER BIBLE',
@@ -477,13 +559,19 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
     if (image && SUPPORTED_STYLES.includes(style)) {
       const neg = typeof image.negativePrompt === 'string' ? image.negativePrompt : '';
       const bansRealism = /photorealistic|3d render/i.test(neg);
-      if (style === 'realistic' && bansRealism) {
-        at(name, 'style=realistic 却在 negativePrompt 里禁 photorealistic／3d render——自相矛盾');
-      }
-      if (style === 'ghibli' && !bansRealism) {
-        at(name, 'style=ghibli 的 negativePrompt 必须禁 photorealistic／3d render');
-      }
       const preset = stylePreset(style);
+      // 拿预设自己的立场当基准，新增预设不用回来改这里
+      const presetBansRealism = /photorealistic|3d render/i.test(preset.negative);
+      if (!presetBansRealism && bansRealism) {
+        at(name, `style=${style} 却在 negativePrompt 里禁 photorealistic／3d render——自相矛盾`);
+      }
+      if (presetBansRealism && !bansRealism) {
+        at(name, `style=${style} 的 negativePrompt 必须禁 photorealistic／3d render`);
+      }
+      // 拟真实拍反过来要禁「画出来的」，漏了模型很容易交一张插画
+      if (style === 'photoreal' && !/illustration|painting|anime|cartoon/i.test(neg)) {
+        at(name, 'style=photoreal 的 negativePrompt 必须禁 illustration／painting／anime／cartoon');
+      }
       if (typeof image.sheet === 'string' && !image.sheet.includes(preset.render)) {
         at(name, `image.sheet 里没有 style=${style} 的渲染句，画风会飘`);
       }
@@ -495,8 +583,10 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
         const v = voice[f];
         if (typeof v !== 'string' || !v.trim()) continue;
         if (lang === 'en' && CJK.test(v)) at(name, `voice.${f} 应为英文，但含中日韩字符`);
-        if (lang === 'zh' && !CJK.test(v)) at(name, `voice.${f} 应为中文，实际是「${v}」`);
-        if (lang === 'zh' && KANA.test(v)) at(name, `voice.${f} 应为中文，但含日文假名`);
+        // zh 的各地区变体（zh-TW / zh-HK…）走同一条中文检查；
+        // 简繁之分自动判不可靠，交给生成阶段的用语约束管。
+        if (isChinese(lang) && !CJK.test(v)) at(name, `voice.${f} 应为中文，实际是「${v}」`);
+        if (isChinese(lang) && KANA.test(v)) at(name, `voice.${f} 应为中文，但含日文假名`);
         if (lang === 'ja' && !KANA.test(v) && !CJK.test(v)) {
           at(name, `voice.${f} 应为日文，实际是「${v}」`);
         }
@@ -727,6 +817,9 @@ function renderCharacter(c, index, t) {
 
 export function renderHtml(characters, source, summary = '', lang = DEFAULT_LANG, ui = null) {
   const t = strings(lang, ui);
+  // 正体中文要挑 TC 字体：Songti SC 那一串在台湾机器上多半没装，
+  // 掉回系统预设会跟内文的正体字形不搭。
+  const isHant = isTraditionalChinese(lang);
   const shots = characters.filter((c) => c.sheetImage).length;
   const ordered = [...characters].sort(
     (a, b) => IMPORTANCE_ORDER.indexOf(a.importance) - IMPORTANCE_ORDER.indexOf(b.importance),
@@ -742,8 +835,8 @@ export function renderHtml(characters, source, summary = '', lang = DEFAULT_LANG
 :root{
   --paper:#eceded; --panel:#f5f6f5; --side:#e4e6e3; --ink:#191d21; --ink-2:#5b636a; --ink-3:#8c9298;
   --rule:#d2d5d0; --rule-2:#c2c6bf; --seal:#8a3324; --seal-soft:#8a332412;
-  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC",Georgia,"Iowan Old Style",serif;
-  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  --serif:${isHant ? '"Songti TC","PMingLiU","Source Han Serif TC","Noto Serif CJK TC"' : '"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC"'},Georgia,"Iowan Old Style",serif;
+  --sans:${isHant ? '"PingFang TC","Microsoft JhengHei","Noto Sans CJK TC"' : '"PingFang SC","Hiragino Sans GB","Microsoft YaHei"'},system-ui,-apple-system,sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --top:60px; --side-w:400px;
 }
@@ -1205,7 +1298,7 @@ function main(argv) {
       JSON.stringify(
         {
           default: DEFAULT_STYLE,
-          note: '整块取用，不要混搭；两个预设的 negative 几乎是相反的',
+          note: '整块取用，不要混搭；各预设的 negative 立场相反，realistic／photoreal 绝不能禁 photorealistic，ghibli 必须禁，photoreal 另外要禁 illustration／painting／anime',
           presets: Object.fromEntries(ids.map((id) => [id, STYLE_PRESETS[id]])),
         },
         null,

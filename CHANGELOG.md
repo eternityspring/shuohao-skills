@@ -1,5 +1,54 @@
 # Changelog
 
+## novel-characters 1.5.0 — 2026-08-09
+
+> 本版起为 fork（[swanky/shuohao-skills](https://github.com/swanky/shuohao-skills)），
+> 上游是 [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills)。
+
+**默认输出台湾正体中文**
+
+- 新增内置界面语言 `zh-TW`，并把 `DEFAULT_LANG` 从 `zh` 改成 `zh-TW`。
+  要简体中文改用 `--lang zh`
+- **不只换字形，用词也照台湾习惯换**：「搜尋」不是「搜索」、「負向提示詞」
+  不是「反向提示词」、「生圖」不是「出图」、「依戲份排序」不是「按戏份排序」
+- 报告字体跟着换：`zh-TW` 挑 Songti TC / PingFang TC / Microsoft JhengHei
+  那一串。原来的 Songti SC 在台湾机器上多半没装，掉回系统预设会跟正体字形不搭
+- 角色卡内容是模型写的，脚本管不了简繁。`SKILL.md` 新增「`zh-TW` 的用语规范」，
+  含一简对多繁的对照表（髮／發、乾／幹、裡／里、鬆／松、隻／只……），
+  外貌描写踩得最多
+- `validate` 的中文检查改成认 `zh` 的所有地区变体（`zh-TW` / `zh-HK` /
+  `zh-Hant`），不再只认裸 `zh`
+
+**新增 `photoreal` 画风预设**
+
+- 拟真实拍：真人、全画幅电影机、50–85mm 镜头、中性暖灰无缝背景，
+  剧组服装组试装定妆照的成品感
+- **跟 `realistic` 不是「更写实一点」的关系**：`realistic` 仍然是画出来的
+  （厚涂、笔触），`photoreal` 要的是拍出来的。`render` 第一句就写死
+  `Live-action photography, not illustration`
+- **反向提示词的立场又反过来**：跟 `realistic` 一样绝不能禁 `photorealistic`，
+  但必须禁 `illustration` / `painting` / `anime` / `cartoon`。漏了这条，
+  模型很容易交一张插画交差。`validate` 会拦
+- 表面处理走得比 `realistic` 更远：真实毛孔和汗毛、不修图、痣和雀斑留着、
+  眉眼诚实地不对称、布料有真实重量和车缝线
+- 打光沿用 `realistic` 的分区逻辑（左栏柔光箱主光要体积，右侧平光好抠图），
+  版面规则不变
+
+**校验器**
+
+- 「该不该禁写实」改成拿**预设自己的 `negative`** 当基准，不再硬编码风格 id。
+  往 `STYLE_PRESETS` 加新预设不用回头改校验逻辑
+
+**修掉的**
+
+- `selftest.mjs` 在 Windows 上全线报错：git 把样例 checkout 成 CRLF，
+  而 `chunkText` 内部已经正规化成 LF，断言拿 CRLF 原文比对 LF 的块必然失败。
+  macOS / Linux 上看不出来
+- `references/schema.md` 的示例自相矛盾：顶层写 `"style": "realistic"`，
+  `image` 却是 `Flat vector cartoon` + 禁 `photorealistic`。照抄会被 `validate` 挡
+
+自测 220 → 264 项。
+
 ## novel-characters 1.4.0 — 2026-08-08
 
 **出图风格可选**

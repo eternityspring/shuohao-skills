@@ -7,6 +7,15 @@
 
 # shuohao-skills
 
+> **这是 fork。** 上游是 [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills)，
+> 原作者微信群等资讯见上方。本 fork 的差异：
+>
+> - **默认输出台湾正体中文**（`zh-TW`），用词照台湾习惯而不只是换字形。要简体用 `--lang zh`
+> - 新增 **`photoreal`** 画风预设：拟真实拍，剧组试装定妆照的质感
+>
+> 详见 [CHANGELOG](CHANGELOG.md)。
+
+
 给 AI 编码 agent 用的 skill 集合。**Claude Code 和 codex 都能跑。**
 
 | Skill | 做什么 |

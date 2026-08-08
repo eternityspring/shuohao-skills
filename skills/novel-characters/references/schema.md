@@ -15,9 +15,9 @@
 | 顶层字段 | 必填 | 说明 |
 | --- | --- | --- |
 | `source` | 是 | 书名/篇名，报告标题用 |
-| `lang` | 是 | 报告语言，默认 `zh` |
-| `style` | 是 | 出图风格，默认 `realistic`；`ghibli` 是吉卜力动画风。见 `style-presets.md` |
-| `ui` | 视情况 | 界面文案翻译。`lang` 是 `zh`/`en`/`ja` 时**不需要**（内置）；其他任何语言**必填**，否则 `validate` 报错。用 `ui-template <lang>` 生成骨架后翻译。只覆盖部分键也可以，缺的用内置英文兜底 |
+| `lang` | 是 | 报告语言，默认 `zh-TW`（台湾正体）。简体中文用 `zh` |
+| `style` | 是 | 出图风格，默认 `realistic`；`ghibli` 是吉卜力动画风，`photoreal` 是拟真实拍。见 `style-presets.md` |
+| `ui` | 视情况 | 界面文案翻译。`lang` 是 `zh-TW`/`zh`/`en`/`ja` 时**不需要**（内置）；其他任何语言**必填**，否则 `validate` 报错。用 `ui-template <lang>` 生成骨架后翻译。只覆盖部分键也可以，缺的用内置英文兜底 |
 | `summary` | 是 | **故事摘要**，中文 3–5 句。交代时空背景、核心情境、人物聚在一起的由头。报告顶部显示，让人不看原文也知道这几个角色是什么关系。不要剧透结局，也不要写成推荐语 |
 | `characters` | 是 | 角色卡数组 |
 
@@ -46,11 +46,11 @@
   },
 
   "image": {
-    "style": "Flat vector cartoon with ink-wash colouring",
+    "style": "半写实厚涂，水墨调色",
     "prompt": "Character design sheet of an elderly Chinese ferryman ...",
     "promptLocal": "角色设定图：约七十岁的中国老船夫……",
-    "negativePrompt": "photorealistic, 3d render, young face, ...",
-    "tags": ["flat vector", "character sheet", "ink wash palette"],
+    "negativePrompt": "plastic or waxy skin, poreless doll face, young face, ...",
+    "tags": ["semi-realistic", "painterly", "character sheet", "ink wash palette"],
     "sheet": "Single character model sheet on ONE 16:9 landscape canvas ... LEFT ZONE ... about 34% ... one bust portrait ... RIGHT-TOP ZONE ... three FULL-BODY views ... PROPORTIONS ARE CRITICAL ... RIGHT-BOTTOM ZONE ... four to five small isolated close-up studies ..."
   },
 
@@ -69,7 +69,7 @@
 
 ## 语言分工
 
-「本地语言」= 顶层 `lang` 指定的语言，默认中文。
+「本地语言」= 顶层 `lang` 指定的语言，默认台湾正体中文（`zh-TW`）。
 
 | 字段 | 类型 | 语言 | 说明 |
 | --- | --- | --- | --- |

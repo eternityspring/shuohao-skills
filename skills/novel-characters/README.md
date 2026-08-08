@@ -8,18 +8,18 @@
 - **人物画像** — 性别、年龄、身份、外貌、性情、动机、人物弧光、关系网，每条附**原文逐字引文**
 - **形象提示词** — 半写实厚涂路线，双语出图 prompt + negative prompt + 风格标签，直接喂 Midjourney / SD / GPT-Image
 - **音色提示词** — 音色、音高、语速、口音、情绪，双语 voice-design prompt，直接喂 Qwen3-TTS / ElevenLabs Voice Design
-- **角色设定图** — 一张 16:9 图分三区：左侧约 34% 证件照式半身像（面部基准）、右上全身三视图、右下关键细节特写条。**画风可选**：默认半写实厚涂，也可以出吉卜力动画风。白底方便抠图，走 codex 内置出图（可选）
+- **角色设定图** — 一张 16:9 图分三区：左侧约 34% 证件照式半身像（面部基准）、右上全身三视图、右下关键细节特写条。**画风可选**：默认半写实厚涂，也可以出吉卜力动画风或拟真实拍。白底方便抠图，走 codex 内置出图（可选）
 
 产出 `cast.json` + Markdown + 一个双击就能开的 `report.html`。
 
-**报告语言可指定**，默认中文：
+**报告语言可指定**，默认台湾正体中文（`zh-TW`）：
 
 ```
 /novel-characters ./book.txt --lang en
 /novel-characters ./book.txt --lang ja
 ```
 
-内置 **中文 / English / 日本語** 三套界面文案。**其他语言一样支持**——skill 会现场把界面文案翻译成目标语言，存进 `cast.json` 的 `ui` 字段，渲染时合并进去。所以法语、韩语、西班牙语都能出完整报告，不会露出英文界面。
+内置 **正體中文 / 简体中文 / English / 日本語** 四套界面文案。**其他语言一样支持**——skill 会现场把界面文案翻译成目标语言，存进 `cast.json` 的 `ui` 字段，渲染时合并进去。所以法语、韩语、西班牙语都能出完整报告，不会露出英文界面。
 
 想自己准备翻译：
 
@@ -45,31 +45,37 @@ node scripts/novel-characters.mjs ui-template fr   # 打印待翻译的骨架
 
 ### 报告语言
 
-默认中文。用 `--lang`，或者直接说「用英文」「日本語で」：
+默认台湾正体中文（`zh-TW`）。用 `--lang`，或者直接说「用英文」「日本語で」：
 
 ```
+/novel-characters ./book.txt --lang zh     # 简体中文
 /novel-characters ./book.txt --lang en
 /novel-characters ./book.txt --lang ja
 ```
 
-内置 **中文 / English / 日本語** 三套界面文案。**其他语言一样支持**——skill 会现场把界面文案翻译成目标语言，存进 `cast.json` 的 `ui` 字段，渲染时合并。法语、韩语、西班牙语都能出完整报告，不会露出英文界面。
+内置 **正體中文 / 简体中文 / English / 日本語** 四套界面文案。**其他语言一样支持**——skill 会现场把界面文案翻译成目标语言，存进 `cast.json` 的 `ui` 字段，渲染时合并。法语、韩语、西班牙语都能出完整报告，不会露出英文界面。
+
+`zh-TW` 不只是换字形：界面用「搜尋」「負向提示詞」「生圖」，角色卡内容也照台湾惯用词写，
+一简对多繁的字（頭**髮**、**乾**淨、眼**裡**）由 `SKILL.md` 的用语规范约束。
 
 两条不跟随语言：**出图和 TTS 提示词永远英文**（引擎吃英文最稳）；**原文引文永远保持原文语言**（翻译了就不是证据了）。
 
 ### 出图风格
 
-默认 `realistic`（半写实厚涂）。想要动画质感：
+默认 `realistic`（半写实厚涂）。想要动画质感或真人选角感：
 
 ```
 /novel-characters ./book.txt --style ghibli
+/novel-characters ./book.txt --style photoreal
 ```
 
 | id | 说明 |
 | --- | --- |
 | `realistic` | 半写实厚涂，皮肤有毛孔和肌理，布料有织纹磨损。默认 |
 | `ghibli` | 吉卜力式手绘赛璐璐，等宽墨线、单层柔和阴影、平涂色块 |
+| `photoreal` | 拟真实拍，剧组试装定妆照：真人、50–85mm 镜头、中性暖灰背景、不修图的皮肤 |
 
-两个可以组合：`--lang ja --style ghibli`。
+和语言可以组合：`--lang zh-TW --style photoreal`。
 
 ```bash
 node scripts/novel-characters.mjs styles          # 看所有预设
@@ -99,7 +105,7 @@ node scripts/novel-characters.mjs styles ghibli   # 看某一个的完整内容
 | `evidence` 必须是原文**逐字连续**片段 | 防编造。被「他说」断开的对白不许拼接 |
 | 出图 prompt **不许出现人名** | 图像模型对人名偏见极重，会画成它记忆里的角色 |
 | 字段**语言分工** | 人类字段跟随 `--lang`、出图和 TTS 提示词永远英文，模型会漂 |
-| **风格与反向提示词匹配** | `realistic` 不能禁 `photorealistic`、`ghibli` 必须禁，搞反整批图就废 |
+| **风格与反向提示词匹配** | `realistic` / `photoreal` 不能禁 `photorealistic`、`ghibli` 必须禁；`photoreal` 另外必须禁 `illustration`／`anime`。搞反整批图就废 |
 | 结构 + 枚举 | `importance` 只能是那四个值 |
 
 这四条不是拍脑袋定的——是模型输出真的违反过、被校验脚本当场抓住才立起来的。
@@ -120,6 +126,7 @@ node scripts/novel-characters.mjs slug "胡二爷"                  # 安全文�
 
 - 单次上限 24 块（约 33 万字符）。超了会明确报 `truncated`，**不静默截断**
 - 人类可读字段跟随 `--lang`；出图和 TTS 提示词**永远英文**，那些引擎吃英文最稳，跟报告语言无关
+- **简繁之分脚本判不了**。`validate` 只查「是不是中文」，写成简体它拦不住——靠 `SKILL.md` 的用语规范约束生成阶段
 - 设定图只自动给 `protagonist` 和 `major`，其余只给提示词
 - **同一批角色的画风可能有差异**——各自独立出图。早期用「扁平矢量卡通」时漂得很厉害（同批出成动画感／半写实／水墨写实三种），换成明确的风格预设后好了很多，但不能保证完全一致。在意的话拿第一张当参考图压一压，见 `references/sheet.md`
 
@@ -131,14 +138,14 @@ node scripts/novel-characters.mjs slug "胡二爷"                  # 安全文�
 SKILL.md                 给 agent 读的工作流
 scripts/
   novel-characters.mjs   chunk / merge / validate / render / slug
-  selftest.mjs           220 项断言，不调模型
+  selftest.mjs           260 余项断言，不调模型
 references/
   roster-pass.md         第一趟：扫描角色
   profile-pass.md        第二趟：生成角色卡（8 条硬规则）
   schema.md              角色卡结构 + 字段语言归属
   sheet.md               角色设定图出图的 codex 调用契约
   report-style.md        report.html 的设计约定
-  style-presets.md       出图风格预设（realistic / ghibli）
+  style-presets.md       出图风格预设（realistic / ghibli / photoreal）
 examples/
   渡口.txt                自带短故事，4 个角色
   渡口-cast.json          产出，同时是校验自检夹具

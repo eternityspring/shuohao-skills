@@ -6,7 +6,7 @@
 
 ## 语言
 
-调用方会给一个**报告语言** `lang`（默认 `zh`）。字段分两类：
+调用方会给一个**报告语言** `lang`（默认 `zh-TW`，台湾正体）。字段分两类：
 
 | 类别 | 字段 | 语言 |
 | --- | --- | --- |
@@ -17,6 +17,10 @@
 
 `promptLocal` 是对应英文提示词的本地语言译文，给人看的。**`lang` 是 `en` 时省略这两个字段**，否则就是原样重复。
 
+`lang` 是 `zh-TW` 时**用台湾惯用词，不是把简体换个字形**。外貌描写里踩得最多的是
+一简对多繁的字（頭**髮**、**乾**淨、眼**裡**、**鬆**垮、一**隻**手），引号用「」。
+完整对照表在 `SKILL.md` 的「`zh-TW` 的用语规范」。
+
 ## 硬规则
 
 1. **一切基于观察记录。** 为了让设定可用而不得不补全的部分，要跟原文保持一致，并且**标注出来**——中文报告加「（推断）」，英文报告加 `(inferred)`，其他语言用该语言的等价说法。**只用一种标记，不要中英都加。**
@@ -26,6 +30,14 @@
 3. **`image.prompt` / `image.promptLocal` / `image.sheet` 里绝对不许出现角色名、别名、作者名、作品名。** 图像模型对这些偏见极重，会画成它记忆里的角色而不是你的角色。描述这个人，不要叫他的名字。
 
 4. `image.prompt` 是**单张表现性插画**（不是技术图，可以放开打光）：四分之三视角半身、纯中性背景、柔和方向主光 + 冷调补光、浅景深、面部最实。
+
+   > **先看 `style`。** 下面第 4 条讲的质感是 `realistic` 预设的内容。调用方指定了
+   > 别的风格（`ghibli` / `photoreal`），就跑
+   > `node scripts/novel-characters.mjs styles <id>`，把那个预设的 render / surface /
+   > lighting / negative / tags **整块换掉**，不要拿这里的写实描述去混搭。
+   >
+   > `photoreal` 尤其要注意：它跟 `realistic` 一样**绝不能**禁 `photorealistic`，
+   > 但**必须**禁 `illustration` / `painting` / `anime` / `cartoon`——它要的是照片不是画。
 
    **画风走半写实厚涂，不要写「扁平矢量卡通」。** 实测「扁平矢量卡通」这句会让模型跟自己拧巴——同一批角色出来有的偏动画、有的偏写实。用这一档：
    `Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded`
