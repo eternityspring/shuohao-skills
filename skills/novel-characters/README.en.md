@@ -110,7 +110,7 @@ node scripts/novel-characters.mjs chunk book.txt /tmp/wk        # split
 node scripts/novel-characters.mjs merge /tmp/wk                 # merge roster-*.json
 node scripts/novel-characters.mjs validate cast.json book.txt   # validate
 node scripts/novel-characters.mjs render cast.json --html       # build report.html
-node scripts/novel-characters.mjs slug "胡二爷"                  # filesystem-safe name
+node scripts/novel-characters.mjs slug "胡二爺"                  # filesystem-safe name
 ```
 
 ## Limits

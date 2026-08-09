@@ -2,12 +2,12 @@
 name: novel-characters
 version: 1.5.0
 description: |
-  从小说或短故事里拆出角色表、人物画像、形象提示词、音色提示词，
-  并给主要角色出角色设定图（左半身像 + 右全身三视图 + 细节条），产出 JSON + Markdown + 可交互的 report.html。
-  报告语言可指定（--lang），默认台湾正体中文（zh-TW），任意语言都支持；
-  出图风格可指定（--style），默认半写实，也可以出吉卜力动画风或拟真实拍。
-  零依赖、零 API key，用当前会话额度；出图走 codex 内置 $imagegen（可选）。
-  Use when asked to 拆小说角色、分析人物、生成角色卡、character sheets from a novel。
+  從小說或短故事裡拆出角色表、人物側寫、造型提示詞、音色提示詞，
+  並給主要角色出角色設定圖（左半身像 + 右全身三視圖 + 細節條），產出 JSON + Markdown + 可互動的 report.html。
+  報告語言可指定（--lang），預設台灣正體中文（zh-TW），任意語言都支援；
+  生圖風格可指定（--style），預設半寫實，也可以出吉卜力動畫風或擬真實拍。
+  零相依、零 API key，用當前工作階段額度；生圖走 codex 內建 $imagegen（可選）。
+  Use when asked to 拆小說角色、分析人物、產生角色卡、character sheets from a novel。
 allowed-tools:
   - Read
   - Write
@@ -17,19 +17,23 @@ allowed-tools:
 triggers:
   - novel-characters
   - 拆角色
+  - 拆書角色
   - 拆书角色
+  - 小說角色
   - 小说角色
+  - 人物側寫
   - 人物画像
   - 角色卡
+  - 三視圖
   - 三视图
   - character sheet from novel
 metadata:
   license: Apache-2.0
   requires:
     bins:
-      - node          # >= 18，只用标准库，无 npm 依赖
+      - node          # >= 18，只用標準庫，無 npm 相依
     optional:
-      - codex         # 有才出三视图；没有就只交提示词，其余照常
+      - codex         # 有才出設定圖；沒有就只交提示詞，其餘照常
   runtimes:
     - claude-code
     - codex
@@ -37,55 +41,56 @@ metadata:
 
 ## novel-characters
 
-输入一篇小说/短故事，输出每个角色的：人物画像、形象提示词、音色提示词、角色设定图。
+輸入一篇小說/短故事，輸出每個角色的：人物側寫、造型提示詞、音色提示詞、角色設定圖。
 
-`{baseDir}` = 本文件所在目录。脚本 `{baseDir}/scripts/novel-characters.mjs`，零依赖，`node` 直接跑。
+`{baseDir}` = 本檔案所在目錄。腳本 `{baseDir}/scripts/novel-characters.mjs`，零相依，`node` 直接跑。
 
-**运行环境**：Claude Code 和 codex 都能跑。差别只在第 8 步出图——见 `references/sheet.md`。
+**執行環境**：Claude Code 和 codex 都能跑。差別只在第 8 步生圖——見 `references/sheet.md`。
 
 ---
 
-### Step 0 — 确定报告语言
+### Step 0 — 確定報告語言
 
-用户可以指定语言，比如「用英文」「--lang en」「日本語で」。**没说就是台湾正体中文（`zh-TW`）。**
+使用者可以指定語言，比如「用英文」「--lang en」「日本語で」。**沒說就是台灣正體中文（`zh-TW`）。**
 
-想要简体中文得明确说，用 `--lang zh`。
+想要簡體中文得明確說，用 `--lang zh`。
 
-这个 `lang` 会一路传下去：第二趟生成角色卡时决定人类可读字段用什么语言，`validate` 和 `render` 也都要带上。
+這個 `lang` 會一路傳下去：第二趟產生角色卡時決定人類可讀欄位用什麼語言，`validate` 和 `render` 也都要帶上。
 
-**界面文案分两种情况：**
+**介面文案分兩種情況：**
 
-- `zh-TW` / `zh` / `en` / `ja` —— 内置，不用管
-- **其他任何语言** —— 你要现场翻一份。跑
+- `zh-TW` / `zh` / `en` / `ja` —— 內建，不用管
+- **其他任何語言** —— 你要現場翻一份。跑
 
   ```bash
   node {baseDir}/scripts/novel-characters.mjs ui-template <lang>
   ```
 
-  它打印一份英文骨架，把每个值翻译成目标语言，整块放进 `cast.json` 顶层的 `ui` 字段。渲染时会合并进内置表。
+  它印出一份英文骨架，把每個值翻譯成目標語言，整塊放進 `cast.json` 頂層的 `ui` 欄位。渲染時會合併進內建表。
 
-  **不给 `ui` 的话 `validate` 会直接报错**——否则报告会是「角色内容是法语、界面标签是英文」的半吊子状态。
+  **不給 `ui` 的話 `validate` 會直接報錯**——否則報告會是「角色內容是法文、介面標籤是英文」的半吊子狀態。
 
-支持的语言不受内置表限制，法语韩语西班牙语都能出完整报告。
+支援的語言不受內建表限制，法文韓文西班牙文都能出完整報告。
 
-#### `zh-TW` 的用语规范
+#### `zh-TW` 的用語規範
 
-界面文案脚本管了，**角色卡内容是你写的，得你自己守**。写 `persona`、`voice` 的人类可读字段时：
+介面文案腳本管了，**角色卡內容是你寫的，得你自己守**。寫 `persona`、`voice` 的人類可讀欄位時：
 
-**用台湾惯用词，不是简体词换字形。** 直接换字形会写出一眼看得出的翻译腔：
+**用台灣慣用詞，不是簡體詞換字形。** 直接換字形會寫出一眼看得出的翻譯腔：
 
-| 别写 | 要写 |
+| 別寫 | 要寫 |
 | --- | --- |
 | 性格、气质 | 個性、氣質 |
 | 视频、图片 | 影片、圖片 |
 | 质量 | 品質 |
-| 信息 | 資訊 |
+| 信息、数据 | 資訊、資料 |
 | 默认、通过、支持 | 預設、透過、支援 |
 | 水准、计划 | 水準、計畫 |
+| 软件、程序、网络 | 軟體、程式、網路 |
 
-**一简对多繁的字最容易翻错**，外貌描写里几乎必踩：
+**一簡對多繁的字最容易翻錯**，外貌描寫裡幾乎必踩：
 
-| 简 | 看语境选 | 例 |
+| 簡 | 看語境選 | 例 |
 | --- | --- | --- |
 | 发 | 髮／發 | 頭**髮**、一**頭**長**髮**；**發**現 |
 | 干 | 乾／幹／干 | **乾**淨、**乾**瘦；**幹**活 |
@@ -96,178 +101,156 @@ metadata:
 | 只 | 只／隻 | **只**是；一**隻**手 |
 | 复 | 復／複／覆 | 恢**復**；**複**雜；答**覆** |
 | 系 | 係／系／繫 | 關**係**；**系**統；維**繫** |
+| 表 | 表／錶 | **表**格；手**錶** |
+| 板 | 板／闆 | 木**板**；老**闆** |
 
-**引号用「」『』**，不要 `""`。
+**引號用「」『』**，不要 `""`。
 
-**不受影响的**：`image.prompt` / `image.negativePrompt` / `image.tags` / `image.sheet` / `voice.prompt` 这些机器字段永远是英文，`validate` 会拦中文字符。
+**不受影響的**：`image.prompt` / `image.negativePrompt` / `image.tags` / `image.sheet` / `voice.prompt` 這些機器欄位永遠是英文，`validate` 會攔中文字元。
 
-### Step 0.5 — 确定画风
+**`persona.evidence` 也不受影響**：引文逐字照抄原文，原文是簡體就是簡體。它是證據，動了就不是證據。
 
-用户可以指定出图风格，**默认 `realistic`**：
+### Step 0.5 — 確定畫風
 
-| id | 说明 | 什么时候用 |
+使用者可以指定生圖風格，**預設 `realistic`**：
+
+| id | 說明 | 什麼時候用 |
 | --- | --- | --- |
-| `realistic` | 半写实厚涂。默认 | 一般设定集 |
-| `ghibli` | 吉卜力式手绘赛璐璐 | 想要动画质感 |
-| `photoreal` | 拟真实拍，剧组试装定妆照 | 要真人选角感、历史剧质感 |
+| `realistic` | 半寫實厚塗。預設 | 一般設定集 |
+| `ghibli` | 吉卜力式手繪賽璐璐 | 想要動畫質感 |
+| `photoreal` | 擬真實拍，劇組試裝定妝照 | 要真人選角感、歷史劇質感 |
 
 ```bash
-node {baseDir}/scripts/novel-characters.mjs styles   # 打印预设的完整内容
+node {baseDir}/scripts/novel-characters.mjs styles   # 印出預設的完整內容
 ```
 
-读 `{baseDir}/references/style-presets.md`。**换风格是整套换**——每个预设自带 render / surface / lighting / negative / tags 五块，整块取用，不要混搭。
+讀 `{baseDir}/references/style-presets.md`。**換風格是整套換**——每個預設自帶 render / surface / lighting / negative / tags 五塊，整塊取用，不要混搭。
 
-最容易搞反的是反向提示词，三个预设的立场两两不同：
+最容易搞反的是負向提示詞，三個預設的立場兩兩不同：
 
-- `realistic` / `photoreal` **绝不能**禁 `photorealistic`
-- `ghibli` **必须**禁
-- `photoreal` 另外**必须**禁 `illustration` / `painting` / `anime` / `cartoon`——它要的是照片不是画，漏了模型很容易交一张插画
+- `realistic` / `photoreal` **絕不能**禁 `photorealistic`
+- `ghibli` **必須**禁
+- `photoreal` 另外**必須**禁 `illustration` / `painting` / `anime` / `cartoon`——它要的是照片不是畫，漏了模型很容易交一張插畫
 
-`validate` 三条都会拦。
+`validate` 三條都會攔。
 
-版面规则（16:9 三区、比例、细节让位）**不随风格变**，变的只有渲染质感。
+版面規則（16:9 三區、比例、細節讓位）**不隨風格變**，變的只有渲染質感。
 
-### Step 1 — 定位输入
+### Step 1 — 定位輸入
 
-用户给文件路径就直接用。直接粘正文的，**先落到一个临时 .txt**——后面校验「引文是否逐字」要拿原文比对，没有原文文件这步就没法做。
+使用者給檔案路徑就直接用。直接貼正文的，**先落到一個暫存 .txt**——後面校驗「引文是否逐字」要拿原文比對，沒有原文檔案這步就沒法做。
 
-确定输出目录：用户指定就用；没指定就用原书同级目录。
+確定輸出目錄：使用者指定就用；沒指定就用原書同層目錄。
 
-### Step 2 — 分块
+### Step 2 — 分塊
 
 ```bash
 node {baseDir}/scripts/novel-characters.mjs chunk <book.txt> <workdir>
 ```
 
-打印 `{"chunks": N, ...}`。
+印出 `{"chunks": N, ...}`。
 
-- **N == 1**：跳过 Step 3，直接在当前会话读原文做第一趟，结果自己写成 `<workdir>/roster-00.json`
-- **N > 1**：进 Step 3
-- `truncated: true`：明确告诉用户尾部没扫到，别闷着
+- **N == 1**：跳過 Step 3，直接在當前工作階段讀原文做第一趟，結果自己寫成 `<workdir>/roster-00.json`
+- **N > 1**：進 Step 3
+- `truncated: true`：明確告訴使用者尾部沒掃到，別悶著
 
-### Step 3 — 第一趟扫描（仅 N > 1）
+### Step 3 — 第一趟掃描（僅 N > 1）
 
-**当前环境支持子代理就并发**（Claude Code 的 Task、codex 的 subagent）：每块一个子代理，**所有调用放在同一条消息里**才是真并发。不支持就一块一块串行读，结果一样，只是慢。
+**當前環境支援子代理就並行**（Claude Code 的 Task、codex 的 subagent）：每塊一個子代理，**所有呼叫放在同一條訊息裡**才是真並行。不支援就一塊一塊串行讀，結果一樣，只是慢。
 
-每个子代理的任务：
-1. 读 `{baseDir}/references/roster-pass.md`，照它执行
-2. 读 `<workdir>/chunk-NN.txt`
-3. 把 roster JSON 写到 `<workdir>/roster-NN.json`
-4. 只回一句「done NN，抽到 X 个角色」
+每個子代理的任務：
+1. 讀 `{baseDir}/references/roster-pass.md`，照它執行
+2. 讀 `<workdir>/chunk-NN.txt`
+3. 把 roster JSON 寫到 `<workdir>/roster-NN.json`
+4. 只回一句「done NN，抽到 X 個角色」
 
-### Step 4 — 归并
+### Step 4 — 歸併
 
 ```bash
 node {baseDir}/scripts/novel-characters.mjs merge <workdir>
 ```
 
-按名字+别名收敛（`陆行远`/`陆`/`姑娘` 会收敛成一个人），notes 累加、quotes 去重，按出现块数降序——出现的块越多戏份越重。
+按名字+別名收斂（`陸行遠`/`陸`/`姑娘` 會收斂成一個人），notes 累加、quotes 去重，依出現塊數遞減排序——出現的塊越多戲份越重。
 
-### Step 5 — 选角
+### Step 5 — 選角
 
-取前 N 位。默认 10，用户说了就听用户的。剩下的角色在最后汇报里提一句「还识别出 X 位没做画像」。
+取前 N 位。預設 10，使用者說了就聽使用者的。剩下的角色在最後回報裡提一句「還辨識出 X 位沒做側寫」。
 
 ### Step 6 — 第二趟出卡
 
-每个角色一份，同样能并发就并发。
+每個角色一份，同樣能並行就並行。
 
-每份任务拿到：
-- `{baseDir}/references/profile-pass.md` 和 `{baseDir}/references/schema.md`（读它们，照着做）
-- **报告语言 `lang`**（Step 0 定的）
-- 该角色归并后的 `name` / `aliases` / `notes` / `quotes`
-- **同批其他角色的名字**（避免长相声线撞车）
+每份任務拿到：
+- `{baseDir}/references/profile-pass.md` 和 `{baseDir}/references/schema.md`（讀它們，照著做）
+- **報告語言 `lang`**（Step 0 定的）
+- 該角色歸併後的 `name` / `aliases` / `notes` / `quotes`
+- **同批其他角色的名字**（避免長相聲線撞車）
 
-角色卡 JSON 写到 `<workdir>/card-<slug>.json`。
+角色卡 JSON 寫到 `<workdir>/card-<slug>.json`。
 
-**同时写一段故事摘要**：用 `lang` 指定的语言，3–5 句，交代时空背景、核心情境、这几个人聚在一起的由头。短篇直接从原文写；长篇从各块的 roster note 归纳。不剧透结局，不写成推荐语。
+**同時寫一段故事摘要**：用 `lang` 指定的語言，3–5 句，交代時空背景、核心情境、這幾個人聚在一起的由頭。短篇直接從原文寫；長篇從各塊的 roster note 歸納。不劇透結局，不寫成推薦語。
 
-合成 `<输出目录>/<书名>-cast.json`：
+合成 `<輸出目錄>/<書名>-cast.json`：
 
 ```json
-{ "source": "书名", "lang": "zh", "style": "realistic", "summary": "……", "characters": [ ... ] }
+{ "source": "書名", "lang": "zh-TW", "style": "realistic", "summary": "……", "characters": [ ... ] }
 ```
 
-### Step 7 — 校验 ⛔ 不能跳
+### Step 7 — 校驗 ⛔ 不能跳
 
 ```bash
 node {baseDir}/scripts/novel-characters.mjs validate <cast.json> <book.txt>
 ```
 
-记得带上 `--lang`（Step 0 定的）。检查：结构、`importance` 枚举、**引文逐字**、**出图提示词不含人名**、**语言分工**（人类字段跟随 `lang`、出图/TTS 提示词永远英文）、以及**非内置语言必须带 `ui`**。
+記得帶上 `--lang`（Step 0 定的）。檢查：結構、`importance` 列舉、**引文逐字**、**生圖提示詞不含人名**、**語言分工**（人類欄位跟隨 `lang`、生圖/TTS 提示詞永遠英文）、以及**非內建語言必須帶 `ui`**。
 
-**有违规就按报错逐条修，改完重跑，直到通过。** 这四类错模型真的会犯——这套检查就是被真实输出打出来的。
+**有違規就按報錯逐條修，改完重跑，直到通過。** 這四類錯模型真的會犯——這套檢查就是被真實輸出打出來的。
 
-### Step 8 — 出图（可选，只给 protagonist 和 major）
+### Step 8 — 生圖（可選，只給 protagonist 和 major）
 
-**每个角色一张**，用 `image.sheet`，落到 `./images/<slug>-sheet.png`。一张横构图内部左右分栏：
+**每個角色一張**，用 `image.sheet`，落到 `./images/<slug>-sheet.png`。一張橫構圖內部左右分欄：
 
 ```
 ┌──────────┬────────────────────────────┐
-│  半身像   │   正视    侧视    背视       │
-│ （证件照） ├────────────────────────────┤
-│  面部基准  │  细节 · 细节 · 细节 · 细节   │
+│  半身像   │   正視    側視    背視       │
+│ （證件照） ├────────────────────────────┤
+│  面部基準  │  細節 · 細節 · 細節 · 細節   │
 │   ~34%   │            16:9            │
 └──────────┴────────────────────────────┘
 ```
 
-左栏半身像是面部设计基准，右上三视图的脸照它画，右下是关键细节的小特写。**两条硬要求**：三视图的脸必须与半身像一致（否则一张图两个长相）；三个全身像的比例必须协调（模型会为了塞下细节把人压扁）。
+左欄半身像是面部設計基準，右上三視圖的臉照它畫，右下是關鍵細節的小特寫。**兩條硬要求**：三視圖的臉必須與半身像一致（否則一張圖兩個長相）；三個全身像的比例必須協調（模型會為了塞下細節把人壓扁）。
 
-读 `{baseDir}/references/sheet.md`，照它的调用契约做。要点：
+讀 `{baseDir}/references/sheet.md`，照它的呼叫契約做。要點：
 
-- **没有 codex 就整步跳过**，只交提示词，后面照常走
-- 跑在 codex 里就直接用 `$imagegen`；跑在别处就 shell 调 codex，先按那里的脚本探测版本最高的 binary（旧版会直接报错）
-- **一个角色一次调用，绝不批量**
-- 单个失败就跳过，不阻断；最后汇总说明
+- **沒有 codex 就整步跳過**，只交提示詞，後面照常走
+- 跑在 codex 裡就直接用 `$imagegen`；跑在別處就 shell 呼叫 codex，先按那裡的腳本偵測版本最高的 binary（舊版會直接報錯）
+- **一個角色一次呼叫，絕不批次**
+- 單個失敗就跳過，不阻斷；最後彙總說明
 
-`supporting` / `minor` 只给提示词不出图。用户明确要求全出就全出。
+`supporting` / `minor` 只給提示詞不生圖。使用者明確要求全出就全出。
 
-### Step 9 — 输出
+### Step 9 — 輸出
 
 ```bash
-cd <输出目录>
-node {baseDir}/scripts/novel-characters.mjs render <cast.json> --md   > <书名>-cast.md
+cd <輸出目錄>
+node {baseDir}/scripts/novel-characters.mjs render <cast.json> --md   > <書名>-cast.md
 node {baseDir}/scripts/novel-characters.mjs render <cast.json> --html > report.html
 ```
 
-语言取 `cast.json` 里的 `lang`，要临时覆盖就加 `--lang <code>`。
+語言取 `cast.json` 裡的 `lang`，要臨時覆寫就加 `--lang <code>`。
 
-`render` 会自动去 `images/<slug>-sheet.png` 找图。所以**先出图再 render**。
+`render` 會自動去 `images/<slug>-sheet.png` 找圖。所以**先生圖再 render**。
 
-report.html 的样式约定见 `{baseDir}/references/report-style.md`——要改样式先读它，别把它改回通用卡片墙。
+report.html 的樣式約定見 `{baseDir}/references/report-style.md`——要改樣式先讀它，別把它改回通用卡片牆。
 
-最终落地：
+最終落地：
 
 ```
-<输出目录>/
-├── <书名>-cast.json
-├── <书名>-cast.md
-├── report.html                    ← 双击就能开
+<輸出目錄>/
+├── <書名>-cast.json
+├── <書名>-cast.md
+├── report.html                    ← 點兩下就能開
 └── images/
     └── <slug>-sheet.png           ← 有 codex 才有
 ```
-
-### Step 10 — 汇报
-
-一句话说清：角色数、出图数、报告路径。校验一次没过的话，说明修了什么。有角色出图失败、被截断、或因为没有 codex 而没出图，明确说清楚。
-
----
-
-## 边界
-
-- 单次上限 24 块（约 33 万字符），超了会明确报 `truncated`，不静默截断
-- 人类可读字段跟随 `--lang`（默认中文）；出图和 TTS 提示词**永远英文**，那些引擎吃英文最稳
-- 设定图最容易出的两个问题：**一张图里两个长相**、**为了塞细节把人物压扁**。拿到图先扫一眼，见 `references/sheet.md`
-- 出图只走 codex built-in `$imagegen`。**不用它的 CLI fallback**（要 `OPENAI_API_KEY`）
-- 想要能实时编辑、边跑边看的交互界面，那是另一个东西，不在这个 skill 里
-
-## 自测
-
-```bash
-node {baseDir}/scripts/selftest.mjs
-```
-
-220 项断言，不调模型、不花额度，覆盖分块 / 归并 / 多语言 / 校验 / 渲染的全部确定性逻辑。改完脚本先跑这个。
-
-## 自带样例
-
-`{baseDir}/examples/渡口.txt` 是一篇短故事，4 个角色，其中货郎全程只有绰号、船夫只被叫过「老伯」——专门用来验别名归并。对应产出 `渡口-cast.json` / `渡口-cast.md` 可以当质量基准，也是校验的自检夹具。

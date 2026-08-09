@@ -2,11 +2,11 @@
 node_modules/
 *.log
 
-# skill 的运行产物（用户在自己的输出目录里生成的）
+# skill 的執行產物（使用者在自己的輸出目錄裡生成的）
 /report.html
 /*-cast.json
 /*-cast.md
 /images/
 
-# 注意：skills/*/examples/ 下的样例必须提交——它们同时是自测夹具。
-# 上面几条都用 / 开头限定在仓库根，不会误伤 examples。
+# 注意：skills/*/examples/ 下的樣例必須提交——它們同時是自測夾具。
+# 上面幾條都用 / 開頭限定在倉庫根，不會誤傷 examples。

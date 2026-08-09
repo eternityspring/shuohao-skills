@@ -59,7 +59,7 @@ export function chunkText(text) {
 
 /**
  * Merge per-chunk rosters into one cast, keyed by name AND alias so that
- * 陆行远 / 陆 / 姑娘 collapse onto the same person regardless of which
+ * 陸行遠 / 陸 / 姑娘 collapse onto the same person regardless of which
  * chunk saw which form first.
  */
 export function mergeRoster(batches) {
@@ -116,34 +116,34 @@ export function slug(name) {
 /* i18n                                                                */
 /* ------------------------------------------------------------------ */
 /*
- * 报告语言。默认 zh-TW（台湾正体）。
- * 内置 zh-TW / zh / en / ja 四套界面文案；给了其他语言码就用 en 的界面骨架，
- * 但角色内容仍按那个语言生成——界面词没翻译总比整篇乱掉强。
+ * 報告語言。預設 zh-TW（台灣正體）。
+ * 內建 zh-TW / zh / en / ja 四套介面文案；給了其他語言碼就用 en 的介面骨架，
+ * 但角色內容仍按那個語言生成——介面詞沒翻譯總比整篇亂掉強。
  */
 
 export const DEFAULT_LANG = 'zh-TW';
 
-/** 中文语言码（含各地区变体），决定人类可读字段该不该是汉字。 */
+/** 中文語言碼（含各地區變體），決定人類可讀欄位該不該是漢字。 */
 export const isChinese = (lang) => typeof lang === 'string' && /^zh(-|$)/i.test(lang);
 
-/** 正体／繁体中文——只影响字体挑选，用词差异由生成阶段负责。 */
+/** 正體／繁體中文——只影響字型挑選，用詞差異由生成階段負責。 */
 export const isTraditionalChinese = (lang) =>
   typeof lang === 'string' && /^zh-(tw|hk|mo|hant)/i.test(lang);
 
 /* ------------------------------------------------------------------ */
-/* 画风预设                                                             */
+/* 畫風預設                                                             */
 /* ------------------------------------------------------------------ */
 /*
- * 换风格是整套换，不是只换一句「画风」。
+ * 換風格是整套換，不是只換一句「畫風」。
  *
- * 最容易踩的坑：各预设的 negativePrompt 立场是相反的。写实那套刚把
- * photorealistic 从反向词里删掉，吉卜力恰恰要禁它。毛孔、皮下散射、
- * 顺表情肌的皱纹在写实里是加分项，在吉卜力里是反效果。
- * photoreal 又反过来：它跟 realistic 一样绝不能禁 photorealistic，
- * 但必须禁 illustration / painting / anime——它要的是照片，不是画。
+ * 最容易踩的坑：各預設的 negativePrompt 立場是相反的。寫實那套剛把
+ * photorealistic 從反向詞裡刪掉，吉卜力恰恰要禁它。毛孔、皮下散射、
+ * 順表情肌的皺紋在寫實裡是加分項，在吉卜力裡是反效果。
+ * photoreal 又反過來：它跟 realistic 一樣絕不能禁 photorealistic，
+ * 但必須禁 illustration / painting / anime——它要的是照片，不是畫。
  *
- * 所以每个预设自带五块：render / surface / lighting / negative / tags，
- * 生成角色卡时整块取用，不要混搭。
+ * 所以每個預設自帶五塊：render / surface / lighting / negative / tags，
+ * 生成角色卡時整塊取用，不要混搭。
  */
 
 export const DEFAULT_STYLE = 'realistic';
@@ -155,10 +155,10 @@ export const STYLE_PRESETS = {
       'Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded',
     surface:
       'Skin with visible pores and uneven tone, faint capillaries at the nostrils and ear rims, subtle subsurface scattering; eyes with a wet specular highlight, moist lower lid, visible iris fibres and a limbal ring; eyelids and eyebrows slightly asymmetric — no two sides identical; individual flyaway hair strands breaking the silhouette. Fabric with a visible weave, wear and shine at elbows, cuffs and knees, cloth falling with real weight and self-shadowing in the folds',
-    // 设定表要平光才好抠图，写实要方向光才有体积——分区解决
+    // 設定表要平光才好去背，寫實要方向光才有體積——分區解決
     lighting:
       'LIGHTING IN THE LEFT ZONE ONLY: a soft directional key light from the upper left with gentle falloff, subtle ambient occlusion under the chin, in the eye sockets and where the collar meets the neck, giving the head real volume. LIGHTING IN THE RIGHT ZONES: flat even orthographic lighting with no directional key and no cast shadows, so the figures stay measurable and cleanly cut out',
-    // 注意：这里绝不能禁 photorealistic
+    // 注意：這裡絕不能禁 photorealistic
     negative:
       'plastic or waxy skin, over-smoothed airbrushed complexion, poreless doll face, perfectly symmetrical face, dead flat eyes without specular highlight, helmet-like hair with no loose strands, flat untextured fabric with no weave or wear, stiff mannequin posing, extra fingers, malformed hands, text, watermark, signature, busy or patterned background, harsh cast shadows on the backdrop',
     tags: ['semi-realistic', 'painterly', 'character sheet', 'subsurface skin', 'directional key light'],
@@ -168,28 +168,28 @@ export const STYLE_PRESETS = {
     label: { zh: '吉卜力动画', 'zh-TW': '吉卜力動畫', en: 'Ghibli-like animation', ja: 'ジブリ風アニメ' },
     render:
       'Hand-painted anime cel illustration in the manner of classic Studio Ghibli feature animation: clean confident ink linework of even weight, simple flat cel shading with a single soft shadow tone, gentle rounded forms, warm naturalistic palette, watercolour-like softness',
-    // 写实那套的表面细节在这里全是反效果，整块换掉
+    // 寫實那套的表面細節在這裡全是反效果，整塊換掉
     surface:
       'Skin as clean flat tone with one soft shadow shape and a warm blush at the cheeks and nose — no pores, no skin texture, no subsurface detail; large clear expressive eyes with a simple round highlight and flat iris colour; hair drawn as grouped strands and clumps with clean silhouettes rather than individual hairs; clothing in simple flat colour with a few decisive fold lines, no fabric weave and no micro-texture',
-    // 平光就是这个风格本身的一部分，不需要分区
+    // 平光就是這個風格本身的一部分，不需要分區
     lighting:
       'Even, gentle daylight across the whole sheet with a single soft shadow tone; no dramatic key light, no ambient occlusion, no cast shadows — the flat lighting is part of the style and keeps the figures cleanly cut out',
-    // 这里反过来，必须禁写实
+    // 這裡反過來，必須禁寫實
     negative:
       'photorealistic, 3d render, hyperrealistic skin texture, visible pores, subsurface scattering, harsh contrast, heavy painterly rendering, muddy or desaturated colours, gritty texture overlay, extra fingers, malformed hands, text, watermark, signature, busy or patterned background',
     tags: ['ghibli-like', 'cel shading', 'hand-painted', 'character sheet', 'flat daylight'],
   },
 
   /*
-   * 拟真实拍。跟 realistic 的差别不是「更写实一点」，是根本不同的东西：
-   * realistic 仍是画出来的（painterly、笔触、厚涂），photoreal 要的是
-   * 「剧组试装定妆照」——真人、真相机、真镜头、真布料。
+   * 擬真實拍。跟 realistic 的差別不是「更寫實一點」，是根本不同的東西：
+   * realistic 仍是畫出來的（painterly、筆觸、厚塗），photoreal 要的是
+   * 「劇組試裝定妝照」——真人、真相機、真鏡頭、真布料。
    *
-   * 所以 negative 的重点从「别画得太塑胶」变成「别画」：illustration /
-   * painting / anime / CGI 全禁。但跟 realistic 一样，photorealistic 与
-   * 3d render 里的 photorealistic 绝不能禁——那是这个预设要的东西本身。
+   * 所以 negative 的重點從「別畫得太塑膠」變成「別畫」：illustration /
+   * painting / anime / CGI 全禁。但跟 realistic 一樣，photorealistic 與
+   * 3d render 裡的 photorealistic 絕不能禁——那是這個預設要的東西本身。
    *
-   * 版面不变：16:9 三区、左半身像右三视图，照样分区打光。
+   * 版面不變：16:9 三區、左半身像右三視圖，照樣分區打光。
    */
   photoreal: {
     label: { zh: '拟真实拍', 'zh-TW': '擬真實拍', en: 'Live-action photography', ja: '実写風' },
@@ -197,10 +197,10 @@ export const STYLE_PRESETS = {
       'Live-action photography, not illustration: a real wardrobe camera-test photograph of a real human being on a film production, shot on a full-frame cinema camera with a 50-85mm lens at a moderate aperture against a neutral warm-gray seamless studio backdrop, the finish and honesty of a costume-department test still',
     surface:
       'True photographic skin: real visible pores, fine vellus hair, uneven natural tone, faint capillaries at the nostrils and ear rims, genuine subsurface scattering, moles and freckles left in place, no beauty retouching and no skin smoothing; eyes with a real catchlight from the key light, moist lower lid, resolvable iris fibres and a limbal ring; eyebrows and eyelids honestly asymmetric; loose individual hair strands catching the light and breaking the silhouette. Real garments with true cloth weight, visible weave, stitched seams and hems, natural drape, self-shadowing folds and honest wear at cuffs, elbows and knees',
-    // 跟 realistic 同一套分区逻辑：左栏要体积，右侧要能量比例、好抠图
+    // 跟 realistic 同一套分區邏輯：左欄要體積，右側要能量比例、好去背
     lighting:
       'LIGHTING IN THE LEFT ZONE ONLY: a large soft-box key from the upper left with a gentle bounce fill on the shadow side, real ambient occlusion under the chin, in the eye sockets and where the collar meets the neck, so the head reads as an actually photographed head with volume. LIGHTING IN THE RIGHT ZONES: flat even frontal studio light with no directional key and no cast shadows on the backdrop, so the figures stay measurable and cleanly cut out',
-    // 这里禁的是「画出来的」，不是「真实的」——photorealistic 绝不能进这一串
+    // 這裡禁的是「畫出來的」，不是「真實的」——photorealistic 絕不能進這一串
     negative:
       'illustration, painting, drawing, sketch, anime, manga, cartoon, cel shading, digital painting brush strokes, CGI, 3d game render, plastic or waxy skin, doll skin, beauty-filter retouching, poreless airbrushed complexion, perfectly symmetrical face, dead flat eyes without a catchlight, wig-like helmet hair with no loose strands, flat untextured costume fabric, cheap cosplay-shop garment, stiff mannequin posing, extra fingers, malformed hands, text, watermark, signature, busy or patterned background, harsh cast shadows on the backdrop',
     tags: ['live-action', 'photographic', 'wardrobe camera test', 'character sheet', 'real skin texture', '85mm lens'],
@@ -255,9 +255,9 @@ const STRINGS = {
     copyImage: '复制图片',
     closeImage: '关闭',
   },
-  // 台湾正体。跟 zh 的差别不只在字形——用词也照台湾习惯换过：
-  // 「生圖」不是「出图」、「負向提示詞」不是「反向提示词」、「搜尋」不是「搜索」。
-  // 只换字形不换用词，读起来还是像翻译腔的简体。
+  // 台灣正體。跟 zh 的差別不只在字形——用詞也照台灣習慣換過：
+  // 這裡說「生圖」而 zh 那套說「出图」，這裡說「負向提示詞」而那邊說「反向提示词」，
+  // 這裡說「搜尋」而那邊說「搜索」。只換字形不換用詞，讀起來還是像翻譯腔的簡體。
   'zh-TW': {
     kicker: '角色設定集',
     titleTail: ' · 角色',
@@ -294,7 +294,7 @@ const STRINGS = {
     mdSynopsis: '## 故事摘要',
     searchPlaceholder: '搜尋角色、特質、身分',
     rosterTitle: '角色 · 依戲份排序',
-    footnote: '標註（推斷）的條目為原文未明寫、依據文本推演而來。',
+    footnote: '標註（推斷）的條目為原文未明寫、依據原文推演而來。',
     noMatch: '沒有符合的角色',
     voiceTag: 'VOICE',
     expandAll: '全部展開',
@@ -351,25 +351,25 @@ const STRINGS = {
     kicker: 'キャラクター設定集',
     titleTail: ' · 登場人物',
     docTitle: (s) => `${s} · キャラクター設定集`,
-    counts: (n, shots) => `${n}人${shots ? ` · 設定画 ${shots}枚` : ''} · 出番順`,
+    counts: (n, shots) => `${n}人${shots ? ` · 設定畫 ${shots}枚` : ''} · 出番順`,
     synopsis: 'あらすじ',
     indexLabel: '登場人物一覧',
     aka: '別名',
-    groups: { persona: '人物像', image: 'ビジュアル', voice: '声' },
+    groups: { persona: '人物像', image: 'ビジュアル', voice: '聲' },
     persona: {
       gender: '性別', ageRange: '年齢', identity: '立場',
       appearance: '外見', temperament: '性格', motivation: '動機',
       arc: '人物の変化', relationships: '関係', evidence: '原文の根拠',
     },
     image: {
-      style: '画風', copyTags: 'タグをコピー',
-      prompt: '画像プロンプト EN', promptLocal: '画像プロンプト',
-      negative: 'ネガティブプロンプト', sheet: 'キャラ設定画プロンプト EN',
+      style: '畫風', copyTags: 'タグをコピー',
+      prompt: '畫像プロンプト EN', promptLocal: '畫像プロンプト',
+      negative: 'ネガティブプロンプト', sheet: 'キャラ設定畫プロンプト EN',
     },
     voice: {
-      timbre: '声質', pitch: '音域', pace: '話速', accent: '訛り',
+      timbre: '聲質', pitch: '音域', pace: '話速', accent: '訛り',
       emotion: '感情', referenceHint: 'たとえるなら',
-      prompt: '音声プロンプト EN', promptLocal: '音声プロンプト',
+      prompt: '音聲プロンプト EN', promptLocal: '音聲プロンプト',
     },
     importance: { protagonist: '主役', major: '主要人物', supporting: '脇役', minor: '端役' },
     copy: 'コピー', copied: 'コピー済み', copyFailed: '失敗', copyJson: 'JSON をコピー',
@@ -383,33 +383,33 @@ const STRINGS = {
     mdSynopsis: '## あらすじ',
     searchPlaceholder: 'キャラクター・特徴・立場を検索',
     rosterTitle: '登場人物 · 出番順',
-    footnote: '（推断）の箇所は原文に明記がなく、本文から推し量ったものです。',
-    noMatch: '該当するキャラクターがいません',
+    footnote: '（推斷）の箇所は原文に明記がなく、本文から推し量ったものです。',
+    noMatch: '該當するキャラクターがいません',
     voiceTag: 'VOICE',
     expandAll: 'すべて展開',
     zoomImage: '拡大表示',
-    copyImage: '画像をコピー',
+    copyImage: '畫像をコピー',
     closeImage: '閉じる',
   },
 };
 
 /**
- * 取界面文案。
+ * 取介面文案。
  *
- * 两层：内置表覆盖常用语言；其他语言由 skill 在生成时翻译一份塞进
- * cast.json 的 `ui`，这里合并进来。这样支持的语言不受内置表限制。
+ * 兩層：內建表覆蓋常用語言；其他語言由 skill 在生成時翻譯一份塞進
+ * cast.json 的 `ui`，這裡合並進來。這樣支援的語言不受內建表限制。
  *
- * @param lang      语言码
- * @param overrides cast.json 的 `ui`，可以只覆盖一部分键
+ * @param lang      語言碼
+ * @param overrides cast.json 的 `ui`，可以只覆蓋一部分鍵
  */
 export function strings(lang = DEFAULT_LANG, overrides = null) {
   const base = STRINGS[lang] ?? STRINGS.en;
   if (!overrides || typeof overrides !== 'object') return base;
 
-  // 只合两层——STRINGS 的嵌套就两层深，够用且不会被脏数据带偏。
+  // 只合兩層——STRINGS 的巢狀就兩層深，夠用且不會被髒資料帶偏。
   const merged = { ...base };
   for (const [k, v] of Object.entries(overrides)) {
-    if (typeof base[k] === 'function') continue; // 函数模板不接受覆盖
+    if (typeof base[k] === 'function') continue; // 函式模板不接受覆蓋
     if (v && typeof v === 'object' && !Array.isArray(v) && base[k] && typeof base[k] === 'object') {
       merged[k] = { ...base[k], ...v };
     } else if (typeof v === 'string') {
@@ -421,10 +421,10 @@ export function strings(lang = DEFAULT_LANG, overrides = null) {
 
 export const SUPPORTED_UI_LANGS = Object.keys(STRINGS);
 
-/** 需要 skill 补一份 `ui` 翻译的语言（内置表里没有的）。 */
+/** 需要 skill 補一份 `ui` 翻譯的語言（內建表裡沒有的）。 */
 export const needsUiTranslation = (lang) => !SUPPORTED_UI_LANGS.includes(lang);
 
-/** `ui` 里可覆盖的键——供 ui-template 子命令生成骨架。 */
+/** `ui` 裡可覆蓋的鍵——供 ui-template 子命令生成骨架。 */
 export function uiTemplate() {
   const en = STRINGS.en;
   const out = {};
@@ -440,23 +440,23 @@ export function uiTemplate() {
 /* ------------------------------------------------------------------ */
 
 const IMPORTANCE = ['protagonist', 'major', 'supporting', 'minor'];
-/** 中日韩表意文字与假名、谚文——图像/TTS 提示词里出现就说明串语言了。 */
+/** 中日韓表意文字與假名、諺文——圖像/TTS 提示詞裡出現就說明串語言了。 */
 const CJK = /[㐀-鿿぀-ヿ가-힯]/;
-/** 假名单独一条：用来把日文和中文区分开。 */
+/** 假名單獨一條：用來把日文和中文區分開。 */
 const KANA = /[぀-ヿ]/;
 
 const PERSONA_STRINGS = ['gender', 'ageRange', 'identity', 'appearance', 'temperament', 'motivation', 'arc'];
-/** 机器输入，永远英文——图像和 TTS 引擎都吃英文最稳，跟报告语言无关。 */
+/** 機器輸入，永遠英文——圖像和 TTS 引擎都吃英文最穩，跟報告語言無關。 */
 const MACHINE_FIELDS = { image: ['prompt', 'negativePrompt', 'sheet'], voice: ['prompt'] };
-/** 给人读的，跟随报告语言。 */
+/** 給人讀的，跟隨報告語言。 */
 const HUMAN_VOICE_FIELDS = ['timbre', 'pitch', 'pace', 'accent', 'emotion', 'referenceHint'];
 
 const normalise = (s) => String(s).replace(/\s+/g, '');
 
 /**
- * @param characters 角色卡数组
- * @param sourceText 原文；null 则跳过逐字引文校验
- * @param lang       报告语言，决定人类可读字段该是什么语言
+ * @param characters 角色卡陣列
+ * @param sourceText 原文；null 則跳過逐字引文校驗
+ * @param lang       報告語言，決定人類可讀欄位該是什麼語言
  */
 export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style = DEFAULT_STYLE) {
   const problems = [];
@@ -464,17 +464,17 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
   const at = (name, msg) => problems.push(`[${name}] ${msg}`);
 
   if (!Array.isArray(characters) || characters.length === 0) {
-    return ['cast 为空或不是数组'];
+    return ['cast 為空或不是陣列'];
   }
 
   for (const c of characters) {
-    const name = c?.name ?? '(无名)';
+    const name = c?.name ?? '(無名)';
 
-    // --- 结构 ---
+    // --- 結構 ---
     if (typeof c?.name !== 'string' || !c.name.trim()) at(name, '缺少 name');
-    if (!Array.isArray(c?.aliases)) at(name, 'aliases 必须是数组');
+    if (!Array.isArray(c?.aliases)) at(name, 'aliases 必須是陣列');
     if (!IMPORTANCE.includes(c?.importance)) {
-      at(name, `importance 必须是 ${IMPORTANCE.join('/')}，实际是 ${JSON.stringify(c?.importance)}`);
+      at(name, `importance 必須是 ${IMPORTANCE.join('/')}，實際是 ${JSON.stringify(c?.importance)}`);
     }
     if (typeof c?.oneLiner !== 'string' || !c.oneLiner.trim()) at(name, '缺少 oneLiner');
 
@@ -483,11 +483,11 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
       at(name, '缺少 persona');
     } else {
       for (const f of PERSONA_STRINGS) {
-        if (typeof persona[f] !== 'string' || !persona[f].trim()) at(name, `persona.${f} 缺失或为空`);
+        if (typeof persona[f] !== 'string' || !persona[f].trim()) at(name, `persona.${f} 缺失或為空`);
       }
-      if (!Array.isArray(persona.personality)) at(name, 'persona.personality 必须是数组');
-      if (!Array.isArray(persona.relationships)) at(name, 'persona.relationships 必须是数组');
-      if (!Array.isArray(persona.evidence)) at(name, 'persona.evidence 必须是数组');
+      if (!Array.isArray(persona.personality)) at(name, 'persona.personality 必須是陣列');
+      if (!Array.isArray(persona.relationships)) at(name, 'persona.relationships 必須是陣列');
+      if (!Array.isArray(persona.evidence)) at(name, 'persona.evidence 必須是陣列');
     }
 
     const image = c?.image;
@@ -495,12 +495,12 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
       at(name, '缺少 image');
     } else {
       for (const f of ['style', 'prompt', 'negativePrompt']) {
-        if (typeof image[f] !== 'string' || !image[f].trim()) at(name, `image.${f} 缺失或为空`);
+        if (typeof image[f] !== 'string' || !image[f].trim()) at(name, `image.${f} 缺失或為空`);
       }
       if (typeof image.sheet !== 'string' || !image.sheet.trim()) {
-        at(name, 'image.sheet 缺失或为空（角色设定图提示词）');
+        at(name, 'image.sheet 缺失或為空（角色設定圖提示詞）');
       }
-      if (!Array.isArray(image.tags)) at(name, 'image.tags 必须是数组');
+      if (!Array.isArray(image.tags)) at(name, 'image.tags 必須是陣列');
     }
 
     const voice = c?.voice;
@@ -508,22 +508,22 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
       at(name, '缺少 voice');
     } else {
       for (const f of [...HUMAN_VOICE_FIELDS, 'prompt']) {
-        if (typeof voice[f] !== 'string' || !voice[f].trim()) at(name, `voice.${f} 缺失或为空`);
+        if (typeof voice[f] !== 'string' || !voice[f].trim()) at(name, `voice.${f} 缺失或為空`);
       }
     }
 
-    // --- 引文必须逐字 ---
+    // --- 引文必須逐字 ---
     if (flatSource && Array.isArray(persona?.evidence)) {
       for (const quote of persona.evidence) {
         if (typeof quote !== 'string') {
-          at(name, 'persona.evidence 里有非字符串');
+          at(name, 'persona.evidence 裡有非字串');
         } else if (!flatSource.includes(normalise(quote))) {
           at(name, `引文不是原文逐字片段：${quote}`);
         }
       }
     }
 
-    // --- 出图提示词不许出现人名 ---
+    // --- 生圖提示詞不許出現人名 ---
     if (image) {
       const names = [c?.name, ...(Array.isArray(c?.aliases) ? c.aliases : [])].filter(
         (n) => typeof n === 'string' && n.trim(),
@@ -532,63 +532,63 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
         const value = image[field];
         if (typeof value !== 'string') continue;
         for (const n of names) {
-          if (value.includes(n)) at(name, `image.${field} 里出现了人名「${n}」`);
+          if (value.includes(n)) at(name, `image.${field} 裡出現了人名「${n}」`);
         }
       }
     }
 
-    // --- 语言分工 ---
-    // 机器字段永远英文；人类字段跟随报告语言。
-    // 只有 zh / en 能可靠自动判别，其他语言不猜、跳过。
+    // --- 語言分工 ---
+    // 機器欄位永遠英文；人類欄位跟隨報告語言。
+    // 只有 zh / en 能可靠自動判別，其他語言不猜、跳過。
     for (const [group, fields] of Object.entries(MACHINE_FIELDS)) {
       const obj = c?.[group];
       if (!obj) continue;
       for (const f of fields) {
         if (typeof obj[f] === 'string' && CJK.test(obj[f])) {
-          at(name, `${group}.${f} 是喂给模型的，必须英文，但含中日韩字符`);
+          at(name, `${group}.${f} 是餵給模型的，必須英文，但含中日韓字元`);
         }
       }
     }
     if (Array.isArray(image?.tags)) {
       for (const t of image.tags) {
-        if (typeof t === 'string' && CJK.test(t)) at(name, `image.tags 必须英文，但「${t}」含中日韩字符`);
+        if (typeof t === 'string' && CJK.test(t)) at(name, `image.tags 必須英文，但「${t}」含中日韓字元`);
       }
     }
-    // --- 风格与提示词必须匹配 ---
-    // 两个预设的反向提示词几乎是相反的，搞反了整批图都毁。
+    // --- 風格與提示詞必須匹配 ---
+    // 兩個預設的負向提示詞幾乎是相反的，搞反了整批圖都毀。
     if (image && SUPPORTED_STYLES.includes(style)) {
       const neg = typeof image.negativePrompt === 'string' ? image.negativePrompt : '';
       const bansRealism = /photorealistic|3d render/i.test(neg);
       const preset = stylePreset(style);
-      // 拿预设自己的立场当基准，新增预设不用回来改这里
+      // 拿預設自己的立場當基準，新增預設不用回來改這裡
       const presetBansRealism = /photorealistic|3d render/i.test(preset.negative);
       if (!presetBansRealism && bansRealism) {
-        at(name, `style=${style} 却在 negativePrompt 里禁 photorealistic／3d render——自相矛盾`);
+        at(name, `style=${style} 卻在 negativePrompt 裡禁 photorealistic／3d render——自相矛盾`);
       }
       if (presetBansRealism && !bansRealism) {
-        at(name, `style=${style} 的 negativePrompt 必须禁 photorealistic／3d render`);
+        at(name, `style=${style} 的 negativePrompt 必須禁 photorealistic／3d render`);
       }
-      // 拟真实拍反过来要禁「画出来的」，漏了模型很容易交一张插画
+      // 擬真實拍反過來要禁「畫出來的」，漏了模型很容易交一張插畫
       if (style === 'photoreal' && !/illustration|painting|anime|cartoon/i.test(neg)) {
-        at(name, 'style=photoreal 的 negativePrompt 必须禁 illustration／painting／anime／cartoon');
+        at(name, 'style=photoreal 的 negativePrompt 必須禁 illustration／painting／anime／cartoon');
       }
       if (typeof image.sheet === 'string' && !image.sheet.includes(preset.render)) {
-        at(name, `image.sheet 里没有 style=${style} 的渲染句，画风会飘`);
+        at(name, `image.sheet 裡沒有 style=${style} 的渲染句，畫風會飄`);
       }
     }
 
-    // 只有这三种能可靠自动判别，其他语言不猜、跳过——误报比漏报更烦人。
+    // 只有這三種能可靠自動判別，其他語言不猜、跳過——誤報比漏報更煩人。
     if (voice) {
       for (const f of HUMAN_VOICE_FIELDS) {
         const v = voice[f];
         if (typeof v !== 'string' || !v.trim()) continue;
-        if (lang === 'en' && CJK.test(v)) at(name, `voice.${f} 应为英文，但含中日韩字符`);
-        // zh 的各地区变体（zh-TW / zh-HK…）走同一条中文检查；
-        // 简繁之分自动判不可靠，交给生成阶段的用语约束管。
-        if (isChinese(lang) && !CJK.test(v)) at(name, `voice.${f} 应为中文，实际是「${v}」`);
-        if (isChinese(lang) && KANA.test(v)) at(name, `voice.${f} 应为中文，但含日文假名`);
+        if (lang === 'en' && CJK.test(v)) at(name, `voice.${f} 應為英文，但含中日韓字元`);
+        // zh 的各地區變體（zh-TW / zh-HK…）走同一條中文檢查；
+        // 簡繁之分自動判不可靠，交給生成階段的用語約束管。
+        if (isChinese(lang) && !CJK.test(v)) at(name, `voice.${f} 應為中文，實際是「${v}」`);
+        if (isChinese(lang) && KANA.test(v)) at(name, `voice.${f} 應為中文，但含日文假名`);
         if (lang === 'ja' && !KANA.test(v) && !CJK.test(v)) {
-          at(name, `voice.${f} 应为日文，实际是「${v}」`);
+          at(name, `voice.${f} 應為日文，實際是「${v}」`);
         }
       }
     }
@@ -657,11 +657,11 @@ export function renderMarkdown(characters, source, summary = '', lang = DEFAULT_
 /* render — html                                                       */
 /* ------------------------------------------------------------------ */
 /*
- * 三栏工作台。设计约定见 references/report-style.md。不能破的：
- *   1. 双字域：衬线=叙事与原文，无衬线=分析，等宽=喂给机器的提示词
- *   2. 「（推断）」自动高亮，让读者一眼分清有据和补全
- *   3. 一次只看一个角色，靠左栏切换 + 顶栏搜索找人
- *   4. 打印时全部展开——屏幕上一次一个，纸上要是完整的一份
+ * 三欄工作台。設計約定見 references/report-style.md。不能破的：
+ *   1. 雙字域：襯線=敘事與原文，無襯線=分析，等寬=餵給機器的提示詞
+ *   2. 「（推斷）」自動高亮，讓讀者一眼分清有據和補全
+ *   3. 一次只看一個角色，靠左欄切換 + 頂欄搜尋找人
+ *   4. 列印時全部展開——螢幕上一次一個，紙上要是完整的一份
  */
 
 const esc = (s) =>
@@ -671,13 +671,13 @@ const esc = (s) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-/** 推断标记：半角/全角 × 中英四种写法都要认，模型不挑食地乱产。 */
-const INFERRED = /（\s*(?:推断|inferred)[^）]*）|\(\s*(?:推断|inferred)[^)]*\)/gi;
+/** 推斷標記：半形/全形 × 中英四種寫法都要認，模型不挑食地亂產。 */
+const INFERRED = /（\s*(?:推斷|inferred)[^）]*）|\(\s*(?:推斷|inferred)[^)]*\)/gi;
 const marked = (s) => esc(s).replace(INFERRED, (m) => `<span class="inf">${m}</span>`);
 
 const IMPORTANCE_ORDER = ['protagonist', 'major', 'supporting', 'minor'];
 
-/** 左栏的一条角色。缩略图取设定图的左半边——那里正好是半身像。 */
+/** 左欄的一條角色。縮圖取設定圖的左半邊——那裡正好是半身像。 */
 function renderRosterItem(c, index, t) {
   const meta = [c.persona?.gender, c.persona?.ageRange].filter(Boolean).join(' · ');
   const hay = [
@@ -817,8 +817,8 @@ function renderCharacter(c, index, t) {
 
 export function renderHtml(characters, source, summary = '', lang = DEFAULT_LANG, ui = null) {
   const t = strings(lang, ui);
-  // 正体中文要挑 TC 字体：Songti SC 那一串在台湾机器上多半没装，
-  // 掉回系统预设会跟内文的正体字形不搭。
+  // 正體中文要挑 TC 字型：Songti SC 那一串在台灣機器上多半沒裝，
+  // 掉回系統預設會跟內文的正體字形不搭。
   const isHant = isTraditionalChinese(lang);
   const shots = characters.filter((c) => c.sheetImage).length;
   const ordered = [...characters].sort(
@@ -831,7 +831,7 @@ export function renderHtml(characters, source, summary = '', lang = DEFAULT_LANG
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(t.docTitle(source))}</title>
 <style>
-/* 冷灰印张 + 铁锈红印记。红色只用在与原文有关的地方和当前选中态。 */
+/* 冷灰印張 + 鐵鏽紅印記。紅色只用在與原文有關的地方和當前選中態。 */
 :root{
   --paper:#eceded; --panel:#f5f6f5; --side:#e4e6e3; --ink:#191d21; --ink-2:#5b636a; --ink-3:#8c9298;
   --rule:#d2d5d0; --rule-2:#c2c6bf; --seal:#8a3324; --seal-soft:#8a332412;
@@ -847,7 +847,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.7 var(--sans)
 h1,h2,h3,h4{margin:0;font-weight:400}
 button{font-family:inherit}
 
-/* ---------- 顶栏 ---------- */
+/* ---------- 頂欄 ---------- */
 .top{position:sticky;top:0;z-index:20;height:var(--top);display:flex;align-items:center;gap:24px;
   padding:0 20px;background:var(--panel);border-bottom:1px solid var(--rule-2)}
 .brand{display:flex;align-items:baseline;gap:10px;flex:none}
@@ -865,7 +865,7 @@ button{font-family:inherit}
 .shell{display:grid;grid-template-columns:var(--side-w) minmax(0,1fr);align-items:start}
 @media(max-width:1080px){:root{--side-w:100%}.shell{grid-template-columns:1fr}}
 
-/* ---------- 左栏 ---------- */
+/* ---------- 左欄 ---------- */
 .side{position:sticky;top:var(--top);height:calc(100vh - var(--top));overflow-y:auto;
   background:var(--side);border-right:1px solid var(--rule-2)}
 @media(max-width:1080px){.side{position:static;height:auto}}
@@ -880,9 +880,9 @@ button{font-family:inherit}
 .rost:hover{background:#00000006}
 .rost.on{background:var(--panel);border-left-color:var(--seal)}
 .rost:focus-visible{outline:2px solid var(--seal);outline-offset:-2px}
-/* 缩略图 = 设定图的左栏切片。设定图固定 16:9、左栏占约 34%，
-   所以把整图按 1/0.34 ≈ 294% 放大再左上对齐，裁出来正好是半身像。
-   比 <img> + object-position 可控：不依赖浏览器怎么 cover。 */
+/* 縮圖 = 設定圖的左欄切片。設定圖固定 16:9、左欄佔約 34%，
+   所以把整圖按 1/0.34 ≈ 294% 放大再左上對齊，裁出來正好是半身像。
+   比 <img> + object-position 可控：不相依瀏覽器怎麼 cover。 */
 .rost-thumb{display:block;width:76px;height:76px;border:1px solid var(--rule-2);border-radius:6px;
   background:#fff no-repeat left top;background-size:294% auto}
 .rost-body{min-width:0}
@@ -898,7 +898,7 @@ button{font-family:inherit}
 .badge{font-size:11px;padding:1px 7px;border:1px solid var(--rule-2);border-radius:2px;color:var(--ink-2)}
 .rost.on .badge,.char-h .badge{border-color:var(--seal);color:var(--seal)}
 
-/* ---------- 主区 ---------- */
+/* ---------- 主區 ---------- */
 .main{padding:26px 28px 72px;min-width:0;max-width:1500px}
 .char{display:none}
 .char.on{display:block}
@@ -913,13 +913,13 @@ button{font-family:inherit}
 .upper{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start;margin-top:20px}
 @media(max-width:1240px){.upper{grid-template-columns:1fr}}
 
-/* 设定图是白底印张 */
+/* 設定圖是白底印張 */
 .plate-wrap{position:relative;margin:0}
 .plate{display:block;width:100%;padding:0;background:#fff;border:1px solid var(--rule-2);
   border-radius:2px;overflow:hidden;cursor:zoom-in}
 .plate img{display:block;width:100%;height:auto}
 .plate:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
-/* 右下角浮在图上，hover 才明显——别挡住画面 */
+/* 右下角浮在圖上，hover 才明顯——別擋住畫面 */
 .copy-img{position:absolute;right:10px;bottom:10px;font:500 11px/1 var(--sans);color:var(--ink-2);
   background:var(--paper);border:1px solid var(--rule-2);border-radius:3px;padding:6px 10px;
   cursor:pointer;opacity:.55;transition:.15s}
@@ -928,7 +928,7 @@ button{font-family:inherit}
 .copy-img:focus-visible{opacity:1;outline:2px solid var(--seal);outline-offset:2px}
 .copy-img[data-done]{border-color:var(--seal);color:var(--seal);opacity:1}
 
-/* 弹层 */
+/* 彈層 */
 .lightbox{position:fixed;inset:0;z-index:50;display:none;place-items:center;
   background:#191d21e6;padding:32px;cursor:zoom-out}
 .lightbox.on{display:grid}
@@ -948,13 +948,13 @@ button{font-family:inherit}
 .blk h3{font:500 11px/1 var(--sans);letter-spacing:.2em;color:var(--seal);margin-bottom:7px}
 .blk p{margin:0;font-size:13.5px;line-height:1.85}
 
-/* 原文：衬线体，铁锈红边栏。这里是书自己在说话 */
+/* 原文：襯線體，鐵鏽紅邊欄。這裡是書自己在說話 */
 .source .quotes{display:grid;grid-template-columns:1fr 1fr;gap:10px 30px}
 @media(max-width:700px){.source .quotes{grid-template-columns:1fr}}
 .source blockquote{margin:0;padding-left:13px;border-left:2px solid var(--seal);
   font:400 13.5px/1.85 var(--serif)}
 
-/* ---------- 右侧信息卡 ---------- */
+/* ---------- 右側資訊卡 ---------- */
 .side-cards{display:flex;flex-direction:column;gap:14px}
 .card{border:1px solid var(--rule);border-radius:2px;background:var(--panel);padding:14px 16px}
 .card h4{font:500 11px/1 var(--sans);letter-spacing:.2em;color:var(--ink-3);margin-bottom:10px;
@@ -970,7 +970,7 @@ button{font-family:inherit}
 .tags li{font:400 11px/1.5 var(--mono);color:var(--ink-2);border:1px solid var(--rule-2);
   background:var(--paper);border-radius:2px;padding:1px 6px}
 
-/* ---------- 提示词 ---------- */
+/* ---------- 提示詞 ---------- */
 .prompts{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px}
 @media(max-width:900px){.prompts{grid-template-columns:1fr}}
 .pgroup{border:1px solid var(--rule);border-radius:2px;background:var(--panel);padding:6px 14px 10px}
@@ -993,7 +993,7 @@ button{font-family:inherit}
 .copy[data-done]{border-color:var(--seal);color:var(--seal)}
 .copy.wide{width:100%;padding:9px}
 
-/* 签名：推断标记 */
+/* 簽名：推斷標記 */
 .inf{color:var(--ink-3);font-size:.88em;background:var(--seal-soft);padding:0 3px;border-radius:2px}
 
 .nomatch{display:none;padding:20px;font-size:13px;color:var(--ink-3)}
@@ -1001,7 +1001,7 @@ button{font-family:inherit}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* 屏幕上一次一个角色，纸上要完整 */
+/* 螢幕上一次一個角色，紙上要完整 */
 @media print{
   .top,.side,.copy{display:none!important}
   .shell{display:block}
@@ -1049,7 +1049,7 @@ button{font-family:inherit}
 <script>
 const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed })};
 
-// 左栏切换：一次只显示一个角色
+// 左欄切換：一次只顯示一個角色
 document.querySelector('.roster').addEventListener('click', (e) => {
   const btn = e.target.closest('.rost');
   if (!btn) return;
@@ -1058,7 +1058,7 @@ document.querySelector('.roster').addEventListener('click', (e) => {
   document.querySelector('.main').scrollIntoView({ block: 'start', behavior: 'smooth' });
 });
 
-// 搜索：过滤左栏；结果只剩一个就直接切过去
+// 搜尋：過濾左欄；結果只剩一個就直接切過去
 document.getElementById('q').addEventListener('input', (e) => {
   const q = e.target.value.trim().toLowerCase();
   let hits = [];
@@ -1071,7 +1071,7 @@ document.getElementById('q').addEventListener('input', (e) => {
   if (q && hits.length === 1) hits[0].click();
 });
 
-// 图片弹层
+// 圖片彈層
 const lb = document.querySelector('.lightbox');
 const lbImg = lb.querySelector('img');
 function closeLb() { lb.classList.remove('on'); lbImg.removeAttribute('src'); }
@@ -1082,7 +1082,7 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
-// 复制图片本身到剪贴板（不是路径）
+// 複製圖片本身到剪貼簿（不是路徑）
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('.copy-img');
   if (!btn) return;
@@ -1091,7 +1091,7 @@ document.addEventListener('click', async (e) => {
   const label = btn.textContent;
   try {
     const blob = await (await fetch(btn.dataset.img)).blob();
-    // Safari 只认 image/png，其它格式先过一遍 canvas
+    // Safari 只認 image/png，其它格式先過一遍 canvas
     let png = blob;
     if (blob.type !== 'image/png') {
       const bmp = await createImageBitmap(blob);
@@ -1130,40 +1130,40 @@ document.addEventListener('click', async (e) => {
 /* CLI                                                                 */
 /* ------------------------------------------------------------------ */
 
-const USAGE = `novel-characters.mjs — novel-characters skill 的确定性工具
+const USAGE = `novel-characters.mjs — novel-characters skill 的確定性工具
 
-  chunk <book.txt> <workdir>       段落感知重叠切块，写 chunk-NN.txt，打印块数
-  merge <workdir>                  归并 roster-*.json，打印 cast JSON
-  validate <cast.json> <book.txt>  校验；有违规逐条打印并 exit 1
-  render <cast.json> [--html|--md] 渲染报告到 stdout（默认 --md）
-  slug <name>                      角色名转安全文件名
-  ui-template [lang]               打印界面文案骨架，供翻译成内置表没有的语言
-  styles [id]                      打印画风预设的完整内容
+  chunk <book.txt> <workdir>       段落感知重疊切塊，寫 chunk-NN.txt，印出塊數
+  merge <workdir>                  歸併 roster-*.json，印出 cast JSON
+  validate <cast.json> <book.txt>  校驗；有違規逐條印出並 exit 1
+  render <cast.json> [--html|--md] 渲染報告到 stdout（預設 --md）
+  slug <name>                      角色名轉安全檔名
+  ui-template [lang]               印出介面文案骨架，供翻譯成內建表沒有的語言
+  styles [id]                      印出畫風預設的完整內容
 
-通用选项：
-  --lang <code>     报告语言，默认取 cast.json 的 lang，再默认 ${DEFAULT_LANG}
-                    内置界面文案：${SUPPORTED_UI_LANGS.join(' / ')}；其他语言码用英文界面骨架
+通用選項：
+  --lang <code>     報告語言，預設取 cast.json 的 lang，再預設 ${DEFAULT_LANG}
+                    內建介面文案：${SUPPORTED_UI_LANGS.join(' / ')}；其他語言碼用英文介面骨架
 
-render 选项：
-  --source <name>   报告标题用的书名（默认取 cast.json 的 source 或文件名）
-  --images <dir>    图片目录名，默认 images
-                    会去找 <dir>/<slug>-sheet.png`;
+render 選項：
+  --source <name>   報告標題用的書名（預設取 cast.json 的 source 或檔名）
+  --images <dir>    圖片目錄名，預設 images
+                    會去找 <dir>/<slug>-sheet.png`;
 
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(path), 'utf8'));
 }
 
-/** 取 --flag 的值，没有就返回 fallback。 */
+/** 取 --flag 的值，沒有就返回 fallback。 */
 function flag(rest, name, fallback = null) {
   const i = rest.indexOf(name);
   return i >= 0 && rest[i + 1] ? rest[i + 1] : fallback;
 }
 
-/** cast.json 可以是 {source, lang, summary, characters}，也可以是裸数组（旧格式）。 */
+/** cast.json 可以是 {source, lang, summary, characters}，也可以是裸陣列（舊格式）。 */
 function loadCast(path) {
   const raw = readJson(path);
   const characters = Array.isArray(raw) ? raw : raw.characters;
-  if (!Array.isArray(characters)) throw new Error(`${path} 里没有 characters 数组`);
+  if (!Array.isArray(characters)) throw new Error(`${path} 裡沒有 characters 陣列`);
   return {
     characters,
     source: Array.isArray(raw) ? null : raw.source,
@@ -1199,7 +1199,7 @@ function main(argv) {
         2,
       ),
     );
-    if (truncated) console.error(`⚠️ 文本超过 ${MAX_CHUNKS} 块上限，尾部未扫描`);
+    if (truncated) console.error(`⚠️ 文字超過 ${MAX_CHUNKS} 塊上限，尾部未掃描`);
     return;
   }
 
@@ -1208,7 +1208,7 @@ function main(argv) {
     if (!workdir) throw new Error('用法：merge <workdir>');
     const dir = resolve(workdir);
     const files = readdirSync(dir).filter((f) => /^roster-.*\.json$/.test(f)).sort();
-    if (!files.length) throw new Error(`${dir} 里没有 roster-*.json`);
+    if (!files.length) throw new Error(`${dir} 裡沒有 roster-*.json`);
     const batches = files.map((f) => {
       const raw = readJson(join(dir, f));
       return Array.isArray(raw) ? raw : (raw.characters ?? []);
@@ -1224,29 +1224,29 @@ function main(argv) {
     const lang = flag(rest, '--lang', castLang);
     const style = flag(rest, '--style', castStyle);
     const source = bookPath ? readFileSync(resolve(bookPath), 'utf8') : null;
-    if (!bookPath) console.error('⚠️ 没给原文，跳过逐字引文校验');
+    if (!bookPath) console.error('⚠️ 沒給原文，跳過逐字引文校驗');
     const problems = validateCast(characters, source, lang, style);
     if (!SUPPORTED_STYLES.includes(style)) {
-      problems.unshift(`顶层 style=${style} 不是已知预设（${SUPPORTED_STYLES.join('/')}）`);
+      problems.unshift(`頂層 style=${style} 不是已知預設（${SUPPORTED_STYLES.join('/')}）`);
     }
-    // 顶层的故事摘要——报告要用，缺了就没法在顶部交代背景
+    // 頂層的故事摘要——報告要用，缺了就沒法在頂部交代背景
     if (typeof summary !== 'string' || !summary.trim()) {
-      problems.unshift('顶层缺少 summary（故事摘要），报告顶部会空着');
+      problems.unshift('頂層缺少 summary（故事摘要），報告頂部會空著');
     }
-    // 内置表没有这个语言，又没给 ui 翻译 —— 报告界面会露出英文
+    // 內建表沒有這個語言，又沒給 ui 翻譯 —— 報告介面會露出英文
     if (needsUiTranslation(lang) && !ui) {
       problems.unshift(
-        `lang=${lang} 不在内置界面语言（${SUPPORTED_UI_LANGS.join('/')}）里，` +
-          '顶层需要一份 ui 翻译，否则界面文案会是英文。' +
-          '用 `ui-template` 生成骨架后翻译填进去。',
+        `lang=${lang} 不在內建介面語言（${SUPPORTED_UI_LANGS.join('/')}）裡，` +
+          '頂層需要一份 ui 翻譯，否則介面文案會是英文。' +
+          '用 `ui-template` 生成骨架後翻譯填進去。',
       );
     }
     if (problems.length) {
-      console.error(`✗ ${problems.length} 处违规：\n`);
+      console.error(`✗ ${problems.length} 處違規：\n`);
       for (const p of problems) console.error('  ' + p);
       process.exit(1);
     }
-    console.log(`✓ ${characters.length} 个角色全部通过校验（lang=${lang}, style=${style}）`);
+    console.log(`✓ ${characters.length} 個角色全部通過校驗（lang=${lang}, style=${style}）`);
     return;
   }
 
@@ -1261,7 +1261,7 @@ function main(argv) {
     const lang = flag(rest, '--lang', castLang);
     const title = sourceFlag ?? source ?? basename(castPath).replace(/\.[^.]+$/, '');
 
-    // 图存在才挂上去；没有就渲染成占位，不影响其余内容。
+    // 圖存在才掛上去；沒有就渲染成佔位，不影響其餘內容。
     const outDir = resolve(castPath, '..');
     for (const c of characters) {
       const stem = `${imagesDir}/${slug(c.name)}`;
@@ -1280,7 +1280,7 @@ function main(argv) {
     const lang = rest[0] ?? '<lang>';
     console.log(
       JSON.stringify(
-        { note: `把下面每个值翻译成 ${lang}，整块放进 cast.json 的顶层 "ui"`, ui: uiTemplate() },
+        { note: `把下面每個值翻譯成 ${lang}，整塊放進 cast.json 的頂層 "ui"`, ui: uiTemplate() },
         null,
         2,
       ),
@@ -1291,14 +1291,14 @@ function main(argv) {
   if (cmd === 'styles') {
     const only = rest[0];
     if (only && !SUPPORTED_STYLES.includes(only)) {
-      throw new Error(`未知风格 ${only}（可用：${SUPPORTED_STYLES.join('/')}）`);
+      throw new Error(`未知風格 ${only}（可用：${SUPPORTED_STYLES.join('/')}）`);
     }
     const ids = only ? [only] : SUPPORTED_STYLES;
     console.log(
       JSON.stringify(
         {
           default: DEFAULT_STYLE,
-          note: '整块取用，不要混搭；各预设的 negative 立场相反，realistic／photoreal 绝不能禁 photorealistic，ghibli 必须禁，photoreal 另外要禁 illustration／painting／anime',
+          note: '整塊取用，不要混搭；各預設的 negative 立場相反，realistic／photoreal 絕不能禁 photorealistic，ghibli 必須禁，photoreal 另外要禁 illustration／painting／anime',
           presets: Object.fromEntries(ids.map((id) => [id, STYLE_PRESETS[id]])),
         },
         null,
@@ -1317,9 +1317,9 @@ function main(argv) {
   throw new Error(`未知命令 ${cmd}\n\n${USAGE}`);
 }
 
-// 只有直接运行才跑 CLI —— selftest.mjs 需要 import 这些函数。
-// 两边都取 realpath：软链安装时 argv[1] 是链接路径，而 import.meta.url
-// 已被 Node 解析成真实路径，不归一化就永远不相等。
+// 只有直接執行才跑 CLI —— selftest.mjs 需要 import 這些函式。
+// 兩邊都取 realpath：軟連結安裝時 argv[1] 是連結路徑，而 import.meta.url
+// 已被 Node 解析成真實路徑，不歸一化就永遠不相等。
 function isMainModule() {
   if (!process.argv[1]) return false;
   try {
