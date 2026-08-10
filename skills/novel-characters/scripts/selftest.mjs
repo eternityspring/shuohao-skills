@@ -11,6 +11,7 @@ import {
   CHUNK_SIZE,
   MAX_CHUNKS,
   SUPPORTED_UI_LANGS,
+  buildGraph,
   chunkText,
   mergeRoster,
   renderHtml,
@@ -233,15 +234,119 @@ ok(!evilHtml.includes('<img src=x onerror'), '角色欄位裡的 HTML 被轉義'
 // 故事摘要
 const DOC = JSON.parse(readFileSync(join(examples, '渡口-cast.json'), 'utf8'));
 ok(DOC.summary && DOC.summary.trim(), '樣例帶故事摘要');
-ok(renderHtml(CAST, '渡口', DOC.summary).includes('class="synopsis"'), 'HTML 頂部渲染摘要');
-ok(!renderHtml(CAST, '渡口', '').includes('class="synopsis"'), '沒有摘要時不留空殼');
+ok(renderHtml(CAST, '渡口', DOC.summary).includes('class="synopsis'), 'HTML 頂部渲染摘要');
+ok(!renderHtml(CAST, '渡口', '').includes('class="synopsis'), '沒有摘要時不留空殼');
 ok(renderMarkdown(CAST, '渡口', DOC.summary).includes('## 故事摘要'), 'Markdown 也帶摘要');
 ok(renderHtml(CAST, '渡口', '<b>x</b>').includes('&lt;b&gt;'), '摘要裡的 HTML 被轉義');
+// 摘要預設三行 + 漸隱，點一下展開
+const synHtml = renderHtml(CAST, '渡口', DOC.summary);
+ok(synHtml.includes('class="synopsis syn-clamp"'), '摘要預設是摺疊態');
+ok(/\.syn-clamp p\{[^}]*-webkit-line-clamp:3/.test(synHtml), '摘要最多三行');
+ok(/\.syn-clamp p\{[^}]*mask-image:linear-gradient/.test(synHtml), '折起來的摘要底部漸隱');
+ok(synHtml.includes('class="syn-more"'), '有展開入口');
+ok(/syn\.classList\.remove\('syn-clamp'\)/.test(synHtml), '點一下展開全部');
+ok(/scrollHeight <= body\.clientHeight/.test(synHtml), '摘要短到不用摺疊就不顯示展開入口');
+
+/* ---------------- 匯出 JSON ---------------- */
+
+// 匯出的形狀就是 cast.json，編輯完要能直接喂回 render
+const expHtml = renderHtml(CAST, '渡口', DOC.summary, 'zh', null, 'ghibli');
+ok(expHtml.includes('class="expo"'), '頂欄有匯出按鈕');
+ok(expHtml.includes('<script type="application/json" id="cast-data">'), '資料內嵌在報告裡');
+ok(expHtml.includes('data-name="渡口-cast.json"'), '下載檔名跟著書名走');
+
+const embedded = expHtml.match(/<script type="application\/json" id="cast-data">([\s\S]*?)<\/script>/)[1];
+const round = JSON.parse(embedded.replace(/\\u003c/g, '<'));
+eq(round.source, '渡口', '匯出帶書名');
+eq(round.lang, 'zh', '匯出帶語言');
+eq(round.style, 'ghibli', '匯出帶畫風');
+eq(round.summary, DOC.summary, '匯出帶故事摘要');
+eq(round.characters.length, CAST.length, '匯出帶全部角色');
+eq(JSON.stringify(round.characters), JSON.stringify(CAST), '角色卡原樣匯出，沒有丟欄位');
+eq(validateCast(round.characters, SOURCE, 'zh', 'realistic').length, 0, '匯出的資料能直接喂回 validate 並透過');
+ok(validateCast(round.characters, SOURCE, 'zh', 'ghibli').length > 0, '喂回去的確實是真資料——畫風說反了照樣報錯');
+
+// ⚠️ 正文裡一個 </script 就能把資料塊提前截斷
+const xss = clone();
+xss[0].persona.appearance = '他說</script><script>alert(1)</script>';
+const xssHtml = renderHtml(xss, 'x', '');
+const xssData = xssHtml.match(/<script type="application\/json" id="cast-data">([\s\S]*?)<\/script>/)[1];
+ok(!xssData.includes('</script'), '資料塊裡的 </script 被轉義，截不斷');
+ok(JSON.parse(xssData.replace(/\\u003c/g, '<')).characters[0].persona.appearance.includes('</script>'), '轉義了但內容沒丟');
+
+// 沒有 ui 就不寫這個鍵，免得匯出裡多一個空欄位
+ok(!('ui' in JSON.parse(renderHtml(CAST, 'x', '').match(/id="cast-data">([\s\S]*?)<\/script>/)[1].replace(/\\u003c/g, '<'))), '沒有 ui 翻譯就不寫這個鍵');
+ok('ui' in JSON.parse(renderHtml(CAST, 'x', '', 'fr', { copy: 'Copier' }).match(/id="cast-data">([\s\S]*?)<\/script>/)[1].replace(/\\u003c/g, '<')), '有 ui 翻譯就帶上');
+
+/* ---------------- 關係圖譜 ---------------- */
+
+// 別名要能連上（老周被叫「老伯」），同一對人只連一條邊，指向沒畫像的人算 dangling
+const G = buildGraph([
+  { name: 'A', aliases: [], persona: { relationships: [{ name: 'B的綽號', relation: 'r1' }] } },
+  { name: 'B', aliases: ['B的綽號'], persona: { relationships: [{ name: 'A', relation: 'r2' }] } },
+  { name: 'C', aliases: [], persona: { relationships: [{ name: '沒這個人', relation: 'r3' }] } },
+]);
+eq(G.edges.length, 1, '同一對人只連一條邊');
+eq(G.edges[0].notes.length, 2, '兩個方向的說法都留著');
+eq(G.dangling, 1, '指向沒做畫像的角色算 dangling');
+eq(
+  buildGraph([{ name: 'A', aliases: [], persona: { relationships: [{ name: 'A', relation: 'x' }] } }]).edges.length,
+  0,
+  '不給自己連邊',
+);
+ok(buildGraph([{ name: 'A', aliases: [], persona: {} }]).edges.length === 0, '沒有 relationships 也不炸');
+
+const graphHtml = renderHtml(CAST, '渡口');
+ok(graphHtml.includes('class="graph'), '有關係圖譜檢視');
+ok(graphHtml.includes('class="gtoggle"'), '左欄有圖譜入口');
+// 頂欄的搜尋圖示也是 svg，所以要卡到 .graph-canvas 裡面那張，否則測了個寂寞
+const canvas = graphHtml.match(/<div class="graph-canvas">\s*<svg viewBox="0 0 (\d+) (\d+)"/);
+ok(canvas, '圖譜是內聯 SVG，不引庫');
+eq(canvas[1], canvas[2], '畫布是正方形');
+ok(Number(canvas[1]) >= 480, '畫布夠大，名字放得下');
+eq((graphHtml.match(/class="gnode[ "]/g) || []).length, CAST.length, `圖譜有 ${CAST.length} 個節點`);
+const CAST_EDGES = buildGraph(CAST).edges;
+ok(CAST_EDGES.length > 0, '樣例裡能連出關係');
+eq((graphHtml.match(/class="gedge"/g) || []).length, CAST_EDGES.length, '弦數和邊數一致');
+eq((graphHtml.match(/class="grow"/g) || []).length, CAST_EDGES.length, '關係表和邊數一致');
+ok(CAST_EDGES.every((e) => e.a <= e.b), '邊的端點排過序，方向不影響去重');
+// 節點點了要能跳到對應角色，靠的是和 .rost 同一套 data-target
+for (const c of CAST) ok(graphHtml.includes(`data-node="${c.name}" data-target="p-${slug(c.name)}"`), `${c.name} 的節點能跳轉`);
+ok(graphHtml.includes('.main.gmode .char{display:none}'), '圖譜和角色詳情互斥');
+// 弦上的關係文字
+eq((graphHtml.match(/class="glabel"/g) || []).length, CAST_EDGES.length, '每條弦上都有關係文字');
+ok(graphHtml.includes('class="glabtoggle'), '關係文字有總開關');
+ok(/class="graph labels"/.test(graphHtml), `${CAST_EDGES.length} 條邊，預設把關係文字標出來`);
+ok(/<text class="glabel"[^>]*>[^<]+<title>/.test(graphHtml), '短標籤在弦上，全文進 title');
+ok(graphHtml.includes('.glabel{display:none'), '關掉時關係文字不畫');
+ok(graphHtml.includes('.glabel.hot{display:block'), '關掉了，懸停那條也要顯示');
+ok(/\.glabel\{[^}]*pointer-events:none/.test(graphHtml), '關係文字不擋節點的滑鼠');
+ok(/\.glabel\{[^}]*paint-order:stroke/.test(graphHtml), '關係文字有底襯，壓在弦上也讀得清');
+// 長關係要截斷，否則一條弦上糊一整句
+const longRel = clone();
+longRel[0].persona.relationships = [{ name: longRel[1].name, relation: '一二三四五六七八九十甲乙丙丁戊己庚辛' }];
+// 對手方也清空，否則這條邊上會有兩種說法，標籤取的是更短的那條
+longRel[1].persona.relationships = [];
+const longHtml = renderHtml(longRel, 'x');
+ok(longHtml.includes('一二三四五六…'), '超過 6 字截斷');
+ok(longHtml.includes('<title>一二三四五六七八九十甲乙丙丁戊己庚辛') || longHtml.includes('丙丁戊己庚辛</title>'), '截斷了但全文還在 title 裡');
+// 邊多了預設收起來
+const many = Array.from({ length: 8 }, (_, i) => {
+  const c = clone()[0];
+  c.name = `角色${i}`;
+  c.aliases = [];
+  c.persona = { ...c.persona, relationships: Array.from({ length: 8 }, (_, j) => ({ name: `角色${j}`, relation: 'r' })) };
+  return c;
+});
+ok(!/class="graph labels"/.test(renderHtml(many, 'x')), '邊多了預設不標關係文字');
+ok(/@media print\{[\s\S]*\.graph\{display:block!important/.test(graphHtml), '列印時圖譜也出');
+// 主角節點要看得出來
+eq((graphHtml.match(/class="gnode lead"/g) || []).length, CAST.filter((c) => c.importance === 'protagonist').length, '主角節點單獨標出');
 
 // 佈局骨架
 const css = renderHtml(CAST, 'x');
 ok(/\.shell\{[^}]*grid-template-columns:var\(--side-w\)/.test(css), '左欄 + 主區兩欄骨架');
-ok(/\.upper\{[^}]*grid-template-columns:minmax\(0,1fr\) 340px/.test(css), '主區內是內容 + 資訊卡兩欄');
+ok(/\.upper\{[^}]*grid-template-columns:minmax\(0,1fr\) 500px/.test(css), '主區內是內容 + 資訊卡兩欄');
 ok(/\.prompts\{[^}]*grid-template-columns:1fr 1fr/.test(css), '提示詞分左右兩組');
 ok(css.includes('.char{display:none}'), '預設只顯示選中的角色');
 ok(/\.main\{[^}]*max-width:1500px/.test(css), '主區最大寬度 1500px');

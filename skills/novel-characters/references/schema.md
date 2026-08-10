@@ -80,11 +80,11 @@
 | `persona.*` | — | **本地語言** | `personality` 3–5 個詞 |
 | `persona.evidence` | string[] | **原文語言** | **逐字引用**，永遠不翻譯——翻了就不是證據了。沒有就空陣列 |
 | `image.style` | string | 本地語言 | 畫風一句話 |
-| `image.prompt` | string | **英文** | 單張表現性插畫；**禁止出現人名** |
+| `image.prompt` | string | **英文** | 單張表現性圖像；**禁止出現人名**；**必須寫明族裔／年代／地域** |
 | `image.promptLocal` | string | 本地語言 | 上面那條的譯文；`lang=en` 時省略；**同樣禁止人名** |
 | `image.negativePrompt` | string | **英文** | 逗號分隔 |
 | `image.tags` | string[] | **英文** | 4–8 個風格標籤 |
-| `image.sheet` | string | **英文** | **角色設定圖**，16:9 三區版面：左約 34% 半身像（面部基準）／右上全身三視圖／右下細節條，細線分隔；**禁止出現人名** |
+| `image.sheet` | string | **英文** | **角色設定圖**，16:9 三區版面：左約 34% 半身像（面部基準）／右上全身三視圖／右下細節條，細線分隔；**禁止出現人名**；**必須寫明族裔／年代／地域** |
 | `voice.timbre/pitch/pace/accent/emotion/referenceHint` | string | **本地語言** | 最容易寫漂的地方，注意 |
 | `voice.prompt` | string | **英文** | 給 TTS 音色設計引擎 |
 | `voice.promptLocal` | string | 本地語言 | 上面那條的譯文；`lang=en` 時省略 |

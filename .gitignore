@@ -7,6 +7,9 @@ node_modules/
 /*-cast.json
 /*-cast.md
 /images/
+/outline-report.html
+/*-outline.json
+/*-outline.md
 
 # 注意：skills/*/examples/ 下的樣例必須提交——它們同時是自測夾具。
 # 上面幾條都用 / 開頭限定在倉庫根，不會誤傷 examples。

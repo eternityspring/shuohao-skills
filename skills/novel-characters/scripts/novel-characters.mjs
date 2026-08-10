@@ -226,7 +226,7 @@ const STRINGS = {
       arc: '人物弧光', relationships: '关系', evidence: '原文依据',
     },
     image: {
-      style: '画风', copyTags: '复制标签',
+      style: '画风',
       prompt: '出图提示词 EN', promptLocal: '出图提示词',
       negative: '反向提示词', sheet: '角色设定图提示词 EN',
     },
@@ -236,6 +236,14 @@ const STRINGS = {
       prompt: '音色提示词 EN', promptLocal: '音色提示词',
     },
     importance: { protagonist: '主角', major: '主要角色', supporting: '配角', minor: '龙套' },
+    graphTitle: '关系图谱',
+    graphHint: '悬停看关系，点击进角色',
+    graphCounts: (n, e) => `${n} 位角色 · ${e} 组关系`,
+    exportJson: '导出 JSON',
+    graphLabels: '关系文字',
+    graphEmpty: '这批角色之间没有互相指认的关系',
+    graphDangling: (n) => `另有 ${n} 条关系指向没做画像的角色，图里不画`,
+    relationsAll: '全部关系',
     copy: '复制', copied: '已复制', copyFailed: '复制失败', copyJson: '复制整份角色 JSON',
     sheetCaption: '左：半身像　右：全身三视图',
     noImage: '尚未出图',
@@ -273,7 +281,7 @@ const STRINGS = {
       arc: '角色弧線', relationships: '人物關係', evidence: '原文依據',
     },
     image: {
-      style: '畫風', copyTags: '複製標籤',
+      style: '畫風',
       prompt: '生圖提示詞 EN', promptLocal: '生圖提示詞',
       negative: '負向提示詞', sheet: '角色設定圖提示詞 EN',
     },
@@ -283,6 +291,14 @@ const STRINGS = {
       prompt: '配音提示詞 EN', promptLocal: '配音提示詞',
     },
     importance: { protagonist: '主角', major: '主要角色', supporting: '配角', minor: '跑龍套' },
+    graphTitle: '關係圖譜',
+    graphHint: '懸停看關係，點選進角色',
+    graphCounts: (n, e) => `${n} 位角色 · ${e} 組關係`,
+    exportJson: '匯出 JSON',
+    graphLabels: '關係文字',
+    graphEmpty: '這批角色之間沒有互相指認的關係',
+    graphDangling: (n) => `另有 ${n} 條關係指向沒做畫像的角色，圖裡不畫`,
+    relationsAll: '全部關係',
     copy: '複製', copied: '已複製', copyFailed: '複製失敗', copyJson: '複製整份角色 JSON',
     sheetCaption: '左：半身像　右：全身三視圖',
     noImage: '尚未生圖',
@@ -318,7 +334,7 @@ const STRINGS = {
       arc: 'Arc', relationships: 'Relationships', evidence: 'From the text',
     },
     image: {
-      style: 'Style', copyTags: 'Copy tags',
+      style: 'Style',
       prompt: 'Image prompt', promptLocal: 'Image prompt (local)',
       negative: 'Negative prompt', sheet: 'Model sheet prompt',
     },
@@ -328,6 +344,14 @@ const STRINGS = {
       prompt: 'Voice prompt', promptLocal: 'Voice prompt (local)',
     },
     importance: { protagonist: 'Lead', major: 'Major', supporting: 'Supporting', minor: 'Minor' },
+    graphTitle: 'Relationship map',
+    graphHint: 'Hover to trace, click to open',
+    graphCounts: (n, e) => `${n} character${n === 1 ? '' : 's'} · ${e} link${e === 1 ? '' : 's'}`,
+    exportJson: 'Export JSON',
+    graphLabels: 'Link labels',
+    graphEmpty: 'No one in this cast names anyone else',
+    graphDangling: (n) => `${n} more link${n === 1 ? '' : 's'} point to characters without a profile and are not drawn`,
+    relationsAll: 'All links',
     copy: 'Copy', copied: 'Copied', copyFailed: 'Failed', copyJson: 'Copy full JSON',
     sheetCaption: 'Left: bust　Right: full-body turnaround',
     noImage: 'Not generated yet',
@@ -362,7 +386,7 @@ const STRINGS = {
       arc: '人物の変化', relationships: '関係', evidence: '原文の根拠',
     },
     image: {
-      style: '畫風', copyTags: 'タグをコピー',
+      style: '畫風',
       prompt: '畫像プロンプト EN', promptLocal: '畫像プロンプト',
       negative: 'ネガティブプロンプト', sheet: 'キャラ設定畫プロンプト EN',
     },
@@ -372,6 +396,14 @@ const STRINGS = {
       prompt: '音聲プロンプト EN', promptLocal: '音聲プロンプト',
     },
     importance: { protagonist: '主役', major: '主要人物', supporting: '脇役', minor: '端役' },
+    graphTitle: '相関図',
+    graphHint: 'ホバーで関係、クリックで詳細',
+    graphCounts: (n, e) => `${n}人 · ${e}組の関係`,
+    exportJson: 'JSON を書き出す',
+    graphLabels: '関係ラベル',
+    graphEmpty: 'この登場人物どうしを結ぶ関係はありません',
+    graphDangling: (n) => `他に${n}件、設定を作っていない人物への関係があります（図には出ません）`,
+    relationsAll: '関係一覧',
     copy: 'コピー', copied: 'コピー済み', copyFailed: '失敗', copyJson: 'JSON をコピー',
     sheetCaption: '左：バストアップ　右：三面図',
     noImage: '未生成',
@@ -815,7 +847,174 @@ function renderCharacter(c, index, t) {
 </article>`;
 }
 
-export function renderHtml(characters, source, summary = '', lang = DEFAULT_LANG, ui = null) {
+/* ------------------------------------------------------------------ */
+/* render — 關係圖譜                                                    */
+/* ------------------------------------------------------------------ */
+/*
+ * 圓環佈局 + 向心貝塞爾。位置在 Node 裡算好直接寫進內聯 SVG，
+ * 瀏覽器端只管高亮和跳轉——報告要能離線雙擊開啟，不許引任何庫。
+ */
+
+/** 節點大小按戲份分檔，一眼能看出誰是主角。 */
+const NODE_R = { protagonist: 11, major: 9, supporting: 7, minor: 5.5 };
+const r1 = (n) => Math.round(n * 10) / 10;
+
+/**
+ * 把 persona.relationships 解析成無向邊。
+ *
+ * 按**名字 + 別名**建索引：老周的關係裡寫「老伯」也要連到同一個節點，
+ * 只按 name 匹配會把一半的邊漏掉。同一對人的兩條單向記述合併成一條邊，
+ * 兩個方向的說法都留著。指向沒做畫像的人算 dangling——不畫，但要報數。
+ */
+export function buildGraph(characters) {
+  const key = (s) => String(s).trim().toLowerCase();
+  const index = new Map();
+  for (const c of characters) {
+    index.set(key(c.name), c.name);
+    for (const a of c.aliases ?? []) index.set(key(a), c.name);
+  }
+
+  const edges = new Map();
+  let dangling = 0;
+  for (const c of characters) {
+    for (const r of c.persona?.relationships ?? []) {
+      if (!r || typeof r.name !== 'string') continue;
+      const target = index.get(key(r.name));
+      if (!target || target === c.name) {
+        dangling++;
+        continue;
+      }
+      const [a, b] = [c.name, target].sort();
+      const k = `${a} ${b}`;
+      if (!edges.has(k)) edges.set(k, { a, b, notes: [] });
+      edges.get(k).notes.push({ from: c.name, text: String(r.relation ?? '') });
+    }
+  }
+  return { edges: [...edges.values()], dangling };
+}
+
+function renderGraph(ordered, t) {
+  const { edges, dangling } = buildGraph(ordered);
+  const n = ordered.length;
+  // 半徑跟人數走，四個人不必撐滿一整張畫布；兩側留 110 給名字
+  const R = Math.max(130, Math.min(260, 40 + n * 14));
+  const side = Math.round((R + 110) * 2);
+  const c0 = side / 2;
+
+  const pos = new Map();
+  ordered.forEach((c, i) => {
+    const a = -Math.PI / 2 + (i * 2 * Math.PI) / Math.max(n, 1);
+    pos.set(c.name, { x: c0 + R * Math.cos(a), y: c0 + R * Math.sin(a), cos: Math.cos(a), sin: Math.sin(a) });
+  });
+
+  // 控制點往圓心拉，弦是彎的——直線在人多時會糊成一團網
+  const arcs = edges.map((e, i) => {
+    const p = pos.get(e.a);
+    const q = pos.get(e.b);
+    const cxq = c0 + ((p.x + q.x) / 2 - c0) * 0.35;
+    const cyq = c0 + ((p.y + q.y) / 2 - c0) * 0.35;
+    // 標籤沿弦錯位排：正對面的兩條弦中點都在圓心，全放 t=0.5 會疊成一坨
+    const t = 0.5 + ((i % 3) - 1) * 0.14;
+    const u = 1 - t;
+    return {
+      e,
+      d: `M${r1(p.x)} ${r1(p.y)} Q${r1(cxq)} ${r1(cyq)} ${r1(q.x)} ${r1(q.y)}`,
+      lx: u * u * p.x + 2 * u * t * cxq + t * t * q.x,
+      ly: u * u * p.y + 2 * u * t * cyq + t * t * q.y,
+    };
+  });
+
+  const paths = arcs
+    .map((a) => `<path class="gedge" data-a="${esc(a.e.a)}" data-b="${esc(a.e.b)}" d="${a.d}"></path>`)
+    .join('');
+
+  // 弦上的關係文字：取最短的一條說法截斷，全文進 <title> 當原生 tooltip
+  const labels = arcs
+    .map((a) => {
+      const notes = a.e.notes.filter((x) => x.text.trim());
+      if (!notes.length) return '';
+      const pick = notes.reduce((s, x) => ([...x.text].length < [...s.text].length ? x : s), notes[0]);
+      // 六個字。再長就壓到隔壁那條弦上去了——全文在 title 和右側關係表裡
+      const chars = [...pick.text.trim()];
+      const text = chars.length > 6 ? `${chars.slice(0, 6).join('')}…` : chars.join('');
+      const full = notes.map((x) => `${x.from} · ${x.text}`).join('\n');
+      return `<text class="glabel" data-a="${esc(a.e.a)}" data-b="${esc(a.e.b)}" x="${r1(a.lx)}" y="${r1(a.ly)}" text-anchor="middle" dominant-baseline="middle">${esc(text)}<title>${esc(full)}</title></text>`;
+    })
+    .join('');
+
+  const dots = ordered
+    .map((c) => {
+      const p = pos.get(c.name);
+      // 圓頂和圓底的名字居中放，兩側的往外甩，免得壓在節點上
+      const flat = Math.abs(p.cos) < 0.25;
+      const anchor = flat ? 'middle' : p.cos < 0 ? 'end' : 'start';
+      const lx = c0 + (R + 15) * p.cos;
+      const ly = c0 + (R + 15) * p.sin + (flat ? (p.sin < 0 ? -6 : 14) : 4.5);
+      return `<g class="gnode${c.importance === 'protagonist' ? ' lead' : ''}" data-node="${esc(c.name)}" data-target="p-${slug(c.name)}" tabindex="0" role="button" aria-label="${esc(c.name)}">
+  <circle class="ghit" cx="${r1(p.x)}" cy="${r1(p.y)}" r="24"></circle>
+  <circle class="gdot" cx="${r1(p.x)}" cy="${r1(p.y)}" r="${NODE_R[c.importance] ?? 7}"></circle>
+  <text x="${r1(lx)}" y="${r1(ly)}" text-anchor="${anchor}">${esc(c.name)}</text>
+</g>`;
+    })
+    .join('');
+
+  const rows = edges
+    .map(
+      (e) => `<button class="grow" data-a="${esc(e.a)}" data-b="${esc(e.b)}" data-target="p-${slug(e.a)}">
+  <b>${esc(e.a)}</b><i>—</i><b>${esc(e.b)}</b>
+  ${e.notes.map((x) => `<span><em>${esc(x.from)}</em> ${marked(x.text)}</span>`).join('')}
+</button>`,
+    )
+    .join('');
+
+  // 邊少就直接把關係文字標上；邊一多就糊成一團，預設收起來，開關留給使用者
+  const labelsOn = edges.length <= 14;
+
+  return `<section class="graph${labelsOn ? ' labels' : ''}" id="graph">
+  <header class="graph-h">
+    <h2>${esc(t.graphTitle)}</h2>
+    <span class="badge">${esc(t.graphCounts(n, edges.length))}</span>
+    <button class="glabtoggle${labelsOn ? ' on' : ''}" aria-pressed="${labelsOn}">${esc(t.graphLabels)}</button>
+    <span class="hint">${esc(t.graphHint)}</span>
+  </header>
+  <div class="graph-body">
+    <div class="graph-canvas">
+      <svg viewBox="0 0 ${side} ${side}" role="img" aria-label="${esc(t.graphTitle)}">
+        <g class="gedges">${paths}</g>
+        <g class="gnodes">${dots}</g>
+        <g class="glabels">${labels}</g>
+      </svg>
+      ${edges.length ? '' : `<p class="graph-empty">${esc(t.graphEmpty)}</p>`}
+    </div>
+    <aside class="grel">
+      <h4>${esc(t.relationsAll)}</h4>
+      <div class="grel-list">${rows}</div>
+      ${dangling ? `<p class="grel-foot">${esc(t.graphDangling(dangling))}</p>` : ''}
+    </aside>
+  </div>
+</section>`;
+}
+
+/*
+ * 報告裡內嵌的那份資料，形狀**就是 cast.json**——編輯完能直接喂回
+ * `render` 重新出報告，不另立一套匯出格式。
+ *
+ * `<` 轉成 <：JSON 裡 `<` 只可能出現在字串值中，整體替換是安全的，
+ * 而不轉的話正文裡一個 `</script` 就能把這個資料塊提前截斷。
+ */
+function embedCast(characters, source, summary, lang, ui, style) {
+  const data = { source, lang, style, summary, ...(ui ? { ui } : {}), characters };
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+export function renderHtml(
+  characters,
+  source,
+  summary = '',
+  lang = DEFAULT_LANG,
+  ui = null,
+  style = DEFAULT_STYLE,
+) {
   const t = strings(lang, ui);
   // 正體中文要挑 TC 字型：Songti SC 那一串在台灣機器上多半沒裝，
   // 掉回系統預設會跟內文的正體字形不搭。
@@ -858,8 +1057,14 @@ button{font-family:inherit}
   border-radius:3px;background:var(--paper);color:var(--ink);font:14px/1 var(--sans);outline:none}
 .search input:focus{border-color:var(--seal)}
 .search svg{position:absolute;left:10px;top:9px;width:14px;height:14px;stroke:var(--ink-3);fill:none}
-.topmeta{margin-left:auto;font-size:12px;color:var(--ink-3);display:flex;gap:10px;flex:none}
+.topmeta{margin-left:auto;font-size:12px;color:var(--ink-3);display:flex;align-items:center;
+  gap:10px;flex:none}
 .topmeta i{font-style:normal;color:var(--rule-2)}
+/* 匯出：下載的就是內嵌的那份 cast.json，編輯完能直接喂回 render */
+.expo{margin-left:4px;font:500 11px/1 var(--sans);color:var(--ink-2);background:var(--paper);
+  border:1px solid var(--rule-2);border-radius:2px;padding:6px 10px;cursor:pointer;transition:.15s}
+.expo:hover{border-color:var(--seal);color:var(--seal)}
+.expo:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
 
 /* ---------- 骨架 ---------- */
 .shell{display:grid;grid-template-columns:var(--side-w) minmax(0,1fr);align-items:start}
@@ -872,6 +1077,16 @@ button{font-family:inherit}
 .synopsis{padding:18px 20px;border-bottom:1px solid var(--rule)}
 .lbl{font:500 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3)}
 .synopsis p{margin:10px 0 0;font:400 14px/1.95 var(--serif)}
+/* 摘要預設三行，底部漸隱——左欄第一屏要留給角色列表。點一下展開，之後不再收起 */
+.syn-clamp{cursor:pointer}
+.syn-clamp p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);
+  mask-image:linear-gradient(180deg,#000 58%,transparent)}
+.syn-more{display:none;margin-top:7px;padding:0;background:none;border:0;cursor:pointer;
+  font:500 11px/1 var(--sans);letter-spacing:.06em;color:var(--seal)}
+.syn-clamp .syn-more{display:block}
+.syn-more:hover{text-decoration:underline}
+.syn-more:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
 .roster-h{padding:14px 20px 8px}
 .roster{display:block}
 .rost{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;width:100%;text-align:left;
@@ -910,7 +1125,7 @@ button{font-family:inherit}
 .char-one{margin-left:auto;font:400 14px/1.7 var(--serif);color:var(--ink-2);text-align:right;max-width:44ch}
 @media(max-width:900px){.char-one{margin-left:0;text-align:left}}
 
-.upper{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start;margin-top:20px}
+.upper{display:grid;grid-template-columns:minmax(0,1fr) 500px;gap:26px;align-items:start;margin-top:20px}
 @media(max-width:1240px){.upper{grid-template-columns:1fr}}
 
 /* 設定圖是白底印張 */
@@ -993,6 +1208,70 @@ button{font-family:inherit}
 .copy[data-done]{border-color:var(--seal);color:var(--seal)}
 .copy.wide{width:100%;padding:9px}
 
+/* ---------- 關係圖譜 ---------- */
+/* 佈局在 Node 裡算好寫進 SVG，這裡只管高亮。紅色仍然只給選中態 */
+.gtoggle{display:flex;align-items:center;gap:9px;width:100%;padding:13px 20px;text-align:left;
+  background:none;border:0;border-bottom:1px solid var(--rule);border-left:2px solid transparent;
+  cursor:pointer;color:var(--ink-2);font:500 12px/1 var(--sans);letter-spacing:.1em}
+.gtoggle:hover{background:#00000006}
+.gtoggle.on{background:var(--panel);border-left-color:var(--seal);color:var(--seal)}
+.gtoggle:focus-visible{outline:2px solid var(--seal);outline-offset:-2px}
+.gtoggle svg{width:15px;height:15px;flex:none;stroke:currentColor;fill:none;stroke-width:1.3}
+.graph{display:none}
+.graph.on{display:block}
+.main.gmode .char{display:none}
+.graph-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  padding-bottom:14px;border-bottom:1px solid var(--rule-2)}
+.graph-h h2{font:400 clamp(22px,2.2vw,28px)/1.1 var(--serif);letter-spacing:.05em}
+.graph-h .hint{margin-left:auto;font-size:12px;color:var(--ink-3)}
+.graph-body{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:26px;
+  align-items:start;margin-top:20px}
+@media(max-width:1100px){.graph-body{grid-template-columns:1fr}}
+.graph-canvas{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:10px}
+.graph-canvas svg{display:block;width:100%;height:auto}
+.graph-empty{margin:0 0 8px;text-align:center;font-size:12.5px;color:var(--ink-3)}
+.gedge{fill:none;stroke:var(--rule-2);stroke-width:1.1;transition:.15s}
+.gedge.hot{stroke:var(--seal);stroke-width:2}
+.gedge.dim{opacity:.15}
+.gnode{cursor:pointer;transition:.15s}
+.gnode .gdot{fill:var(--paper);stroke:var(--ink-2);stroke-width:1.5}
+/* 看不見的命中區：節點本身才十來個畫素，游標很難壓準。
+   單獨一個類，免得被下面 .lead / .hot 的規則一起染色 */
+.gnode .ghit{fill:none;stroke:none;pointer-events:all}
+.gnode text{font:400 13px var(--serif);fill:var(--ink)}
+.gnode.lead .gdot{fill:var(--seal);stroke:var(--seal)}
+.gnode.hot .gdot{stroke:var(--seal);stroke-width:2.5}
+.gnode.hot text{fill:var(--seal)}
+.gnode.dim{opacity:.22}
+.gnode:focus-visible{outline:2px solid var(--seal)}
+/* 弦上的關係文字。預設按邊數決定開不開，懸停的那條永遠顯示。
+   paint-order + 同色描邊 = 給字加一圈底襯，壓在弦上也讀得清 */
+.glabel{display:none;font:400 9px var(--sans);fill:var(--ink-3);pointer-events:none;
+  paint-order:stroke;stroke:var(--panel);stroke-width:3px;stroke-linejoin:round}
+.graph.labels .glabel{display:block}
+.glabel.dim{opacity:.15}
+.glabel.hot{display:block;fill:var(--seal);font-weight:500}
+.glabtoggle{font:500 11px/1 var(--sans);color:var(--ink-2);background:var(--paper);
+  border:1px solid var(--rule-2);border-radius:2px;padding:4px 10px;cursor:pointer;transition:.15s}
+.glabtoggle:hover{border-color:var(--seal);color:var(--seal)}
+.glabtoggle.on{border-color:var(--seal);color:var(--seal);background:var(--seal-soft)}
+.glabtoggle:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.grel{border:1px solid var(--rule);border-radius:2px;background:var(--panel)}
+.grel h4{font:500 11px/1 var(--sans);letter-spacing:.2em;color:var(--ink-3);padding:14px 16px 11px}
+.grel-list{max-height:56vh;overflow-y:auto;border-top:1px solid var(--rule)}
+.grow{display:block;width:100%;text-align:left;padding:11px 16px;background:none;border:0;
+  border-bottom:1px solid var(--rule);cursor:pointer;color:inherit;transition:.15s}
+.grow:last-child{border-bottom:0}
+.grow:hover,.grow.hot{background:var(--seal-soft)}
+.grow.dim{opacity:.3}
+.grow:focus-visible{outline:2px solid var(--seal);outline-offset:-2px}
+.grow b{font:400 14px/1.4 var(--serif);letter-spacing:.03em}
+.grow i{font-style:normal;color:var(--ink-3);padding:0 6px}
+.grow span{display:block;margin-top:4px;font-size:12.5px;line-height:1.65;color:var(--ink-2)}
+.grow em{font-style:normal;color:var(--ink-3)}
+.grel-foot{margin:0;padding:11px 16px;border-top:1px solid var(--rule);
+  font-size:11px;line-height:1.6;color:var(--ink-3)}
+
 /* 簽名：推斷標記 */
 .inf{color:var(--ink-3);font-size:.88em;background:var(--seal-soft);padding:0 3px;border-radius:2px}
 
@@ -1006,6 +1285,7 @@ button{font-family:inherit}
   .top,.side,.copy{display:none!important}
   .shell{display:block}
   .main{padding:0}
+  .graph{display:block!important;page-break-after:always}
   .char{display:block!important;page-break-after:always}
   .pr p{display:block!important}
   .pr summary::before{content:""}
@@ -1022,12 +1302,17 @@ button{font-family:inherit}
   <div class="topmeta">
     <span>${esc(t.kicker)}</span><i>·</i>
     <span>${esc(t.counts(characters.length, shots))}</span>
+    <button class="expo" data-name="${esc(slug(source))}-cast.json">${esc(t.exportJson)}</button>
   </div>
 </header>
 
 <div class="shell">
   <aside class="side">
-    ${summary ? `<section class="synopsis"><div class="lbl">${esc(t.synopsis)}</div><p>${marked(summary)}</p></section>` : ''}
+    ${summary ? `<section class="synopsis syn-clamp"><div class="lbl">${esc(t.synopsis)}</div><p>${marked(summary)}</p><button class="syn-more">${esc(t.expandAll)}</button></section>` : ''}
+    <button class="gtoggle" aria-controls="graph">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.2" cy="4" r="1.9"/><circle cx="12.8" cy="6.2" r="1.9"/><circle cx="7.2" cy="13" r="1.9"/><path d="M5 4.6l6 1.2M4 5.9l2.5 5.4M11.7 7.9l-3.3 3.7"/></svg>
+      <span>${esc(t.graphTitle)}</span>
+    </button>
     <div class="roster-h lbl">${esc(t.rosterTitle)}</div>
     <nav class="roster" aria-label="${esc(t.indexLabel)}">
       ${ordered.map((c, i) => renderRosterItem(c, i, t)).join('\n')}
@@ -1037,6 +1322,7 @@ button{font-family:inherit}
   </aside>
 
   <main class="main">
+    ${renderGraph(ordered, t)}
     ${ordered.map((c, i) => renderCharacter(c, i, t)).join('\n')}
   </main>
 </div>
@@ -1046,8 +1332,22 @@ button{font-family:inherit}
   <img alt="">
 </div>
 
+<script type="application/json" id="cast-data">${embedCast(characters, source, summary, lang, ui, style)}</script>
+
 <script>
 const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed })};
+
+// 匯出：報告自己就帶著完整的 cast.json，下載的是它原樣
+document.querySelector('.expo').addEventListener('click', (e) => {
+  const btn = e.currentTarget;
+  const url = URL.createObjectURL(
+    new Blob([document.getElementById('cast-data').textContent], { type: 'application/json' }),
+  );
+  const a = Object.assign(document.createElement('a'), { href: url, download: btn.dataset.name });
+  a.click();
+  // 別在 click 之後立刻回收——Safari 上會搶在下載讀完之前把 blob 撤掉，存出來是空檔案
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+});
 
 // 左欄切換：一次只顯示一個角色
 document.querySelector('.roster').addEventListener('click', (e) => {
@@ -1055,8 +1355,109 @@ document.querySelector('.roster').addEventListener('click', (e) => {
   if (!btn) return;
   document.querySelectorAll('.rost').forEach((b) => b.classList.toggle('on', b === btn));
   document.querySelectorAll('.char').forEach((a) => a.classList.toggle('on', a.id === btn.dataset.target));
+  showGraph(false);
   document.querySelector('.main').scrollIntoView({ block: 'start', behavior: 'smooth' });
 });
+
+// 關係圖譜：一張全景檢視，跟角色詳情互斥
+const gv = document.querySelector('.graph');
+const gbtn = document.querySelector('.gtoggle');
+function showGraph(on) {
+  gv.classList.toggle('on', on);
+  gbtn.classList.toggle('on', on);
+  document.querySelector('.main').classList.toggle('gmode', on);
+}
+gbtn.addEventListener('click', () => {
+  showGraph(true);
+  document.querySelector('.main').scrollIntoView({ block: 'start', behavior: 'smooth' });
+});
+{
+  // 弦和絃上的文字共用 data-a/data-b，高亮邏輯完全一樣，放一個陣列裡
+  const edges = [...gv.querySelectorAll('.gedge, .glabel')];
+  const nodes = [...gv.querySelectorAll('.gnode')];
+  const rows = [...gv.querySelectorAll('.grow')];
+  const clear = () => [...edges, ...nodes, ...rows].forEach((el) => el.classList.remove('hot', 'dim'));
+
+  // 懸停一個人：他的關係線亮起來，沒關係的壓到背景裡
+  const byNode = (name) => {
+    const near = new Set([name]);
+    for (const e of edges) {
+      if (e.dataset.a === name) near.add(e.dataset.b);
+      if (e.dataset.b === name) near.add(e.dataset.a);
+    }
+    for (const e of edges) {
+      const hot = e.dataset.a === name || e.dataset.b === name;
+      e.classList.toggle('hot', hot);
+      e.classList.toggle('dim', !hot);
+    }
+    for (const nd of nodes) {
+      nd.classList.toggle('hot', nd.dataset.node === name);
+      nd.classList.toggle('dim', !near.has(nd.dataset.node));
+    }
+    for (const r of rows) {
+      const hot = r.dataset.a === name || r.dataset.b === name;
+      r.classList.toggle('hot', hot);
+      r.classList.toggle('dim', !hot);
+    }
+  };
+
+  // 懸停關係表的一行：只亮那一條弦
+  const byEdge = (a, b) => {
+    for (const e of edges) {
+      const hot = e.dataset.a === a && e.dataset.b === b;
+      e.classList.toggle('hot', hot);
+      e.classList.toggle('dim', !hot);
+    }
+    for (const nd of nodes) {
+      const hot = nd.dataset.node === a || nd.dataset.node === b;
+      nd.classList.toggle('hot', hot);
+      nd.classList.toggle('dim', !hot);
+    }
+    for (const r of rows) {
+      const hot = r.dataset.a === a && r.dataset.b === b;
+      r.classList.toggle('hot', hot);
+      r.classList.toggle('dim', !hot);
+    }
+  };
+
+  const jump = (el) => {
+    const item = document.querySelector('.rost[data-target="' + el.dataset.target + '"]');
+    if (item) item.click();
+  };
+
+  // 關係文字的總開關：人多的時候標籤會蓋住圖，一鍵收起
+  const glab = gv.querySelector('.glabtoggle');
+  glab.addEventListener('click', () => {
+    const on = !gv.classList.contains('labels');
+    gv.classList.toggle('labels', on);
+    glab.classList.toggle('on', on);
+    glab.setAttribute('aria-pressed', String(on));
+  });
+
+  gv.addEventListener('mouseover', (e) => {
+    const nd = e.target.closest('.gnode');
+    const row = e.target.closest('.grow');
+    if (nd) byNode(nd.dataset.node);
+    else if (row) byEdge(row.dataset.a, row.dataset.b);
+    else clear();
+  });
+  gv.addEventListener('mouseleave', clear);
+  gv.addEventListener('focusin', (e) => {
+    const nd = e.target.closest('.gnode');
+    if (nd) byNode(nd.dataset.node);
+  });
+  gv.addEventListener('click', (e) => {
+    const hit = e.target.closest('.gnode, .grow');
+    if (hit) jump(hit);
+  });
+  // SVG 的 <g> 不是原生按鈕，回車/空格要自己接
+  gv.addEventListener('keydown', (e) => {
+    const nd = e.target.closest('.gnode');
+    if (!nd || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    jump(nd);
+  });
+}
 
 // 搜尋：過濾左欄；結果只剩一個就直接切過去
 document.getElementById('q').addEventListener('input', (e) => {
@@ -1070,6 +1471,14 @@ document.getElementById('q').addEventListener('input', (e) => {
   document.querySelector('.nomatch').classList.toggle('on', hits.length === 0);
   if (q && hits.length === 1) hits[0].click();
 });
+
+// 摘要預設三行，點一下展開全部；短到不需要摺疊的就直接去掉摺疊態
+const syn = document.querySelector('.synopsis');
+if (syn) {
+  const body = syn.querySelector('p');
+  if (body.scrollHeight <= body.clientHeight + 1) syn.classList.remove('syn-clamp');
+  syn.addEventListener('click', () => syn.classList.remove('syn-clamp'));
+}
 
 // 圖片彈層
 const lb = document.querySelector('.lightbox');
@@ -1257,7 +1666,7 @@ function main(argv) {
     const imagesDir = flag(rest, '--images', 'images');
     const sourceFlag = flag(rest, '--source');
 
-    const { characters, source, summary, lang: castLang, ui } = loadCast(castPath);
+    const { characters, source, summary, lang: castLang, ui, style } = loadCast(castPath);
     const lang = flag(rest, '--lang', castLang);
     const title = sourceFlag ?? source ?? basename(castPath).replace(/\.[^.]+$/, '');
 
@@ -1270,7 +1679,7 @@ function main(argv) {
 
     process.stdout.write(
       (html
-        ? renderHtml(characters, title, summary, lang, ui)
+        ? renderHtml(characters, title, summary, lang, ui, style)
         : renderMarkdown(characters, title, summary, lang, ui)) + '\n',
     );
     return;
@@ -1330,6 +1739,11 @@ function isMainModule() {
 }
 
 if (isMainModule()) {
+  // `render ... | head` 這類管道提前關閉時安靜退出，別甩 EPIPE 堆疊
+  process.stdout.on('error', (e) => {
+    if (e.code === 'EPIPE') process.exit(0);
+    throw e;
+  });
   try {
     main(process.argv.slice(2));
   } catch (error) {

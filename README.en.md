@@ -15,12 +15,12 @@
 >
 > See the [CHANGELOG](CHANGELOG.md).
 
-
-A collection of skills for AI coding agents. **Runs in both Claude Code and codex.**
+**Agent skills for AI short-drama production** — from a novel to shoot-ready material: character bibles, model sheets, adaptation outlines. Built for AI coding agents, **runs in both Claude Code and codex**.
 
 | Skill | What it does |
 | --- | --- |
 | [**novel-characters**](skills/novel-characters/README.en.md) | Turns a novel into a character bible: profiles, design prompts, voice prompts, model sheets. Report language and image style are both configurable |
+| [**novel-outline**](skills/novel-outline/README.en.md) | Adapts a novel into a five-piece short-drama outline: adaptation notes, cast, beats, per-episode synopses, asset list. All 13 quality gates are script-checked; includes a checkup mode for existing outlines |
 
 Point it at a novel and you get this:
 
@@ -87,6 +87,10 @@ for f in skills/*/scripts/selftest.mjs; do node "$f"; done
 ```
 
 There is no CI — the self-tests run in about a second, so running them locally beats waiting on a pipeline. **Only tested on macOS with Node 24**; there is no platform-specific code, so Linux and older Node releases should be fine, but that is unverified.
+
+## Test corpus
+
+[`testdata/classic-chinese-novels/`](testdata/classic-chinese-novels/) contains normalized plain-text editions of *Romance of the Three Kingdoms*, *Water Margin*, *Journey to the West*, *The Plum in the Golden Vase*, and *Dream of the Red Chamber* for local integration and stress testing. See the directory README for sources, checksums, and licensing notes.
 
 
 ## License

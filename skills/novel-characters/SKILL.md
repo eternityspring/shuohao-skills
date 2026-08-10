@@ -1,9 +1,9 @@
 ---
 name: novel-characters
-version: 1.5.0
+version: 1.6.0
 description: |
   從小說或短故事裡拆出角色表、人物側寫、造型提示詞、音色提示詞，
-  並給主要角色出角色設定圖（左半身像 + 右全身三視圖 + 細節條），產出 JSON + Markdown + 可互動的 report.html。
+  並給選中的每個角色產生角色設定圖（左半身像 + 右全身三視圖 + 細節條），產出 JSON + Markdown + 可互動的 report.html。
   報告語言可指定（--lang），預設台灣正體中文（zh-TW），任意語言都支援；
   生圖風格可指定（--style），預設半寫實，也可以出吉卜力動畫風或擬真實拍。
   零相依、零 API key，用當前工作階段額度；生圖走 codex 內建 $imagegen（可選）。
@@ -83,10 +83,10 @@ metadata:
 | 性格、气质 | 個性、氣質 |
 | 视频、图片 | 影片、圖片 |
 | 质量 | 品質 |
-| 信息、数据 | 資訊、資料 |
-| 默认、通过、支持 | 預設、透過、支援 |
+| 資訊、数据 | 資訊、資料 |
+| 默认、通过、支援 | 預設、透過、支援 |
 | 水准、计划 | 水準、計畫 |
-| 软件、程序、网络 | 軟體、程式、網路 |
+| 软件、程式、网络 | 軟體、程式、網路 |
 
 **一簡對多繁的字最容易翻錯**，外貌描寫裡幾乎必踩：
 
@@ -174,7 +174,7 @@ node {baseDir}/scripts/novel-characters.mjs merge <workdir>
 
 ### Step 5 — 選角
 
-取前 N 位。預設 10，使用者說了就聽使用者的。剩下的角色在最後回報裡提一句「還辨識出 X 位沒做側寫」。
+取前 N 位。預設 30，使用者說了就聽使用者的。剩下的角色在最後回報裡提一句「還辨識出 X 位沒做側寫」。
 
 ### Step 6 — 第二趟出卡
 
@@ -206,7 +206,7 @@ node {baseDir}/scripts/novel-characters.mjs validate <cast.json> <book.txt>
 
 **有違規就按報錯逐條修，改完重跑，直到通過。** 這四類錯模型真的會犯——這套檢查就是被真實輸出打出來的。
 
-### Step 8 — 生圖（可選，只給 protagonist 和 major）
+### Step 8 — 生圖（可選，每個角色都出）
 
 **每個角色一張**，用 `image.sheet`，落到 `./images/<slug>-sheet.png`。一張橫構圖內部左右分欄：
 
@@ -228,7 +228,7 @@ node {baseDir}/scripts/novel-characters.mjs validate <cast.json> <book.txt>
 - **一個角色一次呼叫，絕不批次**
 - 單個失敗就跳過，不阻斷；最後彙總說明
 
-`supporting` / `minor` 只給提示詞不生圖。使用者明確要求全出就全出。
+**不按 `importance` 篩，選中的角色全都生圖。** 一個角色一次呼叫，30 個就是 30 次——這是整條管線裡最慢的一步，開始前跟使用者說一聲要產生多少張。使用者想省就讓他給個數，或者明說只要 `protagonist` / `major`。
 
 ### Step 9 — 輸出
 
@@ -254,3 +254,28 @@ report.html 的樣式約定見 `{baseDir}/references/report-style.md`——要�
 └── images/
     └── <slug>-sheet.png           ← 有 codex 才有
 ```
+### Step 10 — 回報
+
+一句話說清：角色數、生圖數、報告路徑。校驗一次沒過的話，說明修了什麼。有角色生圖失敗、被截斷、或因為沒有 codex 而沒生圖，明確說清楚。
+
+---
+
+## 邊界
+
+- 單次上限 24 塊（約 33 萬字元），超了會明確報 `truncated`，不靜默截斷
+- 人類可讀欄位跟隨 `--lang`（預設中文）；生圖和 TTS 提示詞**永遠英文**，那些引擎吃英文最穩
+- 設定圖最容易出的兩個問題：**一張圖裡兩個長相**、**為了塞細節把人物壓扁**。拿到圖先掃一眼，見 `references/sheet.md`
+- 生圖只走 codex built-in `$imagegen`。**不用它的 CLI fallback**（要 `OPENAI_API_KEY`）
+- 想要能即時編輯、邊跑邊看的互動介面，那是另一個東西，不在這個 skill 裡
+
+## 自測
+
+```bash
+node {baseDir}/scripts/selftest.mjs
+```
+
+318 項斷言，不調模型、不花額度，覆蓋分塊 / 歸併 / 多語言 / 校驗 / 渲染的全部確定性邏輯。改完程式先跑這個。
+
+## 自帶樣例
+
+`{baseDir}/examples/渡口.txt` 是一篇短故事，4 個角色，其中貨郎全程只有綽號、船伕只被叫過「老伯」——專門用來驗別名歸併。對應產出 `渡口-cast.json` / `渡口-cast.md` 可以當品質基準，也是校驗的自檢夾具。

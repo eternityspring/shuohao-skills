@@ -15,18 +15,18 @@
 >
 > 詳見 [CHANGELOG](CHANGELOG.md)。
 
-
-給 AI 編碼 agent 用的 skill 集合。**Claude Code 和 codex 都能跑。**
+**AI 短劇製作的 skill 集合**：從一本小說到能開拍的製作素材——拆角色、出設定圖、排大綱。給 AI 編碼 agent 使用，**Claude Code 和 codex 都能跑**。
 
 | Skill | 做什麼 |
 | --- | --- |
 | [**novel-characters**](skills/novel-characters) | 把一篇小說拆成角色設定集：人物側寫、形象提示詞、音色提示詞、角色設定圖。報告語言與生圖風格可選 |
+| [**novel-outline**](skills/novel-outline) | 把一本小說改編成短劇大綱五件套：改編說明、人物表、爽點表、分集梗概、資產清單。13 道品質門全部由程式檢查，支援已有大綱的體檢模式 |
 
 丟一本小說進去，出這個：
 
 ![角色設定集報告](skills/novel-characters/assets/report.png)
 
-## 裝
+## 安裝
 
 ```bash
 git clone https://github.com/eternityspring/shuohao-skills.git
@@ -85,6 +85,10 @@ for f in skills/*/scripts/selftest.mjs; do node "$f"; done
 ```
 
 沒有配 CI——自測足夠快（1 秒），本地跑一次比等 CI 更省事。**只在 macOS + Node 24 上驗過**；程式碼沒有平台相關呼叫，Linux 和更低版本 Node 理論上沒問題，但沒驗。
+
+## 測試語料
+
+[`testdata/classic-chinese-novels/`](testdata/classic-chinese-novels/) 收錄《三國演義》、《水滸傳》、《西遊記》、《金瓶梅》與《紅樓夢》的正規化純文字，供本機整合與壓力測試使用。來源、雜湊及授權提醒請見目錄內說明。
 
 
 ## License

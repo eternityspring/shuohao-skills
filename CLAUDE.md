@@ -1,6 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) and Codex when working with code in this repository.
+
+## Codex / Claude Code 相容
+
+- Claude Code 直接讀取本檔案。
+- Codex 先讀取根目錄的 `AGENTS.md`，再依該入口完整讀取本檔案。
+- 共用規範只維護在本檔案；`AGENTS.md` 不複製規則，避免兩份內容漂移。
 
 ## ⚠️ 這個 repo 一律用台灣正體中文
 
@@ -36,6 +42,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 引號用「」『』，不要 `""`。
 
+中文文案不要為了短而縮成單字詞：「保留／砍掉／合併」不要寫成「保／砍／合」，「安裝」不要寫成「裝」，「使用」不要寫成「用」。章節標題也一樣。
+
 ### 唯一的例外：`STRINGS.zh`
 
 `skills/novel-characters/scripts/novel-characters.mjs` 的 `STRINGS` 表裡，**`zh` 那一整套必須維持簡體**——那是 `--lang zh` 這個功能本身，不是待翻譯的內容。改了簡體報告就廢了，自測也會擋下來。
@@ -49,7 +57,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 cd skills/novel-characters
 
-node scripts/selftest.mjs                              # 全部自測（264 項，不呼叫模型，約一秒）
+node scripts/selftest.mjs                              # 全部自測（318 項，不呼叫模型，約一秒）
 
 node scripts/novel-characters.mjs                      # 印出用法
 node scripts/novel-characters.mjs chunk book.txt /tmp/wk       # 切塊
@@ -77,7 +85,7 @@ node scripts/novel-characters.mjs slug "胡二爺"                 # 安全檔�
 
 ### 這個 repo 是什麼
 
-一個 skill 集合，目前只有 `novel-characters`。**Claude Code 和 codex 都能跑**，差別只在生圖那一步。
+一個 AI 短劇製作 skill 集合，目前包含 `novel-characters` 與 `novel-outline`。**Claude Code 和 codex 都能跑**；需要生圖的步驟由 codex 內建能力處理。
 
 一個 skill = 一個目錄 + 一份 `SKILL.md`。`install.sh` 認的就是 `SKILL.md` 存不存在。
 
