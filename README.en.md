@@ -1,14 +1,9 @@
 [中文](README.md) · **English**
 
-> I run a **paid community for AI short-form drama** — workflows, tooling, and hands-on practice.
-> If that's your thing, add me on **WeChat `hao_dev`** and mention **`github`** in the request.
->
-> <img src="assets/wechat.png" alt="WeChat QR" width="180">
-
 # shuohao-skills
 
-> **This is a fork** of [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills).
-> What differs here:
+> This project is forked from [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills)
+> and continues to build on the original work. What differs here:
 >
 > - **Defaults to Taiwanese Traditional Chinese** (`zh-TW`) — Taiwanese word choices, not just converted glyphs. Use `--lang zh` for Simplified
 > - Adds a **`photoreal`** style preset: live-action wardrobe camera test

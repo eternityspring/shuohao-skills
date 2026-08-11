@@ -1,14 +1,9 @@
 **中文** · [English](README.en.md)
 
-> 我建了一個 **AI 短劇交流群**（付費），聊 AI 短劇的工作流、工具和實作。
-> 有興趣的加我：**微信 `hao_dev`**，新增時**備註 `github`**。
->
-> <img src="assets/wechat.png" alt="爍皓微信QR Code" width="180">
-
 # shuohao-skills
 
-> **這是 fork。** 上游是 [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills)，
-> 原作者微信群等資訊見上方。本 fork 的差異：
+> 本專案 fork 自 [eternityspring/shuohao-skills](https://github.com/eternityspring/shuohao-skills)，
+> 並在原專案基礎上持續延伸。本 fork 的差異：
 >
 > - **預設輸出台灣正體中文**（`zh-TW`），用詞照台灣習慣而不只是換字形。要簡體用 `--lang zh`
 > - 新增 **`photoreal`** 畫風預設：擬真實拍，劇組試裝定妝照的質感
