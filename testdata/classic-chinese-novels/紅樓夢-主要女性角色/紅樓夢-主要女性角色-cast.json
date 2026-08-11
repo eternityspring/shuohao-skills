@@ -1,0 +1,376 @@
+{
+  "source": "紅樓夢・主要女性角色",
+  "lang": "zh-TW",
+  "style": "realistic",
+  "summary": "故事置於清代貴族宅院與大觀園的日常生活之中，少女、少奶奶與貼身丫鬟在禮法、家族責任與真實性情之間各自尋找容身之處。林黛玉、薛寶釵與史湘雲因親族關係寄居賈府，王熙鳳主持家務，賈探春在家族秩序中展現治理才具，妙玉則以帶髮修行者身分住進園中。晴雯與襲人同為賈寶玉身邊的重要侍女，卻以截然不同的方式面對身分限制。八人的交往、詩社、家務與情感牽引，共同構成一幅繁華而暗含裂痕的女性群像。",
+  "characters": [
+    {
+      "name": "林黛玉",
+      "aliases": ["黛玉", "林妹妹", "顰兒", "瀟湘妃子"],
+      "importance": "protagonist",
+      "oneLiner": "寄居賈府的敏銳才女，以詩、眼淚與近乎苛刻的真誠守住自己的感情和尊嚴。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十五至十六歲（推斷）",
+        "identity": "林如海之女、賈母外孫女，寄居賈府的閨閣小姐",
+        "appearance": "身形纖細，帶著先天不足的病弱感；眉形若輕煙微蹙，雙眼含情而常有淚光，呼吸細弱，靜時清雅、動時輕盈。（推斷）面色偏白，黑髮柔細，服飾取蘇州文雅氣質，以月白、煙粉與竹青等低飽和色為主，避免繁重珠翠壓過人物。",
+        "personality": ["敏銳", "真誠", "多情", "自尊", "才思銳利"],
+        "temperament": "初入賈府時處處留心，害怕言行失當；熟悉之後則言詞機敏，能迅速看破人情中的敷衍與親疏。她的尖銳往往是自我保護，情感核心仍是對真心與平等的強烈要求。",
+        "motivation": "在寄人籬下的環境中保存人格與情感自主，並確認自己所珍惜的關係不是被禮法或利益替代。",
+        "arc": "從謹慎寄居、以詩文建立自我，到愈發清楚家族秩序無法容納她所要求的純粹；她以不妥協的情感姿態持續對抗被安排的人生。",
+        "relationships": [
+          {"name": "薛寶釵", "relation": "才華與情感位置上的映照者，從猜疑競爭逐漸生出理解"},
+          {"name": "史湘雲", "relation": "性情相反而能詩酒相交的表親與詩社夥伴"},
+          {"name": "紫鵑", "relation": "最貼近她處境、替她試探未來的侍女"},
+          {"name": "賈寶玉", "relation": "精神知己與情感核心，彼此親近也彼此試探"}
+        ],
+        "evidence": [
+          "不肯輕易多說一句話，多行一步路，惟恐被人恥笑了他去．",
+          "嬌襲一身之病．淚光點點，嬌喘微微．閒靜時如姣花照水，行動處似弱柳",
+          "心較比干多一竅，病如西子胜三分．",
+          "質本洁來還洁去，強于污淖陷渠溝．"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，煙粉、月白與竹青的低飽和配色",
+        "prompt": "Semi-realistic character illustration of a slender fifteen-year-old Han Chinese aristocratic girl from Suzhou living in an elite mid-Qing-dynasty household in 18th-century Beijing. Delicate narrow oval face, softly arched smoke-like brows with a slight worried pinch, large dark almond eyes with a moist reflective gaze, fine straight nose, small pale lips, translucent fair complexion, fragile shoulders and a quiet inward posture. Centre-parted glossy black hair in a restrained period updo with a small white-jade hairpin and two soft side locks. She wears layered pale moon-white and muted dusty-pink silk robes with bamboo-green piping, subtle woven blossom motifs, narrow sleeves, a soft pleated skirt and a plain silk handkerchief. Skin with visible pores and uneven tone, faint capillaries at the nostrils and ear rims, subtle subsurface scattering; eyes with a wet specular highlight, moist lower lid, visible iris fibres and a limbal ring; eyelids and eyebrows slightly asymmetric; individual flyaway hairs break the silhouette. Fabric has visible weave, real weight and self-shadowing folds. Three-quarter waist-up view, plain neutral background, soft directional key light from the upper left with cool fill, shallow depth of field, face in sharpest focus. Semi-realistic painterly rendering with soft blended edges and visible brush texture, anatomically grounded.",
+        "promptLocal": "半寫實人物插畫：出身蘇州、寄居十八世紀清代京城貴族宅院的十五歲漢族少女。身形纖細，窄鵝蛋臉，煙眉微蹙，深色杏眼含著濕潤淚光，鼻樑纖直，唇色淡，肩膀柔弱而姿態內斂。中分黑髮梳成克制的古典髮髻，以小型白玉簪固定，兩側留柔細鬢髮。穿月白與煙粉色層疊絲衣，竹青滾邊，暗織花紋，窄袖、柔軟褶裙，手持素色絲帕。皮膚保留毛孔與自然膚色變化，眼睛有濕潤高光，眉眼略不對稱，髮際線有碎髮；絲料有織紋、重量與褶皺自陰影。四分之三半身視角，中性背景，左上柔和方向主光與冷調補光，淺景深，面部最清晰。",
+        "negativePrompt": "plastic or waxy skin, over-smoothed airbrushed complexion, poreless doll face, perfectly symmetrical face, dead flat eyes without specular highlight, helmet-like hair with no loose strands, flat untextured fabric with no weave or wear, stiff mannequin posing, gaudy imperial crown, modern clothing, extra fingers, malformed hands, text, labels, watermark, signature, busy or patterned background, harsh cast shadows on the backdrop",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "muted pastel palette", "subsurface skin", "directional key light"],
+        "sheet": "Use case: historical-scene. Asset type: production character model sheet. Create a single character model sheet on ONE 16:9 landscape canvas for a slender fifteen-year-old Han Chinese aristocratic girl from Suzhou living in an elite mid-Qing-dynasty household in 18th-century Beijing. Delicate narrow oval face, softly arched smoke-like brows with a slight worried pinch, large dark almond eyes with a moist reflective gaze, fine straight nose, small pale lips, translucent fair complexion, fragile shoulders and a quiet inward posture. Centre-parted glossy black hair in a restrained period updo with a small white-jade hairpin and two soft side locks. Layered pale moon-white and muted dusty-pink silk robes with bamboo-green piping, subtle woven blossom motifs, narrow sleeves, a soft pleated skirt, embroidered cloth shoes and a plain silk handkerchief. The canvas is divided into three zones by thin hairline rules. LEFT ZONE occupies about 34% of the canvas width: one large front-facing bust portrait, head and shoulders, centred like an ID photograph. BOTH SHOULDERS ARE FULLY VISIBLE with clear space on either side; no side cropping, fade, vignette or rounded bottom; end the portrait with a clean straight horizontal cut below the chest. This portrait is the facial identity anchor. Skin has visible pores and uneven tone, faint capillaries and subtle subsurface scattering; eyes have wet highlights, moist lower lids and visible iris fibres; eyelids and brows are slightly asymmetric; flyaway hairs break the silhouette. LIGHTING IN THE LEFT ZONE ONLY: soft directional key light from the upper left with gentle falloff and ambient occlusion under the chin, in the eye sockets and at the collar. RIGHT-TOP ZONE: three FULL-BODY views of the SAME character, front, left profile and back, standing side by side on one shared ground line. Their faces must match the bust portrait exactly: same features, hairstyle and calm melancholy expression. PROPORTIONS ARE CRITICAL: equal height and head-to-body ratio, correct limb lengths, natural anatomy, feet on the ground line, clear margin above and below, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic lighting with no directional key and no cast shadows. RIGHT-BOTTOM ZONE: four small isolated detail studies, evenly spaced and smaller than the figures: the white-jade hairpin, the moist eye and smoke-like brow, bamboo-green silk piping and woven blossom motif, the folded silk handkerchief, and embroidered cloth shoe. If details do not fit, continue them down the right edge; the detail studies give way, not the figures. Plain pure white background throughout, generous even margins, no scenery, no written labels, no text, no watermark. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Fabric has visible weave, wear and shine, real cloth weight and self-shadowing folds."
+      },
+      "voice": {
+        "timbre": "清亮而纖細的少女聲線，帶輕微氣聲與濕潤感",
+        "pitch": "中高音，情緒激動時略顯尖細",
+        "pace": "平時偏慢而字句清楚，譏誚時突然加快",
+        "accent": "帶淡雅江南語感的官話（推斷）",
+        "emotion": "克制、敏感，笑意與哽咽常只隔一線",
+        "referenceHint": "像一位能把玩笑說得極輕、卻讓每個字都帶著試探的年輕詩人",
+        "prompt": "A teenage female voice around fifteen. Clear, delicate light soprano with a faint breathy edge and a moist intimate resonance. Mid-high pitch, controlled volume, precise diction, and a slightly soft Jiangnan colouring within educated Mandarin. Usually measured and quiet, but quickens sharply when teasing or defending herself. Fine emotional micro-variation, restrained vulnerability, dry wit, and tears held just behind the words.",
+        "promptLocal": "約十五歲的少女聲線。清澈纖細的輕女高音，帶淡淡氣聲與貼近耳邊的濕潤共鳴。音高落在中高區，音量克制，咬字精準，官話中帶輕柔江南語感。平時緩慢安靜，譏誚或自我防衛時語速突然加快；情緒變化細微，脆弱被壓在字後，帶乾燥機敏的幽默感。"
+      }
+    },
+    {
+      "name": "薛寶釵",
+      "aliases": ["寶釵", "寶姐姐", "蘅蕪君", "寶姑娘"],
+      "importance": "protagonist",
+      "oneLiner": "端方穩重、博學而善體人情的名門少女，總把熱烈心意收束在合宜分寸之內。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十五至十七歲（推斷）",
+        "identity": "金陵薛家之女，寄居賈府的皇商小姐",
+        "appearance": "臉形豐潤如銀盆，眼若水杏，唇色天然紅潤，眉色濃翠；髮髻烏黑油亮，衣著半新不舊而不顯奢華。（推斷）體態勻稱健康，服色偏蜜合、玫瑰紫與蔥黃，材質上乘但裝飾節制。",
+        "personality": ["穩重", "周全", "博學", "克制", "務實"],
+        "temperament": "少言而不冷淡，能迅速辨認場合需要並給人台階。她習慣將知識、情緒與判斷藏在平和外表之下，既能照顧他人，也能順應家族制度。",
+        "motivation": "維持家族與自身的體面，照顧親人，在既定禮法內爭取最穩妥的生活位置。",
+        "arc": "從從容融入賈府的客居少女，逐漸承擔更多制度性期待；她的成熟與自持使她看似最能適應，卻也讓個人願望難以被看見。",
+        "relationships": [
+          {"name": "林黛玉", "relation": "才學相當的情感映照者，後來以坦誠化解猜疑"},
+          {"name": "史湘雲", "relation": "照顧周全的表姊與詩社夥伴"},
+          {"name": "襲人", "relation": "務實觀念相近、彼此信任的內宅同盟"},
+          {"name": "賈寶玉", "relation": "被家族視為合適婚配對象，思想取向卻常有距離"}
+        ],
+        "evidence": [
+          "而翠，臉若銀盆，眼如水杏．罕言寡語，人謂藏愚，安分隨時，自云守拙．",
+          "一色半新不舊，看去不覺奢華．",
+          "喜他穩重和平",
+          "任是無情也動人．"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，蜜合、蔥黃與玫瑰紫的沉穩配色",
+        "prompt": "Semi-realistic character illustration of a healthy sixteen-year-old Han Chinese merchant-aristocratic girl from Jinling in an elite mid-Qing-dynasty household in 18th-century Beijing. Full silver-moon face, softly rounded cheeks, water-almond dark eyes, naturally red lips, dark unpainted brows, composed direct gaze and a calm reserved smile. Glossy black hair in a neat period bun without loose ornament, secured by one understated gold hairpin. She wears a honey-beige padded silk jacket, muted rose-purple vest and scallion-yellow pleated skirt, all excellent but deliberately half-new and restrained. Visible natural pores, moist eye highlights, slight facial asymmetry, fine flyaway hair, silk and fur with readable weave, stitched seams, weight and self-shadowing folds. Three-quarter waist-up view, neutral background, soft upper-left key light and cool fill, shallow depth of field, semi-realistic painterly rendering with soft blended edges and visible brush texture.",
+        "promptLocal": "半寫實人物插畫：出身金陵皇商家庭、寄居十八世紀清代京城貴族宅院的十六歲漢族少女。臉形豐潤如銀盆，頰線柔和，深色水杏眼，天然紅唇，眉色深而未描，目光沉著，微笑克制。黑髮油亮，梳整齊髮髻，只以一支低調金簪固定。穿蜜合色絲棉襖、低飽和玫瑰紫背心與蔥黃褶裙，材質上乘卻刻意半新不舊。保留自然毛孔、眼中水光、略不對稱的眉眼與碎髮；絲料、毛皮可見織紋與車縫，布料垂墜有重量。四分之三半身視角，中性背景，左上柔和主光配冷調補光。",
+        "negativePrompt": "plastic or waxy skin, poreless doll face, exaggerated thinness, coquettish pose, gaudy crown, modern fashion, perfectly symmetrical face, dead eyes, helmet hair, flat fabric, stiff mannequin pose, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "restrained luxury", "silk texture"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for a healthy sixteen-year-old Han Chinese merchant-aristocratic girl from Jinling in an elite mid-Qing-dynasty household in 18th-century Beijing. Full silver-moon face, water-almond eyes, naturally red lips, dark brows, composed reserved smile, glossy black hair in a neat period bun with one understated gold hairpin. Honey-beige padded silk jacket, muted rose-purple vest, scallion-yellow pleated skirt and discreet embroidered shoes, excellent materials but deliberately half-new. Divide the canvas by thin hairline rules. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders fully visible, clear side margins, clean straight lower cut, no fade or vignette. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left directional key with gentle falloff and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one shared ground line; faces match the bust exactly. PROPORTIONS ARE CRITICAL: equal height, consistent head-to-body ratio, correct anatomy and limb length, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic lighting, no cast shadows. RIGHT-BOTTOM ZONE: small detail studies of the understated gold hairpin, naturally red lips and almond eye, silk-and-fur collar, half-new sleeve cuff, and embroidered shoe. If details do not fit, continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no scenery, no labels or text. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Natural pores, moist eyes, slight facial asymmetry, flyaway hairs and weighted fabric folds."
+      },
+      "voice": {
+        "timbre": "圓潤沉靜的年輕女中音，氣息穩定",
+        "pitch": "中音",
+        "pace": "從容均勻，少有急促",
+        "accent": "受良好教養的官話，帶極淡金陵語感（推斷）",
+        "emotion": "平和、周全，真正情緒藏在停頓裡",
+        "referenceHint": "像能在一桌爭論中用一句話安頓所有人的年輕女主人",
+        "prompt": "A young female voice around sixteen. Warm rounded mezzo-soprano with steady breath support, centred mid register and clear educated Mandarin with a faint Jinling softness. Even unhurried pace, careful consonants, modest pitch movement and a calm socially attentive tone. Emotion remains contained; concern or disappointment appears through slightly longer pauses rather than louder volume.",
+        "promptLocal": "約十六歲的年輕女聲。溫暖圓潤的女中音，氣息支撐穩定，音高集中在中音區；官話清楚端正，帶極淡的金陵柔韻。語速均勻從容，子音仔細，音高起伏克制，語氣始終留意他人感受。關心或失望不靠提高音量，而從稍長的停頓透露。"
+      }
+    },
+    {
+      "name": "王熙鳳",
+      "aliases": ["鳳姐", "鳳姐兒", "鳳辣子", "璉二奶奶", "璉嫂子"],
+      "importance": "protagonist",
+      "oneLiner": "以笑聲、手腕與驚人執行力統御榮國府日常的年輕管家，鋒芒與危機同樣逼人。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約二十至二十五歲（推斷）",
+        "identity": "賈璉之妻、王夫人內姪女，榮國府實際家務管理者",
+        "appearance": "身量苗條、體態風流，一雙丹鳳三角眼配柳葉吊梢眉，粉面含威，未開口先聞笑聲。衣飾彩繡輝煌，珠髻、鳳釵、赤金瓔珞與鮮明紅綠形成強勢華貴的視覺中心。",
+        "personality": ["精明", "果決", "機變", "強勢", "好勝"],
+        "temperament": "進場先以聲音奪人，能在親熱玩笑、威勢命令與利益計算之間瞬間切換。她擅長讀懂權力方向，工作時快速切割問題，但控制欲與長期高壓也使她愈來愈孤立。",
+        "motivation": "守住自己在大家族中的權力、體面與安全，證明管理才能，並確保資源始終掌握在手中。",
+        "arc": "由風光能幹的內宅管理者逐漸被家族財務、權力衝突與個人算計反噬；她既是制度最有效率的操作者，也是被制度消耗的人。",
+        "relationships": [
+          {"name": "賈探春", "relation": "欣賞其才幹，也視為少數能理解家務難處的人"},
+          {"name": "林黛玉", "relation": "以機敏玩笑接待並照顧的表妹"},
+          {"name": "薛寶釵", "relation": "同屬家族核心女性，處事方式一張一弛"},
+          {"name": "平兒", "relation": "最重要的助手、緩衝者與私生活見證者"}
+        ],
+        "evidence": [
+          "一雙丹鳳三角眼，兩彎柳葉吊梢眉，身量",
+          "苗條，体格風騷，粉面含春威不露，丹唇未起笑先聞．",
+          "你只叫他`鳳辣子'就是了。",
+          "机關算盡太聰明，反算了卿卿性命．"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，朱紅、翡翠與金色的高貴強對比",
+        "prompt": "Semi-realistic character illustration of a commanding twenty-three-year-old Han Chinese noblewoman managing an elite mid-Qing-dynasty household in 18th-century Beijing. Slender elegant figure, sharp phoenix-shaped eyes with lifted outer corners, long willow-leaf brows, warm fair face, red lips poised between welcome and command, confident half-smile. Glossy black hair in an elaborate high pearl-studded bun with a gold phoenix hairpin. Rich red silk jacket embroidered with butterflies and flowers, dark teal fur-trimmed outer vest, jade-green pleated skirt, red-gold necklace and restrained courtly jewellery. Natural pores, slight facial asymmetry, lively catchlights, individual flyaway hair, metallic wear and real silk weave. Three-quarter waist-up view, neutral background, soft directional key and cool fill, painterly anatomical realism.",
+        "promptLocal": "半寫實人物插畫：管理十八世紀清代京城貴族宅院的二十三歲漢族少奶奶。身形苗條優雅，丹鳳眼眼尾上挑，柳葉眉細長，面色白裡透暖，紅唇停在親熱與命令之間，帶自信半笑。黑髮梳高髻，嵌珍珠並插金鳳簪。穿朱紅蝶花刺繡絲襖、深石青毛皮鑲邊外褂與翡翠綠褶裙，配赤金瓔珞與克制的貴族首飾。皮膚保留毛孔與眉眼不對稱，眼神有活的高光，髮際有碎髮，金屬有磨痕，絲料織紋清楚。",
+        "negativePrompt": "plastic skin, poreless doll face, passive timid expression, modern makeup, modern clothing, oversized fantasy crown, perfectly symmetrical face, dead eyes, flat fabric, stiff mannequin pose, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "vermilion and jade", "gold jewellery"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for a commanding twenty-three-year-old Han Chinese noblewoman managing an elite mid-Qing-dynasty household in 18th-century Beijing. Slender elegant figure, sharp lifted phoenix eyes, willow-leaf brows, warm fair face, red lips, confident half-smile, elaborate pearl-studded high bun with a gold phoenix hairpin. Rich red embroidered silk jacket, dark teal fur-trimmed vest, jade-green pleated skirt, red-gold necklace and embroidered shoes. Divide with thin hairline rules. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders fully visible, clear margins and clean straight lower edge. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left directional key with volume and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one ground line, all faces matching the bust exactly. PROPORTIONS ARE CRITICAL: equal height and ratio, natural anatomy, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light without cast shadows. RIGHT-BOTTOM ZONE: small detail studies of the gold phoenix hairpin, sharp eye and willow brow, red-gold necklace, butterfly embroidery, and embroidered shoe. If needed, details continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no labels, text or scenery. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Visible pores, asymmetric living features, flyaway hair, true metal wear and weighted woven silk."
+      },
+      "voice": {
+        "timbre": "明亮有穿透力的年輕女中高音，笑聲帶金屬感",
+        "pitch": "中高音，命令時迅速壓低",
+        "pace": "快而俐落，善用突然停頓控制場面",
+        "accent": "京城貴族宅院官話（推斷）",
+        "emotion": "熱絡表面下帶威勢與警覺",
+        "referenceHint": "像一位進門先笑、下一句就能讓所有人立刻照辦的年輕管家",
+        "prompt": "A young adult female voice around twenty-three. Bright cutting mezzo-soprano with strong forward placement and a ringing laugh that carries across a large room. Fast precise pace, agile pitch turns, crisp educated Beijing Mandarin, and sudden low-register drops for commands. Socially sparkling and teasing on the surface, alert and authoritative underneath, with strategic pauses that make others wait.",
+        "promptLocal": "約二十三歲的年輕女聲。明亮銳利的女中音，聲音位置靠前，笑聲帶金屬般穿透力，能越過整個大廳。語速快而精準，音高轉折靈活，京城官話俐落；下命令時會突然壓到較低音區。表面熱絡愛玩笑，底層始終警覺而有權威，善用停頓讓別人等待。"
+      }
+    },
+    {
+      "name": "賈探春",
+      "aliases": ["探春", "三姑娘", "三妹妹", "蕉下客"],
+      "importance": "major",
+      "oneLiner": "志向高、眼界遠的賈府三小姐，以改革家務證明才幹，也清醒看見庶出身分的邊界。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十四至十六歲（推斷）",
+        "identity": "賈政庶女、賈府三小姐，大觀園詩社發起者與家務代理者",
+        "appearance": "削肩細腰、身材修長，鴨蛋臉，眼神俊秀有神，眉形修長，顧盼間精神飛揚，帶書卷氣與行動力。（推斷）穿剪裁清楚的秋香、石榴紅與墨綠絲衣，裝飾以蕉葉紋與簡潔金飾為主。",
+        "personality": ["精明", "果斷", "自尊", "有組織力", "志向高"],
+        "temperament": "說話條理明快，重視制度與公私界線，能在長輩、下人與生母之間承受壓力而不失判斷。她並不否認情感，但拒絕讓親疏破壞規矩。",
+        "motivation": "證明自身才具、改善家族運作並擺脫庶出身分帶來的輕視，尋找能真正施展抱負的空間。",
+        "arc": "從詩社組織者到家務改革者，才能愈來愈清楚；同時也愈明白性別、家世與衰敗家族對她的限制。",
+        "relationships": [
+          {"name": "王熙鳳", "relation": "管理才幹上的前輩與映照，彼此理解家務壓力"},
+          {"name": "薛寶釵", "relation": "共同代理家務的務實夥伴"},
+          {"name": "林黛玉", "relation": "詩社夥伴，互以別號與詩才相激"},
+          {"name": "趙姨娘", "relation": "生母；血緣親近卻常因規矩與自尊衝突"}
+        ],
+        "evidence": [
+          "削肩細腰，長挑身材，鴨蛋臉面，俊眼修眉，顧盼神飛，文彩精華",
+          "才自精明志自高，生于末世運偏消．",
+          "我但凡是個男人，可以出得去，我必早走了，立一番事業",
+          "第五十六回　 敏探春興利除宿弊　時寶釵小惠全大体"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，秋香黃、石榴紅與墨綠的俐落配色",
+        "prompt": "Semi-realistic character illustration of a tall slender fifteen-year-old Han Chinese noble girl in an elite mid-Qing-dynasty household in 18th-century Beijing. Long oval face, bright decisive almond eyes, refined long brows, straight nose, alert upright posture and a direct intelligent gaze. Glossy black hair in a clean balanced period updo with a small gold leaf pin. Structured autumn-gold silk jacket with dark green piping, muted pomegranate-red pleated skirt, narrow sash, discreet banana-leaf embroidery and a slim account booklet in one hand. Natural skin texture, moist eyes, slight asymmetry, flyaway hairs, visible silk weave and weighted crisp folds. Three-quarter waist-up view, neutral background, soft directional key and cool fill, anatomically grounded painterly realism.",
+        "promptLocal": "半寫實人物插畫：十八世紀清代京城貴族宅院中的十五歲漢族小姐。身材修長纖細，長鵝蛋臉，明亮果決的杏眼，修長眉形，鼻樑直，站姿挺拔，目光直接而聰慧。黑髮梳成平衡俐落的古典髮髻，以小型金葉簪固定。穿剪裁清楚的秋香色絲襖、墨綠滾邊、低飽和石榴紅褶裙與窄腰帶，暗繡蕉葉紋，手持薄帳冊。保留自然膚理、眼中水光、略不對稱眉眼與碎髮；絲料織紋清楚，褶皺挺而有重量。",
+        "negativePrompt": "plastic skin, poreless doll face, timid slouch, childish proportions, fantasy armour, modern business suit, gaudy crown, perfectly symmetrical face, dead eyes, flat fabric, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "autumn gold", "decisive posture"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for a tall slender fifteen-year-old Han Chinese noble girl in an elite mid-Qing-dynasty household in 18th-century Beijing. Long oval face, bright decisive almond eyes, refined long brows, straight nose, upright posture, clean black period updo with a small gold leaf pin. Structured autumn-gold silk jacket with dark green piping, muted pomegranate-red pleated skirt, narrow sash, banana-leaf embroidery and a slim account booklet. Thin hairline rules divide three zones. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders visible, clean margins and straight lower cut. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left key, gentle falloff and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one ground line; faces match the bust exactly. PROPORTIONS ARE CRITICAL: equal height, consistent ratio, correct anatomy, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light, no cast shadows. RIGHT-BOTTOM ZONE: small detail studies of the gold leaf pin, decisive eye and brow, banana-leaf embroidery, account booklet, and structured embroidered shoe. Details may continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no labels or text. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Visible skin and fabric texture, slight asymmetry and weighted folds."
+      },
+      "voice": {
+        "timbre": "清脆結實的少女女中音，字頭明確",
+        "pitch": "中音偏高",
+        "pace": "條理清楚，決策時節奏加快",
+        "accent": "端正京城官話（推斷）",
+        "emotion": "自持、果決，受辱時聲線會變硬",
+        "referenceHint": "像一位年紀尚輕卻能主持會議、逐條指出制度漏洞的人",
+        "prompt": "A teenage female voice around fifteen. Clear firm young mezzo with crisp attacks, centred resonance and an alert mid-high register. Educated Beijing Mandarin, orderly phrasing and purposeful pacing that accelerates when making a decision. Controlled confidence by default; when challenged, the tone hardens rather than rises, preserving dignity and precision.",
+        "promptLocal": "約十五歲的少女女中音。聲線清楚結實，字頭俐落，共鳴集中，音高在中高區而保持穩定。京城官話端正，分句有條理，作決定時語速會有目的地加快。平時自信克制；受到挑戰時不提高音量，而是讓音色變硬，維持尊嚴與精準。"
+      }
+    },
+    {
+      "name": "史湘雲",
+      "aliases": ["史湘云", "湘云", "史大姑娘", "雲兒", "枕霞舊友"],
+      "importance": "major",
+      "oneLiner": "爽朗豪邁、才思敏捷的史家姑娘，用大笑、詩酒與男裝般的俐落姿態遮住早年的失怙與寄居感。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十四至十六歲（推斷）",
+        "identity": "史家小姐、賈母娘家姪孫女，常來賈府作客的詩社成員",
+        "appearance": "蜂腰猿背，身形靈活挺拔，穿窄袖短襖、短褶裙與小靴時帶男裝般的俏麗；黑髮濃長，睡時散落枕畔。（推斷）臉形圓潤健康，笑容開闊，服色用秋香、水紅與金色細節。",
+        "personality": ["爽朗", "豪邁", "直率", "活潑", "才思敏捷"],
+        "temperament": "人未坐定便大說大笑，玩笑直來直往，常因不設防而觸動別人的敏感處。她不喜兒女情態的纏繞，卻並非沒有傷感，而是習慣用熱鬧和行動把它帶過。",
+        "motivation": "抓住每次相聚、作詩與遊戲的自由，在受制於親族安排的生活中保留爽朗本色。",
+        "arc": "以開闊天性穿行於青春群體，讓困境一度顯得可以被笑聲化開；她的生命處境逐漸提醒眾人，豪爽並不能取消命運的壓力。",
+        "relationships": [
+          {"name": "林黛玉", "relation": "互相打趣又共享詩才的表姊妹"},
+          {"name": "薛寶釵", "relation": "受到照顧與資助的親近表姊"},
+          {"name": "賈探春", "relation": "詩社中意氣相投的組織者與夥伴"},
+          {"name": "賈寶玉", "relation": "自幼熟識、能不拘禮數相處的表兄"}
+        ],
+        "evidence": [
+          "幸生來，英豪闊大寬宏量，從未將儿女私情略縈心上．",
+          "史湘云大笑大說的，見他兩個來，忙問好廝見．",
+          "偏是咬舌子愛說話",
+          "蜂腰猿背，鶴勢螂形．"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，秋香、水紅與暖金的明快配色",
+        "prompt": "Semi-realistic character illustration of an athletic fifteen-year-old Han Chinese noble girl from the Shi clan visiting an elite mid-Qing-dynasty household in 18th-century Beijing. Lively rounded face, bright slightly upturned eyes, broad spontaneous smile, healthy warm complexion, long black hair gathered high with loose energetic strands. She wears a fitted autumn-green narrow-sleeved silk jacket with gold-edged cuffs, a short water-red pleated overskirt over practical trousers, a long five-colour tasselled sash and small fur-lined riding boots, giving a jaunty boyish silhouette without disguising her femininity. Natural pores, lively catchlights, asymmetric smile, flyaway hair, real silk and fur texture. Three-quarter waist-up view, neutral background, soft directional key, painterly anatomical realism.",
+        "promptLocal": "半寫實人物插畫：來到十八世紀清代京城貴族宅院作客的十五歲漢族史家小姐。身形靈活挺拔，圓潤有朝氣的臉，眼尾略揚，笑容開闊，膚色健康溫暖；長黑髮高束，留下有動勢的碎髮。穿合身秋香色窄袖絲襖、金邊袖口，水紅短褶裙罩在便於活動的長褲外，腰束五色長穗宮絛，腳穿毛皮小靴，形成俐落偏男裝的剪影而仍保有少女感。保留毛孔、眼神高光、不完全對稱的笑容、碎髮及真實絲毛材質。",
+        "negativePrompt": "plastic skin, poreless doll face, passive melancholy pose, fragile sickly body, modern sportswear, fantasy armour, perfectly symmetrical smile, dead eyes, helmet hair, flat fabric, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "jaunty silhouette", "warm autumn palette"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for an athletic fifteen-year-old Han Chinese noble girl visiting an elite mid-Qing-dynasty household in 18th-century Beijing. Lively rounded face, bright upturned eyes, spontaneous broad smile, warm healthy complexion, long black hair gathered high with loose strands. Fitted autumn-green narrow-sleeved silk jacket, gold-edged cuffs, short water-red pleated overskirt over practical trousers, five-colour tasselled sash and small fur-lined boots. Thin hairline rules divide three zones. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders visible, clear margins, straight lower cut. LIGHTING IN THE LEFT ZONE ONLY: soft directional upper-left key with gentle falloff and volume. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one shared ground line; faces match the bust exactly. PROPORTIONS ARE CRITICAL: equal height and body ratio, natural limbs and posture, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light with no cast shadows. RIGHT-BOTTOM ZONE: small details of the high hair tie, laughing eye and dimple, five-colour tasselled sash, gold-edged narrow cuff, and fur-lined boot. Details may continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no text or labels. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Natural texture, flyaway hair and weighted cloth."
+      },
+      "voice": {
+        "timbre": "明亮開闊的少女中高音，笑聲飽滿",
+        "pitch": "中高音，起伏大",
+        "pace": "快而跳躍，常搶在念頭前面",
+        "accent": "官話中帶輕微咬字含混特徵",
+        "emotion": "爽朗、毫不設防，傷感來得快也收得快",
+        "referenceHint": "像一位一邊大笑一邊把即席詩句接完的年輕朋友",
+        "prompt": "A teenage female voice around fifteen. Bright open mezzo-soprano with springy mid-high pitch, strong breath and a full contagious laugh. Fast tumbling pace, broad melodic swings and a slight playful articulation blur on some consonants. Energetic educated Mandarin, direct and unguarded. Sadness may flash briefly, but the voice naturally rebounds toward warmth and action.",
+        "promptLocal": "約十五歲的少女聲線。明亮開闊的女中高音，氣息充足，音高彈性大，笑聲飽滿而有感染力。語速快、語調跳躍，部分子音帶活潑的含混感。官話有教養卻直率不設防；傷感可能突然閃現，但聲線自然會回到溫暖與行動。"
+      }
+    },
+    {
+      "name": "妙玉",
+      "aliases": ["妙姑", "檻外人", "櫳翠庵女尼"],
+      "importance": "major",
+      "oneLiner": "出身仕宦而帶髮修行的孤高才女，以潔癖、茶道與距離感維護一個不受侯門支配的自我。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "十八歲",
+        "identity": "蘇州仕宦之女、帶髮修行者，櫳翠庵住持",
+        "appearance": "原文稱她模樣極好，文墨與經文皆精；帶髮修行而非剃度。（推斷）身形清瘦挺直，面容冷白，眼神疏離，黑髮以素簪收束；穿灰白、茶褐與極淡梅色袍服，材質潔淨，配飾極少。",
+        "personality": ["孤高", "潔癖", "博學", "敏感", "界線分明"],
+        "temperament": "待人以禮卻不肯迎合權勢，說話精確而常帶冷意；對茶、水、器物和交往對象都有嚴格分別。她追求潔淨與超脫，內心卻仍對知己、審美與世俗目光有所牽動。",
+        "motivation": "在宗教修行、出身自尊與個人情感之間維護自主，不讓侯門權勢或世俗粗鄙侵入自己的精神秩序。",
+        "arc": "從拒絕權勢邀請的孤潔修行者，逐漸顯露清規之下仍有人情與執著；她越想保持潔淨，外部世界越證明純粹難以隔絕風險。",
+        "relationships": [
+          {"name": "林黛玉", "relation": "同具蘇州文化氣質、能共品茶水的才女"},
+          {"name": "薛寶釵", "relation": "被她私下以珍器款待的客人"},
+          {"name": "賈惜春", "relation": "能談禪下棋、互為精神映照的朋友"},
+          {"name": "賈寶玉", "relation": "被她保持距離又給予特殊待遇的訪客"}
+        ],
+        "evidence": [
+          "帶發修行，今年才十八歲，",
+          "文墨也极通，經文也不用學了，摸樣儿又极好．",
+          "欲洁何曾洁，云空未必空．",
+          "你這遭吃的茶是托他兩個福，獨你來了， 我是不給"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，灰白、茶褐與淡梅色的潔淨配色",
+        "prompt": "Semi-realistic character illustration of an eighteen-year-old Han Chinese gentlewoman from Suzhou living as a tonsure-free Buddhist practitioner in a secluded convent within an elite mid-Qing-dynasty estate in 18th-century Beijing. Slender upright figure, refined pale oval face, cool narrow eyes, straight dark brows, composed unsmiling mouth and an exacting distant gaze. Long glossy black hair remains unshaven, gathered into a low austere knot with a plain dark-wood pin. Immaculate layered robes in warm white, pale tea-brown and a trace of plum-grey, fine linen-silk texture, narrow sash, no jewellery; holding a small green-jade tea cup. Natural skin texture, slight asymmetry, moist eyes, flyaway hairs, clean weighted cloth. Three-quarter waist-up view, neutral background, soft directional key, painterly realism.",
+        "promptLocal": "半寫實人物插畫：出身蘇州、住在十八世紀清代京城貴族園林尼庵中的十八歲漢族帶髮修行者。身形清瘦挺直，精緻冷白鵝蛋臉，眼形偏長而目光疏離，深色直眉，嘴唇克制無笑。黑髮未剃，收成低而嚴整的髮結，以素木簪固定。穿暖白、淡茶褐與梅灰色層疊袍服，亞麻與絲料細緻潔淨，束窄腰帶，不戴首飾，手持小型綠玉茶杯。保留自然膚理、略不對稱眉眼、濕潤眼神、碎髮與有重量的潔淨布料。",
+        "negativePrompt": "plastic skin, poreless doll face, shaved head, ornate jewellery, seductive pose, fantasy nun costume, modern clothing, perfectly symmetrical face, dead eyes, flat fabric, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "austere palette", "tea ritual"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for an eighteen-year-old Han Chinese gentlewoman from Suzhou living as a tonsure-free Buddhist practitioner in a secluded convent inside an elite mid-Qing-dynasty estate in 18th-century Beijing. Slender upright figure, refined pale oval face, cool narrow eyes, straight brows, composed mouth, long unshaven black hair in a low austere knot with a plain wood pin. Immaculate warm-white, pale tea-brown and plum-grey layered robes, narrow sash, no jewellery, small green-jade tea cup. Thin hairline rules divide three zones. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders visible, clean margins and straight lower cut. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left key and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one ground line, faces matching the bust. PROPORTIONS ARE CRITICAL: equal height and ratio, correct anatomy, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light, no cast shadows. RIGHT-BOTTOM ZONE: small details of the plain wood hairpin, cool eye and straight brow, green-jade cup, immaculate layered collar, and cloth shoe. Details may continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no labels or text. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Natural skin, flyaway hair and fine weighted fabric."
+      },
+      "voice": {
+        "timbre": "清冷偏薄的年輕女中音，共鳴位置靠前",
+        "pitch": "中音偏高，音域收窄",
+        "pace": "慢而精確，句尾乾淨收斷",
+        "accent": "清雅江南語感的官話（推斷）",
+        "emotion": "疏離、審慎，偶爾流露極淡的興味",
+        "referenceHint": "像一位在安靜茶室中只說必要之語、每個字都經過衡量的人",
+        "prompt": "A young female voice, eighteen. Cool light mezzo with narrow forward resonance, restrained mid-high range and very clean breath control. Precise educated Mandarin with a subtle Suzhou softness. Slow deliberate pace, clipped sentence endings, minimal pitch display and almost no filler. Emotionally distant and exacting by default, with only a faint warmth when discussing art, tea or a trusted mind.",
+        "promptLocal": "十八歲年輕女聲。清冷偏薄的女中音，共鳴窄而靠前，音高落在受控制的中高區，氣息極乾淨。官話精準，帶淡淡蘇州柔韻。語速緩慢審慎，句尾俐落收斷，幾乎沒有多餘語助詞。平時疏離挑剔，談到藝術、茶或可信之人時才浮出極淡暖意。"
+      }
+    },
+    {
+      "name": "晴雯",
+      "aliases": ["晴雯兒", "晴姑娘"],
+      "importance": "major",
+      "oneLiner": "容貌出眾、口齒鋒利又手藝高超的丫鬟，以不肯低頭的脾氣反抗身分加諸的屈辱。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十六至十七歲（推斷）",
+        "identity": "賈寶玉房中的大丫鬟，擅長針線與精細織補",
+        "appearance": "水蛇腰、削肩膀，身形纖長，眉眼與林黛玉略有相似，被公認為丫鬟中容貌最出眾者。（推斷）尖細鵝蛋臉、眼尾銳利，黑髮高束，穿石榴紅與月白的俐落短襖長裙，袖口便於做針線。",
+        "personality": ["剛烈", "機敏", "好強", "直率", "手藝精湛"],
+        "temperament": "反應快、嘴上不讓人，受到輕慢時立刻回擊；她也能為珍惜的人抱病完成困難織補。她的驕傲來自能力與自我價值，卻在階級秩序裡常被解讀成越界。",
+        "motivation": "守住人格與被平等對待的權利，以手藝、忠誠和鮮明性情證明丫鬟並非可任意處置的人。",
+        "arc": "由怡紅院中最有光彩與自由氣息的侍女，逐漸成為流言與權力整肅的目標；她不肯馴服的性格既是生命力，也是制度懲罰她的理由。",
+        "relationships": [
+          {"name": "襲人", "relation": "同在怡紅院、處世路線完全相反的首席侍女"},
+          {"name": "林黛玉", "relation": "容貌氣質被旁人拿來相比，皆具敏感與鋒芒"},
+          {"name": "王熙鳳", "relation": "曾由其確認為丫鬟中容貌最佳者"},
+          {"name": "賈寶玉", "relation": "願以真性情相待、也為他抱病織補的主人"}
+        ],
+        "evidence": [
+          "心比天高，身為下賤．風流靈巧",
+          "生的模樣儿比別人標致些．又生了一張巧嘴",
+          "水蛇腰，削肩膀，眉眼又",
+          "都沒晴雯生得好．"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，石榴紅、月白與靛青的銳利配色",
+        "prompt": "Semi-realistic character illustration of a striking seventeen-year-old Han Chinese senior maid in an elite mid-Qing-dynasty household in 18th-century Beijing. Slender flexible waist, narrow shoulders, sharp oval face, expressive slightly lifted dark eyes, fine arched brows, straight nose, quick defiant mouth and an alert challenging gaze. Black hair swept into a practical high knot with loose side strands and a plain red cord. Fitted pomegranate-red cotton-silk jacket with moon-white collar and cuffs, indigo pleated skirt, simple apron sash, sewing needle case and folded piece of richly patterned gold-thread fabric. Natural pores, asymmetric brows, bright wet eyes, flyaway hairs, visible weave and honest wear. Three-quarter waist-up view, neutral background, soft directional key, painterly realism.",
+        "promptLocal": "半寫實人物插畫：十八世紀清代京城貴族宅院中的十七歲漢族大丫鬟。腰身纖細靈活、削肩，尖鵝蛋臉，眼尾略揚而神情鮮明，細彎眉，鼻樑直，嘴角像隨時要反駁，目光警醒不服輸。黑髮梳成便於工作的高髻，以素紅繩固定，兩側留碎髮。穿合身石榴紅棉絲短襖、月白領袖與靛青褶裙，束簡單工作圍帶，帶針盒與一塊金線織紋布料。保留毛孔、不對稱眉眼、明亮眼神、碎髮、布料織紋與真實磨損。",
+        "negativePrompt": "plastic skin, poreless doll face, submissive timid expression, aristocratic crown, modern clothing, fantasy costume, perfectly symmetrical face, dead eyes, flat fabric, stiff mannequin pose, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "defiant expression", "textile craft"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for a striking seventeen-year-old Han Chinese senior maid in an elite mid-Qing-dynasty household in 18th-century Beijing. Slender flexible waist, narrow shoulders, sharp oval face, expressive lifted eyes, fine brows, defiant mouth, black hair in a practical high knot with red cord and loose strands. Fitted pomegranate-red cotton-silk jacket with moon-white collar, indigo pleated skirt, simple sash, needle case and folded gold-thread fabric. Thin hairline rules divide three zones. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders visible, margins clear, straight lower cut. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left key with volume and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one ground line; faces match the bust exactly. PROPORTIONS ARE CRITICAL: equal height, consistent body ratio, correct anatomy, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light, no cast shadows. RIGHT-BOTTOM ZONE: small details of the red hair cord, defiant eye and brow, needle case, gold-thread repair seam, and practical cloth shoe. Details may continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no labels or text. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Natural skin, flyaway hair, visible weave and worn cuffs."
+      },
+      "voice": {
+        "timbre": "清亮偏硬的少女女高音，字頭銳利",
+        "pitch": "中高音",
+        "pace": "反應快，爭辯時連珠般加速",
+        "accent": "京城內宅口語（推斷）",
+        "emotion": "警醒、驕傲，關心常包在不耐煩裡",
+        "referenceHint": "像一位手上不停做精細工作、嘴上也絕不肯輸的人",
+        "prompt": "A teenage female voice around seventeen. Clear hard-edged soprano with bright upper resonance, crisp consonants and fast reflexive delivery. Colloquial Beijing household Mandarin. Speech accelerates into rapid precise bursts during argument, but becomes breathier and softer when exhausted or privately caring. Default emotion: proud, alert and unwilling to submit; affection is hidden inside impatience.",
+        "promptLocal": "約十七歲的少女女高音。聲線清亮偏硬，上部共鳴明顯，子音銳利，反應極快。使用京城內宅口語；爭辯時加速成精準連珠句，疲憊或私下關心時才轉為較輕的氣聲。預設情緒是驕傲、警醒、不肯服輸，親近常藏在不耐煩裡。"
+      }
+    },
+    {
+      "name": "襲人",
+      "aliases": ["花襲人", "珍珠", "襲人姐姐", "花大姑娘"],
+      "importance": "major",
+      "oneLiner": "溫柔周全、極盡職責的首席侍女，把情感、前途與秩序全都寄託在照料賈寶玉之上。",
+      "persona": {
+        "gender": "女",
+        "ageRange": "約十七至十九歲（推斷）",
+        "identity": "原為賈母婢女，後成為賈寶玉身邊最主要的貼身侍女",
+        "appearance": "原文以柔媚嬌俏概括其姿容。（推斷）臉形柔圓、眉眼溫順，身形勻稱，動作安穩熟練；黑髮梳成整潔低髻，穿藕荷、米白與淺茶色的乾淨棉絲衣裙，配花形小銀簪。",
+        "personality": ["溫柔", "盡責", "務實", "耐心", "善於規勸"],
+        "temperament": "照料人時細密周全，能提前想到風險並不厭其煩地規勸。她的忠誠具有強烈專一性，也帶著對穩定身分與未來安排的現實考量。",
+        "motivation": "確保賈寶玉平安並走向家族認可的道路，同時維護自己在怡紅院中的位置與可預期的未來。",
+        "arc": "從被賈母挑中的可靠侍女成為怡紅院秩序核心；她以順從規範換取安全，卻也在個人感情與家族安排之間失去決定權。",
+        "relationships": [
+          {"name": "晴雯", "relation": "能力相當而處世策略相反的同僚"},
+          {"name": "薛寶釵", "relation": "價值觀相近、能談論寶玉前途的小姐"},
+          {"name": "王熙鳳", "relation": "內宅權力體系中必須配合的管理者"},
+          {"name": "賈寶玉", "relation": "服務、規勸與情感投注的中心"}
+        ],
+        "evidence": [
+          "素喜襲人心地純良，克盡職任",
+          "如今服侍寶玉，心中眼中又只有一個寶玉．",
+          "每每規諫寶玉，心中著實憂郁",
+          "襲人柔媚嬌俏"
+        ]
+      },
+      "image": {
+        "style": "半寫實厚塗，藕荷、米白與淺茶色的溫柔配色",
+        "prompt": "Semi-realistic character illustration of an eighteen-year-old Han Chinese senior personal maid in an elite mid-Qing-dynasty household in 18th-century Beijing. Balanced healthy figure, softly rounded face, gentle almond eyes, smooth straight brows, small warm smile and an attentive composed gaze. Glossy black hair arranged in a neat low period bun with a tiny silver flower pin. Clean lotus-root-pink cotton-silk jacket, rice-white collar, pale tea-brown pleated skirt, practical soft shoes and a folded outer robe held carefully over one arm. Natural pores, moist eyes, slight asymmetry, a few controlled flyaway hairs, visible cotton-silk weave and softened worn cuffs. Three-quarter waist-up view, neutral background, soft directional key and cool fill, painterly realism.",
+        "promptLocal": "半寫實人物插畫：十八世紀清代京城貴族宅院中的十八歲漢族首席貼身侍女。身形健康勻稱，臉形柔圓，杏眼溫和，眉形平順，嘴角帶小幅暖笑，目光專注而安定。黑髮梳成整潔低髻，插一支小型銀花簪。穿乾淨藕荷色棉絲襖、米白領口與淺茶褐褶裙，腳穿實用軟鞋，手臂仔細托著摺好的外衣。保留自然毛孔、濕潤眼神、略不對稱眉眼、少量碎髮、棉絲織紋與磨軟袖口。",
+        "negativePrompt": "plastic skin, poreless doll face, seductive glamour pose, aristocratic crown, modern nurse uniform, modern clothing, perfectly symmetrical face, dead eyes, helmet hair, flat fabric, extra fingers, malformed hands, text, labels, watermark, signature, busy background",
+        "tags": ["semi-realistic", "painterly", "character sheet", "mid-qing china", "soft lotus palette", "attentive posture"],
+        "sheet": "Create a character model sheet on ONE 16:9 landscape canvas for an eighteen-year-old Han Chinese senior personal maid in an elite mid-Qing-dynasty household in 18th-century Beijing. Balanced healthy figure, softly rounded face, gentle almond eyes, straight brows, small warm smile, glossy black hair in a neat low period bun with a tiny silver flower pin. Clean lotus-root-pink cotton-silk jacket, rice-white collar, pale tea-brown pleated skirt, practical soft shoes and a folded outer robe. Thin hairline rules divide three zones. LEFT ZONE about 34%: large front-facing bust identity anchor, both shoulders visible, clear margins and straight lower cut. LIGHTING IN THE LEFT ZONE ONLY: soft upper-left key with gentle falloff and ambient occlusion. RIGHT-TOP ZONE: front, left profile and back FULL-BODY views of the SAME character on one shared ground line; all faces match the bust. PROPORTIONS ARE CRITICAL: equal height and body ratio, correct limbs and natural anatomy, no stretching, squashing or foreshortening. LIGHTING IN THE RIGHT ZONES: flat even orthographic light with no cast shadows. RIGHT-BOTTOM ZONE: small details of the silver flower pin, attentive eye and brow, softened cuff, carefully folded robe, and practical cloth shoe. Details may continue down the right edge; the detail studies give way, not the figures. Pure white background, generous margins, no labels or text. Semi-realistic character illustration, painterly rendering with soft blended edges and visible brush texture, anatomically grounded. Natural skin, subtle asymmetry, flyaway hairs and weighted cloth."
+      },
+      "voice": {
+        "timbre": "溫暖柔和的年輕女中音，胸腔共鳴穩定",
+        "pitch": "中音",
+        "pace": "平穩耐心，規勸時句子拉長",
+        "accent": "京城內宅官話（推斷）",
+        "emotion": "關切、克制，焦急時仍努力維持柔和",
+        "referenceHint": "像一位一面整理衣物、一面耐心把同一句勸告說到對方聽進去的人",
+        "prompt": "A young female voice around eighteen. Warm soft mezzo-soprano with stable chest resonance, even breath and a comfortable middle register. Clear household Beijing Mandarin, patient moderate pace and gently lengthened phrases when advising someone. Caring, practical and contained by default; anxiety tightens the breath slightly but rarely breaks the soothing surface.",
+        "promptLocal": "約十八歲的年輕女中音。聲線溫暖柔和，胸腔共鳴穩定，氣息均勻，音高舒適地落在中音區。京城內宅官話清楚，語速耐心適中，規勸時會把句子輕輕拉長。平時關切、務實而克制；焦急時氣息稍緊，卻很少打破安撫性的表面。"
+      }
+    }
+  ]
+}
