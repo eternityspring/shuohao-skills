@@ -21,6 +21,7 @@ import {
   slug,
   PROP_SCALES,
   validateArt,
+  validatePropStatesShape,
 } from './novel-art.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -89,7 +90,7 @@ ok(castNamesOf({ characters: [] }).length === 0, '空 cast 不炸');
 
 eq(validateArt(FIXTURE, NAMES).length, 0, '自带样例通过校验（含角色名检查）');
 ok(gateReport(FIXTURE, NAMES).every((g) => g.ok), '样例全部质量门通过');
-eq(gateReport(FIXTURE).length, 11, '质量门共 11 道（场景 7 + 道具 4）');
+eq(gateReport(FIXTURE).length, 12, '质量门共 12 道（场景 7 + 道具 5，道具含状态已出图核对）');
 
 /* ---------------- 质量门逐项击穿 ---------------- */
 // 每一道门都要证明它真的会拦——不然就是永远为真的假测试
@@ -274,7 +275,7 @@ ok(/e\.key === 'Escape'/.test(html), 'Esc 关闭弹层');
   ok(withImg.includes('class="zoom" data-src="images/x-sheet.png"'), '出图后图片可点，弹层拿到地址');
   ok(withImg.includes('cursor:zoom-in'), '鼠标提示可放大');
 }
-eq((html.match(/<li class="ok">/g) || []).length, 11, '11 道质量门全 ✓');
+eq((html.match(/<li class="ok">/g) || []).length, 12, '12 道质量门全 ✓');
 ok(html.includes('gatepill pass'), '页眉徽章通过态');
 ok(html.includes('未提供 cast.json'), '报告如实标注角色名检查被跳过');
 
@@ -370,6 +371,42 @@ eq(FIXTURE.props.length, 2, '样例带两件叙事道具');
   d.props[0].image.prompt += ' carried by 沈知微';
   ok(!gate(d, 'no-names', NAMES).ok, '道具提示词出现角色名被拦');
 }
+// 道具状态变体反向对账：剧情用到的状态必须都出图
+{
+  const d = clone();
+  // P01 现有状态是合上/打开；剧情还用到「藏着」却没出图
+  const refs = { P01: ['合上', '打开', '藏着'] };
+  ok(!gateReport(d, NAMES, refs).find((g) => g.id === 'prop-states').ok, '剧情用到但没出图的状态被拦');
+  ok(gateReport(d, NAMES, refs).find((g) => g.id === 'prop-states').detail.includes('藏着'), '报错点名缺哪个状态');
+  // 状态都覆盖了则放行
+  const okRefs = { P01: ['合上', '打开'] };
+  ok(gateReport(d, NAMES, okRefs).find((g) => g.id === 'prop-states').ok, '剧情用到的状态都出图则放行');
+  // 没传 propStateRefs 时不报（保持旧行为）
+  ok(gate(d, 'prop-states').ok, '未给 propStateRefs 时状态门只看 ≥1，不误报');
+}
+// 报告与 CLI 必须用同一组质量门输入：renderHtml 须透传 propStateRefs，否则 HTML 误报全过
+{
+  const d = clone();
+  const refs = { P01: ['合上', '打开', '藏着'] };
+  const badHtml = renderHtml(d, 'zh', refs);
+  ok(badHtml.includes('gatepill fail') || badHtml.includes('class="galert"'), 'renderHtml 透传 propStateRefs 后，状态缺失能反映在报告里（不再误报全过）');
+  ok(!renderHtml(d, 'zh').includes('gatepill fail'), '不传 propStateRefs 时维持旧行为（不误报）');
+}
+// 状态「已出图」核对：states[].image 声明的文件不存在时应报错（提示词齐全 ≠ 已出图）
+{
+  const d = clone();
+  d.props[0].states[0].image = 'images/P01-合上.png';
+  const missing = gateReport(d, NAMES, null, (p) => p !== 'images/P01-合上.png');
+  ok(!missing.find((g) => g.id === 'prop-state-images').ok, '声明了图片但文件不存在被拦');
+  const present = gateReport(d, NAMES, null, () => true);
+  ok(present.find((g) => g.id === 'prop-state-images').ok, '图片确实存在时放行');
+  // 不传 assetExists：无法核对文件，但已声明 image 即视为通过（仅校验声明）
+  ok(gateReport(d, NAMES).find((g) => g.id === 'prop-state-images').ok, '未传 assetExists 但已声明 image 时仍视为通过（声明即计划）');
+  // 不传 assetExists 且未声明 image：明确失败（不再静默放行）
+  const noDecl = clone();
+  for (const st of noDecl.props[0].states) delete st.image;
+  ok(!gateReport(noDecl, NAMES).find((g) => g.id === 'prop-state-images').ok, '未声明 image 且无 assetExists 时门失败（不再假通过）');
+}
 // 道具没有光照门的义务
 {
   const d = clone();
@@ -446,5 +483,52 @@ eq(FIXTURE.props.length, 2, '样例带两件叙事道具');
   const gateEn = renderHtml(FIXTURE, 'en');
   ok(gateEn.includes('Consistency anchors, 3–5'), 'EN 报告的质量门标签翻译且阈值原样保留');
   ok(!gateEn.includes('一致性锚点 3–5 个'), 'EN 报告不再出现中文门标签');
+}
+
+/* ---------------- validatePropStatesShape 结构校验（第三轮 P1-5 / 第四轮覆盖）---------------- */
+// --prop-states 是独立来源，必须先过结构校验再进对账。
+{
+  const PIDS = ['P01', 'P02'];
+  const mustThrow = (raw, label) => {
+    let threw = false;
+    try { validatePropStatesShape(raw, PIDS); } catch { threw = true; }
+    ok(threw, label);
+  };
+  mustThrow('not-object', '非对象（字符串）被拦');
+  mustThrow([], '数组而非对象被拦');
+  mustThrow({}, '空对象被拦');
+  mustThrow({ P99: ['打开'] }, '未知道具 id（P99）被拦');
+  mustThrow({ P01: '打开' }, '值不是数组被拦');
+  mustThrow({ P01: ['打开', 2] }, '数组含非字符串被拦');
+  // 缺漏现有道具：删掉 P02 整项即可绕过反查——必须被拦（第四轮修复）
+  mustThrow({ P01: ['合上', '打开'] }, '缺漏现有道具 P02 被拦（防删整项绕过）');
+  // 显式 "none" 可合法豁免某件道具的状态对账
+  const withNone = validatePropStatesShape({ P01: ['合上', '打开'], P02: 'none' }, PIDS);
+  eq(withNone.P02.length, 0, 'P02 显式 "none" 视为无需状态');
+  // 合法形状放行并原样返回
+  const okShape = validatePropStatesShape({ P01: ['合上', '打开'], P02: ['正面'] }, PIDS);
+  eq(okShape.P01.join('|'), '合上|打开', '合法 prop-states 原样通过');
+}
+
+/* ---------------- prop-state-images 门：状态必须声明 image 且文件存在（第四轮 P1）---------------- */
+// 之前只要 states[].image 不填就静默放行（假通过）。现在每个状态都必须声明 image；
+// 给了 assetExists 还要核对文件真实存在。
+{
+  const base = clone();
+  // 去掉所有状态的 image 声明（模拟还没出图）
+  for (const pr of base.props) for (const st of pr.states) delete st.image;
+  // 不传 assetExists：仍要求每个状态声明 image 路径
+  ok(gateReport(base, NAMES).find((g) => g.id === 'prop-state-images').ok === false,
+    '未声明 state.image 时 prop-state-images 门失败（无 assetExists 也查声明）');
+  // 传一个「所有文件都不存在」的检查函数：声明了但文件不存在也要失败
+  const never = () => false;
+  const declared = clone();
+  for (const pr of declared.props) for (const st of pr.states) st.image = `images/${pr.id}-${st.state}.png`;
+  ok(gateReport(declared, NAMES, null, never).find((g) => g.id === 'prop-state-images').ok === false,
+    '声明了 image 但文件不存在时 prop-state-images 门失败');
+  // 声明且文件存在：通过
+  const always = () => true;
+  ok(gateReport(declared, NAMES, null, always).find((g) => g.id === 'prop-state-images').ok === true,
+    '声明 image 且文件存在时 prop-state-images 门通过');
 }
 console.log(`✓ ${passed} 项自测全部通过`);

@@ -126,14 +126,14 @@ export const PROP_SCALES = {
 /** 道具参考图不许有手——拿着道具的手是最常见的污染。 */
 const HANDS_BAN = /hand|finger/i;
 
-export function gateReport(doc, castNames = null) {
+export function gateReport(doc, castNames = null, propStateRefs = null, assetExists = null) {
   const gates = [];
   const add = (id, label, ok, detail = '') => gates.push({ id, label, ok, detail });
   const scenes = Array.isArray(doc?.scenes) ? doc.scenes : [];
   const props = Array.isArray(doc?.props) ? doc.props : [];
   const bad = {
     anchors: [], lighting: [], people: [], english: [], names: [], variant: [], style: [],
-    states: [], scale: [], hands: [], whitebg: [],
+    states: [], scale: [], hands: [], whitebg: [], stateImgs: [],
   };
   const ids = new Set(scenes.map((s) => s?.id));
   const style = doc?.style ?? DEFAULT_STYLE;
@@ -197,6 +197,14 @@ export function gateReport(doc, castNames = null) {
 
     // 状态 ≥1：合上/打开、藏着/摊开——每个状态都是一张要单独生成的参考
     if (!Array.isArray(pr?.states) || pr.states.length === 0) bad.states.push(label);
+    // 反向对账：剧情用到的状态变体是否都落成对应 states[].state（给了 propStateRefs 才查）
+    else if (propStateRefs && Array.isArray(propStateRefs[pr.id]) && propStateRefs[pr.id].length) {
+      const have = new Set(pr.states.map((st) => (st?.state ?? '').trim()).filter(Boolean));
+      for (const need of propStateRefs[pr.id]) {
+        const k = typeof need === 'string' ? need.trim() : null;
+        if (k && !have.has(k)) bad.states.push(`${label} 缺状态变体「${k}」（剧本出现但未出图）`);
+      }
+    }
 
     // 尺度参照：scale 枚举 + 提示词里必须出现对应英文短语
     const scaleEn = PROP_SCALES[pr?.scale];
@@ -211,6 +219,25 @@ export function gateReport(doc, castNames = null) {
 
     // 白底：道具参考图要被贴进各种镜头，必须纯白背景可抠
     if (!/white background/i.test(pr?.image?.sheet ?? '')) bad.whitebg.push(label);
+
+    // 状态变体「已出图」核对：states[].prompt 只证明提示词齐全，不代表图片已生成。
+    // 每个状态都必须指定出图文件（states[].image）；给了 assetExists 时还要核对文件真实存在。
+    // 不声明 image 或文件不存在都判失败——杜绝「提示词齐全却没图」的假通过。
+    if (typeof assetExists === 'function') {
+      for (const st of pr?.states ?? []) {
+        const nm = st?.state ?? '?';
+        if (!thText(st?.image)) {
+          bad.stateImgs.push(`${label} 状态「${nm}」未声明 image（必须指定出图文件）`);
+        } else if (!assetExists(st.image)) {
+          bad.stateImgs.push(`${label} 状态「${nm}」声明了图片 ${st.image} 但文件不存在`);
+        }
+      }
+    } else {
+      // 没传 assetExists：无法核对文件，但仍要求每个状态声明 image 路径（至少证明有出图计划），否则视为未出图
+      for (const st of pr?.states ?? []) {
+        if (!thText(st?.image)) bad.stateImgs.push(`${label} 状态「${st?.state ?? '?'}」未声明 image（无 assetExists 时仍须声明出图文件）`);
+      }
+    }
   }
 
   add('anchors', `一致性锚点 ${ANCHOR_RANGE[0]}–${ANCHOR_RANGE[1]} 个`, scenes.length + props.length > 0 && bad.anchors.length === 0, bad.anchors.join('；'));
@@ -229,6 +256,14 @@ export function gateReport(doc, castNames = null) {
   add('prop-scale', '道具尺度参照写进提示词', props.length === 0 || bad.scale.length === 0, bad.scale.join('；'));
   add('prop-hands', '道具参考图无手：反向提示词禁手', props.length === 0 || bad.hands.length === 0, bad.hands.join('；'));
   add('prop-white', '道具设定图纯白背景可抠', props.length === 0 || bad.whitebg.length === 0, bad.whitebg.join('；'));
+  add(
+    'prop-state-images',
+    '道具状态变体「已出图」核对（每个状态须声明 image 且文件真实存在；提示词齐全 ≠ 已出图）',
+    props.length === 0 || bad.stateImgs.length === 0,
+    typeof assetExists === 'function'
+      ? (bad.stateImgs.length ? bad.stateImgs.join('；') : '已逐一核对 states[].image 文件存在')
+      : (bad.stateImgs.length ? bad.stateImgs.join('；') : '未提供 assetExists：仅校验每个状态是否声明了 image 路径'),
+  );
 
   return gates;
 }
@@ -237,7 +272,7 @@ export function gateReport(doc, castNames = null) {
 /* validate                                                            */
 /* ------------------------------------------------------------------ */
 
-export function validateArt(doc, castNames = null) {
+export function validateArt(doc, castNames = null, propStateRefs = null, assetExists = null) {
   const problems = [];
   const p = (msg) => problems.push(msg);
   if (!doc || typeof doc !== 'object') return ['art.json 不是对象'];
@@ -323,8 +358,9 @@ export function validateArt(doc, castNames = null) {
     }
   }
 
-  // 质量门失败并入违规列表
-  for (const g of gateReport(doc, castNames)) {
+  // 质量门失败并入违规列表（未显式传 propStateRefs 时，从 doc.propStateRefs 取）
+  const stateRefs = propStateRefs ?? (doc?.propStateRefs ?? null);
+  for (const g of gateReport(doc, castNames, stateRefs, assetExists)) {
     if (!g.ok) p(`质量门未过：${g.label}${g.detail ? `（${g.detail}）` : ''}`);
   }
 
@@ -581,10 +617,11 @@ function embedDoc(doc) {
   return JSON.stringify(doc).replace(/</g, '\\u003c');
 }
 
-export function renderHtml(doc, lang = null) {
+export function renderHtml(doc, lang = null, propStateRefs = null, assetExists = null) {
   const code = lang ?? doc?.lang ?? 'zh';
   const t = tOf(code);
-  const gates = gateReport(doc);
+  const stateRefs = propStateRefs ?? (doc?.propStateRefs ?? null);
+  const gates = gateReport(doc, null, stateRefs, assetExists);
   const failed = gates.filter((g) => !g.ok);
   const scenes = doc.scenes;
   const props = doc.props ?? [];
@@ -966,12 +1003,17 @@ document.querySelector('.expo').addEventListener('click', (e) => {
 const USAGE = `novel-art.mjs — novel-art skill 的确定性工具（场景 + 道具）
 
   seed <outline.json>                    从大纲预填 art.json 骨架（打印到 stdout，道具留空待提取）
-  validate <art.json> [--cast c.json]    校验；有违规逐条打印并 exit 1
+  validate <art.json> [--cast c.json] [--prop-states states.json]
+                                         校验；有违规逐条打印并 exit 1
                                          给了 cast.json 才查「提示词不含角色名」
-  checkup <art.json> [--cast c.json]     只打印质量门 ✓/✗，有未过项 exit 1
-  render <art.json> [--html|--md] [--lang zh|en]
+                                         --prop-states 给独立剧本状态来源（如 P01:["合上","打开"]），
+                                         用于对账「剧情用到的状态是否都出图」；不给则退回 art.json 自报
+  checkup <art.json> [--cast c.json] [--prop-states states.json]
+                                         只打印质量门 ✓/✗，有未过项 exit 1
+  render <art.json> [--html|--md] [--lang zh|en] [--prop-states states.json]
                                          渲染报告到 stdout（默认 --md）
                                          界面语言优先级：--lang > art.json 顶层 lang 字段 > 中文
+                                         renderHtml 与 CLI 同源：--prop-states 也会透传给质量门
   styles [id]                            打印画风预设的完整内容
   slug <name>                            场景名转安全文件名
 
@@ -984,6 +1026,38 @@ function readJson(path) {
 function flag(rest, name, fallback = null) {
   const i = rest.indexOf(name);
   return i >= 0 && rest[i + 1] ? rest[i + 1] : fallback;
+}
+
+/**
+ * 校验 --prop-states 的结构：必须是对象，且须覆盖 art.json 里的全部现有道具
+ * （防止删掉某整件道具的键来绕过反查）；值要么是「状态名字符串数组」，要么是显式
+ * 的 "none" 声明（该道具确实无需状态对账）。拒绝空对象、错误字段类型、未知道具、
+ * 空数组、非字符串元素、缺漏现有道具。
+ * 返回干净的对象；不合法则抛错（让 CLI 以非零退出，而不是静默零问题）。
+ */
+const PROP_STATES_NONE = 'none';
+export function validatePropStatesShape(raw, propIds) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error('--prop-states 内容必须是 JSON 对象（如 {"P01":["合上","打开"], "P02":"none"}）');
+  }
+  const valid = new Set(propIds);
+  const out = {};
+  for (const [k, v] of Object.entries(raw)) {
+    if (!valid.has(k)) throw new Error(`--prop-states 的键「${k}」不是 art.json 里的现有道具 id（现有：${[...valid].join(',')}）`);
+    // 显式声明该道具无需状态对账
+    if (v === PROP_STATES_NONE) { out[k] = []; continue; }
+    if (!Array.isArray(v)) throw new Error(`--prop-states 的「${k}」必须是状态名字符串数组，或显式 "none" 声明无需状态`);
+    if (v.some((s) => typeof s !== 'string')) throw new Error(`--prop-states 的「${k}」必须是纯字符串数组（不能含数字/对象）`);
+    const cleaned = v.filter((s) => s.trim());
+    if (cleaned.length === 0) throw new Error(`--prop-states 的「${k}」必须是非空字符串数组，若确实无状态请显式写 "none"`);
+    out[k] = cleaned;
+  }
+  // 必须覆盖全部现有道具：缺键即视为漏掉整件道具的反查
+  const missing = [...valid].filter((id) => !(id in out));
+  if (missing.length) throw new Error(`--prop-states 未覆盖全部现有道具，缺：${missing.join(', ')}（如需跳过某件请显式写 "none"）`);
+  // 没有道具时（propIds 为空）不强制写契约；有道具则必须逐项覆盖（上面已查缺失）
+  if (valid.size > 0 && Object.keys(out).length === 0) throw new Error('--prop-states 不能是空对象');
+  return out;
 }
 
 function main(argv) {
@@ -1009,8 +1083,30 @@ function main(argv) {
     const names = castPath ? castNamesOf(readJson(castPath)) : null;
     if (!castPath) console.error('⚠️ 没给 --cast，跳过「提示词不含角色名」检查');
 
+    // 道具状态反查：优先独立来源 --prop-states <file>（剧本用到的状态，非美术文件自证），
+    // 否则退回 art.json 顶层的 propStateRefs（若有）。两都没有则跳过该反查。
+    const psPath = flag(rest, '--prop-states');
+    let propStateRefs = null;
+    const propIds = (doc.props ?? []).map((p) => p?.id).filter(Boolean);
+    if (psPath) {
+      const raw = readJson(psPath);
+      // 结构校验：键必须对应现有道具、值必须是非空字符串数组，否则明确报错（不能静默零问题）
+      propStateRefs = validatePropStatesShape(raw, propIds);
+      console.error(`ℹ️ 用 --prop-states 提供的独立状态来源对账（${Object.keys(propStateRefs).length} 件道具）`);
+    } else if (doc?.propStateRefs) {
+      propStateRefs = doc.propStateRefs;
+    }
+    if (!psPath && !doc?.propStateRefs) {
+      console.error('⚠️ 未给 --prop-states 且 art.json 无 propStateRefs，跳过「状态变体未出图」反查');
+    }
+
+    // 实际图片核对：states[].image 声明了路径时，基于 art.json 所在目录检查文件是否真实存在。
+    // 不声明 image 则门跳过（但明确「提示词齐全 ≠ 已出图」），不阻断正常流程。
+    const outDir = resolve(path, '..');
+    const assetExists = (rel) => existsSync(resolve(outDir, rel));
+
     if (cmd === 'checkup') {
-      const gates = gateReport(doc, names);
+      const gates = gateReport(doc, names, propStateRefs, assetExists);
       for (const g of gates) console.log(`${g.ok ? '✓' : '✗'} ${g.label}${!g.ok && g.detail ? ` — ${g.detail}` : ''}`);
       const failedN = gates.filter((g) => !g.ok).length;
       console.log(failedN ? `\n✗ ${failedN} 项未过` : '\n✓ 全部通过');
@@ -1018,7 +1114,7 @@ function main(argv) {
       return;
     }
 
-    const problems = validateArt(doc, names);
+    const problems = validateArt(doc, names, propStateRefs, assetExists);
     if (problems.length) {
       console.error(`✗ ${problems.length} 处违规：\n`);
       for (const x of problems) console.error('  ' + x);
@@ -1030,7 +1126,7 @@ function main(argv) {
 
   if (cmd === 'render') {
     const [path] = rest;
-    if (!path) throw new Error('用法：render <art.json> [--html|--md] [--lang zh|en]');
+    if (!path) throw new Error('用法：render <art.json> [--html|--md] [--lang zh|en] [--prop-states states.json]');
     const doc = readJson(path);
     const lang = flag(rest, '--lang');
     // 图存在才挂上去；没有就渲染成占位，不影响其余内容
@@ -1039,7 +1135,15 @@ function main(argv) {
       const rel = `images/${slug(item.name)}-sheet.png`;
       if (existsSync(resolve(outDir, rel))) item.sheetImage = rel;
     }
-    process.stdout.write((rest.includes('--html') ? renderHtml(doc, lang) : renderMarkdown(doc, lang)) + '\n');
+    // renderHtml 与 CLI 必须用同一组质量门输入：把 --prop-states 与 assetExists 一并透传
+    const psPath = flag(rest, '--prop-states');
+    const propIds = (doc.props ?? []).map((p) => p?.id).filter(Boolean);
+    const stateRefs = psPath
+      ? validatePropStatesShape(readJson(psPath), propIds)
+      : (doc.propStateRefs ? validatePropStatesShape(doc.propStateRefs, propIds) : null);
+    // assetExists：以 art.json 所在目录为基，校验 states[].image 声明的文件是否真实存在（与 validate/checkup 同源）
+    const assetExists = (rel) => existsSync(resolve(outDir, rel));
+    process.stdout.write((rest.includes('--html') ? renderHtml(doc, lang, stateRefs, assetExists) : renderMarkdown(doc, lang)) + '\n');
     return;
   }
 

@@ -476,13 +476,30 @@ const normalise = (s) => String(s).replace(/\s+/g, '');
  * @param sourceText 原文；null 则跳过逐字引文校验
  * @param lang       报告语言，决定人类可读字段该是什么语言
  */
-export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style = DEFAULT_STYLE) {
+export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style = DEFAULT_STYLE, referencedIds = null) {
   const problems = [];
   const flatSource = sourceText === null ? null : normalise(sourceText);
   const at = (name, msg) => problems.push(`[${name}] ${msg}`);
 
   if (!Array.isArray(characters) || characters.length === 0) {
     return ['cast 为空或不是数组'];
+  }
+
+  // --- 角色 id 契约：必填、格式 C<两位数字>、不可重复 ---
+  // 下游（script/storyboard/outline）用角色码引用，cast 必须有稳定唯一 id 才能对账，
+  // 否则「被引用但缺失」门和下游引用都会断链。DJ-demo 已补全 C01–C05。
+  const idRe = /^C\d{2}$/;
+  const seenIds = new Set();
+  for (const c of characters) {
+    const name = c?.name ?? '(无名)';
+    const id = typeof c?.id === 'string' ? c.id.trim() : '';
+    if (!id) {
+      problems.push(`[${name}] 缺少 id（角色码必填，格式如 C01，下游用它对账）`);
+      continue;
+    }
+    if (!idRe.test(id)) problems.push(`[${name}] id「${id}」格式应为 C 加两位数字（如 C01）`);
+    if (seenIds.has(id)) problems.push(`[${name}] id「${id}」重复，角色码必须唯一`);
+    seenIds.add(id);
   }
 
   // --- 同剧角色画风必须一致 ---
@@ -665,6 +682,22 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
     }
   }
 
+  // --- 被下游引用但 cast 缺失 ---
+  // script/storyboard/outline 引用了某角色 ID，但 cast.json 里没有对应条目：
+  // 之前全程静默通过，导致被引用的角色从未建卡。给了 referencedIds 才查。
+  if (Array.isArray(referencedIds) && referencedIds.length) {
+    const known = new Set();
+    for (const c of characters) {
+      if (typeof c?.id === 'string' && c.id.trim()) known.add(c.id.trim());
+      if (typeof c?.name === 'string' && c.name.trim()) known.add(c.name.trim());
+      for (const a of c?.aliases ?? []) if (typeof a === 'string' && a.trim()) known.add(a.trim());
+    }
+    for (const id of referencedIds) {
+      const key = typeof id === 'string' ? id.trim() : null;
+      if (key && !known.has(key)) problems.push(`角色「${key}」被下游（script/storyboard/outline）引用，但 cast 中不存在`);
+    }
+  }
+
   return problems;
 }
 
@@ -680,7 +713,7 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
  * 顺序）。不给 order 就保持传入顺序——CLI 按文件名读卡，那是 slug
  * 字典序不是戏份序，所以报告要「按戏份排序」就必须给 order。
  */
-export function assembleCast(cards, { source, lang = DEFAULT_LANG, style = DEFAULT_STYLE, summary = '', ui = null, order = null } = {}) {
+export function assembleCast(cards, { source, lang = DEFAULT_LANG, style = DEFAULT_STYLE, summary = '', ui = null, order = null, idMap = null } = {}) {
   const rank = (c) => {
     const i = IMPORTANCE.indexOf(c?.importance);
     return i < 0 ? IMPORTANCE.length : i; // 越界的排最后，让 validate 去报，这里不崩
@@ -691,12 +724,65 @@ export function assembleCast(cards, { source, lang = DEFAULT_LANG, style = DEFAU
   const characters = cards
     .map((card, i) => [card, i])
     .sort((a, b) => rank(a[0]) - rank(b[0]) || byOrder(a[0]) - byOrder(b[0]) || a[1] - b[1])
-    .map(([card]) => card);
+    // 角色 id 是下游引用的稳定契约，必须从明确映射继承，不能靠数组顺序临时编号：
+    // card 自带 id 则保留，否则按 name/alias 查 idMap，查不到则抛出明确错误让调用方补映射
+    .map(([card]) => {
+      if (card?.id && String(card.id).trim()) return card;
+      const key = String(card?.name ?? '').trim().toLowerCase();
+      const aliasKeys = (card?.aliases ?? []).map((a) => String(a).trim().toLowerCase());
+      const found = idMap
+        ? (idMap[key] ?? aliasKeys.map((a) => idMap[a]).find(Boolean))
+        : null;
+      if (!found) {
+        throw new Error(
+          `角色「${card?.name ?? '?'}」没有 id，且 --id-map 里找不到对应条目。` +
+            '角色 id 是下游（script/storyboard/outline）引用的稳定契约，必须从明确的 id-map 继承，不能按顺序临时编号。' +
+            '在 outline 角色表里取 id，或传 --id-map {name: "C01"}。',
+        );
+      }
+      return { ...card, id: found };
+    });
   const cast = { source, lang, style };
   if (ui) cast.ui = ui;
   cast.summary = summary;
   cast.characters = characters;
   return cast;
+}
+
+/* ------------------------------------------------------------------ */
+/* id-map 解析（CLI --id-map 与单测共用）                              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * 把 --id-map 的输入解析成小写 name/alias -> id 的映射。支持三种格式：
+ *   1) outline 对象 {characters:[{id,name,aliases}]}（真实 outline.json 直接可用）
+ *   2) 角色表数组 [{id:"C01", name:"沈知微"}]
+ *   3) 简单映射 {name:"C01"}
+ * 解析不出任何映射则抛错。
+ */
+export function parseIdMap(raw) {
+  const rows = Array.isArray(raw)
+    ? raw
+    : Array.isArray(raw?.characters)
+      ? raw.characters
+      : null;
+  let idMap = null;
+  if (rows) {
+    idMap = {};
+    for (const r of rows) {
+      if (r?.id && r?.name) {
+        idMap[String(r.name).trim().toLowerCase()] = r.id;
+        for (const a of r.aliases ?? []) idMap[String(a).trim().toLowerCase()] = r.id;
+      }
+    }
+  } else if (raw && typeof raw === 'object') {
+    idMap = {};
+    for (const [k, v] of Object.entries(raw)) idMap[String(k).trim().toLowerCase()] = v;
+  }
+  if (!idMap || Object.keys(idMap).length === 0) {
+    throw new Error('--id-map 未能解析出任何映射：文件应是 {characters:[...]}、[{id,name}] 或 {name:"C01"}');
+  }
+  return idMap;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1614,7 +1700,12 @@ const USAGE = `novel-characters.mjs — novel-characters skill 的确定性工�
   assemble <workdir> --source <书名>
         [--lang] [--style] [--out] 把 card-*.json + summary.txt（+ ui.json）合成 cast.json
         [--order merged.json]      同档角色的戏份顺序（默认自动找 <workdir>/merged.json）
-  validate <cast.json> <book.txt>  校验；有违规逐条打印并 exit 1
+        [--id-map map.json]        角色 id 映射（{name:"C01"} 或 outline 角色表 [{id,name}]）；
+                                    不给且卡片无 id 则 assemble 失败（id 是下游必填契约）
+  validate <cast.json> <book.txt> [--refs refs.json]
+                                校验；有违规逐条打印并 exit 1
+                                --refs 显式给下游引用角色集；不给则自动从同目录
+                                outline/script/storyboard 收集，接入「被引用但 cast 缺失」检查
   render <cast.json> [--html|--md] 渲染报告到 stdout（默认 --md）
   slug <name>                      角色名转安全文件名
   ui-template [lang]               打印界面文案骨架，供翻译成内置表没有的语言
@@ -1631,6 +1722,110 @@ render 选项：
 
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(path), 'utf8'));
+}
+
+/**
+ * 从下游文件（outline / script / storyboard）收集被引用的角色标识。
+ * 只收集「字段名含 character 且数组元素是字符串」的情况——即下游对角色的引用
+ * （如 scenes[].characters=['C01','C02']、cuts[].characters=['C01']）。
+ * 元素是对象的数组（如 roles=[{id,name,...}] 角色定义本体、或 outline 角色表）不收集，
+ * 否则会把「改动记录」「场景ID」等文本误判为角色引用。
+ */
+function collectReferencedIds(obj) {
+  const out = new Set();
+  const walk = (v) => {
+    if (v == null || typeof v !== 'object') return;
+    if (Array.isArray(v)) {
+      // 纯字符串数组：若父级字段名含 character 则由调用方判断；这里只处理对象递归
+      for (const e of v) walk(e);
+      return;
+    }
+    for (const [k, val] of Object.entries(v)) {
+      const key = String(k).toLowerCase();
+      if (key.includes('character') && Array.isArray(val) && val.every((e) => typeof e === 'string')) {
+        for (const e of val) if (e.trim()) out.add(e.trim());
+      }
+      walk(val);
+    }
+  };
+  walk(obj);
+  return [...out];
+}
+
+/** 自动探测下游文件：从 cast 所在目录向下（含子目录）搜索，并在向上查找时
+ *  限定在「最近的项目根目录」内——项目根 = 第一个同时含 characters/outline/script/
+ *  storyboard 其中多类的祖先目录（通常 cast 住在 <根>/characters/ 下）。
+ *  命中「同项目前缀 + 下游类型」的 json，合并去重出被引用角色集；找不到返回 null。
+ *  注意：必须完整遍历候选文件再返回，不能在遍历中途因 ids 非空就停，
+ *  否则目录顺序靠前的无关文件会让后续真正的 script/storyboard 被漏掉。
+ *  关键：绝不向上扫到 Desktop / 用户目录 / 盘根，避免混入同级其他项目、备份或
+ *  同名作品的角色引用（造成引用污染与误报）。正式流水线应优先用 --refs 显式给文件。 */
+export function autoRefsFromDir(castPath) {
+  const base = basename(castPath).replace(/\.json$/i, '');
+  const projPrefix = base.includes('-') ? base.split('-')[0] : base; // 渡口-cast -> 渡口
+  const ids = new Set();
+  const stem0 = basename(castPath);
+
+  // 项目根的判定：含 characters 子目录（cast 必在 <根>/characters/ 下），
+  // 或同时含 outline/script/storyboard 中至少两类。
+  const isProjectRoot = (dir) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return false;
+    }
+    const names = new Set(entries.filter((e) => e.isDirectory()).map((e) => e.name.toLowerCase()));
+    if (names.has('characters')) return true;
+    const kinds = ['outline', 'script', 'storyboard'].filter((k) => [...names].some((n) => n.startsWith(k)));
+    return kinds.length >= 2;
+  };
+
+  const walk = (dir, depth) => {
+    if (depth > 3) return;
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const e of entries) {
+      if (e.name === stem0) continue;
+      const full = join(dir, e.name);
+      if (e.isDirectory()) {
+        walk(full, depth + 1);
+      } else if (e.name.endsWith('.json')) {
+        const stem = e.name.replace(/\.json$/i, '');
+        if (/outline|script|storyboard/i.test(stem) && stem.startsWith(projPrefix)) {
+          try {
+            const obj = readJson(full);
+            for (const id of collectReferencedIds(obj)) ids.add(id);
+          } catch {
+            /* 单个文件坏掉不影响其他 */
+          }
+        }
+      }
+    }
+  };
+
+  // 1) 向下：从 cast 所在目录（characters/）递归搜子目录
+  walk(resolve(castPath, '..'), 0);
+
+  // 2) 向上：只在「最近的项目根」范围内扫。找到项目根后扫它本身，立即停止，
+  //    绝不继续上探父级（Desktop / 用户目录 / 盘根）——避免混入同级其他项目或同名作品。
+  let cur = resolve(castPath, '..'); // characters/
+  let guard = 0;
+  while (guard++ < 12) {
+    const parent = resolve(cur, '..');
+    if (parent === cur) break; // 已到盘根（兜底，正常会在命中项目根时先 break）
+    if (isProjectRoot(parent)) {
+      walk(parent, 0); // 扫项目根本身的平级文件（outline/script/storyboard 常在这里）
+      break;
+    }
+    cur = parent;
+  }
+
+  return ids.size ? [...ids] : null;
 }
 
 /** 取 --flag 的值，没有就返回 fallback。 */
@@ -1764,13 +1959,22 @@ function main(argv) {
       console.error(`⚠️ 没有 --order 也没有 ${join(dir, 'merged.json')}，同档角色将按文件名序而不是戏份序`);
     }
 
+    // 角色 id 映射：从 outline 角色表或显式 --id-map 继承稳定 id，不能靠数组顺序临时编号
+    const idMapPath = flag(rest, '--id-map');
+    let idMap = null;
+    if (idMapPath) {
+      idMap = parseIdMap(readJson(idMapPath));
+    } else {
+      console.error('⚠️ 没给 --id-map，角色 id 将从卡片自带 id 继承；若卡片无 id 则 assemble 会失败（id 是必填契约）');
+    }
+
     if (problems.length) {
       console.error(`✗ ${problems.length} 处问题：\n`);
       for (const p of problems) console.error('  ' + p);
       process.exit(1);
     }
 
-    const cast = assembleCast(cards, { source: sourceName, lang, style, summary, ui, order });
+    const cast = assembleCast(cards, { source: sourceName, lang, style, summary, ui, order, idMap });
     const json = JSON.stringify(cast, null, 2) + '\n';
     const out = flag(rest, '--out');
     if (out) {
@@ -1790,7 +1994,22 @@ function main(argv) {
     const style = flag(rest, '--style', castStyle);
     const source = bookPath ? readFileSync(resolve(bookPath), 'utf8') : null;
     if (!bookPath) console.error('⚠️ 没给原文，跳过逐字引文校验');
-    const problems = validateCast(characters, source, lang, style);
+
+    // 下游角色引用：优先显式 --refs <file>（JSON 数组或含 .characters 字段的对象），
+    // 否则自动探测同目录的 outline/script/storyboard 收集，让“被引用但 cast 缺失”门真正接入流水线
+    const refsFlag = flag(rest, '--refs');
+    let referencedIds = null;
+    if (refsFlag) {
+      const raw = readJson(refsFlag);
+      referencedIds = Array.isArray(raw) ? raw : (raw?.characters ?? []);
+      console.error(`ℹ️ 用 --refs 提供的 ${referencedIds.length} 个引用角色对账`);
+    } else {
+      referencedIds = autoRefsFromDir(castPath);
+      if (referencedIds) console.error(`ℹ️ 自动从同目录下游文件收集到 ${referencedIds.length} 个引用角色，已接入缺失对账`);
+      else console.error('⚠️ 未给 --refs 且同目录找不到 outline/script/storyboard，跳过「被引用但缺失」检查');
+    }
+
+    const problems = validateCast(characters, source, lang, style, referencedIds);
     if (!SUPPORTED_STYLES.includes(style)) {
       problems.unshift(`顶层 style=${style} 不是已知预设（${SUPPORTED_STYLES.join('/')}）`);
     }

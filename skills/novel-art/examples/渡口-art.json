@@ -184,11 +184,13 @@
       "states": [
         {
           "state": "合上",
-          "prompt": "the suitcase closed and latched, resting upright, brass clasps fastened, worn leather surfaces catching soft light"
+          "prompt": "the suitcase closed and latched, resting upright, brass clasps fastened, worn leather surfaces catching soft light",
+          "image": "images/P01-合上.png"
         },
         {
           "state": "打开",
-          "prompt": "the suitcase lying open, lid at full angle, revealing a stack of folded petition papers and a small wooden memorial tablet inside, dark fabric lining creased"
+          "prompt": "the suitcase lying open, lid at full angle, revealing a stack of folded petition papers and a small wooden memorial tablet inside, dark fabric lining creased",
+          "image": "images/P01-打开.png"
         }
       ],
       "relatedScenes": [
@@ -246,11 +248,13 @@
       "states": [
         {
           "state": "正面",
-          "prompt": "the inkstone face up, moon-shaped wear ring around the ink pool visible, chipped corner facing camera"
+          "prompt": "the inkstone face up, moon-shaped wear ring around the ink pool visible, chipped corner facing camera",
+          "image": "images/P02-正面.png"
         },
         {
           "state": "底面刻印",
-          "prompt": "the inkstone flipped bottom up, two lines of carved official seal characters filled with dried ink, raking light making the carving legible"
+          "prompt": "the inkstone flipped bottom up, two lines of carved official seal characters filled with dried ink, raking light making the carving legible",
+          "image": "images/P02-底面刻印.png"
         }
       ],
       "relatedScenes": [

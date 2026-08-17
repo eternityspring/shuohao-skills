@@ -457,6 +457,8 @@ export function gateReport(board, ctx = {}) {
     });
 
     let prevSceneIndex = 0;
+    // 按场累计本集所有分镜实际引用的人物/道具，循环结束后做反向对账
+    const usedByScene = new Map();
     for (const seg of ep?.segments ?? []) {
       const sid = seg?.id ?? '?';
       const cuts = seg?.cuts ?? [];
@@ -558,6 +560,12 @@ export function gateReport(board, ctx = {}) {
 
         // 引用对账 + 台词装得下 + 台词逐字进 <d>
         if (scene) {
+          // 累计本场所有分镜实际引用的人物/道具，供循环结束后的反向对账
+          if (!usedByScene.has(scene.sceneIndex)) usedByScene.set(scene.sceneIndex, { chars: new Set(), props: new Set() });
+          const acc = usedByScene.get(scene.sceneIndex);
+          for (const c of cut?.characters ?? []) acc.chars.add(c);
+          for (const pr of cut?.props ?? []) acc.props.add(pr);
+
           const cast = new Set(scene.characters);
           for (const c of cut?.characters ?? []) {
             if (!cast.has(c)) bad.refs.push(`${cid} 的 ${c} 不在剧本该场人物里`);
@@ -598,6 +606,21 @@ export function gateReport(board, ctx = {}) {
             bad.recipe.push(`${sid}#${i + 1} 的配方「${card.name}」要 ${min} 格连排，这里只有 ${run} 格——多格配方靠连续同 recipe 的分镜表达`);
           }
           i = j + 1;
+        }
+      }
+    }
+
+    // 反向对账：剧本该场有某人物/道具，但本集所有分镜都没引用（漏引用）
+    if (sEp) {
+      for (const scene of sEp.scenes) {
+        const acc = usedByScene.get(scene.sceneIndex);
+        const usedChars = acc?.chars ?? new Set();
+        const usedProps = acc?.props ?? new Set();
+        for (const c of scene.characters ?? []) {
+          if (!usedChars.has(c)) bad.refs.push(`E${String(ep?.ep).padStart(2, '0')} 第 ${scene.sceneIndex} 场人物「${c}」没有任何分镜引用`);
+        }
+        for (const pr of scene.props ?? []) {
+          if (!usedProps.has(pr)) bad.refs.push(`E${String(ep?.ep).padStart(2, '0')} 第 ${scene.sceneIndex} 场道具「${pr}」没有任何分镜引用`);
         }
       }
     }

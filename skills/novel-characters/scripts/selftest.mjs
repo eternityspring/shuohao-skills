@@ -27,6 +27,8 @@ import {
   strings,
   uiTemplate,
   validateCast,
+  autoRefsFromDir,
+  parseIdMap,
 } from './novel-characters.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -58,15 +60,16 @@ eq(chunkText('   \n  ').length, 0, '纯空白不产生块');
 eq(chunkText(SOURCE).length, 1, '短故事只有一块');
 
 const long = SOURCE.repeat(150);
+const normalizedLong = long.replace(/\r\n/g, '\n').trim();
 const chunks = chunkText(long);
 ok(chunks.length > 1, '长文本会切成多块');
 ok(chunks.every((c) => c.length <= CHUNK_SIZE), `没有块超过 CHUNK_SIZE(${CHUNK_SIZE})`);
-ok(long.includes(chunks[0].slice(0, 200)), '块内容来自原文');
+ok(normalizedLong.includes(chunks[0].slice(0, 200)), '块内容来自规范化后的原文');
 // 相邻块必须重叠，否则卡在切口上的角色会两边都漏
 ok(chunks[1].includes(chunks[0].slice(-100).slice(0, 40)), '相邻块有重叠');
 // 覆盖率：把所有块拼起来（去重叠后）应该盖住绝大部分原文
 const covered = chunks.reduce((sum, c) => sum + c.length, 0);
-ok(covered >= long.length, '所有块加起来覆盖全文（含重叠）');
+ok(covered >= normalizedLong.length, '所有块加起来覆盖规范化全文（含重叠）');
 
 const huge = SOURCE.repeat(1500);
 ok(chunkText(huge).length <= MAX_CHUNKS, `超长文本被 MAX_CHUNKS(${MAX_CHUNKS}) 截断而不是无限切`);
@@ -205,10 +208,10 @@ eq(
 
 const asm = assembleCast(
   [
-    { name: 'A', importance: 'supporting' },
-    { name: 'B', importance: 'protagonist' },
-    { name: 'C', importance: 'major' },
-    { name: 'D', importance: 'major' },
+    { id: 'C02', name: 'A', importance: 'supporting' },
+    { id: 'C01', name: 'B', importance: 'protagonist' },
+    { id: 'C03', name: 'C', importance: 'major' },
+    { id: 'C04', name: 'D', importance: 'major' },
   ],
   { source: '书', lang: 'zh', style: 'ghibli', summary: '摘要' },
 );
@@ -220,31 +223,122 @@ eq(asm.characters.map((c) => c.name).join(''), 'BCDA', '按 importance 排序，
 ok(!('ui' in asm), '没有 ui 就不写这个键');
 
 // 同档要按戏份序——CLI 按文件名读卡是 slug 字典序，order 就是用来纠正它的
+const idMapAll = { 老周: 'C03', 沈知微: 'C01', 陆行远: 'C02', a: 'C09', x: 'C08', b: 'C07' };
 const byFilename = [
   { name: '老周', importance: 'major' },      // 文件名序在前
   { name: '沈知微', importance: 'protagonist' },
   { name: '陆行远', importance: 'major' },     // 但戏份比老周重
 ];
-const ordered = assembleCast(byFilename, { source: 'x', order: ['沈知微', '陆行远', '老周'] });
-eq(ordered.characters.map((c) => c.name).join('→'), '沈知微→陆行远→老周', '同档按 order 的戏份顺序');
+const ordered = assembleCast(byFilename, { source: 'x', order: ['沈知微', '陆行远', '老周'], idMap: idMapAll });
+eq(ordered.characters.map((c) => c.name).join('|'), '沈知微|陆行远|老周', '同档按 order 的戏份顺序');
 eq(
-  assembleCast(byFilename, { source: 'x' }).characters.map((c) => c.name).join('→'),
-  '沈知微→老周→陆行远',
+  assembleCast(byFilename, { source: 'x', idMap: idMapAll }).characters.map((c) => c.name).join('|'),
+  '沈知微|老周|陆行远',
   '不给 order 才退回传入顺序——这正是要修的文件名序',
 );
 // order 里没有的名字排同档末尾，不报错
 eq(
-  assembleCast(byFilename, { source: 'x', order: ['沈知微', '陆行远'] }).characters.map((c) => c.name).join('→'),
-  '沈知微→陆行远→老周',
+  assembleCast(byFilename, { source: 'x', order: ['沈知微', '陆行远'], idMap: idMapAll }).characters.map((c) => c.name).join('|'),
+  '沈知微|陆行远|老周',
   'order 缺名字的排同档末尾',
 );
-ok('ui' in assembleCast([{ name: 'A' }], { source: 'x', ui: { copy: 'Copier' } }), '有 ui 翻译就带上');
+ok('ui' in assembleCast([{ name: 'A' }], { source: 'x', ui: { copy: 'Copier' }, idMap: idMapAll }), '有 ui 翻译就带上');
 eq(
-  assembleCast([{ name: 'X', importance: 'sidekick' }, { name: 'B', importance: 'protagonist' }], { source: 'x' })
+  assembleCast([{ name: 'X', importance: 'sidekick' }, { name: 'B', importance: 'protagonist' }], { source: 'x', idMap: idMapAll })
     .characters[0].name,
   'B',
   'importance 越界的排最后而不是崩掉',
 );
+
+/* ---------------- assemble → validate 回归（idMap 继承）---------------- */
+// 第三轮修复：assemble 不再按数组顺序临时编号，id 必须来自明确映射。
+// 这里证明 idMap 真能落到角色上、validate 认可；且缺映射会抛错而非静默。
+{
+  const cards = [{ name: '沈知微', importance: 'protagonist' }, { name: '陆行远', importance: 'major' }];
+  const built = assembleCast(cards, { source: 'x', idMap: { 沈知微: 'C01', 陆行远: 'C02' } });
+  eq(built.characters[0].id, 'C01', 'idMap 继承 C01');
+  eq(built.characters[1].id, 'C02', 'idMap 继承 C02');
+  // 落下的 id 契约合规：validateCast 不会因「缺 id / id 格式 / 重复」这类 id 契约问题而报错
+  const idProblems = validateCast(built.characters, null).filter((p) => /缺 ?id|格式应为 C|重复/.test(p));
+  eq(idProblems.length, 0, 'assemble 出的 id 经 validate 认可（id 契约无误报）');
+  // 别名也能命中映射
+  const byAlias = assembleCast([{ name: '小沈', aliases: ['沈知微'] }], { source: 'x', idMap: { 沈知微: 'C01' } });
+  eq(byAlias.characters[0].id, 'C01', '别名命中 idMap');
+  // 缺映射：必须抛错，不能落成一个临时编号
+  let threw = false;
+  try { assembleCast([{ name: '无名' }], { source: 'x', idMap: { 别人: 'C99' } }); }
+  catch { threw = true; }
+  ok(threw, '缺 idMap 条目时抛出明确错误（杜绝顺序编号）');
+}
+
+/* ---------------- autoRefsFromDir 不提前停 ---------------- */
+// 第三轮修复：autoRefsFromDir 早退出会让目录靠前的无关 json 之后的真正 script/storyboard 漏扫。
+// 这里用一个临时目录，先放一个无关 outline（不含 character 数组），再放一个 storyboard（含 C05），
+// 证明两个都被扫到，C05 能被收集到。
+{
+  const { mkdirSync, writeFileSync, mkdtempSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join: j } = await import('node:path');
+  const dir = mkdtempSync(j(tmpdir(), 'refs-'));
+  mkdirSync(j(dir, 'sub'), { recursive: true });
+  // 无关 outline（无 character 字段）——若早退出就停在这
+  writeFileSync(j(dir, '渡口-outline.json'), JSON.stringify({ title: '渡口', 改动记录: ['C01 出场'] }));
+  // 真正的 storyboard，含被引用的 C05
+  writeFileSync(
+    j(dir, 'sub', '渡口-storyboard.json'),
+    JSON.stringify({ segments: [{ cuts: [{ scene: 'S01', characters: ['C01', 'C05'] }] }] }),
+  );
+  const ids = autoRefsFromDir(j(dir, '渡口-cast.json'));
+  ok(ids && ids.includes('C05'), 'autoRefsFromDir 完整遍历：扫到子目录里的 C05');
+  ok(ids && ids.includes('C01'), 'autoRefsFromDir 也收集到同级 outline 的 C01');
+}
+
+/* ---------------- autoRefsFromDir 不越界扫到项目根之上（第五轮 P1）---------------- */
+// 真实 cast 在 <项目根>/characters/ 下；在更高层伪造一个「同名项目根」（含 characters/
+// outline 且引用码 Z99），证明扫描在最近项目根处停止，不会污染到 Z99，也不会走到盘根。
+{
+  const { mkdirSync, writeFileSync, mkdtempSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join: j2 } = await import('node:path');
+  const fakeRoot = mkdtempSync(j2(tmpdir(), 'fakeproj-'));
+  // 更高一层的「祖父项目根」：含 characters/ 与 outline，引用 Z99（污染样本）
+  mkdirSync(j2(fakeRoot, 'characters'), { recursive: true });
+  writeFileSync(j2(fakeRoot, 'characters', '渡口-cast.json'), '[]');
+  writeFileSync(
+    j2(fakeRoot, '渡口-outline.json'),
+    JSON.stringify({ title: '渡口', characters: [{ id: 'Z99', name: '污染角色' }] }),
+  );
+  // 真实项目根：放在 fakeRoot 之下，cast 在 <真实根>/characters/
+  const realRoot = j2(fakeRoot, 'DJ-demo');
+  mkdirSync(j2(realRoot, 'characters'), { recursive: true });
+  mkdirSync(j2(realRoot, 'sub'), { recursive: true });
+  writeFileSync(j2(realRoot, 'characters', '渡口-cast.json'), '[]');
+  writeFileSync(j2(realRoot, '渡口-outline.json'), JSON.stringify({ title: '渡口' }));
+  writeFileSync(
+    j2(realRoot, 'sub', '渡口-storyboard.json'),
+    JSON.stringify({ segments: [{ cuts: [{ scene: 'S01', characters: ['C01', 'C05'] }] }] }),
+  );
+  const ids = autoRefsFromDir(j2(realRoot, 'characters', '渡口-cast.json'));
+  ok(ids && ids.includes('C05'), '最近项目根内仍可收集到 C05');
+  ok(ids && !ids.includes('Z99'), '不越界到上层伪造项目根（Z99 污染被排除）');
+}
+
+/* ---------------- parseIdMap（--id-map 三种格式，含真实 outline）---------------- */
+{
+  // 真实 outline 对象 {characters:[...]} 可直接用
+  const fromOutline = parseIdMap({ characters: [{ id: 'C01', name: '沈知微', aliases: ['小沈'] }, { id: 'C02', name: '陆行远' }] });
+  eq(fromOutline['沈知微'], 'C01', 'outline 对象解析出 C01');
+  eq(fromOutline['小沈'], 'C01', 'outline 别名也进映射');
+  eq(fromOutline['陆行远'], 'C02', 'outline 解析出 C02');
+  // 角色表数组
+  eq(parseIdMap([{ id: 'C03', name: '老周' }])['老周'], 'C03', '角色表数组解析');
+  // 简单映射
+  eq(parseIdMap({ 沈知微: 'C01' })['沈知微'], 'C01', '简单映射解析');
+  // 解析不出任何映射则抛错（不会把 outline 的 source/lang 顶层键当角色）
+  let threw = false;
+  try { parseIdMap({ source: '渡口', lang: 'zh', characters: [] }); } catch { threw = true; }
+  ok(threw, '空 characters 数组抛错（不误把顶层键当角色）');
+}
 
 /* ---------------- slug ---------------- */
 
@@ -300,6 +394,37 @@ ok(hits(bad, 'persona') > 0, '抓住缺失的 persona');
 
 // 没有原文时应该跳过逐字校验而不是全判失败
 eq(validateCast(CAST, null).length, 0, '不给原文时跳过引文校验');
+
+// 被下游引用但 cast 缺失：之前静默通过，C05 类 bug 漏网
+{
+  const allIds = CAST.map((c) => c.id);
+  // 引用了一个 cast 里没有的 ID
+  const refs = [...allIds, 'C99'];
+  ok(
+    validateCast(CAST, SOURCE, 'zh', 'realistic', refs).some((p) => p.includes('C99')),
+    '被引用的角色 C99 在 cast 缺失时报错',
+  );
+  // 只引用了确实存在的 ID：不误报
+  eq(validateCast(CAST, SOURCE, 'zh', 'realistic', allIds).length, 0, '只引用存在的角色时不误报');
+  // 没传 referencedIds：维持旧行为，不报错
+  eq(validateCast(CAST, SOURCE, 'zh', 'realistic').length, 0, '不传 referencedIds 时保持旧行为');
+}
+
+// 角色 id 契约：必填、格式 C<两位数字>、不可重复（防止后续项目再次出现角色码断链）
+{
+  const clone = () => JSON.parse(JSON.stringify(CAST));
+  const noId = clone();
+  delete noId[0].id;
+  ok(validateCast(noId, SOURCE, 'zh', 'realistic').some((p) => p.includes('缺少 id')), '缺 id 被拦');
+  const badFmt = clone();
+  badFmt[0].id = 'C1';
+  ok(validateCast(badFmt, SOURCE, 'zh', 'realistic').some((p) => p.includes('格式应为 C 加两位数字')), 'id 格式错（C1）被拦');
+  const dup = clone();
+  dup[1].id = 'C01';
+  ok(validateCast(dup, SOURCE, 'zh', 'realistic').some((p) => p.includes('重复')), 'id 重复被拦');
+  // 合法 id 不触发
+  eq(validateCast(clone(), SOURCE, 'zh', 'realistic').length, 0, '合法 C01–C05 id 不误报');
+}
 
 /* ---------------- render ---------------- */
 
