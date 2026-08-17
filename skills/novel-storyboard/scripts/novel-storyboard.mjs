@@ -3,8 +3,8 @@
 // Zero dependencies on purpose: the skill must work in any directory
 // without an npm install. Node 18+ (stdlib only).
 
-import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, writeFileSync } from 'node:fs';
+import { basename, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /* ------------------------------------------------------------------ */
@@ -215,6 +215,125 @@ export function expandScript(script) {
 export const segSeconds = (segment) => r1((segment?.cuts ?? []).reduce((n, c) => n + (c?.seconds ?? 0), 0));
 
 /* ------------------------------------------------------------------ */
+/* 镜头配方卡库（可选挂载）                                               */
+/* ------------------------------------------------------------------ */
+/*
+ * shot-recipes 是可选挂载的卡库：给了 --shots <卡片目录> 才有 shot-recipe
+ * 这道门。两个 skill 必须各自独立、谁没有谁都能跑，所以这里刻意不
+ * import shot-recipes.mjs，自己写一份受限 frontmatter 解析——与
+ * expandScript 同一个先例（跨目录 import 会让 skill 拷不走）。
+ *
+ * 只取门要用的机器字段，正文一概不读；语法受限到只认 `key: 标量` 与
+ * `key: [a, b, c]` 行内数组——受限就没有歧义，25 行足够。卡片格式的合法性
+ * 由 shot-recipes 自己的 lint 负责，这边只管读得懂的部分。
+ */
+
+const RECIPE_FIELDS = new Set(['id', 'name', 'name_en', 'cuts', 'must_phrases', 'sizes', 'cameras']);
+const unquote = (s) => String(s).replace(/^['"](.*)['"]$/, '$1').trim();
+
+/** 受限 frontmatter 解析：只回机器字段，没有 id 就当不是卡片。 */
+export function parseCardFields(text) {
+  const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(String(text ?? ''));
+  if (!m) return null;
+  const card = {};
+  for (const line of m[1].split(/\r?\n/)) {
+    const kv = /^([a-z_]+):\s*(.*)$/.exec(line);
+    if (!kv || !RECIPE_FIELDS.has(kv[1])) continue;
+    const v = kv[2].trim();
+    if (v.startsWith('[')) {
+      const inner = v.replace(/^\[/, '').replace(/\]$/, '').trim();
+      card[kv[1]] = inner
+        ? inner.split(',').map(unquote).filter((x) => x !== '').map((x) => (/^-?\d+$/.test(x) ? Number(x) : x))
+        : [];
+    } else {
+      card[kv[1]] = unquote(v);
+    }
+  }
+  return card.id ? card : null;
+}
+
+/** 读卡片目录 → Map<id, 机器字段>。只吃顶层 .md（en/ 是正文翻译，机器字段只有一份）。 */
+export function loadRecipes(dir) {
+  const root = resolve(dir);
+  const cards = new Map();
+  if (!existsSync(root)) return cards;
+  for (const f of readdirSync(root).filter((x) => x.endsWith('.md')).sort()) {
+    const card = parseCardFields(readFileSync(join(root, f), 'utf8'));
+    if (card) cards.set(card.id, card);
+  }
+  return cards;
+}
+
+/*
+ * 建议景别 / 运镜**刻意不设门**，只在报告里提示偏离，理由三条：
+ *   1. 配方是语汇不是法条——同一张卡在竖屏与横屏、两人与三人、有台词
+ *      与无台词的情况下，景别会合理偏移（卡库那边把它们存成集合而不是
+ *      序列，就是从结构上杜绝升级成硬门）
+ *   2. 可选挂载的东西一旦变严就没人挂——挂了反而被拦，下次就不挂了
+ *   3. 仓库已有明文判例：误拦的门比没有门更糟，门的信用比数量重要
+ */
+export function recipeDrift(cut, card) {
+  const sizes = Array.isArray(card?.sizes) ? card.sizes : [];
+  const cameras = Array.isArray(card?.cameras) ? card.cameras : [];
+  return {
+    sizes: sizes.length && !sizes.includes(cut?.size) ? sizes : [],
+    cameras: cameras.length && !cameras.includes(cut?.camera) ? cameras : [],
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* 门失败累积                                                           */
+/* ------------------------------------------------------------------ */
+/*
+ * 每次 validate / checkup 的结果本来跑完就没了，于是「模型最常违反哪条规则」
+ * 只能靠印象。这里把每次运行与每条失败追加到工作目录的 .gates.jsonl，
+ * stats 子命令再读回来，回答三个问题：
+ *   哪道门最常响   → 那条规则模型最常无视，措辞该改
+ *   哪道门从没响过 → 可能是死门，或者规则已经被模型内化了
+ *   失败详情长什么样 → 反复出现却没有门的那类问题，只能靠人看这些自由文本
+ *
+ * 刻意做成纯函数 + CLI 负责 IO：自测不落盘也能验。
+ * 写不进去就静默跳过——日志是附加价值，不能让它挡住主流程。
+ */
+
+export const GATE_LOG = '.gates.jsonl';
+
+/** 一次运行产生的日志行（对象数组，CLI 负责序列化落盘）。 */
+export function gateLogEntries(gates, { doc = '', at = '' } = {}) {
+  const list = Array.isArray(gates) ? gates : [];
+  if (!list.length) return [];
+  const failed = list.filter((g) => !g.ok);
+  const rows = [{ kind: 'run', at, doc, gates: list.length, failed: failed.length }];
+  for (const g of failed) {
+    rows.push({ kind: 'fail', at, doc, gate: g.id, label: g.label, detail: g.detail ?? '' });
+  }
+  return rows;
+}
+
+/** 汇总日志行。allGates 给全量门 id，用来找出「从没响过」的那些。 */
+export function summarizeGateLog(entries, allGates = []) {
+  const rows = (Array.isArray(entries) ? entries : []).filter((e) => e && typeof e === 'object');
+  const runs = rows.filter((e) => e.kind === 'run');
+  const fails = rows.filter((e) => e.kind === 'fail');
+  const byGate = new Map();
+  for (const f of fails) {
+    if (!byGate.has(f.gate)) byGate.set(f.gate, { gate: f.gate, label: f.label ?? f.gate, count: 0, samples: [] });
+    const rec = byGate.get(f.gate);
+    rec.count += 1;
+    if (rec.samples.length < 3 && f.detail) rec.samples.push(f.detail);
+  }
+  const ranked = [...byGate.values()].sort((a, b) => b.count - a.count || a.gate.localeCompare(b.gate));
+  const silent = allGates.filter((id) => !byGate.has(id));
+  return {
+    runs: runs.length,
+    cleanRuns: runs.filter((r) => !r.failed).length,
+    fails: fails.length,
+    ranked,
+    silent,
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* stats                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -307,8 +426,11 @@ export function gateReport(board, ctx = {}) {
   const bad = {
     coverage: [], segCap: [], cutLen: [], fit: [], duration: [], crowd: [],
     id: [], size: [], camera: [], english: [], names: [], refs: [],
-    h3s: [], h3d: [], h3e: [], style: [],
+    h3s: [], h3d: [], h3e: [], style: [], recipe: [],
   };
+  // 配方卡库是可选挂载：ctx.recipes 为空就整门跳过（不是「没有 cut 带 recipe」就跳过）
+  const recipes = ctx.recipes ?? null;
+  let recipeRefs = 0;
   const styleId = board?.style ?? DEFAULT_STYLE;
   const style = STYLE_PRESETS[styleId];
   if (!style) bad.style.push(`style「${styleId}」不在预设里（${Object.keys(STYLE_PRESETS).join(' / ')}）`);
@@ -419,6 +541,23 @@ export function gateReport(board, ctx = {}) {
           if (frame.includes(name)) bad.names.push(`${cid} 的分镜图提示词出现角色名「${name}」`);
         }
 
+        // 镜头配方：id 在卡库里 + 每条必备短语进了本切的 frame
+        // 判定与 shot-recipes 的 checkRecipes 完全一致：两边小写化后 includes，逐条全中才算过
+        if (recipes && typeof cut?.recipe === 'string' && cut.recipe) {
+          recipeRefs += 1;
+          const card = recipes.get(cut.recipe);
+          if (!card) {
+            bad.recipe.push(`${cid} 引用的配方「${cut.recipe}」不在配方库里`);
+          } else {
+            const lower = frame.toLowerCase();
+            for (const ph of card.must_phrases ?? []) {
+              if (!lower.includes(String(ph).toLowerCase())) {
+                bad.recipe.push(`${cid} 的分镜图提示词缺配方「${card.name}」的必备短语「${ph}」`);
+              }
+            }
+          }
+        }
+
         // 引用对账 + 台词装得下 + 台词逐字进 <d>
         if (scene) {
           // 累计本场所有分镜实际引用的人物/道具，供循环结束后的反向对账
@@ -448,6 +587,27 @@ export function gateReport(board, ctx = {}) {
           }
         }
       });
+
+      // 多格配方靠「连续同 id 的 run」表达（不引入新结构）：卡片 cuts 下限 ≥ 2 时，
+      // 连续段的长度不得小于该下限——单独挂一格的两格配方是没兑现的配方
+      if (recipes) {
+        for (let i = 0; i < cuts.length; ) {
+          const rid = cuts[i]?.recipe;
+          if (typeof rid !== 'string' || !rid) {
+            i += 1;
+            continue;
+          }
+          let j = i;
+          while (j + 1 < cuts.length && cuts[j + 1]?.recipe === rid) j += 1;
+          const card = recipes.get(rid);
+          const min = Array.isArray(card?.cuts) ? card.cuts[0] : 0;
+          const run = j - i + 1;
+          if (min >= 2 && run < min) {
+            bad.recipe.push(`${sid}#${i + 1} 的配方「${card.name}」要 ${min} 格连排，这里只有 ${run} 格——多格配方靠连续同 recipe 的分镜表达`);
+          }
+          i = j + 1;
+        }
+      }
     }
 
     // 反向对账：剧本该场有某人物/道具，但本集所有分镜都没引用（漏引用）
@@ -508,6 +668,8 @@ export function gateReport(board, ctx = {}) {
 
   const SKIP_SCRIPT = '未提供 script.json，本门跳过（视为通过）';
   const SKIP_NAMES = '未提供 outline/cast，本门跳过（视为通过）';
+  const SKIP_SHOTS = '未挂载配方卡库（--shots <卡片目录>），本门跳过（视为通过）';
+  const NO_RECIPE = '本批分镜没有引用配方';
 
   add('coverage', '剧本节拍被恰好一次、按顺序、连续认领（分镜级）', bad.coverage.length === 0, script ? bad.coverage.join('；') : SKIP_SCRIPT);
   add('segment-cap', `每段 0 < 总秒数 ≤ ${params.maxSegmentSeconds}（一次生成的上限）`, eps.length > 0 && bad.segCap.length === 0, bad.segCap.join('；'));
@@ -525,6 +687,13 @@ export function gateReport(board, ctx = {}) {
   add('prompt-english', '分镜图提示词全英文且非空', bad.english.length === 0, bad.english.join('；'));
   add('prompt-no-names', '英文提示词不含角色名（分镜图提示词恒查；中文 H3 提示词放行）', bad.names.length === 0, banned.length ? bad.names.join('；') : SKIP_NAMES);
   add('refs', '场次／人物／道具对账剧本', bad.refs.length === 0, script ? bad.refs.join('；') : SKIP_SCRIPT);
+  // 可选挂载的门放最后：没给 --shots 就跳过；给了但全篇没引用配方也算通过，但要明说，不静默
+  add(
+    'shot-recipe',
+    '引用的配方存在、必备短语进了分镜图提示词、多格配方连排够格数',
+    bad.recipe.length === 0,
+    recipes ? (bad.recipe.length ? bad.recipe.join('；') : recipeRefs ? '' : NO_RECIPE) : SKIP_SHOTS,
+  );
 
   return gates;
 }
@@ -695,6 +864,7 @@ const GATE_LABELS_EN = {
   'prompt-english': 'Frame prompts are English and non-empty',
   'prompt-no-names': 'English prompts carry no character names',
   'refs': 'Scenes / characters / props audited against the script',
+  'shot-recipe': 'Referenced recipes exist, their must-phrases are in the frame prompt, multi-cut recipes run long enough',
 };
 const GATE_SKIPS_EN = {
     '未提供 outline.json，本门跳过（视为通过）': 'outline.json not provided — gate skipped (treated as passing)',
@@ -702,6 +872,8 @@ const GATE_SKIPS_EN = {
     '未提供 script.json，本门跳过（视为通过）': 'script.json not provided — gate skipped (treated as passing)',
     '未提供 outline/cast，本门跳过（视为通过）': 'outline/cast not provided — gate skipped (treated as passing)',
     '未提供 cast.json，本门跳过（视为通过）': 'cast.json not provided — gate skipped (treated as passing)',
+    '未挂载配方卡库（--shots <卡片目录>），本门跳过（视为通过）': 'no recipe card library mounted (--shots <cards dir>) — gate skipped (treated as passing)',
+    '本批分镜没有引用配方': 'no cut in this batch references a recipe',
 };
 /** 报告里的门文案：英文界面取映射，未命中或中文界面回落原文。 */
 const gateText = (g, lang) => {
@@ -754,7 +926,7 @@ const I18N = {
     hideSegs: '▴ 收起',
     copy: '复制', copied: '已复制', copyFailed: '复制失败',
     dialogueCols: ['段 · 切', '说话人', '台词', '台词秒数'],
-    cutCols: ['切', '起点', '秒', '景别', '运镜', '画面', '人物'],
+    cutCols: ['切', '起点', '秒', '景别', '运镜', '配方', '画面', '人物'],
     batchCols: ['场景', '光照', '段', '需要的角色', '道具'],
     atSec: (t) => `${t.toFixed(2)}s 起`,
     batchLabel: (num) => `批次 ${num}`,
@@ -763,6 +935,11 @@ const I18N = {
     listSep: '、',
     sizeName: (size) => SHOT_SIZES[size]?.zh ?? size,
     cameraLabel: (camera) => `${camera}（${CAMERA_MOVES[camera] ?? '?'}）`,
+    recipeNone: '—',
+    recipeName: (card, id) => card?.name ?? id,
+    recipeDrift: (sizes, cameras) =>
+      `配方建议${[sizes.length ? `景别 ${sizes.join(' / ')}` : '', cameras.length ? `运镜 ${cameras.join(' / ')}` : ''].filter(Boolean).join(' · ')}——只提示不设门`,
+    recipeHint: (n) => `ℹ️ ${n} 处分镜的景别／运镜偏离了配方建议——配方是语汇不是法条，只提示不设门（报告的「配方」列有 ≠ 标记）`,
     speakerLine: (name, text) => `${name}：「${text}」`,
     withLighting: (name, lighting) => (lighting ? `${name}（${lighting}）` : name),
     fmtMin: (sec) => `${Math.floor(sec / 60)} 分 ${Math.round(sec % 60)} 秒`,
@@ -810,7 +987,7 @@ const I18N = {
     hideSegs: '▴ Collapse',
     copy: 'Copy', copied: 'Copied', copyFailed: 'Copy failed',
     dialogueCols: ['Segment · cut', 'Speaker', 'Line', 'Seconds'],
-    cutCols: ['Cut', 'Start', 'Sec', 'Size', 'Camera', 'Picture', 'Characters'],
+    cutCols: ['Cut', 'Start', 'Sec', 'Size', 'Camera', 'Recipe', 'Picture', 'Characters'],
     batchCols: ['Scene', 'Lighting', 'Segments', 'Characters needed', 'Props'],
     atSec: (t) => `from ${t.toFixed(2)}s`,
     batchLabel: (num) => `Batch ${num}`,
@@ -819,6 +996,11 @@ const I18N = {
     listSep: ', ',
     sizeName: (size) => SHOT_SIZES[size]?.phrase ?? size,
     cameraLabel: (camera) => camera,
+    recipeNone: '—',
+    recipeName: (card, id) => card?.name_en ?? card?.name ?? id,
+    recipeDrift: (sizes, cameras) =>
+      `Recipe suggests ${[sizes.length ? `size ${sizes.join(' / ')}` : '', cameras.length ? `camera ${cameras.join(' / ')}` : ''].filter(Boolean).join(' · ')} — advisory, not gated`,
+    recipeHint: (n) => `ℹ️ ${n} cut(s) deviate from their recipe's suggested size / camera — a recipe is vocabulary, not law: advisory only (see the ≠ marks in the Recipe column)`,
     speakerLine: (name, text) => `${name}: “${text}”`,
     withLighting: (name, lighting) => (lighting ? `${name} (${lighting})` : name),
     fmtMin: (sec) => `${Math.floor(sec / 60)} min ${Math.round(sec % 60)} s`,
@@ -852,6 +1034,21 @@ function namer(ctx = {}, t = I18N.zh) {
     char: (id) => (id === 'VO' ? t.voiceOver : charName.get(id) ?? id),
     scene: (id) => sceneName.get(id) ?? id,
     prop: (id) => propName.get(id) ?? id,
+  };
+}
+
+/**
+ * cut 的「配方」列：卡名 + 偏离建议景别／运镜时的 ≠ 标记。
+ * 偏离只提示不设门——配方是语汇不是法条（理由见 recipeDrift 上方注释）。
+ */
+function cutRecipe(cut, recipes, t) {
+  const id = typeof cut?.recipe === 'string' ? cut.recipe : '';
+  if (!id) return null;
+  const card = recipes?.get(id) ?? null;
+  const off = recipeDrift(cut, card);
+  return {
+    name: t.recipeName(card, id),
+    drift: off.sizes.length || off.cameras.length ? t.recipeDrift(off.sizes, off.cameras) : '',
   };
 }
 
@@ -890,9 +1087,12 @@ export function renderMarkdown(board, ctx = {}) {
         const summary = cutBeats(cut, scene)
           .map((b) => (b.kind === 'line' ? t.speakerLine(n.char(b.speaker), b.text) : b.text))
           .join(' ');
+        // md 没有 title 属性，偏离的建议值直接写在格子里
+        const rc = cutRecipe(cut, ctx.recipes, t);
         out.push(mdRow([
           `#${ci + 1}`, `${starts[ci].toFixed(2)}s`, cut.seconds,
           t.sizeName(cut.size), t.cameraLabel(cut.camera),
+          rc ? `${rc.name}${rc.drift ? ` ≠（${rc.drift}）` : ''}` : t.recipeNone,
           summary, (cut.characters ?? []).map(n.char).join(t.listSep),
         ]));
       });
@@ -915,8 +1115,9 @@ export function renderMarkdown(board, ctx = {}) {
 /* ------------------------------------------------------------------ */
 /*
  * 与另外四份报告同一套视觉语言。设计约定见 references/report-style.md。
- * 分镜图从 ./images/<段号>-f<切序>.png 找（相对 render 时的工作目录），
- * 有就内嵌显示 + 点击放大，没有就显示占位——不猜、不骗。
+ * 分镜图从工作目录下 <段号>/f<切序>.png 找（imageExists 由 CLI 注入，
+ * render 时检查相对工作目录的路径），有就内嵌显示 + 点击放大，
+ * 没有就显示占位——不猜、不骗。
  */
 
 function embedDoc(doc) {
@@ -973,19 +1174,30 @@ export function renderHtml(board, ctx = {}) {
           const frame = (ci) => `${seg.id}/f${ci + 1}.png`;
           const has = (ci) => (ctx.imageExists ? ctx.imageExists(frame(ci)) : false);
 
-          const master = has(0)
-            ? `<img class="frame" src="${esc(frame(0))}" alt="${esc(`${seg.id}#1`)}" loading="lazy">`
-            : `<div class="frame ph"><b>${esc(t.masterLabel)} · ${esc(t.frameMissing(1))}</b><span>${esc(seg.cuts[0]?.frame ?? '')}</span></div>`;
-          const subs = seg.cuts.length > 1
-            ? `<div class="subs">${seg.cuts
-                .slice(1)
-                .map((cut, ci) =>
-                  has(ci + 1)
-                    ? `<img class="subf" src="${esc(frame(ci + 1))}" alt="${esc(`${seg.id}#${ci + 2}`)}" loading="lazy">`
-                    : `<span class="subf ph">${esc(t.frameMissing(ci + 2))}</span>`,
-                )
-                .join('')}</div>`
-            : '';
+          // 主分镜图区：图出全的段保留原 master+subs 层级；有缺图的段每切一格——
+          // 有图的格显示原图，无图的格显示整宽提示词卡 + 复制按钮（混合情况按格判断）
+          const hasAll = seg.cuts.every((_, ci) => has(ci));
+          let master, subs;
+          if (hasAll) {
+            master = `<img class="frame" src="${esc(frame(0))}" alt="${esc(`${seg.id}#1`)}" loading="lazy">`;
+            subs = seg.cuts.length > 1
+              ? `<div class="subs">${seg.cuts
+                  .slice(1)
+                  .map((cut, ci) => `<img class="subf" src="${esc(frame(ci + 1))}" alt="${esc(`${seg.id}#${ci + 2}`)}" loading="lazy">`)
+                  .join('')}</div>`
+              : '';
+          } else {
+            master = `<div class="fquad">${seg.cuts
+              .map((cut, ci) => {
+                const label = ci === 0 ? t.masterLabel : t.subLabel(ci + 1);
+                const body = has(ci)
+                  ? `<img class="frame" src="${esc(frame(ci))}" alt="${esc(`${seg.id}#${ci + 1}`)}" loading="lazy">`
+                  : `<div class="frame ph fcell"><div class="fcell-h"><b>${esc(`${label} · ${t.frameMissing(ci + 1)}`)}</b><button class="copy mini" data-copy="${esc(cut.frame ?? '')}">${esc(t.copy)}</button></div><span class="fprompt">${esc(cut.frame ?? '')}</span></div>`;
+                return body;
+              })
+              .join('\n')}</div>`;
+            subs = '';
+          }
 
           const cutRows = seg.cuts
             .map((cut, ci) => {
@@ -997,11 +1209,14 @@ export function renderHtml(board, ctx = {}) {
                     : `<p class="sact">${esc(b.text)}</p>`,
                 )
                 .join('');
+              // 「配方」列：偏离建议景别／运镜的加 ≠ 上标，建议值写进 title——提示而已，不是门
+              const rc = cutRecipe(cut, ctx.recipes, t);
               return `<li class="cut">
   <div class="cut-h">
     <b>#${ci + 1}</b>
     <span class="cut-t">${esc(t.atSec(starts[ci]))} · ${cut.seconds}s</span>
     <span class="cut-sc">${esc(t.sizeName(cut.size))} · ${esc(cut.camera)}</span>
+    ${rc ? `<span class="cut-rc">${esc(rc.name)}${rc.drift ? `<sup title="${esc(rc.drift)}">≠</sup>` : ''}</span>` : ''}
     ${(cut.characters ?? []).map((id) => `<span class="chip">${esc(n.char(id))}</span>`).join('')}
     ${(cut.props ?? []).map((id) => `<span class="chip prop">${esc(n.prop(id))}</span>`).join('')}
     <button class="copy mini" data-copy="${esc(cut.frame ?? '')}">${esc(t.framePrompt)}</button>
@@ -1074,8 +1289,9 @@ ${cards}
   const gateList = `<ul class="gate">
   ${gates
     .map(
+      // 通过的门只有跳过说明与「没有引用配方」这类备注带 detail——都要显示出来，不静默
       (g) => `<li class="${g.ok ? 'ok' : 'bad'}"><span class="m">${g.ok ? '✓' : '✗'}</span><span>${esc(gateText(g, t.langCode).label)}${
-        (!g.ok && g.detail) || (g.ok && g.detail.includes('跳过')) ? `<small>${esc(gateText(g, t.langCode).detail)}</small>` : ''
+        g.detail ? `<small>${esc(gateText(g, t.langCode).detail)}</small>` : ''
       }</span></li>`,
     )
     .join('\n  ')}
@@ -1173,6 +1389,13 @@ section.top-sec{margin-top:34px}
 .frame.ph span{font:400 10.5px/1.55 var(--mono);color:var(--ink-2);overflow:hidden;display:-webkit-box;
   -webkit-line-clamp:5;-webkit-box-orient:vertical}
 .subs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.fquad{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
+.fquad .frame.ph{aspect-ratio:auto}
+.fquad .fcell{margin:0;min-height:0}
+.fcell-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.fcell-h .copy.mini{margin:0;flex:none}
+.frame.ph .fprompt{font:400 10.5px/1.4 var(--mono);color:var(--ink-2);white-space:pre-wrap;word-break:break-word;display:block;
+  -webkit-line-clamp:none;-webkit-box-orient:vertical;overflow:visible}
 .subf{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--rule-2);border-radius:2px;
   cursor:zoom-in;display:block;background:var(--side)}
 .subf.ph{display:flex;align-items:center;justify-content:center;cursor:default;
@@ -1196,6 +1419,8 @@ section.top-sec{margin-top:34px}
 .cut-h b{font:500 12px/1 var(--mono);color:var(--seal)}
 .cut-t{font:500 10.5px/1.6 var(--mono);color:var(--ink-3)}
 .cut-sc{font-size:11.5px;color:var(--ink-2)}
+.cut-rc{font:400 10.5px/1.6 var(--mono);border:1px dashed var(--rule-2);border-radius:2px;padding:0 6px;color:var(--ink-2)}
+.cut-rc sup{color:var(--seal-2);font-weight:700;cursor:help;margin-left:2px}
 .cut-h .copy{margin-left:auto;opacity:0;transition:.15s}
 .cut:hover .copy{opacity:1}
 .cut p{margin:3px 0 0;font-size:12px;line-height:1.6}
@@ -1403,13 +1628,22 @@ const USAGE = `novel-storyboard.mjs — novel-storyboard skill 的确定性工�
   seed <script.json> [--eps 1-3]              从剧本预填节拍工作底稿（打印到 stdout）
   validate <sb.json> --script <script.json>   校验；有违规逐条打印并 exit 1
            [--outline] [--cast] [--art]       outline/cast 查提示词人名；art 只管显示名字
+           [--shots <卡片目录>]                挂载镜头配方卡库，开 shot-recipe 门（不给就跳过）
   checkup <sb.json> --script <script.json>    只打印质量门 ✓/✗，有未过项 exit 1
+          [--shots <卡片目录>]
   render <sb.json> --script <script.json>     渲染报告到 stdout（默认 --md）
          [--html|--md] [--outline] [--art]    分镜图从 ./<段号>/f<切序>.png 找
          [--lang zh|en]                       报告界面语言（默认 zh；未指定时读取 JSON 顶层 lang 字段）
+         [--shots <卡片目录>]                  报告的「配方」列显示卡名并标注建议景别／运镜的偏离
   export <sb.json> --script <script.json>     导出 H3 投产包：每段一个文件夹 <段号>/prompt.md
          [--out .]                            （分镜图 f1..fN.png 同住）+ 根部 manifest.json
-  slug <name>                                 剧名转安全文件名`;
+  stats                                       读当前目录的 .gates.jsonl，汇总哪道门最常响、
+                                              哪道门从没响过（validate/checkup 会自动累积）
+  slug <name>                                 剧名转安全文件名
+
+validate 与 checkup 每次都会把门的结果追加到当前目录的 .gates.jsonl。
+积累几十次之后跑 stats，就知道模型最常违反哪条规则——那条规则的措辞该改。
+不想记就加 --no-log；写不进去会静默跳过，不影响校验本身。`;
 
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(path), 'utf8'));
@@ -1420,12 +1654,30 @@ function flag(rest, name, fallback = null) {
   return i >= 0 && rest[i + 1] ? rest[i + 1] : fallback;
 }
 
+/*
+ * --shots 只接受卡片目录，不接受导出的 shots.json：中间产物必然会漂，
+ * 卡片 .md 才是唯一来源。目录里读不到卡片就直接报错——挂了却没生效
+ * 比没挂更坏。
+ */
+function loadShots(dir) {
+  if (/\.json$/i.test(dir)) {
+    throw new Error('--shots 只接受卡片目录（shot-recipes/references/cards），不接受导出的 shots.json——中间产物必然会漂');
+  }
+  const cards = loadRecipes(dir);
+  if (!cards.size) throw new Error(`--shots ${dir} 里没读到卡片（.md）——请指向 shot-recipes/references/cards`);
+  return cards;
+}
+
 function loadCtx(rest) {
   const get = (name) => {
     const path = flag(rest, name);
     return path ? readJson(path) : null;
   };
-  return { script: get('--script'), outline: get('--outline'), cast: get('--cast'), art: get('--art') };
+  const shots = flag(rest, '--shots');
+  return {
+    script: get('--script'), outline: get('--outline'), cast: get('--cast'), art: get('--art'),
+    recipes: shots ? loadShots(shots) : null,
+  };
 }
 
 function main(argv) {
@@ -1458,15 +1710,45 @@ function main(argv) {
     if (!ctx.script) throw new Error('分镜离开剧本没有意义——必须给 --script <script.json>');
     if (!ctx.outline && !ctx.cast) console.error('⚠️ 没给 --outline / --cast，跳过提示词人名检查');
 
+    // 门的结果追加到 .gates.jsonl——validate 与 checkup 都记，
+    // 这样「跑过多少次」这个分母才是全的
+    const logGates = (gates) => {
+      if (rest.includes('--no-log')) return;
+      try {
+        const rows = gateLogEntries(gates, { doc: basename(path), at: new Date().toISOString() });
+        if (rows.length) appendFileSync(GATE_LOG, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
+      } catch { /* 写不进去就算了，日志不能挡住主流程 */ }
+    };
+
     if (cmd === 'checkup') {
       const gates = gateReport(board, ctx);
-      for (const g of gates) console.log(`${g.ok ? '✓' : '✗'} ${g.label}${!g.ok && g.detail ? ` — ${g.detail}` : ''}`);
+      logGates(gates);
+      for (const g of gates) console.log(`${g.ok ? '✓' : '✗'} ${g.label}${g.detail ? ` — ${g.detail}` : ''}`);
       const failedN = gates.filter((g) => !g.ok).length;
       console.log(failedN ? `\n✗ ${failedN} 项未过` : '\n✓ 全部通过');
+      // 建议景别／运镜的偏离只在这里提示，不进门——配方是语汇不是法条，
+      // 而且可选挂载的东西一旦变严就没人挂了
+      if (ctx.recipes) {
+        const drifted = [];
+        for (const ep of board?.episodes ?? []) {
+          for (const seg of ep?.segments ?? []) {
+            (seg?.cuts ?? []).forEach((cut, ci) => {
+              const card = typeof cut?.recipe === 'string' ? ctx.recipes.get(cut.recipe) : null;
+              if (!card) return;
+              const d = recipeDrift(cut, card);
+              if (d.sizes.length || d.cameras.length) {
+                drifted.push(`  ${seg.id}#${ci + 1}「${card.name}」${I18N.zh.recipeDrift(d.sizes, d.cameras)}`);
+              }
+            });
+          }
+        }
+        if (drifted.length) console.error(`\n${I18N.zh.recipeHint(drifted.length)}\n${drifted.join('\n')}`);
+      }
       if (failedN) process.exit(1);
       return;
     }
 
+    logGates(gateReport(board, ctx));
     const problems = validateStoryboard(board, ctx);
     if (problems.length) {
       console.error(`✗ ${problems.length} 处违规：\n`);
@@ -1507,6 +1789,34 @@ function main(argv) {
     const segN = pack.manifest.length;
     console.log(`✓ ${segN} 段投产包 → ${resolve(dir)}/（每段一个文件夹：分镜图 + prompt.md；根部 manifest.json）`);
     if (pack.missingTotal) console.log(`⚠️ 缺 ${pack.missingTotal} 张分镜图，已在 manifest 的 missing 里标注——喂 H3 前先补齐`);
+    return;
+  }
+
+  if (cmd === 'stats') {
+    let entries = [];
+    try {
+      entries = readFileSync(GATE_LOG, 'utf8').split('\n').filter(Boolean).map((l) => {
+        try { return JSON.parse(l); } catch { return null; }
+      }).filter(Boolean);
+    } catch {
+      console.log(`还没有 ${GATE_LOG}——先在这个目录里跑几次 validate 或 checkup，门的失败会累积到这里。`);
+      return;
+    }
+    const allGates = gateReport({ episodes: [] }, {}).map((g) => g.id);
+    const s = summarizeGateLog(entries, allGates);
+    console.log(`跑过 ${s.runs} 次，其中 ${s.cleanRuns} 次全过 · 累计 ${s.fails} 条失败\n`);
+    if (s.ranked.length) {
+      console.log('最常响的门（那条规则模型最常无视，措辞该改）：');
+      for (const r of s.ranked) {
+        console.log(`  ${String(r.count).padStart(3)} 次  ${r.gate.padEnd(16)} ${r.label}`);
+        for (const x of r.samples) console.log(`         ${x.length > 90 ? x.slice(0, 90) + '…' : x}`);
+      }
+      console.log();
+    }
+    if (s.silent.length) {
+      console.log(`从没响过的门（${s.silent.length} / ${allGates.length}）——可能是死门，也可能规则已经被模型内化：`);
+      console.log('  ' + s.silent.join(' / '));
+    }
     return;
   }
 

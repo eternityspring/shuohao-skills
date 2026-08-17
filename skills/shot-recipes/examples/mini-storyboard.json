@@ -1,0 +1,64 @@
+{
+  "_note": "check 的击穿夹具：一处合规 + 三处击穿。结构刻意长得与任何分镜 skill 都不一样——check 深度遍历任意 JSON，只认同时带 recipe 与 frame 的对象，所以它吃任何形状。展示用的完整样片见 vocab-reel.json。",
+  "source": "卡库自测夹具",
+  "scenes": [
+    {
+      "id": "S1",
+      "cuts": [
+        {
+          "recipe": "ots-shot-reverse",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "frame": "medium over-the-shoulder shot, the listener's shoulder and back of the head filling the left foreground, blurred foreground shoulder, the speaker facing the camera in sharp focus, wooden cabin interior, cinematic film still, 16:9"
+        },
+        {
+          "recipe": "ots-shot-reverse",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Push In",
+          "frame": "close over-the-shoulder shot, foreground shoulder on the right, blurred foreground shoulder, the other speaker in sharp focus answering, same wooden cabin interior, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "_defect": "击穿一：缺一条必备短语（有 over-the-shoulder，没有 blurred foreground shoulder）",
+      "cuts": [
+        {
+          "recipe": "ots-shot-reverse",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "frame": "medium over-the-shoulder shot of two people talking across a table, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "_defect": "击穿二：引用了库里没有的配方 id",
+      "cuts": [
+        {
+          "recipe": "no-such-recipe",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "frame": "close-up of a hand on a brass clasp, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "_defect": "击穿三：中文提示词——check 跳过并计数，不误报一片",
+      "cuts": [
+        {
+          "recipe": "talking-head-anchor",
+          "seconds": 6,
+          "size": "medium",
+          "camera": "Static Shot",
+          "frame": "中景，讲述者正对镜头，肩部以上，背景干净"
+        }
+      ]
+    }
+  ]
+}

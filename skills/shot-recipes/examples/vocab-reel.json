@@ -1,0 +1,393 @@
+{
+  "_note": "shot-recipes 自有的语汇样片：一个故事串起全部镜头语汇，2 个人物 / 3 个空间 / 3 件道具。每一格点名它主要演示的那张卡。check 深度遍历任意 JSON，只认同时带 recipe 与 frame 的对象。",
+  "title": "回信",
+  "title_en": "The Letter Back",
+  "era": "1995 年，北方小城",
+  "logline": "儿子回到父亲的老房子，桌上摆着一封信。父子为这封信坐了一下午。最后儿子走了，信留在桌上。",
+  "logline_en": "A son comes back to his father's old flat. A letter sits on the table. They sit with it all afternoon. He leaves; the letter stays.",
+  "cast": [
+    { "id": "S", "zh": "儿子 32", "en": "the son, 32", "look": "short black hair, dark blue work jacket over a grey-green shirt tucked into his trousers" },
+    { "id": "F", "zh": "父亲 60", "en": "the father, 60", "look": "grey-flecked short hair, dark grey cardigan over a buttoned shirt" }
+  ],
+  "props": [
+    { "id": "letter", "zh": "牛皮纸信", "en": "a folded brown paper letter, no readable writing" },
+    { "id": "flask", "zh": "红搪瓷暖水瓶", "en": "a red enamel vacuum flask with a brushed metal cap and a side handle" },
+    { "id": "mug", "zh": "白搪瓷缸", "en": "a white enamel mug with a red rim and a lid" }
+  ],
+  "sections": [
+    {
+      "id": "arrive",
+      "zh": "到达",
+      "en": "Arrival",
+      "subject": "drama",
+      "cuts": [
+        {
+          "id": "R01",
+          "seconds": 5,
+          "size": "extreme-wide",
+          "camera": "Truck Right",
+          "recipe": "drone-shot",
+          "zh": "航拍一片旧居民楼，只有一栋的四层窗口是暖的，那是父亲家。",
+          "frame": "extreme wide aerial view from high above a block of 1990s northern Chinese walk-up flats at dusk, ground detail reads as texture with the grey tiled roofs, the bare courtyard trees and the drying lines flattening into pattern, camera trucking slowly to the right across four identical blocks, one fourth-floor window in the near block glowing warm while every other window stays cold blue, cement grey and pale green throughout, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R02",
+          "seconds": 3,
+          "size": "extreme-wide",
+          "camera": "Static Shot",
+          "recipe": "extreme-wide-size",
+          "zh": "大远景，楼下的院子，儿子只是画面里一个小点。",
+          "frame": "extreme wide shot of the courtyard below the block, the son a single dark blue figure crossing it from the right, figure reduced to a speck against six storeys of balconies, no facial detail at this distance and only the shape of a man carrying nothing, a bicycle shed and two drying lines the only other structures, the courtyard otherwise empty, flat overcast late-afternoon light, cement grey walls, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R03",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Tracking Shot",
+          "recipe": "handheld-follow-in",
+          "zh": "跟着儿子的背影走进楼道，一步一次微沉。",
+          "frame": "medium shot, subject seen from behind as the son climbs the stairwell, his dark blue work jacket and short black hair filling the centre of frame, handheld feel with a slight irregular sway timed to the footsteps, the camera a step and a half behind him for four steps up to the half-landing, chest-high pale green wainscot and cracked white plaster on the left wall, an iron railing on the right, a small window of cold blue daylight at the landing and one bare bulb burning above it, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R04",
+          "seconds": 5,
+          "size": "wide",
+          "camera": "Tracking Shot",
+          "recipe": "steadicam-move",
+          "zh": "稳定器穿过楼道，声控灯一盏盏亮起来，又在身后一盏盏灭掉。",
+          "frame": "wide shot, the camera travelling down the corridor behind the son in one continuous glide, no jitter and no bounce, horizon stays level throughout, the sound-operated lights switching on one bare bulb at a time ahead of him and dying out behind him, pale green wainscot and cracked plaster running past on both sides, a terrazzo floor, the corridor empty apart from him, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R05",
+          "seconds": 4,
+          "size": "wide",
+          "camera": "Tilt Up",
+          "recipe": "low-angle",
+          "zh": "低角度从楼梯井往上，天井的光落下来。",
+          "frame": "wide shot from the bottom of the stairwell shaft, lens below the eye line at knee height tilting up, ceiling or sky fills the top with four flights of railing spiralling toward a pale skylight, the son a small figure at the third-floor turn with one hand on the rail, cold daylight falling down the shaft against one warm bare bulb on the second landing, pale green wainscot and cracked plaster on every flight, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R06",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "frame-within-frame",
+          "zh": "从楼道的窗框里看见楼下的院子。",
+          "frame": "medium shot looking out through the stairwell window, inner opening frames the subject with the single bare courtyard tree standing alone below, dark border around the opening formed by the unlit stairwell wall filling the outer third of the picture on every side, the bicycle shed and the drying lines beyond the tree, the courtyard empty, cold blue daylight outside against the dark interior, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R07",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Tracking Shot",
+          "recipe": "door-threshold",
+          "zh": "推门进屋，门内暖灯，门外楼道冷白。",
+          "frame": "medium shot, the son walking toward and through the flat door, doorway in frame on the right taking a third of the width, dark red painted wood, half open, swinging inward, light differs across the threshold: inside a single bare bulb over the round table pooling warm on the terrazzo floor, outside the corridor lit cold white by one sound-operated bulb, camera follows the subject through the doorway, pale green wainscot on both sides of the door, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R08",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "POV",
+          "recipe": "pov-shot",
+          "zh": "主观视角，他自己的手推开那扇门，屋子在门边露出来。",
+          "frame": "medium shot, first-person view of what the son sees as he pushes the door open, eye height held constant at standing eye height, the observer stays out of frame with no face, shoulder or back of head anywhere in the picture, his own hands entering the lower frame with one palm flat on the dark red door and nothing held, the room opening past the edge of the door: a round wooden table under a single bare bulb, a folded brown paper letter lying on it, chest-high pale green wainscot, cracked white plaster, terrazzo floor, a blue glass window in the back wall giving cold fill, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "sit",
+      "zh": "对坐",
+      "en": "Sitting with it",
+      "subject": "drama",
+      "cuts": [
+        {
+          "id": "R09",
+          "seconds": 4,
+          "size": "wide",
+          "camera": "Static Shot",
+          "recipe": "wide-size",
+          "zh": "全景，两人各据圆桌一头：儿子站在左端，父亲坐在右端。",
+          "frame": "wide shot of the room, the son standing at the left end of the round wooden table in full body in frame facing right, feet planted on the ground on the terrazzo floor, the father seated on a wooden chair at the right end facing him, a folded brown paper letter, a red enamel vacuum flask and a white enamel mug with a red rim on the table between them, chest-high pale green wainscot, cracked white plaster above it, a single bare bulb hanging over the table as the only warm source, a wooden-blade ceiling fan, a wall calendar, a blue glass window in the back wall giving cold fill, a little headroom, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R10",
+          "seconds": 6,
+          "size": "wide",
+          "camera": "Static Shot",
+          "recipe": "two-shot-hold",
+          "zh": "双人同框持镜，儿子也坐下来，整格不切。",
+          "frame": "wide shot, both figures share the frame for the whole cut, the son pulling out the second chair at the left end of the round table and sitting down while the father stays seated at the right end, unbroken take with no cut and no reframe, the letter, the red enamel flask and the white enamel mug holding the middle of the table between them, the single bare bulb overhead as the warm key, the blue glass window behind giving cold fill, pale green wainscot, terrazzo floor, the ceiling fan motionless, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R11",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "ots-shot-reverse",
+          "zh": "过肩，前景肩在左（儿子的肩），父亲开口。",
+          "frame": "medium over-the-shoulder shot, the son's shoulder and the back of his head filling the left foreground in dark blue, blurred foreground shoulder, the father seated on the right in sharp focus facing the camera, speaking with one hand resting flat on the table beside the folded brown paper letter, the red enamel flask and the white enamel mug on the wood between them, pale green wainscot and cracked plaster behind him, the blue glass window at the far left giving cold fill, the bare bulb warm from above, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R12",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "ots-shot-reverse",
+          "zh": "反打，前景肩换到右（父亲的肩），儿子不接话；两人左右位置不变。",
+          "frame": "close over-the-shoulder shot, the reverse of the previous cut: the father's shoulder and the back of his grey-flecked head now filling the right foreground, blurred foreground shoulder, the son still on the left in sharp focus facing the camera, saying nothing with his jaw set, the red enamel flask standing between them and the white enamel mug at the left edge, the same bare bulb now hanging in the upper middle of frame, the blue glass window behind on the right, pale green wainscot across the back wall, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R13",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "reaction-hold",
+          "zh": "反应静持，镜头留在听着的那张脸上。",
+          "frame": "close-up of the father, the listener in frame held still under the same bare bulb as the previous cut, no dialogue in this cut with the mouth closed throughout, one small movement only — the eyes going down to the letter and coming back up, locked-off camera, dark grey cardigan over a buttoned shirt, pale green wainscot behind him, the blue glass window a soft cold shape at the edge of frame, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R14",
+          "seconds": 4,
+          "size": "close",
+          "camera": "Push In",
+          "recipe": "slow-push-face",
+          "zh": "缓推儿子的脸，他下定决心。",
+          "frame": "close-up pushing slowly in on the son until his face fills the frame, eyes in sharp focus and not blinking, the decision arriving without a word, the camera creeping forward at a steady rate with no change of angle, the warm bare bulb from the upper left and cold blue window light grazing his right cheek, the pale green wainscot and cracked plaster dissolving behind him, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R15",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "eye-level-angle",
+          "zh": "平视，两人齐眉，镜头不表态。",
+          "frame": "medium shot of both men seated across the round table, lens level with the eyes of both of them, horizon line at eye height running along the top edge of the pale green wainscot on the back wall, neither man looking up or down at the other, the son on the left and the father on the right, the letter, the red enamel flask and the white enamel mug between them, the bare bulb warm above, the blue glass window cold behind, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R16",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "rule-of-thirds",
+          "zh": "三分构图，父亲偏在右侧，面朝的方向留出空。",
+          "frame": "medium shot of the father alone on the right third of the frame, turned to face left toward the son who stays out of frame, eyes on the upper third line, open space on the side they face with the whole left two-thirds left to bare wall and the cold blue window, the white enamel mug at his elbow, cracked white plaster above the pale green wainscot, the warm bare bulb from above, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R17",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "foreground-occlusion",
+          "zh": "前景遮挡，暖水瓶挡住父亲半张脸。",
+          "frame": "medium shot with the red enamel vacuum flask standing tall in the near foreground, foreground object cuts across the frame edge running out of the bottom of the picture and up through the left third, part of the subject hidden behind it with half of the father's face lost behind the flask body and only one eye and the line of his jaw surviving past it, the flask soft and unfocused while the father stays sharp, the warm bare bulb above and the cold blue window behind, pale green wainscot, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R18",
+          "seconds": 5,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "low-key",
+          "zh": "低调，天暗下来，只剩灯泡那一小圈光。",
+          "frame": "medium shot after dark, most of the frame in shadow with the far wall, the ceiling fan and the window sunk almost to black, a small pool of light on the subject thrown by the single bare bulb over the round table, the two men reduced to the lit half of each face and their hands on the wood, the red enamel flask catching one warm edge, about four stops between the tabletop and the room, every shadow still holding detail and never crushed flat, no filter and no colour cast, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "letter",
+      "zh": "那封信",
+      "en": "The letter",
+      "subject": "drama",
+      "cuts": [
+        {
+          "id": "R19",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "hands-tell",
+          "zh": "只给手，父亲按住信，儿子的手伸过来停住。",
+          "frame": "close-up of the tabletop, hands only, no face visible, the father's hand pressed flat on the folded brown paper letter with the fingers spread, the son's hand entering from the right and stopping short of it with the fingers curled, the white enamel mug with a red rim at the right edge of frame, dark polished wood grain across the bottom, the warm bare bulb from above dropping the rest of the room into soft darkness, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R20",
+          "seconds": 2,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "insert-beat",
+          "zh": "插入重音，信被推过桌面。",
+          "frame": "close-up, action in progress with the folded brown paper letter already sliding across the polished tabletop under the father's fingertips, isolated detail with only the letter, the moving hand and the wood grain inside the frame, the movement caught mid-slide and neither started nor finished inside the cut, the warm bare bulb from above, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R21",
+          "seconds": 3,
+          "size": "extreme-close",
+          "camera": "Static Shot",
+          "recipe": "extreme-close-size",
+          "zh": "大特写，信纸的折痕撑满画框。",
+          "frame": "extreme close-up of the fold in the brown paper letter, one detail fills the entire frame with the crease running diagonally from corner to corner, cut off by the frame edges on all four sides so the sheet keeps no outline of its own, the raised paper fibres along the ridge and the soft shadow in the valley of the fold, no writing anywhere on the paper, the warm bare bulb raking across the crease from above, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R22",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "shallow-focus",
+          "zh": "浅景深，焦平面落在信上，父亲化开。",
+          "frame": "close-up shot near wide open, focus plane on the subject with the folded brown paper letter lying in the middle of the table and only its near half holding sharp, background melts into soft blur with the father behind it dissolved into a dark grey shape and the bare bulb reduced to a round warm bloom, the white enamel mug a soft white smear at the edge of frame, the blue window a cold wash behind, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R23",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "rack-focus-reveal",
+          "zh": "焦点从信转到父亲的脸。",
+          "frame": "medium shot, locked-off, shallow depth of field with the folded brown paper letter large in the near foreground and the father seated behind it, focus shifts from foreground to background as the letter goes soft and the father's face comes up sharp, the pull taking about a second with nothing else moving inside the frame, the warm bare bulb above, the cold blue window at the back, pale green wainscot and cracked plaster, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "object",
+      "zh": "器物",
+      "en": "The objects",
+      "subject": "product",
+      "_note": "产品那一组不搭影棚白底，就拍桌上这两件器物，背景沉进暗处让轮廓读得干净。90 年代的搪瓷器天然无品牌，正好符合产品卡「不许有 logo」的纪律。",
+      "cuts": [
+        {
+          "id": "R24",
+          "seconds": 3,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "hero-drop-in",
+          "zh": "搪瓷缸落到桌面正中，停住。",
+          "frame": "medium shot of the round tabletop, the white enamel mug with a red rim coming down into the centre of the wood, settles into place with one small rattle of its lid, short travel distance of about a hand's width from just above the table, no hands in frame, the room behind sunk dark so the mug silhouette reads clean, the warm bare bulb from above as the key and one cold blue edge from the window on the left, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, clean product still, 16:9"
+        },
+        {
+          "id": "R25",
+          "seconds": 6,
+          "size": "medium",
+          "camera": "Arc Shot",
+          "recipe": "product-orbit",
+          "zh": "绕暖水瓶走半圈，看一遍材质。",
+          "frame": "medium shot orbiting the red enamel vacuum flask standing on the round table, product centered and never leaving the middle of the picture, consistent product silhouette held through the whole arc with the brushed metal cap on top and the side handle swinging around the body, the camera holding a constant distance while the pale green wainscot and the cold blue window slide past behind, the enamel chipped along the base and the glaze catching a soft highlight down one side, the room sunk dark so the outline reads clean, the warm bare bulb above, no filter and no colour cast, shadows keep detail, fine film grain, no logo and no readable text, clean product still, 16:9"
+        },
+        {
+          "id": "R26",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "centered-composition",
+          "zh": "暖水瓶钉在画幅正中。",
+          "frame": "medium shot of the red enamel vacuum flask on the round table, subject dead centre in frame on the vertical middle line, centre stays fixed for the whole cut with a locked-off camera and no drift, the wall behind reading symmetrically to either side of it with the pale green wainscot line crossing at the same height left and right, the room sunk dark, the warm bare bulb above as the key and a cold blue edge from the window, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, clean product still, 16:9"
+        },
+        {
+          "id": "R27",
+          "seconds": 3,
+          "size": "close",
+          "camera": "Static Shot",
+          "recipe": "side-light",
+          "zh": "侧光勾出搪瓷面的釉光与磕碰。",
+          "frame": "close-up of the red enamel vacuum flask and the white enamel mug standing side by side, light comes from one side with a single hard source at ninety degrees from the left picking out the glaze along both bodies, shadow side keeps detail so the right half still shows the chips in the enamel and the worn red rim rather than going black, about three stops between the lit side and the shadow side, the room behind sunk dark, no filter and no colour cast, fine film grain, soft highlights, no logo and no readable text, clean product still, 16:9"
+        },
+        {
+          "id": "R28",
+          "seconds": 5,
+          "size": "medium",
+          "camera": "Push In",
+          "recipe": "dolly-track",
+          "zh": "轨道匀速推近暖水瓶。",
+          "frame": "medium shot moving in on the red enamel vacuum flask on the round table, constant speed from start to finish with no acceleration and no easing at either end, the camera path stays straight in along the centre line of the table with no arc and no drift, the flask growing steadily while the pale green wainscot behind holds its place, the room sunk dark, the warm bare bulb above and a cold blue edge from the window, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, clean product still, 16:9"
+        },
+        {
+          "id": "R29",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "telephoto-compression",
+          "zh": "长焦把桌面与后墙压成一片。",
+          "frame": "medium shot on a long lens from across the room, compressed perspective flattening the tabletop, the flask and the back wall into a single plane, background stacked behind the subject with the white enamel mug, the red enamel vacuum flask, the wall calendar and the blue glass window reading as layers pressed one on top of another, the depth of the room gone, the far wall soft and sunk dark, the warm bare bulb above, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, clean product still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "speak",
+      "zh": "他说",
+      "en": "He tells it",
+      "subject": "vlog",
+      "_note": "1995 年没有口播，所以这一组理解成「一个人对着镜头讲这件事」，像纪录片的采访镜头——它同时是口播机位，也是故事的一部分。",
+      "cuts": [
+        {
+          "id": "R30",
+          "seconds": 6,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "talking-head-anchor",
+          "zh": "儿子坐在圆桌前正对镜头，讲这封信的来历。",
+          "frame": "medium shot of the son seated at the round table, speaker facing the lens straight on, framed centre with his eyes on the upper third line, subtle breathing motion and small natural blinks with nothing else moving, telling where the letter came from, the near edge of the round table crossing the bottom of frame, chest-high pale green wainscot and cracked white plaster behind him, the bare bulb hanging in the upper right as the warm key, the blue glass window in the upper left as cold fill, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R31",
+          "seconds": 4,
+          "size": "medium",
+          "camera": "Static Shot",
+          "recipe": "high-key",
+          "zh": "换到白天窗边，整幅画面明亮均匀。",
+          "frame": "medium shot by the window in daytime, bright even light throughout with the bare bulb switched off and flat daylight flooding in through the blue glass, shadows stay soft and open with barely a stop between the lit side and the shadow side of his face, the son sitting close to the window and facing the lens, the cracked white plaster and the pale green wainscot bright and low in contrast, the white enamel mug on the sill catching the light, no filter and no colour cast, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R32",
+          "seconds": 5,
+          "size": "wide",
+          "camera": "Static Shot",
+          "recipe": "negative-space",
+          "zh": "大片留白，他偏在画面一角，其余是空墙。",
+          "frame": "wide shot with the son small in the bottom left corner sitting on the edge of a wooden chair, large empty area in the frame given to the bare cracked white plaster above the pale green wainscot filling the upper right three quarters, nothing else enters that empty area for the whole cut, the round table just clipped at the bottom edge, flat daylight coming from the blue glass window off frame to the left, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        }
+      ]
+    },
+    {
+      "id": "leave",
+      "zh": "离开",
+      "en": "Leaving",
+      "subject": "drama",
+      "cuts": [
+        {
+          "id": "R33",
+          "seconds": 2,
+          "size": "medium",
+          "camera": "Pan Right",
+          "recipe": "whip-blur-bridge",
+          "zh": "甩出去，屋里，模糊在尾部，方向向右。",
+          "frame": "medium shot inside the room, the son standing up from the table and stepping out of frame to the left, the camera whipping to the right at the end of the shot, motion blur streaks smearing the wainscot, the tabletop and the bare bulb into horizontal lines, direction of travel preserved to the right, the last sharp thing before the blur is the folded brown paper letter left lying on the table, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R34",
+          "seconds": 2,
+          "size": "medium",
+          "camera": "Pan Right",
+          "recipe": "whip-blur-bridge",
+          "zh": "甩进来，楼道，模糊在头部，方向仍然向右。",
+          "frame": "medium shot, the frame settling out of a whip coming from the same side, motion blur streaks still dragging across the opening moment before the image steadies, direction of travel preserved to the right, the corridor outside the flat resolving out of the blur, the son sharp once the frame has settled, walking away from the camera toward the stairwell, cracked plaster above pale green wainscot on both sides, one cold bare bulb overhead, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R35",
+          "seconds": 4,
+          "size": "wide",
+          "camera": "Static Shot",
+          "recipe": "backlit-silhouette",
+          "zh": "逆光，他在楼道尽头只剩一个轮廓。",
+          "frame": "wide shot down the corridor, light source behind the subject with the pale daylight of the stairwell window at the far end, facial features in shadow with nothing left on the face and only a dark contour of shoulders and short hair surviving, the son stopped at the end of the corridor with one hand at his side, about four stops between the outline and the window behind him, the corridor walls falling away into near black on both sides, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        },
+        {
+          "id": "R36",
+          "seconds": 5,
+          "size": "wide",
+          "camera": "Pull Out",
+          "recipe": "pull-out",
+          "zh": "拉远，整栋楼在画面里缩小，四层那扇窗还亮着。",
+          "frame": "medium shot at the start with the son crossing the courtyard away from the camera, the camera moving backward and ending on the whole block in one wide, subject shrinks faster than the background as he recedes while the layers open behind him, depth opens up behind the subject in real recession rather than a flat reduction, at the end six storeys of balconies fill the frame with one fourth-floor window still burning warm and every other window cold, the bicycle shed and the drying lines at the edges, the courtyard otherwise empty, dusk, no filter and no colour cast, shadows keep detail, fine film grain, soft highlights, no logo and no readable text, cinematic film still, 16:9"
+        }
+      ]
+    }
+  ]
+}

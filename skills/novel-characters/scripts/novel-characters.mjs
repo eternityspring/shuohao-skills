@@ -506,7 +506,7 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
   // 这是整批图"像不像同一部片"的底线。每个角色的 image.style 给人读的画风
   // 一句话，模型在第二趟出卡时可能按各自服装/年龄自由发挥（藏青/冷灰/大地色
   // 各写一套），导致同框时像四个画师画的。预设只约束大类别（realistic/ghibli），
-  // 管不到剧内统一，所以用确定性检查兜底：归一化后多于一钟值就报错，并点名
+  // 管不到剧内统一，所以用确定性检查兜底：归一化后多于一种值就报错，并点名
   // 哪些角色用了不同画风。单角色（或未写 image.style 的角色）不触发。
   const styleByChar = [];
   for (const c of characters) {
@@ -523,6 +523,43 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
     if (seen.size > 1) {
       const groups = [...seen.values()].map((names) => names.join('、')).join('  vs  ');
       problems.push(`同剧角色画风不一致（image.style 必须统一）：${groups}`);
+    }
+  }
+
+  // --- 同批角色的提示词不许雷同 ---
+  /*
+   * profile-pass.md 早就写着「同一批角色之间要能区分开，别把长相和声线做成一个样」，
+   * 但没有门。模型第二趟出卡时容易套同一个模板：个体描述写得短，剩下全是真实感样板
+   * 与固定的构图光照尾巴——两个年龄性别接近的角色出来就是同一个人（issue #9）。
+   *
+   * 判定：按词集合算 Jaccard 相似度，超阈值就点名那一对。
+   * 阈值取 0.75，是量出来的不是拍的——自带样例四个角色两两最高 39%，
+   * 而「只改年龄与衣服颜色」的雷同用例是 98%，中间余量极大。
+   *
+   * image.sheet 刻意不查：三分区排版规范是大段固定文本，真实角色之间本来就有 63%
+   * 重合，设门必然误拦——误拦的门比没有门更糟。
+   */
+  const promptSim = (a, b) => {
+    const words = (s) => new Set(String(s ?? '').toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 2));
+    const A = words(a); const B = words(b);
+    if (A.size < 8 || B.size < 8) return 0;
+    const inter = [...A].filter((w) => B.has(w)).length;
+    return inter / new Set([...A, ...B]).size;
+  };
+  const SIM_MAX = 0.75;
+  for (const [field, label] of [['prompt', '出图提示词'], ['voice', '音色提示词']]) {
+    const get = (c) => (field === 'prompt' ? c?.image?.prompt : c?.voice?.prompt);
+    for (let i = 0; i < characters.length; i += 1) {
+      for (let j = i + 1; j < characters.length; j += 1) {
+        const sim = promptSim(get(characters[i]), get(characters[j]));
+        if (sim >= SIM_MAX) {
+          const pct = Math.round(sim * 100);
+          problems.push(
+            `${characters[i]?.name ?? '(无名)'} 与 ${characters[j]?.name ?? '(无名)'} 的${label}雷同 ${pct}%`
+            + `（上限 ${Math.round(SIM_MAX * 100)}%）——同一批角色要能区分开，别套同一个模板`,
+          );
+        }
+      }
     }
   }
 

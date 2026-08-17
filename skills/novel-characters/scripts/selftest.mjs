@@ -33,7 +33,10 @@ import {
 
 const here = dirname(fileURLToPath(import.meta.url));
 const examples = join(here, '..', 'examples');
-const SOURCE = readFileSync(join(examples, '渡口.txt'), 'utf8');
+// chunkText 内部会把 \r\n 规范成 \n 再切块。这里读进来先规范一次，否则 Windows 上
+// （git 默认 core.autocrlf 把 .txt 检出成 CRLF）拿原始文本当比对基准，
+// 「块内容来自原文」「覆盖全文」两条会假失败——issue #8。
+const SOURCE = readFileSync(join(examples, '渡口.txt'), 'utf8').replace(/\r\n/g, '\n');
 const CAST = JSON.parse(readFileSync(join(examples, '渡口-cast.json'), 'utf8')).characters;
 
 let passed = 0;
@@ -770,6 +773,55 @@ eq(validateCast(CAST, SOURCE, 'zh', 'realistic').length, 0, '样例四个角色�
   const ws = clone();
   ws[0].image.style = '  半写实厚涂插画，冷调低饱和民国配色，晨雾柔光  ';
   eq(validateCast(ws, SOURCE, 'zh', 'realistic').length, 0, 'image.style 仅空白差异不算不一致');
+}
+
+// 同批角色的提示词不许雷同——模型套同一个模板，两个年龄性别接近的角色会出成同一个人（issue #9）
+eq(validateCast(CAST, SOURCE, 'zh', 'realistic').length, 0, '样例四个角色的提示词差异够大，不误拦');
+{
+  const dup = clone();
+  dup[1].image.prompt = dup[0].image.prompt;
+  ok(
+    validateCast(dup, SOURCE, 'zh', 'realistic').some((x) => x.includes('出图提示词雷同')),
+    '两个角色的出图提示词完全相同会报错',
+  );
+}
+{
+  // 只改年龄与衣服颜色 —— 这正是实际踩到的形态：个体描述太短，剩下全是样板
+  const near = clone();
+  near[1].image.prompt = near[0].image.prompt
+    .replace(/nineteen-year-old/g, 'twenty-two-year-old')
+    .replace(/navy-blue/g, 'dark green');
+  ok(
+    validateCast(near, SOURCE, 'zh', 'realistic').some((x) => x.includes('出图提示词雷同')),
+    '只改几个词的出图提示词照样被拦',
+  );
+}
+{
+  const dupVoice = clone();
+  dupVoice[1].voice.prompt = dupVoice[0].voice.prompt;
+  ok(
+    validateCast(dupVoice, SOURCE, 'zh', 'realistic').some((x) => x.includes('音色提示词雷同')),
+    '两个角色的音色提示词相同也会报错',
+  );
+}
+{
+  // image.sheet 刻意不查：三分区排版规范是大段固定文本，真实角色之间本来就 63% 重合
+  const dupSheet = clone();
+  dupSheet[1].image.sheet = dupSheet[0].image.sheet;
+  ok(
+    !validateCast(dupSheet, SOURCE, 'zh', 'realistic').some((x) => x.includes('雷同')),
+    'image.sheet 相同不报错——它的固定排版文本占比太高，设门必然误拦',
+  );
+}
+{
+  // 极短提示词不参与判定，否则空字段之间会互相假命中
+  const tiny = clone();
+  tiny[0].image.prompt = 'a man';
+  tiny[1].image.prompt = 'a man';
+  ok(
+    !validateCast(tiny, SOURCE, 'zh', 'realistic').some((x) => x.includes('出图提示词雷同')),
+    '词数太少的提示词不参与雷同判定',
+  );
 }
 
 /* ---------------- 真实感 ---------------- */

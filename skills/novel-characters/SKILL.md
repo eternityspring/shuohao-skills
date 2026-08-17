@@ -1,6 +1,6 @@
 ---
 name: novel-characters
-version: 1.7.0
+version: 1.9.0
 description: |
   从小说或短故事里拆出角色表、人物画像、形象提示词、音色提示词，
   并给每个角色出角色设定图（左半身像 + 右全身三视图 + 细节条），产出 JSON + Markdown + 可交互的 report.html。
@@ -247,7 +247,7 @@ report.html 的样式约定见 `{baseDir}/references/report-style.md`——要�
 node {baseDir}/scripts/selftest.mjs
 ```
 
-307 项断言，不调模型、不花额度，覆盖分块 / 归并 / 合成 / 多语言 / 校验 / 渲染的全部确定性逻辑。改完脚本先跑这个。
+316 项断言，不调模型、不花额度，覆盖分块 / 归并 / 合成 / 多语言 / 校验 / 渲染的全部确定性逻辑。改完脚本先跑这个。
 
 ## 自带样例
 

@@ -18,12 +18,18 @@ import {
   computeStats,
   cutStarts,
   expandScript,
+  GATE_LOG,
+  gateLogEntries,
   gateReport,
+  summarizeGateLog,
   h3AlignmentLine,
   h3CutSlices,
   h3CutTime,
   h3Remainder,
+  loadRecipes,
+  parseCardFields,
   paramsOf,
+  recipeDrift,
   renderHtml,
   renderMarkdown,
   seedFromScript,
@@ -110,7 +116,7 @@ eq(paramsOf({ params: { maxCutSeconds: 4 } }).maxCutSeconds, 4, '分镜上限可
 /* ---------------- 质量门：全绿基线 ---------------- */
 
 ok(gateReport(FIXTURE, CTX).every((g) => g.ok), '样例带全部上游全部门通过');
-eq(gateReport(FIXTURE, CTX).length, 16, '十六道门');
+eq(gateReport(FIXTURE, CTX).length, 17, '十七道门');
 {
   const gates = gateReport(FIXTURE, {});
   ok(gates.every((g) => g.ok), '不带上游也通过（对账门跳过）');
@@ -416,6 +422,166 @@ eq(h3Remainder('a <d>[Chinese] 你好</d> b "营业中" c'), 'a   b   c', 'h3Rem
   ok(!gate(doc, 'style-phrase').ok, '换成吉卜力后写实短语不再达标——换风格是整批换');
 }
 
+/* ---------------- 镜头配方卡库（可选挂载） ---------------- */
+/*
+ * 受限 frontmatter 解析是本 skill 自己写的（刻意不 import shot-recipes.mjs，
+ * 两个 skill 谁没有谁都能跑），所以解析器、加载器、门三层都要有断言。
+ */
+
+{
+  const card = parseCardFields(`---
+id: demo-card
+name: 演示卡
+name_en: Demo Card
+category: dialogue
+cuts: [2, 3]
+sizes: [medium, close]
+cameras: [Static Shot, Push In]
+must_phrases: [over-the-shoulder, blurred foreground shoulder]
+---
+
+## 意图
+
+正文一概不读。
+`);
+  eq(card.id, 'demo-card', '受限解析取到 id');
+  eq(card.name_en, 'Demo Card', '英文卡名也是机器字段');
+  eq(card.cuts.join(','), '2,3', '行内数组里的整数转成数字');
+  eq(card.must_phrases.length, 2, '必备短语按逗号切开');
+  eq(card.category, undefined, '门用不到的字段一概不收');
+  eq(parseCardFields('没有 frontmatter'), null, '没有 frontmatter 就不是卡片');
+  eq(parseCardFields('---\nname: 无 id\n---\n'), null, '没有 id 就不是卡片');
+}
+
+const CARDS = loadRecipes(join(here, '../../shot-recipes/references/cards'));
+ok(CARDS.size >= 17, '卡片目录读得出全库');
+ok(CARDS.get('ots-shot-reverse').must_phrases.includes('over-the-shoulder'), '真实卡片的必备短语读得出来');
+eq(CARDS.get('ots-shot-reverse').cuts[0], 2, '真实卡片的格数下限读得出来');
+eq(loadRecipes(join(here, '../不存在的目录')).size, 0, '目录不存在不崩');
+
+const SHOTS = { ...CTX, recipes: CARDS };
+// 合规引用：两格连排的过肩正反打，必备短语逐条进 frame
+const withRecipe = () => {
+  const doc = clone(FIXTURE);
+  const cuts = doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts;
+  for (const i of [0, 1]) {
+    cuts[i].recipe = 'ots-shot-reverse';
+    cuts[i].frame += ', over-the-shoulder framing with a blurred foreground shoulder';
+  }
+  return doc;
+};
+
+// 跳过条件是「没给 --shots」，不是「没有 cut 带 recipe」
+{
+  const g = gate(FIXTURE, 'shot-recipe');
+  ok(g.ok, '没挂卡库本门通过');
+  ok(g.detail.includes('跳过'), '跳过要明说，不静默');
+}
+{
+  // 夹具本身有两处真实引用（E01-06#1 hands-tell / E01-09#1 insert-beat），
+  // 所以「全篇没引用」这一条要拿剥掉 recipe 的副本来试
+  const bare = JSON.parse(JSON.stringify(FIXTURE));
+  for (const s of bare.episodes.flatMap((e) => e.segments)) for (const c of s.cuts) delete c.recipe;
+  const g = gate(bare, 'shot-recipe', SHOTS);
+  ok(g.ok, '挂了卡库但全篇没引用配方也算通过');
+  eq(g.detail, '本批分镜没有引用配方', '没引用同样明说，不静默');
+}
+{
+  // 样例即规范：夹具里真的挂了配方，而且挂了之后这道门是过的
+  const refs = FIXTURE.episodes.flatMap((e) => e.segments).flatMap((s) => s.cuts).filter((c) => c.recipe);
+  eq(refs.length, 2, '夹具有两处真实配方引用');
+  const g = gate(FIXTURE, 'shot-recipe', SHOTS);
+  ok(g.ok, '夹具的配方引用全过');
+  eq(g.detail, '', '全过不留备注');
+}
+{
+  const g = gate(withRecipe(), 'shot-recipe', SHOTS);
+  ok(g.ok, '合规引用全过');
+  eq(g.detail, '', '全过不留备注');
+}
+// 击穿一：id 不在卡库
+{
+  const doc = withRecipe();
+  doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts[0].recipe = 'no-such-card';
+  const g = gate(doc, 'shot-recipe', SHOTS);
+  ok(!g.ok, '引用不存在的配方被拦');
+  ok(g.detail.includes('E01-05#1') && g.detail.includes('不在配方库里'), '点名到段号#切序');
+}
+// 击穿二：必备短语没进 frame
+{
+  const doc = withRecipe();
+  const cuts = doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts;
+  cuts[1].frame = cuts[1].frame.replace('blurred foreground shoulder', 'soft foreground');
+  const g = gate(doc, 'shot-recipe', SHOTS);
+  ok(!g.ok, '必备短语没进分镜图提示词被拦');
+  ok(g.detail.includes('E01-05#2'), '点名到切');
+  ok(g.detail.includes('过肩正反打') && g.detail.includes('blurred foreground shoulder'), '配方名 + 缺的短语原文——与 shot-recipes 的 check 措辞一致');
+}
+{
+  const doc = withRecipe();
+  const cuts = doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts;
+  cuts[0].frame = cuts[0].frame.replace('over-the-shoulder', 'Over-The-Shoulder');
+  ok(gate(doc, 'shot-recipe', SHOTS).ok, '短语判定两边小写化，大小写不影响');
+}
+// 击穿三：多格配方的连排长度不够
+{
+  const doc = withRecipe();
+  delete doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts[1].recipe;
+  const g = gate(doc, 'shot-recipe', SHOTS);
+  ok(!g.ok, '两格配方只挂一格被拦');
+  ok(g.detail.includes('E01-05#1') && g.detail.includes('要 2 格连排'), '多格配方靠连续同 recipe 的分镜表达');
+}
+// 建议景别／运镜不设门，只在报告里提示偏离
+{
+  const doc = withRecipe();
+  const cut = doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts[0];
+  cut.size = 'extreme-wide';
+  ok(gate(doc, 'shot-recipe', SHOTS).ok, '建议景别偏离不设门——配方是语汇不是法条');
+  const d = recipeDrift(cut, CARDS.get('ots-shot-reverse'));
+  eq(d.sizes.join(' / '), 'medium / close', '偏离时报出建议景别');
+  eq(d.cameras.length, 0, '运镜没偏离就不报');
+  eq(recipeDrift(cut, null).sizes.length, 0, '没有卡片就没有偏离可言');
+}
+// recipe 不进结构检查——照 note 这个可选字段的先例办
+{
+  const doc = clone(FIXTURE);
+  doc.episodes[0].segments[0].cuts[0].recipe = 'no-such-card';
+  eq(validateStoryboard(doc, CTX).length, 0, '不挂卡库时 recipe 不进结构检查');
+}
+
+/* ---------------- 门失败累积 ---------------- */
+
+// 每次 validate 的结果本来跑完就没了，「模型最常违反哪条规则」只能靠印象。
+// 纯函数 + CLI 负责 IO，所以这里不落盘也能验。
+{
+  const gates = [
+    { id: 'cut-length', label: '每个分镜 2–5 秒', ok: false, detail: 'E01-01#1 9 秒' },
+    { id: 'coverage', label: '节拍全覆盖', ok: true, detail: '' },
+    { id: 'segment-cap', label: '每段 ≤ 15 秒', ok: false, detail: 'E01-01 共 21 秒' },
+  ];
+  const rows = gateLogEntries(gates, { doc: 'x.json', at: 'T0' });
+  eq(rows.length, 3, '一次运行记一条 run + 每条失败一行');
+  eq(rows[0].kind, 'run', '第一行是运行记录');
+  eq(rows[0].gates, 3, 'run 记下这次跑了几道门');
+  eq(rows[0].failed, 2, 'run 记下这次挂了几道');
+  ok(rows.slice(1).every((r) => r.kind === 'fail'), '其余都是失败记录');
+  ok(rows.every((r) => r.at === 'T0' && r.doc === 'x.json'), '时间与文档名逐行带上');
+  eq(gateLogEntries([], {}).length, 0, '没有门就不写任何东西');
+
+  const all = ['cut-length', 'coverage', 'segment-cap', 'refs'];
+  const sum = summarizeGateLog([...rows, ...gateLogEntries(gates, { doc: 'y.json', at: 'T1' })], all);
+  eq(sum.runs, 2, '统计跑过几次');
+  eq(sum.cleanRuns, 0, '统计全过几次');
+  eq(sum.fails, 4, '统计累计失败条数');
+  eq(sum.ranked[0].gate, 'cut-length', '按失败次数排序，最常响的在前');
+  eq(sum.ranked[0].count, 2, '同一道门跨运行累加');
+  ok(sum.ranked[0].samples.length >= 1, '带上 detail 样本，供人看有没有该设而没设的门');
+  eq(sum.silent.join(','), 'coverage,refs', '从没响过的门列出来——可能是死门，也可能规则已被内化');
+  eq(summarizeGateLog([], all).silent.length, 4, '零日志时所有门都算没响过');
+  eq(summarizeGateLog([null, 'x', { kind: 'run', failed: 0 }], all).runs, 1, '坏行跳过不炸');
+}
+eq(GATE_LOG, '.gates.jsonl', '日志文件名固定');
+
 /* ---------------- exportPack（H3 投产包） ---------------- */
 
 {
@@ -427,6 +593,7 @@ eq(h3Remainder('a <d>[Chinese] 你好</d> b "营业中" c'), 'a   b   c', 'h3Rem
   ok(p01.content.includes('Picture 1 = f1.png（**首帧**，钉 0.00 秒）'), '明确指定哪个文件是首帧');
   ok(p01.content.includes('Picture 4 = f4.png（钉 10.00 秒）'), '每张图的切点秒数写明');
   ok(p01.content.includes('---\n\nHow the reference pictures align'), '分隔线以下是 h3Prompt 原样（官方英文口径）');
+  ok(!JSON.stringify(pack).includes('recipe'), '配方是创作期语汇，H3 投产包里没有它的位置');
   const m = pack.manifest.find((x) => x.segment === 'E01-01');
   eq(m.pictures.join(','), 'E01-01/f1.png,E01-01/f2.png,E01-01/f3.png,E01-01/f4.png', 'Picture 序 = 文件夹里的 f1..fn');
   eq(m.cutStarts.join(','), '0,3,6,10', 'manifest 带切点时刻表');
@@ -508,11 +675,19 @@ ok(html.includes('分镜节奏带'), '01 分镜节奏带');
 ok(html.includes('分集分镜表'), '02 分集分镜表');
 ok(html.includes('生成批次单'), '03 生成批次单');
 ok(html.includes('配音对齐单'), '04 配音对齐单');
-ok(html.includes('✓ 质量门 16 / 16'), '页眉徽章全绿');
+ok(html.includes('✓ 质量门 17 / 17'), '页眉徽章全绿');
 ok(html.includes('class="rseg"'), '节奏带按段分组（粗分隔）');
 ok(html.includes('#seg-E01-01'), '节奏带段可跳转');
 ok(html.includes('主分镜图 · #1 未生成'), '主分镜图缺图时显示占位不装有');
 ok(html.includes('#2 未生成'), '子分镜图缺图有小占位');
+// 主分镜图区：无图时每切各占一整行提示词卡 + 复制按钮（PR 核心目标）
+{
+  const nCuts = FIXTURE.episodes.reduce((n, e) => n + e.segments.reduce((m, s) => m + s.cuts.length, 0), 0);
+  ok((html.match(/class="frame ph fcell"/g) ?? []).length === nCuts, '无图时每切都是整宽提示词卡');
+  const c0 = FIXTURE.episodes[0].segments[0].cuts;
+  ok(html.includes(`data-copy="${c0[0].frame}"`), '主分镜格复制按钮带该切 frame 原文');
+  ok(html.includes(`data-copy="${c0[1].frame}"`), '子分镜格复制按钮同样带 frame 原文');
+}
 ok(html.includes('class="shots clip"'), '段卡区默认截断');
 ok(html.includes('展开全部段'), '每集自带展开按钮');
 ok(html.includes('H3 提示词'), '段卡带 H3 提示词面板');
@@ -531,6 +706,9 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   ok(withImg.includes('"E01-01/f1.png"'), '主分镜图从段文件夹读');
   ok(withImg.includes('"E01-01/f2.png"'), '子分镜图同样从段文件夹读');
   ok(!withImg.includes('未生成'), '有图时不再显示占位');
+  ok(!withImg.includes('class="frame ph fcell"'), '图出全时不再走整宽提示词卡');
+  ok(withImg.includes('class="subs"'), '图出全时保留子分镜条');
+  ok(withImg.includes('class="subf"'), '子分镜条用小缩略图');
 }
 // 病灶横幅
 {
@@ -557,7 +735,7 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   const en = renderHtml(FIXTURE, { ...CTX, lang: 'en' });
   ok(en.includes('<html lang="en">'), 'en 报告的 html lang 属性跟着语言走');
   ok(en.includes('Export JSON'), 'en 界面：导出按钮英文');
-  ok(en.includes('Quality gates 16 / 16'), 'en 界面：页眉徽章英文');
+  ok(en.includes('Quality gates 17 / 17'), 'en 界面：页眉徽章英文');
   ok(en.includes('Cut rhythm strip'), 'en 界面：节奏带节标题英文');
   ok(en.includes('Segment cards'), 'en 界面：分镜表节标题英文');
   ok(en.includes('Generation batches'), 'en 界面：批次节标题英文');
@@ -598,5 +776,33 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   const gateEn = renderHtml(FIXTURE, { ...CTX, lang: 'en' });
   ok(gateEn.includes('Every cut 2–5s'), 'EN 报告的质量门标签翻译且阈值原样保留');
   ok(!gateEn.includes('每个分镜 2–5 秒'), 'EN 报告不再出现中文门标签');
+  ok(gateEn.includes('no recipe card library mounted'), 'EN 报告的跳过说明也翻译');
+}
+
+/* ---------------- 报告里的「配方」列（偏离只提示，不设门） ---------------- */
+
+{
+  const doc = withRecipe();
+  const rmd = renderMarkdown(doc, SHOTS);
+  ok(rmd.includes('| 配方 |'), 'md 分镜表有配方列');
+  ok(rmd.includes('| 过肩正反打 |'), 'md 显示卡名，没偏离就不带 ≠');
+  ok(renderMarkdown(doc, { ...SHOTS, lang: 'en' }).includes('| Recipe |'), 'en md 的配方列表头英文');
+  const rhtml = renderHtml(doc, SHOTS);
+  ok(rhtml.includes('class="cut-rc">过肩正反打</span>'), 'html 分镜行有配方标签');
+  ok(!rhtml.includes('≠'), '没偏离就不出 ≠ 上标');
+}
+{
+  const doc = withRecipe();
+  doc.episodes[0].segments.find((s) => s.id === 'E01-05').cuts[0].size = 'extreme-wide';
+  const rhtml = renderHtml(doc, SHOTS);
+  ok(rhtml.includes('<sup title="配方建议景别 medium / close——只提示不设门">≠</sup>'), '偏离加 ≠ 上标，建议值写进 title');
+  ok(renderMarkdown(doc, SHOTS).includes('过肩正反打 ≠（配方建议景别 medium / close——只提示不设门）'), 'md 没有 title，建议值直接写进格子');
+  ok(renderHtml(doc, { ...SHOTS, lang: 'en' }).includes('Recipe suggests size medium / close — advisory, not gated'), 'en 报告的偏离提示英文');
+  ok(gate(doc, 'shot-recipe', SHOTS).ok, '偏离在报告里提示，但门照过——门的信用比数量重要');
+}
+{
+  const doc = withRecipe();
+  ok(renderMarkdown(doc, CTX).includes('| ots-shot-reverse |'), '不挂卡库时配方列退回裸 id');
+  ok(renderMarkdown(FIXTURE, CTX).includes('| — |'), '没引用配方的切在配方列写 —');
 }
 console.log(`✓ ${passed} 项自测全部通过`);

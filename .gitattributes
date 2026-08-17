@@ -1,0 +1,8 @@
+# 自测里有断言拿原文当比对基准，而切块函数内部会把 \r\n 规范成 \n。
+# 若 .txt 在 Windows 上被检出成 CRLF，那些断言会假失败（issue #8）。
+# 所有文本一律以 LF 检出，从根上避免这一类问题。
+* text=auto eol=lf
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary

@@ -22,3 +22,10 @@ node_modules/
 
 # 注意：skills/*/examples/ 下的样例必须提交——它们同时是自测夹具。
 # 上面几条都用 / 开头限定在仓库根，不会误伤 examples。
+
+# 画廊报告是渲染产物，每次 render 都能重新生成
+skills/shot-recipes/references/cards/gallery*.html
+.playwright-mcp/
+
+# 门失败累积日志（用户在自己的输出目录里生成的）
+.gates.jsonl

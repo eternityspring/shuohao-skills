@@ -1,6 +1,6 @@
 ---
 name: novel-storyboard
-version: 1.1.0
+version: 1.3.0
 description: |
   给 AI 短剧出分镜：三层结构——段（一次视频生成，≤15 秒）→ 分镜（段内 2–5 秒的剪切，认领剧本节拍）
   → 分镜图（每切一张关键帧：主分镜图钉 0.00 秒，子分镜图钉各自切点）。
@@ -9,7 +9,8 @@ description: |
   references/h3-prompt.md，不依赖外部 skill）。
   产出 storyboard.json + Markdown + 单页评审报告（分镜节奏带 / 分集分镜表 / 生成批次单 /
   配音对齐单，含导出 JSON）。分镜图出图拿场景与角色设定图当参考图走 codex $imagegen（可选）。
-  16 道质量门全部由脚本确定性检查；export 一键导出 H3 投产包（每段提示词 + 按 Picture 序的分镜图清单）。零依赖、零 API key，用当前会话额度。
+  17 道质量门全部由脚本确定性检查（第 17 道 shot-recipe 可选：挂上 shot-recipes 卡库才查，不挂就明说跳过）；
+  export 一键导出 H3 投产包（每段提示词 + 按 Picture 序的分镜图清单）。零依赖、零 API key，用当前会话额度。
   Use when asked to 分镜、出分镜、镜头表、切镜、storyboard for AI short drama。
 allowed-tools:
   - Read
@@ -66,6 +67,7 @@ metadata:
 
 - `--outline` / `--cast`：提示词禁人名检查 + 报告里 C01 显示成人名
 - `--art`：报告里 S01 显示成场景名 + 批次单嵌场景设定图
+- `--shots <卡片目录>`：**可选**挂载 shot-recipes 的镜头配方卡库（指向 `shot-recipes/references/cards`，只接受目录不接受导出的 JSON），开第 17 道 `shot-recipe` 门。没装 shot-recipes 就别给——本 skill 自包含，不依赖它
 
 **一次切几集**：跟剧本的批次走（剧本写到哪就分到哪），默认一批 ≤ 3 集。
 
@@ -94,12 +96,15 @@ node {baseDir}/scripts/novel-storyboard.mjs seed <script.json> --eps 1-3 > <work
 
 ```bash
 node {baseDir}/scripts/novel-storyboard.mjs validate <storyboard.json> \
-  --script <script.json> --outline <outline.json> --cast <cast.json>
+  --script <script.json> --outline <outline.json> --cast <cast.json> \
+  [--shots <shot-recipes/references/cards>]
 ```
 
-16 道质量门全是代码：节拍全覆盖（分镜级，恰好一次、按顺序、连续）、段 0 < 总秒 ≤ 15、**每切 2–5 秒**、台词装得进分镜、每集总时长在剧本目标 ±15% 内、同框 ≤ 3 人（超了必须带拆解说明）、段号 E01-01 格式连号、景别短语在分镜图提示词里、**风格短语统一**（`style` 预设 realistic/ghibli 与角色/场景 skill 同名对齐，同剧分镜图不许画风漂）、运镜用 H3 词表且在自己的 [Shot k] 段落里、**H3 对齐指令由分镜结构推导逐字对账 + 切点时刻逐个对**、**认领台词逐字进 `<d>` 块**、**提示词语言与 promptLang 一致**（双向查：中文写成英文、英文混进中文都拦）、分镜图提示词全英文非空、英文提示词不含角色名（中文 H3 提示词放行）、场次/人物/道具对账剧本。
+17 道质量门全是代码：节拍全覆盖（分镜级，恰好一次、按顺序、连续）、段 0 < 总秒 ≤ 15、**每切 2–5 秒**、台词装得进分镜、每集总时长在剧本目标 ±15% 内、同框 ≤ 3 人（超了必须带拆解说明）、段号 E01-01 格式连号、景别短语在分镜图提示词里、**风格短语统一**（`style` 预设 realistic/ghibli 与角色/场景 skill 同名对齐，同剧分镜图不许画风漂）、运镜用 H3 词表且在自己的 [Shot k] 段落里、**H3 对齐指令由分镜结构推导逐字对账 + 切点时刻逐个对**、**认领台词逐字进 `<d>` 块**、**提示词语言与 promptLang 一致**（双向查：中文写成英文、英文混进中文都拦）、分镜图提示词全英文非空、英文提示词不含角色名（中文 H3 提示词放行）、场次/人物/道具对账剧本、**镜头配方对账**（可选门，见下）。
 
 **有违规逐条修，改完重跑，直到通过。**
+
+**第 17 道 `shot-recipe`（可选挂载）**：给了 `--shots` 才查，不给就明说跳过。cut 上可以写一个可选的 `recipe`（配方卡 id，**cut 级不是 segment 级**，**多格配方靠连续同 id 的分镜表达**，不是数组），门查三条——id 在卡库里、卡片的每条 `must_phrases` 出现在该切的 `frame` 里（两边小写化后 `includes`）、卡片 `cuts` 下限 ≥ 2 时连续同 id 的分镜数不得低于该下限。卡片的**建议景别与运镜不设门**，只在报告的「配方」列和 `checkup` 末尾提示偏离：配方是语汇不是法条，可选挂载的东西一旦变严就没人挂。
 
 ### Step 4 — 出分镜图（可选）
 
@@ -160,13 +165,25 @@ novel-storyboard → storyboard.json （怎么拍：镜头、首帧、批次）
 - 口型/唇形同步暂不管——那是生成管线的事
 - 分镜图不追求一次到位——它是给视频模型的构图锚，构图对、资产对就够，微调交给重生成
 
+## 门失败会累积
+
+`validate` 与 `checkup` 每次都把门的结果追加到**当前目录**的 `.gates.jsonl`；跑 `stats` 汇总：
+
+```bash
+node {baseDir}/scripts/novel-storyboard.mjs stats
+```
+
+回答三件事：**哪道门最常响**（那条规则模型最常无视，该改的是措辞）、**哪道门从没响过**（可能是死门，也可能规则已被内化）、**失败详情长什么样**（反复出现却没有门的那类问题，只能靠人看）。
+
+不想记加 `--no-log`；写不进去静默跳过，不影响校验。
+
 ## 自测
 
 ```bash
 node {baseDir}/scripts/selftest.mjs
 ```
 
-183 项断言，不调模型、不花额度。16 道质量门每一道都有击穿用例。改完脚本先跑这个。
+254 项断言，不调模型、不花额度。17 道质量门每一道都有击穿用例。改完脚本先跑这个。
 
 ## 自带样例
 

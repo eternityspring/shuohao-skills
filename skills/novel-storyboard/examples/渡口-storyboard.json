@@ -328,7 +328,8 @@
               "props": [
                 "P01"
               ],
-              "frame": "close-up of a young woman's hand slamming down on the lid of an old leather suitcase, green-tarnished brass clasp under her fingers, a reaching hand frozen mid-air at the frame edge, cinematic film still, cold gray-green palette, 16:9"
+              "recipe": "hands-tell",
+              "frame": "close-up of a young woman's hand slamming down on the lid of an old leather suitcase, hands only, no face visible, green-tarnished brass clasp under her fingers, a reaching hand frozen mid-air at the frame edge, cinematic film still, cold gray-green palette, 16:9"
             },
             {
               "beats": [
@@ -504,7 +505,8 @@
                 "C02"
               ],
               "props": [],
-              "frame": "close-up of a long dark coat pocket, the fabric tightening as the hidden hand inside clenches, dim cabin light, cinematic film still, cold gray-green palette, 16:9"
+              "recipe": "insert-beat",
+              "frame": "close-up of a long dark coat pocket, an isolated detail with the action in progress — the fabric tightening as the hidden hand inside clenches, dim cabin light, cinematic film still, cold gray-green palette, 16:9"
             },
             {
               "beats": [

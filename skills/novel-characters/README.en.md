@@ -153,7 +153,7 @@ node scripts/novel-characters.mjs slug "胡二爷"                  # filesystem
 SKILL.md                 the workflow the agent reads
 scripts/
   novel-characters.mjs   chunk / merge / assemble / validate / render / slug
-  selftest.mjs           307 assertions, never calls a model
+  selftest.mjs           316 assertions, never calls a model
 references/
   roster-pass.md         pass 1: scanning for characters
   profile-pass.md        pass 2: building a character sheet (8 hard rules)
@@ -175,6 +175,6 @@ In `examples/渡口.txt` the peddler is only ever referred to by a nickname and 
 node scripts/selftest.mjs
 ```
 
-307 assertions across chunking, alias merging, assembly, localization, validation, and rendering. No model calls, no quota, runs in about a second. Run it before anything else after touching the scripts.
+316 assertions across chunking, alias merging, assembly, localization, validation, and rendering. No model calls, no quota, runs in about a second. Run it before anything else after touching the scripts.
 
 **Only tested on macOS with Node 24.** There is no platform-specific code, so Linux and older Node releases should be fine, but that is **unverified**.
