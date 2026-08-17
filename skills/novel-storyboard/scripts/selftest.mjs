@@ -117,6 +117,75 @@ eq(gateReport(FIXTURE, CTX).length, 16, '十六道门');
   ok(gates.find((g) => g.id === 'coverage').detail.includes('跳过'), '跳过要明说，不静默');
 }
 
+/* ---------------- 质量门：refs 反向对账（剧本有角色/道具但分镜零引用）---------------- */
+
+// 构造最小剧本 + 分镜：第 1 场剧本人物是 [老周, 沈知微]，但分镜只引用了老周
+const miniScript = {
+  episodes: [
+    {
+      ep: 1,
+      scenes: [
+        { sceneId: 's1', lighting: '日', characters: ['老周', '沈知微'], props: ['玉佩'], flow: [{ action: '两人对峙' }] },
+      ],
+    },
+  ],
+};
+const miniDoc = {
+  style: 'realistic',
+  promptLang: 'en',
+  episodes: [
+    {
+      ep: 1,
+      segments: [
+        {
+          id: 'E01-01',
+          sceneIndex: 1,
+          h3Prompt: 'I2VA\n[Scene 1]\n[Shot 1] wide shot\n<d>[老周] 让开。</d>\n[Cut 1] 0.0s',
+          cuts: [
+            { seconds: 3, size: 'wide', camera: 'static', characters: ['老周'], props: [], beats: [1, 1], frame: 'cinematic film still of an old dock' },
+          ],
+        },
+      ],
+    },
+  ],
+};
+{
+  const g = gateReport(miniDoc, { script: miniScript });
+  const refsGate = g.find((x) => x.id === 'refs');
+  ok(!refsGate.ok, 'refs 门抓到剧本人物沈知微未被任何分镜引用');
+  ok(refsGate.detail.includes('沈知微'), '报错点名漏引用的角色');
+  ok(refsGate.detail.includes('玉佩'), '剧本道具未被引用也被抓');
+  ok(!refsGate.detail.includes('老周'), '被引用的人物不误报');
+}
+{
+  // 分镜全部引用了剧本人物/道具：不误报
+  const doc2 = structuredClone(miniDoc);
+  doc2.episodes[0].segments[0].cuts[0].characters = ['老周', '沈知微'];
+  doc2.episodes[0].segments[0].cuts[0].props = ['玉佩'];
+  ok(gateReport(doc2, { script: miniScript }).find((x) => x.id === 'refs').ok, '全部引用时不误报');
+}
+
+// 同一场拆成多个分镜段：引用分散在两段里，聚合后不应误报「零引用」
+{
+  const doc3 = structuredClone(miniDoc);
+  // 拆成两个 segment，老周在段1、沈知微在段2，玉佩在段2
+  doc3.episodes[0].segments = [
+    {
+      id: 'E01-01',
+      sceneIndex: 1,
+      h3Prompt: 'I2VA\n[Scene 1]\n[Shot 1] wide shot\n<d>[老周] 让开。</d>\n[Cut 1] 0.0s',
+      cuts: [{ seconds: 3, size: 'wide', camera: 'static', characters: ['老周'], props: [], beats: [1, 1], frame: 'cinematic film still of an old dock' }],
+    },
+    {
+      id: 'E01-02',
+      sceneIndex: 1,
+      h3Prompt: 'I2VA\n[Scene 1]\n[Shot 1] wide shot\n<d>[沈知微] 我不走。</d>\n[Cut 1] 0.0s',
+      cuts: [{ seconds: 3, size: 'wide', camera: 'static', characters: ['沈知微'], props: ['玉佩'], beats: [1, 1], frame: 'cinematic film still of a girl' }],
+    },
+  ];
+  ok(gateReport(doc3, { script: miniScript }).find((x) => x.id === 'refs').ok, '同一场拆多段、引用分散时不误报（聚合正确）');
+}
+
 /* ---------------- 质量门：逐门击穿 ---------------- */
 
 // coverage — 没人认领 / 重复认领 / 区间不合法 / 整场没分镜 / 顺序倒退

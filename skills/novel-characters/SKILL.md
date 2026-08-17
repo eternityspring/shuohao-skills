@@ -155,8 +155,11 @@ node {baseDir}/scripts/novel-characters.mjs merge <workdir> --apply merges.json 
 ```bash
 node {baseDir}/scripts/novel-characters.mjs assemble <workdir> \
   --source <书名> --lang <lang> --style <style> \
+  --id-map <outline.json> \
   --out <输出目录>/<书名>-cast.json
 ```
+
+`--id-map` 给每个角色继承**稳定角色码**（下游 script/storyboard/outline 用 `C01`–`C05` 引用角色）。支持三种来源：**真实 outline.json**（`{characters:[{id,name,aliases}]}`）、角色表数组 `[{id,name}]`、或简单映射 `{"沈知微":"C01"}`。**卡片自带 `id` 也可**；否则必须能从 `--id-map` 查到（按 name/aliases），查不到 assemble 直接报错——**绝不按数组顺序临时编号**。
 
 坏卡会被逐个点名——哪份 `card-*.json` 坏了就只重跑那个角色，其他不用动。
 
@@ -165,10 +168,12 @@ node {baseDir}/scripts/novel-characters.mjs assemble <workdir> \
 ### Step 7 — 校验 ⛔ 不能跳
 
 ```bash
-node {baseDir}/scripts/novel-characters.mjs validate <cast.json> <book.txt>
+node {baseDir}/scripts/novel-characters.mjs validate <cast.json> <book.txt> --lang <lang>
 ```
 
-记得带上 `--lang`（Step 0 定的）。检查：结构、`importance` 枚举、**引文逐字**、**出图提示词不含人名**、**语言分工**（人类字段跟随 `lang`、出图/TTS 提示词永远英文）、以及**非内置语言必须带 `ui`**。
+记得带上 `--lang`（Step 0 定的）。检查：结构、`importance` 枚举、**引文逐字**、**出图提示词不含人名**、**语言分工**（人类字段跟随 `lang`、出图/TTS 提示词永远英文）、**非内置语言必须带 `ui`**，以及**角色码契约**（`id` 必填、格式 `C`+两位数字、不可重复）。
+
+`validate` 还会核对「下游引用了某角色码但 cast 缺失」：优先用 `--refs <file>`，否则**自动扫描** cast 同目录及上层的 outline/script/storyboard 收集被引用角色码。
 
 **有违规就按报错逐条修，改完重跑，直到通过。** 这四类错模型真的会犯——这套检查就是被真实输出打出来的。
 

@@ -6,7 +6,7 @@ description: |
   空景提示词；道具的戏剧功能、状态变体、尺度参照、白底无手提示词。
   产出 art.json + Markdown + 单页评审报告（含导出 JSON）。
   为 AI 生成而设计，不是实拍——环境和道具都是生成资产，交付的是让它们跨集长一样的一致性方案；
-  11 道质量门全部由脚本确定性检查（锚点 3–5、无人无手、白底可抠、尺度短语、提示词英文……）。
+  12 道质量门全部由脚本确定性检查（锚点 3–5、无人无手、白底可抠、尺度短语、提示词英文、状态变体已出图……）。
   有 novel-outline 的 outline.json 就用 seed 预填场景清单与出现集；出图走 codex 内置 $imagegen（可选）。
   零依赖、零 API key，用当前会话额度。
   Use when asked to 场景设定、出场景、环境设定集、场景一致性、scene bibles for AI short drama。
@@ -96,10 +96,13 @@ node {baseDir}/scripts/novel-art.mjs seed <outline.json> > <workdir>/art.json
 ### Step 3 — 校验 ⛔ 不能跳
 
 ```bash
-node {baseDir}/scripts/novel-art.mjs validate <art.json> --cast <cast.json>
+node {baseDir}/scripts/novel-art.mjs validate <art.json> --cast <cast.json> \
+  --prop-states <prop-states.json>
 ```
 
-11 道质量门全是代码。场景 + 共用 7 道：锚点 3–5、光照状态 ≥1、**无人**、提示词全英文、不含角色名（给了 --cast 才查）、变体引用完整、风格与反向词匹配。道具专属 4 道：**状态 ≥1**、**尺度短语写进提示词**、**反向词禁手**、**设定图纯白背景**。
+12 道质量门全是代码。场景 + 共用 7 道：锚点 3–5、光照状态 ≥1、**无人**、提示词全英文、不含角色名（给了 --cast 才查）、变体引用完整、风格与反向词匹配。道具专属 5 道：**状态 ≥1**、**状态变体已出图**（每个状态须声明 `image` 且文件真实存在）、**尺度短语写进提示词**、**反向词禁手**、**设定图纯白背景**。
+
+`--prop-states <file>` 是**独立来源**（如 `{"P01":["合上","打开"],"P02":["正面","底面刻印"]}`），优先级高于 art.json 自报；它必须覆盖全部现有道具（缺项即报错，确实无状态可显式写 `"none"`）。不传则跳过「状态变体是否都出图」反查、并在报告里明说。
 
 **有违规逐条修，改完重跑，直到通过。**
 
@@ -117,7 +120,7 @@ node {baseDir}/scripts/novel-art.mjs validate <art.json> --cast <cast.json>
 ```bash
 cd <输出目录>
 node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --md   > <剧名>-art.md
-node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --html > art-report.html
+node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --html --prop-states <prop-states.json> > art-report.html
 ```
 
 报告界面默认中文；用户要英文界面就加 `--lang en`（或在 art.json 顶层写 `"lang": "en"`，`--lang` 优先）。`render` 自动去 `images/<slug>-sheet.png` 找图（场景和道具都找），**先出图再 render**。报告含：KPI 带、场景清单、场景设定卡、道具清单、道具设定卡（锚点核对表 / 状态变体 / 提示词包全带复制按钮）、质量门面板、导出 JSON（下载的就是 art.json 原样）。
@@ -161,7 +164,7 @@ seed 吃 outline.json（场景部分；道具表大纲里没有，模型从原�
 node {baseDir}/scripts/selftest.mjs
 ```
 
-144 项断言，不调模型、不花额度。11 道质量门每一道都有击穿用例。改完脚本先跑这个。
+163 项断言，不调模型、不花额度。12 道质量门每一道都有击穿用例。改完脚本先跑这个。
 
 ## 自带样例
 
