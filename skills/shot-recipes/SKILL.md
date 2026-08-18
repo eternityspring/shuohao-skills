@@ -13,6 +13,9 @@ description: |
   零依赖、零 API key。
   Use when asked to 镜头语言、运镜、机位角度、构图、光线、景别、分镜怎么切、
   shot vocabulary / camera movement / camera angle for AI video。
+  也适用于固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、
+  多参考图稀释空间等空间锁定问题（此时读取 references/space-consistency-mechanism.md，
+  需要机器可读空间圣经时再读取 references/space-bible-schema.md）。
 allowed-tools:
   - Read
   - Write
@@ -56,6 +59,15 @@ metadata:
 **自包含**：不依赖任何别的 skill——卡片正文不引用外部文档，出图契约 / 写卡纪律 / 报告约定都在自带的 `references/` 里，展示数据与示例帧也是这个 skill 自己的（`examples/vocab-reel.json`）。**整个目录拷走就能用**。用法五讲的与 `novel-storyboard` 的挂载是**可选集成**，不用它照样跑。
 
 **边界（不做的事）**：不写剧本、不排分镜结构、不出视频。它只提供语汇与检查——**配方只描述官方词表描述不了的东西**（前景肩、浅景深、手持质感、材质轮廓、光比差）；景别与运镜词各自已经有门在管，卡片不重复设门。
+
+### 相关：固定场景空间一致性
+
+遇到**固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、多参考图稀释空间**这类问题，本卡库不重复造机制，转而读取：
+
+- `references/space-consistency-mechanism.md` —— 机制总述（单一事实源 + 读取-校验-编译 + 母版优先派生 + 断言式检查 + 常见失败模式）；
+- `references/space-bible-schema.md` —— 需要创建**机器可读空间圣经**（manifest / 尺寸 / 朝向 / 结构 / 锚点 / 机位枚举 / 可见度分级 / 座位拓扑 / blocking_states / occupancy 推导）时再读取。
+
+机制全文不复制进本文件；卡库只负责镜头语汇与检查，空间锁定交给上面的 reference。
 
 ---
 
