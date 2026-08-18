@@ -1,5 +1,7 @@
-# 固定场景空间一致性机制（可复用）
+# 固定场景空间一致性机制（方法论文档）
 
+> **状态说明（读前必看）**：本文是**方法论**，不是本 skill 已发布的 CLI 能力。文中「桥接脚本必须读取-校验-编译-注入」「自动检查」等描述，是**建议机制**；对应的 loader / bridge / 空间检查脚本目前只在 `DJ-demo` 项目内实现为样例，**尚未进入 `shot-recipes` 或任何 skill 的命令行**。本仓库的正式校验器（novel-art / novel-storyboard 等）当前不识别 `spaceId / cameraId / spaceVisibility / blockingState` 等字段。要用，需在自己项目里实现消费方脚本。
+>
 > 适用：任何有「固定场景 + 多集多镜头 + 文生图/图生视频」的短剧。
 > 机器可读的字段契约见同目录 **`space-bible-schema.md`**（本文件只讲机制与纪律，不重复字段定义）。
 
@@ -30,14 +32,18 @@
 ### 3.1 单一事实源 = 空间圣经 JSON
 每个固定场景一份结构化 JSON（尺寸/拓扑/朝向/锚点/blocking）。**它不是给人看的文档，是给脚本读的源。**
 
-### 3.2 读取—校验—编译（fail-closed）
-桥接脚本必须：
+### 3.2 读取—校验—编译（fail-closed，建议机制）
+> 以下是一套**建议的桥接机制**，DJ-demo 项目已按此实现为样例脚本；它不是本 skill 当前发布的 CLI 能力，仅作方法参考。
+
+桥接脚本（建议在具体项目里实现）应：
 1. **读取**：加载空间圣经 JSON（通过 `manifest.json` 映射 `scene_id→文件`）。
 2. **校验**：版本号存在、必填字段齐全、座位编号自洽（P1-P3/S1-S3 都存在）、`blocking_states` 引用的 seat id 都在拓扑内、**真实机位枚举 `camera_positions` 存在且 `cut.cameraId` 必在其中**、双人占同座冲突（同一 blocking_state 内一个座位被多人占用即报错）。校验失败 → 脚本 exit 1，**不生成任何派生文件**。
 3. **编译**：把空间硬约束编译成不同用途的前缀/片段，注入到派生提示词（见第 5 节）。
 4. **版本戳**：派生提示词带 `space_version` 字段，便于过期标记。
 
 ### 3.3 注入依据必须来自源 JSON 的结构化字段，禁止关键词推断
+> 本节描述**建议的数据契约**；`spaceIds / cameraId / spaceVisibility / blockingState / spaceId` 这些字段目前不在本仓库正式 schema 里，需在项目侧自行扩展。
+
 - 错误做法：用 `frame.includes("cabin")` 判断"是不是船舱镜头"——漏检/误检会让约束悄悄丢失（false-green）。
 - 正确做法：权威源里显式声明，bridge 只消费声明：
   - storyboard 每段加 `spaceIds: ["S01"]`；每 cut 加 `cameraId`（真实机位枚举）、`spaceVisibility`、`blockingState`（引用空间圣经 `blocking_states` 的 key）。

@@ -13,9 +13,11 @@ description: |
   零依赖、零 API key。
   Use when asked to 镜头语言、运镜、机位角度、构图、光线、景别、分镜怎么切、
   shot vocabulary / camera movement / camera angle for AI video。
-  也适用于固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、
-  多参考图稀释空间等空间锁定问题（此时读取 references/space-consistency-mechanism.md，
-  需要机器可读空间圣经时再读取 references/space-bible-schema.md）。
+  若遇到固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、
+  多参考图稀释空间等空间锁定问题，本库提供 references/space-consistency-mechanism.md
+  （方法论）与 references/space-bible-schema.md（字段契约）供参考；
+  注意：相关的读取-校验-编译-注入与自动检查脚本目前只在 DJ-demo 项目中落地为样例，
+  尚未作为本 skill 的 CLI 能力提供——本库只给方法，不替你跑机制。
 allowed-tools:
   - Read
   - Write
@@ -60,14 +62,14 @@ metadata:
 
 **边界（不做的事）**：不写剧本、不排分镜结构、不出视频。它只提供语汇与检查——**配方只描述官方词表描述不了的东西**（前景肩、浅景深、手持质感、材质轮廓、光比差）；景别与运镜词各自已经有门在管，卡片不重复设门。
 
-### 相关：固定场景空间一致性
+### 相关：固定场景空间一致性（方法论文档，非本库能力）
 
-遇到**固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、多参考图稀释空间**这类问题，本卡库不重复造机制，转而读取：
+遇到**固定场景空间一致性、场景母版、多镜头座位/房间/船舱结构漂移、多参考图稀释空间**这类问题，可参考：
 
-- `references/space-consistency-mechanism.md` —— 机制总述（单一事实源 + 读取-校验-编译 + 母版优先派生 + 断言式检查 + 常见失败模式）；
-- `references/space-bible-schema.md` —— 需要创建**机器可读空间圣经**（manifest / 尺寸 / 朝向 / 结构 / 锚点 / 机位枚举 / 可见度分级 / 座位拓扑 / blocking_states / occupancy 推导）时再读取。
+- `references/space-consistency-mechanism.md` —— 方法论总述（单一事实源 + 读取-校验-编译思路 + 母版优先派生 + 断言式检查 + 常见失败模式）；
+- `references/space-bible-schema.md` —— 需要设计**机器可读空间圣经**（manifest / 尺寸 / 朝向 / 结构 / 锚点 / 机位枚举 / 可见度分级 / 座位拓扑 / blocking_states / occupancy 推导）时可作字段契约参考。
 
-机制全文不复制进本文件；卡库只负责镜头语汇与检查，空间锁定交给上面的 reference。
+**重要边界**：以上两份是方法论文档与字段规范。把"读取-校验-编译-注入"真正落到 CLI 的桥接脚本、空间检查脚本，目前只在 `DJ-demo` 项目内实现为样例，**不是本 skill 的已发布能力**。本卡库只负责镜头语汇与检查，不替你跑空间锁定机制；要在自己项目里用，需自行实现消费方脚本。
 
 ---
 
