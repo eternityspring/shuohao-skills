@@ -73,6 +73,7 @@ export const CAMERA_MOVES = {
 export const STYLE_PRESETS = {
   realistic: { zh: '半写实电影感', phrase: 'cinematic film still' },
   ghibli: { zh: '吉卜力手绘', phrase: 'hand-painted anime film still' },
+  cel90: { zh: '90 年代赛璐璐', phrase: 'hand-painted 1990s cel anime film still' },
 };
 export const DEFAULT_STYLE = 'realistic';
 

@@ -45,6 +45,18 @@ export const SCENE_STYLE_PRESETS = {
       'people, human figures, characters, crowds, photorealistic, 3d render, hyperrealistic texture, harsh contrast, gritty grime, lens effects, text, watermark, signature',
     tags: ['ghibli-like', 'background art', 'watercolour', 'environment sheet', 'warm palette'],
   },
+
+  cel90: {
+    label: '90 年代赛璐璐冷色调',
+    render:
+      'Hand-painted 1990s anime background art in the manner of a military science-fiction OVA: gouache-on-board painting with crisp ruled perspective lines, cool steel-blue and slate-grey palette, hard-edged shadow blocks, matte surfaces',
+    surface:
+      'Simplified mechanical and architectural detail with clean ruled lines; panels, pipes and consoles as flat colour planes with one hard shadow side and a thin cold highlight; grime suggested by a few dark strokes; no photographic micro-detail, no soft airbrush haze',
+    // 必须禁写实，也禁暖色水彩那套
+    negative:
+      'people, human figures, characters, crowds, photorealistic, 3d render, hyperrealistic texture, warm pastel palette, watercolour softness, lens effects, bloom, text, watermark, signature',
+    tags: ['1990s anime', 'background art', 'gouache', 'cool palette', 'cel shading'],
+  },
 };
 
 export const SUPPORTED_STYLES = Object.keys(SCENE_STYLE_PRESETS);
@@ -211,7 +223,7 @@ export function gateReport(doc, castNames = null) {
     // 风格与反向词匹配 + sheet 带渲染句
     const bansRealism = /photorealistic|3d render/i.test(neg);
     if (style === 'realistic' && bansRealism) bad.style.push(`${label} 禁了 photorealistic`);
-    if (style === 'ghibli' && !bansRealism) bad.style.push(`${label} 没禁 photorealistic`);
+    if (style !== 'realistic' && !bansRealism) bad.style.push(`${label} 没禁 photorealistic`);
     if (thText(s?.image?.sheet) && !s.image.sheet.includes(preset.render)) bad.style.push(`${label} 的 sheet 缺渲染句`);
   }
 
@@ -464,7 +476,7 @@ const I18N = {
     langCode: 'en',
     kicker: 'Art Bible',
     docTitle: (s) => `${s} · Art Bible`,
-    styleLine: (id) => `Style: ${({ realistic: 'semi-realistic painterly', ghibli: 'Ghibli-style animation' })[id] ?? id}`,
+    styleLine: (id) => `Style: ${({ realistic: 'semi-realistic painterly', ghibli: 'Ghibli-style animation', cel90: '1990s cel animation, cool palette' })[id] ?? id}`,
     exportJson: 'Export JSON',
     gates: 'Quality gates',
     gatesPass: 'All passed',

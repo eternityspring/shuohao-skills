@@ -246,6 +246,21 @@ export const STYLE_PRESETS = {
       'photorealistic, 3d render, hyperrealistic skin texture, visible pores, subsurface scattering, harsh contrast, heavy painterly rendering, muddy or desaturated colours, gritty texture overlay, extra fingers, malformed hands, text, watermark, signature, busy or patterned background',
     tags: ['ghibli-like', 'cel shading', 'hand-painted', 'character sheet', 'flat daylight'],
   },
+
+  cel90: {
+    label: { zh: '90 年代赛璐璐冷色调', en: '1990s cel anime, cool palette', ja: '90年代セル画・寒色' },
+    render:
+      'Hand-painted 1990s anime cel illustration in the manner of a late-Showa and early-Heisei OVA: crisp confident ink linework, hard-edged two-tone cel shading with large dark shadow shapes, cool steel-blue and slate-grey palette, matte flat colour fills',
+    // 赛璐璐：硬边两阶阴影、哑光平涂，绝不能有渐变与皮肤质感
+    surface:
+      'Skin as a flat matte tone with one hard-edged shadow shape and a faint cool rim of light — no pores, no gradients, no airbrushed blush; sharp narrow eyes with a single small highlight and flat iris colour; hair as sharp grouped strands with one straight highlight band; clothing in flat colour with hard fold shadows, no fabric weave, no texture; metal and gear as flat planes with a single specular streak',
+    lighting:
+      'Cool overcast key light from the upper left producing one hard cel shadow shape, a thin cold rim light on the far edge, no soft gradients, no ambient occlusion, no cast shadows on the backdrop — the hard two-tone lighting is part of the style and keeps the figures cleanly cut out',
+    // 必须禁写实，也要禁现代柔光数码动画和暖色系
+    negative:
+      'photorealistic, 3d render, hyperrealistic skin texture, visible pores, subsurface scattering, soft airbrushed gradients, warm pastel palette, watercolour softness, glossy modern digital anime look, chibi proportions, extra fingers, malformed hands, text, watermark, signature, busy or patterned background',
+    tags: ['1990s anime', 'cel shading', 'two-tone shadow', 'cool palette', 'character sheet'],
+  },
 };
 
 export const SUPPORTED_STYLES = Object.keys(STYLE_PRESETS);
@@ -729,7 +744,7 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
       if (style === 'realistic' && bansRealism) {
         at(name, 'style=realistic 却在 negativePrompt 里禁 photorealistic／3d render——自相矛盾');
       }
-      if (style === 'ghibli' && !bansRealism) {
+      if (style !== 'realistic' && !bansRealism) {
         at(name, 'style=ghibli 的 negativePrompt 必须禁 photorealistic／3d render');
       }
       const preset = stylePreset(style);
