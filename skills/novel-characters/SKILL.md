@@ -68,7 +68,7 @@ metadata:
 
 ### Step 0.5 — 确定画风
 
-用户可以指定出图风格：**默认 `realistic`**（半写实厚涂），想要动画质感就用 `ghibli`（吉卜力式手绘赛璐璐）。
+用户可以指定出图风格：**默认 `realistic`**（半写实厚涂），想要动画质感就用 `ghibli`（吉卜力式手绘赛璐璐），90 年代 OVA 那种硬阴影冷色调用 `cel90`。
 
 ```bash
 node {baseDir}/scripts/novel-characters.mjs styles   # 打印预设的完整内容
@@ -76,7 +76,7 @@ node {baseDir}/scripts/novel-characters.mjs styles   # 打印预设的完整内�
 
 读 `{baseDir}/references/style-presets.md`。**换风格是整套换**——每个预设自带 render / surface / lighting / negative / tags 五块，整块取用，不要混搭。
 
-最容易搞反的是反向提示词：`realistic` 绝不能禁 `photorealistic`，`ghibli` 必须禁。`validate` 会拦这个。
+最容易搞反的是反向提示词：`realistic` 绝不能禁 `photorealistic`，`ghibli` / `cel90` 必须禁。`validate` 会拦这个。
 
 版面规则（16:9 三区、比例、细节让位）**不随风格变**，变的只有渲染质感。
 

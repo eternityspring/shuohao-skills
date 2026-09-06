@@ -84,6 +84,7 @@ Two things never follow the language: **image and TTS prompts stay English** (th
 | --- | --- |
 | `realistic` | Semi-realistic painterly — skin with pores and texture, fabric with weave and wear. Default |
 | `ghibli` | Ghibli-like hand-painted cel — even ink linework, a single soft shadow tone, flat colour |
+| `cel90` | 1990s cel anime, cool palette — hard two-tone shadows with large dark areas, steel-blue / slate-grey, matte flat fills (OVA look) |
 
 They combine: `--lang ja --style ghibli`.
 

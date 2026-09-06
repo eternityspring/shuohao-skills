@@ -1,6 +1,6 @@
 # 画风预设
 
-出图风格可选。**默认 `realistic`**，想要动画质感就用 `ghibli`。
+出图风格可选。**默认 `realistic`**，想要动画质感就用 `ghibli`，90 年代 OVA 式硬阴影冷色调用 `cel90`。
 
 预设定义在 `scripts/novel-characters.mjs` 的 `STYLE_PRESETS` 里，跑
 `node scripts/novel-characters.mjs styles` 可以把整段打出来直接用。
@@ -9,6 +9,7 @@
 | --- | --- |
 | `realistic` | 半写实厚涂。默认 |
 | `ghibli` | 吉卜力式手绘赛璐璐动画 |
+| `cel90` | 90 年代赛璐璐动画，冷钢蓝灰，硬边两阶阴影 |
 
 ## ⚠️ 换风格是整套换，不是只换一句「画风」
 
@@ -25,7 +26,7 @@
 **两个预设的 `negative` 几乎是相反的**：
 
 - `realistic` **绝不能**禁 `photorealistic` / `3d render`——一边要真实感一边禁真实感是自相矛盾的，它禁的是「假」（塑料皮肤、无毛孔娃娃脸、完全对称的脸）
-- `ghibli` **必须**禁 `photorealistic` / `3d render` / `visible pores`——写实的那些细节在这里全是反效果
+- `ghibli` / `cel90` **必须**禁 `photorealistic` / `3d render` / `visible pores`——写实的那些细节在这里全是反效果
 
 `surface` 同理。写实要毛孔、皮下散射、根根分明的碎发、布料织纹；吉卜力明确要
 **无毛孔、无皮肤纹理、成簇的发丝、平涂无织纹的布料**。把写实那段带进吉卜力，

@@ -90,6 +90,7 @@ node scripts/novel-characters.mjs seed outline.json > seed.json
 | --- | --- |
 | `realistic` | 半写实厚涂，皮肤有毛孔和肌理，布料有织纹磨损。默认 |
 | `ghibli` | 吉卜力式手绘赛璐璐，等宽墨线、单层柔和阴影、平涂色块 |
+| `cel90` | 90 年代赛璐璐冷色调：硬边两阶阴影、大块暗部、钢蓝灰、哑光平涂（OVA 味） |
 
 两个可以组合：`--lang ja --style ghibli`。
 
@@ -147,7 +148,7 @@ node scripts/novel-characters.mjs styles ghibli   # 看某一个的完整内容
 | `evidence` 必须是原文**逐字连续**片段 | 防编造。被「他说」断开的对白不许拼接 |
 | 出图 prompt **不许出现人名** | 图像模型对人名偏见极重，会画成它记忆里的角色 |
 | 字段**语言分工** | 人类字段跟随 `--lang`、出图和 TTS 提示词永远英文，模型会漂 |
-| **风格与反向提示词匹配** | `realistic` 不能禁 `photorealistic`、`ghibli` 必须禁，搞反整批图就废 |
+| **风格与反向提示词匹配** | `realistic` 不能禁 `photorealistic`、`ghibli` / `cel90` 必须禁，搞反整批图就废 |
 | 结构 + 枚举 | `importance` 只能是那四个值 |
 
 这四条不是拍脑袋定的——是模型输出真的违反过、被校验脚本当场抓住才立起来的。
@@ -189,7 +190,7 @@ references/
   schema.md              角色卡结构 + 字段语言归属
   sheet.md               角色设定图出图的 codex 调用契约
   report-style.md        report.html 的设计约定
-  style-presets.md       出图风格预设（realistic / ghibli）
+  style-presets.md       出图风格预设（realistic / ghibli / cel90）
 examples/
   渡口.txt                自带短故事，4 个角色
   渡口-cast.json          产出，同时是校验自检夹具

@@ -66,7 +66,7 @@ metadata:
 2. 小说原文——自己归纳场景清单（主舞台优先，参考 novel-outline 的主场景上限思路：别贪多）
 3. 用户手写的场景清单
 
-画风：**默认 `realistic`**（半写实厚涂），动画质感用 `ghibli`。**跟角色 skill 保持同一档**——角色是吉卜力、场景是半写实，合成的时候没法看。跑 `node {baseDir}/scripts/novel-art.mjs styles` 看预设全文，整块取用不混搭。
+画风：**默认 `realistic`**（半写实厚涂），动画质感用 `ghibli`，90 年代赛璐璐冷色调用 `cel90`。**跟角色 skill 保持同一档**——角色是吉卜力、场景是半写实，合成的时候没法看。跑 `node {baseDir}/scripts/novel-art.mjs styles` 看预设全文，整块取用不混搭。
 
 有 cast.json（novel-characters 的产出）也带上——校验「提示词不含角色名」要用。
 
