@@ -47,7 +47,7 @@ const gate = (d, id, names = null) => gateReport(d, names).find((g) => g.id === 
 /* ---------------- 画风预设 ---------------- */
 
 eq(DEFAULT_STYLE, 'realistic', '默认半写实');
-eq(SUPPORTED_STYLES.join(','), 'realistic,ghibli', '两档画风与 novel-characters 同名对齐');
+eq(SUPPORTED_STYLES.join(','), 'realistic,ghibli,cel90', '两档画风与 novel-characters 同名对齐');
 ok(!/photorealistic/.test(SCENE_STYLE_PRESETS.realistic.negative), 'realistic 不禁 photorealistic');
 ok(/photorealistic/.test(SCENE_STYLE_PRESETS.ghibli.negative), 'ghibli 必须禁 photorealistic');
 ok(/people/.test(SCENE_STYLE_PRESETS.realistic.negative), 'realistic 预设自带禁人');

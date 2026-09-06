@@ -745,7 +745,7 @@ export function validateCast(characters, sourceText, lang = DEFAULT_LANG, style 
         at(name, 'style=realistic 却在 negativePrompt 里禁 photorealistic／3d render——自相矛盾');
       }
       if (style !== 'realistic' && !bansRealism) {
-        at(name, 'style=ghibli 的 negativePrompt 必须禁 photorealistic／3d render');
+        at(name, 'style=${style} 的 negativePrompt 必须禁 photorealistic／3d render');
       }
       const preset = stylePreset(style);
       if (typeof image.sheet === 'string' && !image.sheet.includes(preset.render)) {
