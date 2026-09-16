@@ -78,6 +78,8 @@ node scripts/report-selftest.mjs   # 92 项断言，不起浏览器
 
 ![分镜报告](skills/novel-storyboard/assets/report.webp)
 
+> 💡 **管线入口需要的是文本。** 一本小说是文本，直接丢进去就行。但剧本 PDF、网页上的参考素材、访谈/头脑风暴的录音——这些到不了五段管线，得先变成文本。先用 [cue-omni-reader](https://github.com/sensedeal/cue-skills/tree/main/cue-omni-reader) 收成 Markdown——网页（含页内视频/附件）+ 已授权本地文档/音频/视频，一次可选多个本地文件——再把得到的文本当作小说丢进来。安装一行：`npx skills add sensedeal/cue-skills --skill cue-omni-reader`（MIT；可能计费）。
+
 ## 安装
 
 ```bash

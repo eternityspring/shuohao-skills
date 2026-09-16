@@ -73,6 +73,8 @@ Point it at a novel and you get all five:
 
 ![Storyboard report](skills/novel-storyboard/assets/report.webp)
 
+> 💡 **The pipeline needs text to start.** A novel is already text — point it and go. But a script PDF, web reference material, or an interview/brainstorm recording never reaches the five-stage pipeline until it becomes text. Run those through [cue-omni-reader](https://github.com/sensedeal/cue-skills/tree/main/cue-omni-reader) first to get Markdown — web pages including in-page video/attachments, plus authorized local documents, audio, or video; several local files at once — then treat the resulting text as the novel. Install: `npx skills add sensedeal/cue-skills --skill cue-omni-reader` (MIT; may bill).
+
 ## Install
 
 ```bash
