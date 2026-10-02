@@ -8,6 +8,13 @@ import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const IS_WIN = process.platform === 'win32';
+
+/** 在本机 shell 里跑一条命令：Windows 走 cmd.exe，其余走 sh（与 fillTemplate 的引号约定配套）。 */
+function runShell(cmd, opts = {}) {
+  return spawnSync(cmd, { ...opts, shell: true });
+}
+
 export const SKILL_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** 配置放在 skill 安装目录（install.sh 是软链，重装不会冲掉）；文件名带 .local，不进版本控制。 */
 export const CONFIG_PATH = process.env.CHARACTER_REFS_CONFIG || join(SKILL_DIR, 'config.local.json');   // 环境变量只给自测用
@@ -176,7 +183,7 @@ export async function qwenGenerate(job, cfg) {
 export function findCodex(explicit = null) {
   if (explicit) return explicit;
   const home = homedir();
-  const which = spawnSync('sh', ['-c', 'command -v codex'], { encoding: 'utf8' }).stdout.trim();
+  const which = runShell(IS_WIN ? 'where codex' : 'command -v codex', { encoding: 'utf8' }).stdout.trim();
   const cands = [which, `${home}/.npm-global/bin/codex`, `${home}/.local/bin/codex`, '/opt/homebrew/bin/codex', '/usr/local/bin/codex'];
   let best = null, bestN = -1;
   for (const c of new Set(cands.filter(Boolean))) {
@@ -264,7 +271,9 @@ export async function openaiGenerate(job, cfg) {
 /* ------------------------------------------------------------------ */
 /* 自定义命令模板                                                        */
 /* ------------------------------------------------------------------ */
-const shq = (s) => `'${String(s).replace(/'/g, `'\\''`)}'`;
+const shq = IS_WIN
+  ? (s) => `"${String(s).replace(/"/g, '""')}"`
+  : (s) => `'${String(s).replace(/'/g, `'\\''`)}'`;
 
 /** 占位符：{prompt_file} {negative_file} {prompt} {negative} {refs} {ref1} {ref2} {ref3} {out} {width} {height} {ratio} {seed}，全部已加引号。 */
 export function fillTemplate(cmd, vars) {
@@ -282,7 +291,7 @@ export function customGenerate(job, cfg, name) {
       out: join(dir, 'out.png'), width, height, ratio: job.ratio, seed: job.seed ?? '' };
     writeFileSync(vars.prompt_file, job.text);
     writeFileSync(vars.negative_file, job.negative);
-    const r = spawnSync('sh', ['-c', fillTemplate(spec.cmd, vars)], { encoding: 'utf8', timeout: 20 * 60_000 });
+    const r = runShell(fillTemplate(spec.cmd, vars), { encoding: 'utf8', timeout: 20 * 60_000 });
     if (!existsSync(vars.out)) throw new Error(`自定义模型 ${name} 没有写出 {out}（退出码 ${r.status}）：${(r.stderr ?? '').trim().slice(0, 300)}`);
     return readFileSync(vars.out);
   } finally {
