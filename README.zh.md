@@ -4,7 +4,7 @@
 
 🎬 **[AI视频工作台](https://studio.reelbenchai.com)**
 
-[![ReelBench AI视频工作台英文首屏](assets/reelbench-first-screen-en.png)](https://studio.reelbenchai.com)
+[![ReelBench AI视频工作台中文首屏](assets/reelbench-first-screen.png)](https://studio.reelbenchai.com)
 
 # shuohao-skills
 
