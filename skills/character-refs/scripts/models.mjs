@@ -282,7 +282,10 @@ export function customGenerate(job, cfg, name) {
       out: join(dir, 'out.png'), width, height, ratio: job.ratio, seed: job.seed ?? '' };
     writeFileSync(vars.prompt_file, job.text);
     writeFileSync(vars.negative_file, job.negative);
-    const r = spawnSync('sh', ['-c', fillTemplate(spec.cmd, vars)], { encoding: 'utf8', timeout: 20 * 60_000 });
+    // Windows 兼容：sh 会把未加引号路径里的反斜杠当转义符吃掉（如模板里的脚本路径），
+    // 统一换成正斜杠（Windows 与 node 均接受），macOS/Linux 保持原样。
+    const cmd = process.platform === 'win32' ? spec.cmd.replace(/\\/g, '/') : spec.cmd;
+    const r = spawnSync('sh', ['-c', fillTemplate(cmd, vars)], { encoding: 'utf8', timeout: 20 * 60_000 });
     if (!existsSync(vars.out)) throw new Error(`自定义模型 ${name} 没有写出 {out}（退出码 ${r.status}）：${(r.stderr ?? '').trim().slice(0, 300)}`);
     return readFileSync(vars.out);
   } finally {
