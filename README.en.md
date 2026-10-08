@@ -1,6 +1,10 @@
-[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-f2e3e3?style=for-the-badge&labelColor=f2e3e3&color=b07070)](README.md)
-[![English](https://img.shields.io/badge/English-8b1a1a?style=for-the-badge)](README.en.md)
+[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-f2e3e3?style=for-the-badge&labelColor=f2e3e3&color=b07070)](README.zh.md)
+[![English](https://img.shields.io/badge/English-8b1a1a?style=for-the-badge)](README.md)
 [![Follow on X](https://img.shields.io/badge/Follow-%40eternityspring-b07070?style=for-the-badge&labelColor=8b1a1a&logo=x&logoColor=f2e3e3)](https://x.com/eternityspring)
+
+🎬 **[AI Video Workspace](https://studio.reelbenchai.com)**
+
+[![ReelBench AI Video Workspace](assets/reelbench-first-screen-en.png)](https://studio.reelbenchai.com)
 
 > 👋 **Open to work / collaboration** — I'm between jobs right now, and this repo is what I build in that spare time.
 > Happy to hear from anyone this resonates with. Besides **remote work**, I'm also open to a **half-collaboration**: a few thousand RMB a month for living costs plus a profit share. On-site trips are possible where the work genuinely needs them. What I'm really after is finding people on the same wavelength to build something in this AI wave.
