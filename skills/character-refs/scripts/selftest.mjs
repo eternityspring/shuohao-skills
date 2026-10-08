@@ -9,7 +9,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chunks, crc32, decode, flattenAlpha, pngInfo, readText, solidPng, withText } from './png.mjs';
 import { deflateSync } from 'node:zlib';
 import {
@@ -400,8 +400,8 @@ const serve = (handler) => new Promise((ok_) => {
 
 /* ---------------- 完整流程（自定义命令模板造白底图） ---------------- */
 {
-  const mk = join(TMP, 'mk.mjs');
-  writeFileSync(mk, `import { writeFileSync } from 'node:fs';\nimport { solidPng } from ${JSON.stringify(join(here, 'png.mjs'))};\n` +
+  const mk = join(TMP, 'mk.mjs').replace(/\\/g, '/');   // Windows: sh 里反斜杠是转义符，路径统一用正斜杠
+  writeFileSync(mk, `import { writeFileSync } from 'node:fs';\nimport { solidPng } from ${JSON.stringify(pathToFileURL(join(here, 'png.mjs')).href)};\n` +
     `const [w, h, out] = process.argv.slice(2); writeFileSync(out, solidPng(Math.round(w / 3), Math.round(h / 3)));\n`);
   const env = { ...process.env, CHARACTER_REFS_CONFIG: join(TMP, 'config.json') };
   const run = (...a) => spawnSync(process.execPath, [CLI, ...a], { encoding: 'utf8', env });

@@ -3,11 +3,27 @@
 // 凭据只从环境变量或配置里指定的 .env 文件读，从不打印。
 
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/** 找到可用的 sh 可执行文件。POSIX 上直接用 PATH 里的 sh；Windows 上 sh 通常不在 PATH，
+ *  自动定位 Git for Windows 自带的 sh.exe（通过 where git 或常见安装路径）。 */
+export function findSh() {
+  if (process.platform !== 'win32') return 'sh';
+  const t = spawnSync('sh', ['-c', 'echo ok'], { encoding: 'utf8' });
+  if (t.status === 0) return 'sh';
+  const cands = [];
+  try {
+    const gitBin = dirname(execFileSync('where', ['git'], { encoding: 'utf8' }).split(/\r?\n/)[0].trim());
+    cands.push(join(gitBin, 'sh.exe'));
+    cands.push(join(dirname(gitBin), 'usr', 'bin', 'sh.exe'));
+  } catch { /* where git 失败就走常见路径 */ }
+  cands.push('C:\\Program Files\\Git\\bin\\sh.exe', 'C:\\Program Files (x86)\\Git\\bin\\sh.exe');
+  for (const c of cands) if (existsSync(c)) return c;
+  return 'sh';
+}
 export const SKILL_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** 配置放在 skill 安装目录（install.sh 是软链，重装不会冲掉）；文件名带 .local，不进版本控制。 */
 export const CONFIG_PATH = process.env.CHARACTER_REFS_CONFIG || join(SKILL_DIR, 'config.local.json');   // 环境变量只给自测用
@@ -176,7 +192,7 @@ export async function qwenGenerate(job, cfg) {
 export function findCodex(explicit = null) {
   if (explicit) return explicit;
   const home = homedir();
-  const which = spawnSync('sh', ['-c', 'command -v codex'], { encoding: 'utf8' }).stdout.trim();
+  const which = spawnSync(findSh(), ['-c', 'command -v codex'], { encoding: 'utf8' }).stdout.trim();
   const cands = [which, `${home}/.npm-global/bin/codex`, `${home}/.local/bin/codex`, '/opt/homebrew/bin/codex', '/usr/local/bin/codex'];
   let best = null, bestN = -1;
   for (const c of new Set(cands.filter(Boolean))) {
@@ -277,12 +293,13 @@ export function customGenerate(job, cfg, name) {
   const dir = mkdtempSync(join(tmpdir(), 'character-refs-'));
   try {
     const [width, height] = QWEN_SIZES[job.ratio];
-    const vars = { prompt_file: join(dir, 'prompt.txt'), negative_file: join(dir, 'negative.txt'), prompt: job.text, negative: job.negative,
-      refs: job.refs.map((f) => resolve(f)), ref1: job.refs[0] ?? '', ref2: job.refs[1] ?? '', ref3: job.refs[2] ?? '',
-      out: join(dir, 'out.png'), width, height, ratio: job.ratio, seed: job.seed ?? '' };
+    const fwd = (p) => (typeof p === 'string' ? p.replace(/\\/g, '/') : p);   // sh 里反斜杠是转义符，路径统一用正斜杠
+    const vars = { prompt_file: fwd(join(dir, 'prompt.txt')), negative_file: fwd(join(dir, 'negative.txt')), prompt: job.text, negative: job.negative,
+      refs: job.refs.map((f) => fwd(resolve(f))), ref1: fwd(job.refs[0] ?? ''), ref2: fwd(job.refs[1] ?? ''), ref3: fwd(job.refs[2] ?? ''),
+      out: fwd(join(dir, 'out.png')), width, height, ratio: job.ratio, seed: job.seed ?? '' };
     writeFileSync(vars.prompt_file, job.text);
     writeFileSync(vars.negative_file, job.negative);
-    const r = spawnSync('sh', ['-c', fillTemplate(spec.cmd, vars)], { encoding: 'utf8', timeout: 20 * 60_000 });
+    const r = spawnSync(findSh(), ['-c', fillTemplate(spec.cmd, vars)], { encoding: 'utf8', timeout: 20 * 60_000 });
     if (!existsSync(vars.out)) throw new Error(`自定义模型 ${name} 没有写出 {out}（退出码 ${r.status}）：${(r.stderr ?? '').trim().slice(0, 300)}`);
     return readFileSync(vars.out);
   } finally {
