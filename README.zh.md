@@ -8,7 +8,7 @@
 
 # shuohao-skills
 
-**AI 短剧制作的 skill 集合**：从一本小说到直接喂生成管线的制作素材——拆角色、排大纲、出场景与道具设定、写剧本、切分镜。给 AI 编码 agent 用，**Claude Code 和 codex 都能跑**。
+**面向各类 Agent 的 AI 短剧制作 skill 集合**：从一本小说到直接交给生成管线的制作素材——拆角色、排大纲、出场景与道具设定、写剧本、切分镜。每个 skill 都是自包含目录，任何能够读取 `SKILL.md` 并执行随附脚本的 Agent 都可以使用；Claude Code 和 Codex 只是其中两个运行示例，并非使用前提。
 
 整条管线长这样——**改编大纲收敛结构，剧本、场景、角色三者同步迭代，分镜只做输出不做新决定**：
 
@@ -93,7 +93,7 @@ cd shuohao-skills
 ./scripts/install.sh
 ```
 
-自动检测本机装了 Claude Code 还是 codex，把所有 skill **软链**过去——`git pull` 之后立刻生效，不用重装。
+安装脚本目前会检测 Claude Code 和 Codex，并为它们创建**软链接**——`git pull` 之后立刻生效，不需要重新安装。Skill 本身不依赖这两个运行时；其他 Agent 可以把对应 skill 目录复制或链接到自己的 skill 目录，也可以直接加载其中的 `SKILL.md`。
 
 ```bash
 ./scripts/install.sh novel-characters   # 只装某一个
@@ -104,6 +104,8 @@ cd shuohao-skills
 不想用脚本就自己链：
 
 ```bash
+AGENT_SKILLS_DIR=/path/to/your-agent/skills
+ln -s "$PWD/skills/novel-characters" "$AGENT_SKILLS_DIR/novel-characters"
 ln -s "$PWD/skills/novel-characters" ~/.claude/skills/novel-characters
 ln -s "$PWD/skills/novel-characters" ~/.codex/skills/novel-characters
 ```
@@ -114,7 +116,7 @@ ln -s "$PWD/skills/novel-characters" ~/.codex/skills/novel-characters
 | --- | --- | --- |
 | **Node** | 必需 | ≥ 18。skill 的脚本只用标准库，**没有 npm 依赖，不需要 install** |
 | **模型额度** | 必需 | 用你当前会话的额度，**不需要任何 API key** |
-| **codex CLI** | 可选 | 只是一个能跑这些 skill 的运行环境，跟 Claude Code 等价。五段管线 skill **不出图**，不需要它的任何本机能力 |
+| **Agent 运行时** | 必需 | 能够读取 `SKILL.md` 并执行随附的 Node.js 脚本。Claude Code、Codex 以及其他兼容 Agent 均可 |
 | **出图模型** | 只有 character-refs 需要 | 四选一：自己的 ComfyUI（Qwen Image）、本机 codex 内置出图（吃 ChatGPT 订阅额度）、OpenAI API key（GPT Image 2）、自定义命令。第一次使用时选 |
 
 ## 仓库约定
