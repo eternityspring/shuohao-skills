@@ -798,6 +798,28 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   ok(withImg.includes('class="subs"'), '图出全时保留子分镜条');
   ok(withImg.includes('class="subf"'), '子分镜条用小缩略图');
 }
+// 分镜图位跟着画幅走：竖屏剧改 9:16，横屏输出一个字节都不变
+{
+  const styleOf = (h) => h.match(/<style>[\s\S]*?<\/style>/)[0];
+  ok(html.includes('.frame{width:100%;aspect-ratio:16/9;') && !html.includes('aspect-ratio:9/16'), '默认横屏：分镜图位 16:9，不插竖屏样式');
+  const land = clone(FIXTURE);
+  land._meta = { orientation: 'landscape' };
+  ok(styleOf(renderHtml(land, CTX)) === styleOf(html), '明写横屏与不写一样，样式逐字节不变');
+  const port = clone(FIXTURE);
+  port._meta = { orientation: 'portrait' };
+  const ph = renderHtml(port, { ...CTX, image: (kind, rel) => rel });
+  ok(ph.includes('.frame,.subf{aspect-ratio:9/16}'), '_meta.orientation=portrait：主图与子分镜条图位改 9:16');
+  ok(ph.includes('img.frame{width:min(100%,300px)'), '竖屏主图收窄，不撑成一屏多高');
+  ok(ph.includes('.bimg{width:100%;aspect-ratio:16/9;'), '场景设定图仍是 16:9，不跟剧的画幅走');
+  port._meta = { orientation: 'V' };
+  ok(renderHtml(port, CTX).includes('aspect-ratio:9/16'), '_meta.orientation 的简写 v 与应用一样认成竖屏');
+  // 样例的 frame 本身不带画幅标签（画幅由下游定），这里照下游应用的写法在末尾贴 `, 9:16`
+  const tail = clone(FIXTURE);
+  for (const ep of tail.episodes) for (const s of ep.segments) for (const c of s.cuts) c.frame = `${c.frame ?? ''}, 9:16`;
+  ok(renderHtml(tail, CTX).includes('aspect-ratio:9/16'), '没记 _meta 时按 frame 末尾的 9:16 标签认竖屏');
+  tail._meta = { orientation: 'landscape' };
+  ok(!renderHtml(tail, CTX).includes('aspect-ratio:9/16'), '_meta.orientation 比 frame 标签优先');
+}
 // 病灶横幅
 {
   const doc = clone(FIXTURE);

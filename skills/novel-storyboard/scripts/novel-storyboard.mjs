@@ -1272,6 +1272,44 @@ function embedDoc(doc) {
   return JSON.stringify(doc).replace(/</g, '\\u003c');
 }
 
+/*
+ * 分镜图位的画幅。图在下游出，画幅也由下游按这部剧定（竖屏 9:16 / 横屏 16:9，见
+ * references/frame.md）；图位要是写死 16:9，竖图就被 object-fit:cover 裁成一条横带——
+ * 看报告的人会以为构图出了问题。认的顺序与下游应用一致：
+ *   1. 顶层 `_meta.orientation`——下游应用在切镜那一刻明写的，最权威；
+ *   2. 每切 frame 末尾的画幅标签（下游贴的 `…, 9:16`），数多的那个——老分镜没记 _meta 也认得出；
+ *   3. 都认不出就是 16:9，这个 skill 的原生画幅。
+ * 只管分镜图：批次卡里的场景设定图（`.bimg`）一律按 16:9 出，不跟剧的画幅走。
+ */
+const ORIENTATION_TAG = {
+  portrait: '9:16', vertical: '9:16', v: '9:16', 竖: '9:16', 竖屏: '9:16', '9:16': '9:16',
+  landscape: '16:9', horizontal: '16:9', h: '16:9', 横: '16:9', 横屏: '16:9', '16:9': '16:9',
+};
+
+function boardAspect(board) {
+  const declared = ORIENTATION_TAG[String(board?._meta?.orientation ?? '').trim().toLowerCase()];
+  if (declared) return declared;
+  let portrait = 0;
+  let landscape = 0;
+  for (const ep of board?.episodes ?? []) {
+    for (const seg of ep.segments ?? []) {
+      for (const cut of seg.cuts ?? []) {
+        const f = String(cut.frame ?? '');
+        if (/(^|[\s,])9:16\s*$/.test(f)) portrait++;
+        else if (/(^|[\s,])16:9\s*$/.test(f)) landscape++;
+      }
+    }
+  }
+  return portrait > landscape ? '9:16' : '16:9';
+}
+
+// 竖屏才追加；横屏一个字节都不多，报告与改动前逐字节一致。主图收窄居中——
+// 整卡宽的 9:16 一张就有一屏多高，子分镜条四格竖缩略图照旧铺满
+const PORTRAIT_FRAME_CSS = `
+/* 竖屏 9:16：分镜图位跟着画幅改竖（场景设定图 .bimg 仍是 16:9） */
+.frame,.subf{aspect-ratio:9/16}
+img.frame{width:min(100%,300px);margin:0 auto}`;
+
 export function renderHtml(board, ctx = {}) {
   const lang = ctx.lang ?? board?.lang ?? 'zh';
   const t = tOf(lang);
@@ -1283,6 +1321,8 @@ export function renderHtml(board, ctx = {}) {
   const eps = board.episodes;
   const params = stats.params;
   const fmtMin = t.fmtMin;
+  // 分镜图位跟着这部剧的画幅走（见 boardAspect）；横屏不插任何东西
+  const frameAspectCss = boardAspect(board) === '9:16' ? PORTRAIT_FRAME_CSS : '';
 
   const SIZE_ALPHA = { 'extreme-wide': 0.25, wide: 0.4, medium: 0.58, close: 0.78, 'extreme-close': 1 };
 
@@ -1592,7 +1632,7 @@ a.chip:hover{border-color:var(--seal);color:var(--seal)}
 .ptab{font:500 11px/1 var(--sans);letter-spacing:.08em;color:var(--ink-3);background:none;border:0;
   border-bottom:1.5px solid transparent;padding:4px 6px;cursor:pointer}
 .ptab.on{color:var(--ink);border-bottom-color:var(--seal)}
-.ptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.ptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}${frameAspectCss}
 
 /* 03 generation batches */
 .batches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
