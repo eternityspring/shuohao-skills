@@ -127,6 +127,27 @@ const ROUND = { name: '红木圆桌', alt: 'round table', plan: [0.3, 0.3, 0.7, 
   eq(lines.length, FIXTURE.scenes.length, '每一场一句');
 }
 
+/* ---------------- Vietnamese live blocking ---------------- */
+{
+  const a = { id: 'A', name: 'An', present: true, item: 'bàn dài', side: 'east', along: 0.1, posture: 'stand', facing: 'northwest' };
+  const b = { ...a, id: 'B', name: 'Bình', along: 0.2, posture: 'sit' };
+  const scene = { places: [a, b], extras: 2, extrasWhere: 'cửa ra vào' };
+  const original = JSON.stringify(scene);
+  eq(placeSentence(a, 'vi'), 'An đứng ở phía đông của bàn dài, gần đầu phía bắc, hướng về tây bắc', 'Vietnamese posture, side and diagonal facing');
+  eq(placeSentence({ ...b, side: 'on', item: 'ghế', facing: 'south' }, 'vi'), 'Bình ngồi trên ghế, hướng về nam', 'Vietnamese seated position');
+  ok(stagingBlocking(scene, 'vi').includes('ngay phía nam của An'), 'Vietnamese neighbours keep spatial order');
+  ok(stagingBlocking(scene, 'vi').endsWith('Có thêm 2 diễn viên quần chúng ở cửa ra vào, chỉ làm nền.'), 'Vietnamese extras include count and location');
+  ok(stagingBlocking({ ...scene, extras: 0 }, 'vi').endsWith('Các chỗ còn lại đều trống, không có người khác.'), 'Vietnamese empty seats');
+  eq(placeSentence({ ...a, present: false }, 'vi'), null, 'Absent people have no Vietnamese blocking sentence');
+  const item = { name: 'bàn dài', plan: [0.2, 0.2, 0.7, 0.7], on: false };
+  const problems = sceneProblems({ ...scene, extrasWhere: '' }, { items: [item] }, 'vi');
+  ok(problems.some(p => p.gate === 'extras' && p.text === 'Có 2 diễn viên quần chúng nhưng chưa ghi vị trí'), 'Vietnamese live extras diagnostic');
+  ok(problems.some(p => p.gate === 'no-overlap' && p.text.includes('An và Bình trùng vị trí')), 'Vietnamese live overlap diagnostic');
+  eq(JSON.stringify(scene), original, 'Localization leaves scene data unchanged');
+  const embedded = (new Function('return (' + stagingCore.toString() + ')()'))();
+  eq(embedded.stagingBlocking(scene, 'vi'), stagingBlocking(scene, 'vi'), 'Embedded browser core matches the CLI in Vietnamese');
+}
+
 /* ---------------- seed ---------------- */
 
 {

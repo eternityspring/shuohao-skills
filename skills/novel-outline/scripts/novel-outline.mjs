@@ -269,7 +269,7 @@ export function gateReport(outline) {
   add(
     'major-early',
     '大爆点不在最后一集才首次出现',
-    majors.length > 0 && Math.min(...majors) < total,
+    majors.length > 0 && (total === 1 || Math.min(...majors) < total),
     majors.length ? `最早在第 ${Math.min(...majors)} 集` : '没有 major 爽点',
   );
 
@@ -1537,9 +1537,13 @@ if (epsMore) {
   });
 }
 
-// export: the report carries outline.json verbatim; the download is byte-identical
+// Export through the active locale when available; standalone reports retain the source JSON.
 document.querySelector('.expo').addEventListener('click', (e) => {
   const btn = e.currentTarget;
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(JSON.parse(document.getElementById('outline-data').textContent), btn.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(
     new Blob([document.getElementById('outline-data').textContent], { type: 'application/json' }),
   );

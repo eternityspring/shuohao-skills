@@ -948,9 +948,13 @@ document.addEventListener('click', async (e) => {
   setTimeout(() => { btn.textContent = label; delete btn.dataset.done; }, 1600);
 });
 
-// export: the report carries the full script.json; the download is it verbatim
+// Export through the active locale when available; standalone reports retain the source JSON.
 document.querySelector('.expo').addEventListener('click', (e) => {
   const btn = e.currentTarget;
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(JSON.parse(document.getElementById('script-data').textContent), btn.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(
     new Blob([document.getElementById('script-data').textContent], { type: 'application/json' }),
   );

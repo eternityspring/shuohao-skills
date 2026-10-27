@@ -39,6 +39,7 @@ assert.equal(vi.arbitrary.nil,null);
 assert.equal(vi.arbitrary.flag,false);
 assert.equal(vi.arbitrary.numeric,2);
 assert.equal(vi.arbitrary.custom,'Bến đò trong sương');
+
 assert.equal(JSON.stringify(source),original);
 vi.locations[0].items[0].plan[0]=9;
 assert.equal(source.locations[0].items[0].plan[0],.1,'Export owns its arrays');

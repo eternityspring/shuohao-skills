@@ -541,6 +541,9 @@ export function gateReport(board, ctx = {}) {
   let recipeRefs = 0;
   // 提示词语言：默认英文——官方规范的口径（台词仍在 <d> 里保留原文）；'zh' 可切整条中文
   const promptLang = board?.promptLang ?? 'en';
+  const proseLang = ['vi','en'].includes(board?.lang) ? board.lang : 'zh';
+  const sizeLabel = size => proseLang === 'vi' ? ({'extreme-wide':'đại toàn cảnh',wide:'toàn cảnh',medium:'trung cảnh',close:'cận cảnh','extreme-close':'đặc tả'})[size] : proseLang === 'en' ? SHOT_SIZES[size]?.phrase : SHOT_SIZES[size]?.zh;
+  const validProse = text => proseLang === 'zh' ? CJK.test(text) : !CJK.test(text) && /[A-Za-zÀ-ỹ]/u.test(text);
 
   // 视频提示词禁人名：outline 的名字 + cast 的名字与别名。这是 H3 与 Seedance 官方规范的要求，
   // 不跟着语言变；分镜图提示词反过来直呼其名——名字指向挂上去的那张设定图
@@ -625,8 +628,8 @@ export function gateReport(board, ctx = {}) {
         }
         if (!SHOT_SIZES[cut?.size]) {
           bad.size.push(`${cid} 景别「${cut?.size}」不在枚举里`);
-        } else if (!String(cut?.frame ?? '').includes(SHOT_SIZES[cut.size].zh)) {
-          bad.size.push(`${cid} 分镜图提示词缺景别词「${SHOT_SIZES[cut.size].zh}」`);
+        } else if (!String(cut?.frame ?? '').toLowerCase().includes(sizeLabel(cut.size))) {
+          bad.size.push(`${cid} 分镜图提示词缺景别词「${sizeLabel(cut.size)}」`);
         }
         if (!CAMERA_MOVES[cut?.camera]) {
           bad.camera.push(`${cid} 运镜「${cut?.camera}」不在 H3 词表里`);
@@ -641,7 +644,7 @@ export function gateReport(board, ctx = {}) {
         }
         const frame = String(cut?.frame ?? '');
         if (!frame.trim()) bad.frame.push(`${cid} 的分镜图提示词为空`);
-        else if (!CJK.test(frame)) bad.frame.push(`${cid} 的分镜图提示词不是中文`);
+        else if (!validProse(frame)) bad.frame.push(`${cid} frame language must match ${proseLang}`);
 
         // 构图量化字段：每镜六项齐全，稳定性在枚举里
         const missing = COMPOSITION_FIELDS.filter((f) => !String(cut?.[f] ?? '').trim());
@@ -652,7 +655,7 @@ export function gateReport(board, ctx = {}) {
         const shot = String(cut?.shot ?? '');
         if (!shot.trim()) bad.sd.push(`${cid} 缺 shot（Seedance 镜头正文）`);
         else {
-          if (!CJK.test(shot)) bad.sd.push(`${cid} 的 shot 不是中文`);
+          if (!validProse(shot)) bad.sd.push(`${cid} shot language must match ${proseLang}`);
           for (const [re, what] of SEEDANCE_FORBIDDEN) {
             if (re.test(shot)) bad.sd.push(`${cid} 的 shot 写了${what}`);
           }
@@ -1826,6 +1829,10 @@ document.addEventListener('click', async (e) => {
 // 导出：报告自己带着完整的 storyboard.json，下载的是它原样
 document.querySelector('.expo').addEventListener('click', (e) => {
   const btn = e.currentTarget;
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(JSON.parse(document.getElementById('storyboard-data').textContent), btn.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(
     new Blob([document.getElementById('storyboard-data').textContent], { type: 'application/json' }),
   );

@@ -52,6 +52,7 @@ export function stagingCore() {
   function alongWord(side, along, lang) {
     if (side === 'on') return '';
     const third = along < 1 / 3 ? 0 : along > 2 / 3 ? 2 : 1;
+    if (lang === 'vi') return (runsNorthSouth(side) ? ['gần đầu phía bắc', 'ở giữa', 'gần đầu phía nam'] : ['gần đầu phía tây', '', 'gần đầu phía đông'])[third];
     if (runsNorthSouth(side)) {
       return lang === 'zh' ? ['靠北', '中段', '靠南'][third] : ['toward the north end', 'in the middle', 'toward the south end'][third];
     }
@@ -72,6 +73,12 @@ export function stagingCore() {
         ? `${thing}上`
         : `${thing}${ZH_SIDE[p.side]}${alongWord(p.side, p.along, 'zh')}${after ? `、${after.name}${step === 'south' ? '南' : '东'}侧` : ''}`;
       return `${p.name}${verb}${where}，面朝${ZH_FACING[p.facing] ?? p.facing}`;
+    }
+    if (lang === 'vi') {
+      const directions = { north: 'bắc', northeast: 'đông bắc', east: 'đông', southeast: 'đông nam', south: 'nam', southwest: 'tây nam', west: 'tây', northwest: 'tây bắc' };
+      const verb = p.posture === 'sit' ? 'ngồi' : 'đứng';
+      const where = p.side === 'on' ? `trên ${thing}` : [`ở phía ${directions[p.side] ?? p.side} của ${thing}`, alongWord(p.side, p.along, 'vi'), after ? `ngay phía ${directions[step]} của ${after.name}` : ''].filter(Boolean).join(', ');
+      return `${p.name} ${verb} ${where}, hướng về ${directions[p.facing] ?? p.facing}`;
     }
     const verb = p.posture === 'sit' ? 'sits' : 'stands';
     const where = p.side === 'on'
@@ -99,6 +106,7 @@ export function stagingCore() {
 
   function extrasSentence(s, lang) {
     const where = (s.extrasWhere ?? '').trim();
+    if (lang === 'vi') return !(s.extras > 0) ? 'Các chỗ còn lại đều trống, không có người khác' : `Có thêm ${s.extras} diễn viên quần chúng${where ? ` ở ${where}` : ''}, chỉ làm nền`;
     if (!(s.extras > 0)) return lang === 'zh' ? '其余座位空着，没有其他人' : 'every other seat is empty and nobody else is there';
     return lang === 'zh'
       ? `另有 ${s.extras} 名群演${where ? `在${where}` : ''}，只作背景`
@@ -254,6 +262,7 @@ export function stagingCore() {
    * `location` 是这一场所在地点的认图结果。
    */
   function sceneProblems(scene, location, lang = 'zh') {
+    const vi = lang === 'vi';
     const zh = lang === 'zh';
     const out = [];
     const add = (gate, text) => out.push({ gate, text });
@@ -264,33 +273,33 @@ export function stagingCore() {
     const ids = places.map((p) => p.id);
     const castIds = cast.map((c) => c.id);
     const missing = cast.filter((c) => !ids.includes(c.id)).map((c) => c.name);
-    if (missing.length) add('cast-complete', zh ? `站位表里少了：${missing.join('、')}` : `missing from the places: ${missing.join(', ')}`);
+    if (missing.length) add('cast-complete', vi ? `Thiếu trong danh sách bố trí: ${missing.join(', ')}` : zh ? `站位表里少了：${missing.join('、')}` : `missing from the places: ${missing.join(', ')}`);
     const extra = places.filter((p) => !castIds.includes(p.id)).map((p) => p.name ?? p.id);
-    if (extra.length) add('cast-complete', zh ? `出场人物表以外的人：${extra.join('、')}` : `not in the scene's cast: ${extra.join(', ')}`);
+    if (extra.length) add('cast-complete', vi ? `Không thuộc danh sách nhân vật của cảnh: ${extra.join(', ')}` : zh ? `出场人物表以外的人：${extra.join('、')}` : `not in the scene's cast: ${extra.join(', ')}`);
     const twice = ids.filter((id, i) => ids.indexOf(id) !== i);
-    if (twice.length) add('cast-complete', zh ? `同一个人写了两次：${[...new Set(twice)].join('、')}` : `listed twice: ${[...new Set(twice)].join(', ')}`);
+    if (twice.length) add('cast-complete', vi ? `Bị liệt kê hai lần: ${[...new Set(twice)].join(', ')}` : zh ? `同一个人写了两次：${[...new Set(twice)].join('、')}` : `listed twice: ${[...new Set(twice)].join(', ')}`);
 
     const undecided = places.filter((p) => typeof p.present !== 'boolean').map((p) => p.name);
-    if (undecided.length) add('present-set', zh ? `还没定开场在不在：${undecided.join('、')}` : `not yet said whether they are there at the opening: ${undecided.join(', ')}`);
-    else if (places.length && !places.some((p) => p.present)) add('present-set', zh ? '开场一个人都不在' : 'nobody is there when the scene opens');
+    if (undecided.length) add('present-set', vi ? `Chưa xác định có mặt ở đầu cảnh: ${undecided.join(', ')}` : zh ? `还没定开场在不在：${undecided.join('、')}` : `not yet said whether they are there at the opening: ${undecided.join(', ')}`);
+    else if (places.length && !places.some((p) => p.present)) add('present-set', vi ? 'Không có ai ở đầu cảnh' : zh ? '开场一个人都不在' : 'nobody is there when the scene opens');
 
     for (const p of places) {
       if (p.present === false) {
         if (p.item != null || p.side != null || p.along != null) {
-          add('place-valid', zh ? `${p.name} 开场不在，item、side、along 要空着` : `${p.name} is not there at the opening: leave item, side and along empty`);
+          add('place-valid', vi ? `${p.name} vắng mặt ở đầu cảnh: để trống item, side và along` : zh ? `${p.name} 开场不在，item、side、along 要空着` : `${p.name} is not there at the opening: leave item, side and along empty`);
         }
         continue;
       }
       if (p.present !== true) continue;
       const it = things.get(p.item);
-      if (!it) add('place-valid', zh ? `${p.name} 站的「${p.item ?? ''}」不在这个地点认出来的东西里` : `${p.name}'s "${p.item ?? ''}" is not one of the things read off this place`);
-      if (!SIDES.includes(p.side)) add('place-valid', zh ? `${p.name} 的 side 要是 north / east / south / west / on` : `${p.name}'s side must be north / east / south / west / on`);
-      else if (p.side === 'on' && it && !it.on) add('place-valid', zh ? `${p.name} 写了在「${p.item}」上，可它上面不能坐也不能站，写它的哪一侧` : `${p.name} is on the "${p.item}", which nobody can sit or stand on: say which side`);
+      if (!it) add('place-valid', vi ? `${p.name}: đồ vật “${p.item ?? ''}” không thuộc địa điểm này` : zh ? `${p.name} 站的「${p.item ?? ''}」不在这个地点认出来的东西里` : `${p.name}'s "${p.item ?? ''}" is not one of the things read off this place`);
+      if (!SIDES.includes(p.side)) add('place-valid', vi ? `${p.name}: side phải là north / east / south / west / on` : zh ? `${p.name} 的 side 要是 north / east / south / west / on` : `${p.name}'s side must be north / east / south / west / on`);
+      else if (p.side === 'on' && it && !it.on) add('place-valid', vi ? `${p.name} ở trên “${p.item}”, nhưng đồ vật này không thể ngồi hoặc đứng lên; hãy chọn một phía` : zh ? `${p.name} 写了在「${p.item}」上，可它上面不能坐也不能站，写它的哪一侧` : `${p.name} is on the "${p.item}", which nobody can sit or stand on: say which side`);
       if (p.side !== 'on' && !(typeof p.along === 'number' && p.along >= 0 && p.along <= 1)) {
-        add('place-valid', zh ? `${p.name} 的 along 要是 0 到 1 之间的数` : `${p.name}'s along must be a number from 0 to 1`);
+        add('place-valid', vi ? `${p.name}: along phải là một số từ 0 đến 1` : zh ? `${p.name} 的 along 要是 0 到 1 之间的数` : `${p.name}'s along must be a number from 0 to 1`);
       }
-      if (!POSTURES.includes(p.posture)) add('place-valid', zh ? `${p.name} 的 posture 要是 sit 或 stand` : `${p.name}'s posture must be sit or stand`);
-      if (!FACINGS.includes(p.facing)) add('place-valid', zh ? `${p.name} 的 facing 要是八个方位之一` : `${p.name}'s facing must be one of the eight directions`);
+      if (!POSTURES.includes(p.posture)) add('place-valid', vi ? `${p.name}: posture phải là sit hoặc stand` : zh ? `${p.name} 的 posture 要是 sit 或 stand` : `${p.name}'s posture must be sit or stand`);
+      if (!FACINGS.includes(p.facing)) add('place-valid', vi ? `${p.name}: facing phải là một trong tám hướng` : zh ? `${p.name} 的 facing 要是八个方位之一` : `${p.name}'s facing must be one of the eight directions`);
     }
 
     const sideGroups = new Map();
@@ -305,16 +314,16 @@ export function stagingCore() {
         const a = sorted[i - 1];
         const b = sorted[i];
         if (b.along - a.along < MIN_APART) {
-          add('no-overlap', zh
+          add('no-overlap', vi ? `${a.name} và ${b.name} trùng vị trí cạnh “${b.item}”; hãy kéo họ ra xa nhau dọc cạnh này` : zh
             ? `${a.name} 和 ${b.name} 叠在「${b.item}」${ZH_SIDE[b.side]}同一处，沿这一侧拉开`
             : `${a.name} and ${b.name} stand on one spot on the ${b.side} side of the "${b.item}": spread them along it`);
         }
       }
     }
 
-    if (!(Number.isInteger(scene.extras) && scene.extras >= 0)) add('extras', zh ? '群演人数要是 0 或正整数（剧本没写有别人就是 0）' : 'extras must be 0 or a whole number (0 when the script names nobody else)');
-    else if (scene.extras > 0 && !(scene.extrasWhere ?? '').trim()) add('extras', zh ? `有 ${scene.extras} 名群演，没写他们在哪` : `${scene.extras} extras, but not where they are`);
-    else if (scene.extras === 0 && (scene.extrasWhere ?? '').trim()) add('extras', zh ? '没有群演，extrasWhere 要空着' : 'no extras: leave extrasWhere empty');
+    if (!(Number.isInteger(scene.extras) && scene.extras >= 0)) add('extras', vi ? 'Số diễn viên quần chúng phải là số nguyên không âm' : zh ? '群演人数要是 0 或正整数（剧本没写有别人就是 0）' : 'extras must be 0 or a whole number (0 when the script names nobody else)');
+    else if (scene.extras > 0 && !(scene.extrasWhere ?? '').trim()) add('extras', vi ? `Có ${scene.extras} diễn viên quần chúng nhưng chưa ghi vị trí` : zh ? `有 ${scene.extras} 名群演，没写他们在哪` : `${scene.extras} extras, but not where they are`);
+    else if (scene.extras === 0 && (scene.extrasWhere ?? '').trim()) add('extras', vi ? 'Không có diễn viên quần chúng: để trống extrasWhere' : zh ? '没有群演，extrasWhere 要空着' : 'no extras: leave extrasWhere empty');
     return out;
   }
 
@@ -1146,6 +1155,10 @@ document.addEventListener('pointerover', (e) => {
 
 /* 导出：下载的是改过的 staging.json，喂回 validate / render 照样能用 */
 document.querySelector('.expo').addEventListener('click', (e) => {
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(doc, e.currentTarget.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(new Blob([JSON.stringify(doc, null, 2) + '\\n'], { type: 'application/json' }));
   const a = Object.assign(document.createElement('a'), { href: url, download: e.currentTarget.dataset.name });
   a.click();

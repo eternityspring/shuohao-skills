@@ -1395,6 +1395,10 @@ const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed })};
 // 导出：报告自己就带着完整的 cast.json，下载的是它原样
 document.querySelector('.expo').addEventListener('click', (e) => {
   const btn = e.currentTarget;
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(JSON.parse(document.getElementById('cast-data').textContent), btn.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(
     new Blob([document.getElementById('cast-data').textContent], { type: 'application/json' }),
   );

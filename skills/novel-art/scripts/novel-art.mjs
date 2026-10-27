@@ -916,6 +916,10 @@ document.addEventListener('click', async (e) => {
 // 导出：报告自己带着完整的 art.json，下载的是它原样
 document.querySelector('.expo').addEventListener('click', (e) => {
   const btn = e.currentTarget;
+  if (window.shuohaoLanguage?.downloadJson) {
+    window.shuohaoLanguage.downloadJson(JSON.parse(document.getElementById('art-data').textContent), btn.dataset.name);
+    return;
+  }
   const url = URL.createObjectURL(
     new Blob([document.getElementById('art-data').textContent], { type: 'application/json' }),
   );
