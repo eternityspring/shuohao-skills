@@ -1,0 +1,9 @@
+.sh-langbar{position:sticky;top:0;z-index:2147483000;min-height:48px;display:flex;gap:12px;align-items:center;padding:8px 24px;background:#fffefa;color:#263222;border-bottom:1px solid #dedfd4;font:13px/1.5 system-ui,-apple-system,sans-serif;box-sizing:border-box}
+.sh-langbar .sh-home{text-decoration:none;color:#47583a;font-weight:650;white-space:nowrap}
+.sh-langbar .sh-locale-message{flex:1;color:#697064}
+.sh-langbar select{appearance:auto;border:1px solid #cbd1c3;background:white;color:#20251e;border-radius:6px;padding:5px 9px;min-width:112px;font:inherit}
+.sh-langbar label{font-weight:600;white-space:nowrap}
+.sh-langbar select:focus-visible,.sh-langbar a:focus-visible{outline:3px solid #9cb68a;outline-offset:2px}
+.sh-locale-loading body>:not(.sh-langbar):not(script){visibility:hidden}
+body:has(.sh-langbar) .rp-rail{top:48px!important;height:calc(100vh - 48px)!important}
+@media(max-width:600px){.sh-langbar{padding:8px 12px;gap:8px}.sh-langbar label{font-size:12px}.sh-langbar select{min-width:104px}.sh-locale-message{font-size:11px}.sh-langbar .sh-home{font-size:12px}}

@@ -1,0 +1,2649 @@
+{
+  "script": {
+    "schema_version": "1.0",
+    "project": {
+      "title": "CHIẾC TÚI CŨ",
+      "slug": "chiec_tui_cu",
+      "duration_seconds": 300,
+      "aspect_ratio": "16:9",
+      "language": "Tiếng Việt",
+      "genre": "Tâm lý xã hội; đối đầu, lật thế",
+      "visual_style": "Điện ảnh hiện thực đương đại; 24 fps, ánh sáng showroom trắng trung tính, da người tự nhiên; khung hình chặt dần khi bị xúc phạm, mở lại khi An giành quyền quyết định. Không slow motion khoe tiền; không nhãn hiệu thật.",
+      "assumptions": [
+        "Ba nhân vật trưởng thành: Hoài An, Mai và Minh. An và Mai từng là bạn học thân, mười hai năm chưa gặp. Minh là quản lý showroom, chưa quen An, không có quan hệ tình cảm hay tài chính với cô.",
+        "An 32 tuổi, chủ một xưởng nội thất nhỏ đã làm ăn ổn định; mua ô tô để đi công trình. Cô đến nhận chiếc xe đã chọn, không mua bốc đồng chỉ để trả đũa. Nghề của An là hậu cảnh diễn xuất, không thêm cảnh hay thoại giải thích giàu có.",
+        "Showroom hư cấu tại Việt Nam, một buổi sáng ngày thường, vắng khách. Xe gầm cao màu bạc; giá theo hồ sơ hư cấu 1.280.000.000 đồng, cọc trước 200.000.000 đồng, thanh toán còn lại 1.080.000.000 đồng.",
+        "Lịch hẹn 10 giờ; hồ sơ, thủ tục, phương tiện thanh toán đã được chuẩn bị trước. Phim lược thời gian kiểm tra xe và hồ sơ bằng montage có chủ đích; thời gian truyện khoảng 09:58–10:28, không phải toàn bộ mua bán thực hiện trong năm phút.",
+        "Nam chính giải quyết việc tiếp khách trước khi biết số tiền An có. Nữ chính tự kiểm tra, trả tiền và quyết định ai bàn giao. Không đuổi việc ngay tại chỗ; Mai phải bàn giao ca và làm việc với quản lý.",
+        "Chưa tạo ảnh, giọng hay video. Mọi tham chiếu trong gói ở trạng thái planned. Các dòng chữ, màn hình, phụ đề và số tiền phải dựng hậu kỳ bằng chữ chuẩn."
+      ]
+    },
+    "story": {
+      "logline": "Đến nhận chiếc xe đã đặt, Hoài An nhận ra người bạn thân năm xưa đang bán hàng tại showroom. Bị chính người ấy nhục mạ vì quần áo giản dị, cô buộc phải giành lại quyền được lắng nghe — trước khi việc thanh toán phơi bày người thực sự đáng xấu hổ.",
+      "theme": "Sự tôn trọng phải có trước khi biết khả năng chi trả. Tiền làm lộ thành kiến; chiếc túi cũ cho thấy cái giá của việc đánh mất một người bạn.",
+      "stakes": "An có thể nhận xe nhưng mất nốt hình ảnh đẹp về người bạn từng giúp mình. Mai đặt uy tín nghề nghiệp và tình bạn lên một phán đoán ngoại hình. Minh phải xử lý sai phạm của nhân viên và bảo vệ khách ngay khi chưa biết khách có mua được hay không.",
+      "synopsis": "Hoài An mặc sơ mi vải thô, quần tối màu, mang chiếc túi vải cũ đến showroom nhận xe. Người bán hàng là Mai, bạn học đã mười hai năm không gặp. An vui mừng nhắc chiếc quai túi Mai từng khâu giúp. Mai nhìn giày và túi rồi cho rằng An đến xin việc hoặc xem cho vui. Dù An nói rõ tên đặt xe và yêu cầu kiểm tra lịch hẹn, Mai không kiểm tra, chặn cô lại trước chiếc xe bạc, nhắc cả chuyện An từng vay học phí và đẩy tờ giới thiệu xe cũ về phía cô. An yêu cầu được tiếp bởi người khác. Mai dọa gọi bảo vệ. Minh, quản lý vừa đi từ văn phòng ra, dừng sự việc. Mai kể lệch rằng khách làm ầm; Minh hỏi đã kiểm tra lịch hẹn chưa. Mai phải nhận là chưa. Minh xin lỗi và tự tra cứu. Đơn cọc hai trăm triệu, chiếc xe bạc và lịch nhận mười giờ đều khớp tên An. Mai chống chế rằng An không nói sớm; An đáp cô đã nói, Mai không nghe. An tiếp tục kiểm tra xe và giấy tờ vì cô đã chọn xe trước khi gặp lại Mai. Khi An chuyển phần còn lại, màn hình chờ khiến Mai tưởng vẫn còn lối thoát cho phán đoán của mình. Nhưng xác nhận từ kế toán cho thấy một tỷ không trăm tám mươi triệu đã vào tài khoản đại lý. Mai vội đổi sang giọng phục vụ. An yêu cầu Minh bàn giao và nói rõ: kể cả không mua, cô cũng không đáng bị đối xử như vậy. Minh yêu cầu Mai bàn giao ca và làm việc về sự việc. Mai xin lỗi, lần đầu trở lại cách xưng hô của hai người bạn. An nói cô đã mong được gặp lại Mai, rồi cất chìa khóa xe mới vào chiếc túi vẫn giữ từ ngày bạn khâu giúp. An bước về phía xe, Mai đứng lại sau lớp kính phản chiếu. Không tiếng vỗ tay, không ăn mừng hạ nhục; sự bẽ mặt đến từ chính hành vi của Mai.",
+      "beats": [
+        "00:00–00:34 | Gieo chiếc túi cũ: một vật bình thường chứa bằng chứng tình bạn thật.",
+        "00:34–01:12 | An nói rõ mục đích và tên hẹn; Mai từ chối kiểm chứng vì thành kiến.",
+        "01:12–01:57 | Mai chạm vào lòng tự trọng, bêu chuyện học phí, đẩy tờ xe cũ và dọa gọi bảo vệ. An dừng xưng hô thân mật khi tự bảo vệ.",
+        "01:57–02:45 | Minh can thiệp, hỏi sự thật về quy trình thay vì phán đoán tài sản. Mai thừa nhận chưa tra lịch.",
+        "02:45–03:19 | Cú lật thứ nhất: khách bị xem thường chính là chủ đơn đặt chiếc xe bạc. An chỉ ra mình đã nói từ đầu.",
+        "03:19–03:57 | An kiểm xe, đọc và ký hồ sơ, gửi thanh toán. Khoảng chờ cho Mai một hy vọng sai cuối cùng.",
+        "03:57–04:40 | Cú lật thứ hai: đại lý nhận đủ tiền. An tự quyết người bàn giao và nói câu chốt về phẩm giá. Mai chịu hệ quả nghề nghiệp.",
+        "04:40–05:00 | Lời xin lỗi quá muộn cho niềm vui gặp lại. Chìa khóa mới đi vào túi cũ, An rời khung; Mai nhìn lại chính mình trong kính."
+      ]
+    },
+    "entities": [
+      {
+        "id": "AN",
+        "kind": "character",
+        "identity": "NGUYỄN HOÀI AN, nữ Việt 32 tuổi, mặt trái xoan hơi vuông hàm, mắt nâu sâu, nốt ruồi nhỏ dưới đuôi mắt trái, tóc đen ngang vai buộc thấp. Dáng người vừa, vai thẳng, không trang điểm đậm. Có thói quen miết ngón cái lên đường vá túi khi bị tổn thương. Không đồng nhất giản dị với luộm thuộm.",
+        "variants": [
+          {
+            "id": "AN_V1",
+            "description": "Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện",
+            "voice_id": "VOICE_AN"
+          }
+        ]
+      },
+      {
+        "id": "MAI",
+        "kind": "character",
+        "identity": "TRẦN MAI, nữ Việt 32 tuổi, mặt thon dài, mắt sắc, tóc nâu đen búi thấp gọn, môi màu đỏ đất; tay phải thường vuốt bảng tên khi muốn kiểm soát tình huống. Biểu cảm thay từ cười nghề nghiệp sang nhếch môi rồi môi cứng, mắt tránh. Không diễn thành ác nhân hoạt hình.",
+        "variants": [
+          {
+            "id": "MAI_V1",
+            "description": "Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện",
+            "voice_id": "VOICE_MAI"
+          }
+        ]
+      },
+      {
+        "id": "MINH",
+        "kind": "character",
+        "identity": "LÊ MINH, nam Việt 35 tuổi, mặt góc cạnh, tóc đen cắt ngắn rẽ nhẹ, sạch râu, dáng cao vừa, cử động tiết chế. Luôn nhìn người đang nói; giọng vững, không quát. Không ôm eo hoặc chạm vào An.",
+        "variants": [
+          {
+            "id": "MINH_V1",
+            "description": "Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện",
+            "voice_id": "VOICE_MINH"
+          }
+        ]
+      },
+      {
+        "id": "BAG",
+        "kind": "prop",
+        "identity": "Túi tote vải bạt be xám, thân chữ nhật khoảng 34×38 cm, không chữ, hai quai cùng vải; chân quai trước bên trái có đường khâu chữ X màu xanh lam dài 3 cm. Vết vá cũ bền chắc, không rách thêm.",
+        "variants": [
+          {
+            "id": "BAG_V1",
+            "description": "Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "CAR",
+        "kind": "prop",
+        "identity": "Một crossover năm chỗ màu bạc ánh kim, hình dáng nguyên bản hư cấu, đầu xe thanh ngang không logo, cụm đèn LED hai nét, mâm năm chấu kép; nội thất nâu tối, vô lăng đen. Không đổi sang xe thể thao.",
+        "variants": [
+          {
+            "id": "CAR_V1",
+            "description": "Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "PHONE",
+        "kind": "prop",
+        "identity": "Điện thoại màn hình phẳng màu đen, ốp xám trơn, không logo. Màn hình dùng đồ họa ngân hàng hư cấu chỉ dựng hậu kỳ.",
+        "variants": [
+          {
+            "id": "PHONE_V1",
+            "description": "Màn hình chưa mở giao dịch khi lấy khỏi túi; Q32 gửi khoản 1.080.000.000 đồng, không lộ thông tin xác thực. Tay phải An cầm; tay trái chạm xác nhận.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "TABLET",
+        "kind": "prop",
+        "identity": "Máy tính bảng bạc 11 inch, ốp xanh than, giao diện quản lý bán hàng hư cấu, không logo.",
+        "variants": [
+          {
+            "id": "TABLET_V1",
+            "description": "Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "DOCS",
+        "kind": "prop",
+        "identity": "Tập hợp đồng A4 bìa trắng, kẹp đen góc trên trái, bút đen kẹp gáy. Trang chủ có ba vùng chữ cần hậu kỳ: tên chủ, giá, khoản cọc.",
+        "variants": [
+          {
+            "id": "DOCS_V1",
+            "description": "Hồ sơ đã soạn trước đúng tên NGUYỄN HOÀI AN, tổng 1.280.000.000 đồng; An kiểm tra rồi ký Q31, không xuất hiện chữ ký trước đó.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "KEY",
+        "kind": "prop",
+        "identity": "Chìa khóa ô tô màu đen hình chữ nhật bo góc, viền bạc, khoen tròn gắn thẻ trắng nhỏ không chữ. Chỉ một chìa trong phim.",
+        "variants": [
+          {
+            "id": "KEY_V1",
+            "description": "Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "LEAFLET",
+        "kind": "prop",
+        "identity": "Một tờ giấy A5 màu trắng ngà in ảnh xe đã qua sử dụng, không thương hiệu; tiêu đề XE ĐÃ QUA SỬ DỤNG dựng hậu kỳ khi cần đọc.",
+        "variants": [
+          {
+            "id": "LEAFLET_V1",
+            "description": "Tờ đơn đặt trên bục nhỏ gần xe bạc, Mai đẩy về phía An Q14 và để ở đó đến hết phim.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "EXT",
+        "kind": "location",
+        "identity": "Mặt tiền showroom hư cấu cửa kính bốn cánh, khung đen, đá xám, biển chữ hình khối không tên thương hiệu; thấy xe bạc bên trái bên trong.",
+        "variants": [
+          {
+            "id": "EXT_V1",
+            "description": "Ban ngày khô ráo, nắng dịu 09:58; không có xe khác hay người qua đường nhận diện được.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      },
+      {
+        "id": "INT",
+        "kind": "location",
+        "identity": "Showroom khoảng 12×16 m, đá xám nhạt, cửa kính nam, xe bạc phía tây, bục tài liệu sát sườn xe, bàn hợp đồng gỗ óc chó phía đông, văn phòng kính mờ phía bắc. Bàn có ba ghế và không đổi vị trí.",
+        "variants": [
+          {
+            "id": "INT_V1",
+            "description": "Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.",
+            "story_time": "Buổi sáng hiện tại, toàn bộ phần xuất hiện"
+          }
+        ]
+      }
+    ],
+    "voices": [
+      {
+        "id": "VOICE_AN",
+        "entity_id": "AN",
+        "variant_ids": [
+          "AN_V1"
+        ],
+        "language": "Tiếng Việt",
+        "identity": "Nữ trưởng thành, giọng Hà Nội nhẹ, trung âm ấm, phát âm gọn, nhịp khoảng 3,0–3,8 âm tiết/giây.",
+        "performance": "Đầu phim thân mật, tự nhiên; khi bị xúc phạm ngừng nửa nhịp và giảm âm lượng thay vì hét. Cuối phim cứng rắn nhưng hụt nhẹ hơi ở lời về tình bạn. Không giọng khoe của, không nức nở."
+      },
+      {
+        "id": "VOICE_MAI",
+        "entity_id": "MAI",
+        "variant_ids": [
+          "MAI_V1"
+        ],
+        "language": "Tiếng Việt",
+        "identity": "Nữ trưởng thành, giọng Hà Nội rõ, âm sáng hơi mảnh, nhanh vừa khoảng 3,4–4,0 âm tiết/giây.",
+        "performance": "Mỉm cười khi hạ thấp khách, nhấn nhẹ cậu và tiền tỷ; sau lật thế nuốt khan và chuyển xưng chị–em quá ngọt, cuối phim trở lại tớ thấp và ngắn. Không đổi diễn viên giọng."
+      },
+      {
+        "id": "VOICE_MINH",
+        "entity_id": "MINH",
+        "variant_ids": [
+          "MINH_V1"
+        ],
+        "language": "Tiếng Việt",
+        "identity": "Nam trưởng thành, giọng Bắc trung tính, trung trầm, nhịp đều khoảng 3,1–3,8 âm tiết/giây.",
+        "performance": "Chặn bằng giọng thấp chắc, không quát; xin lỗi hướng về An, câu hỏi nhân viên ngắn và có khoảng chờ. Không tung hô khách vì tiền, không đọc số tiền như quảng cáo."
+      }
+    ],
+    "references": [
+      {
+        "id": "REF_AN",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          }
+        ],
+        "description": "NGUYỄN HOÀI AN, nữ Việt 32 tuổi, mặt trái xoan hơi vuông hàm, mắt nâu sâu, nốt ruồi nhỏ dưới đuôi mắt trái, tóc đen ngang vai buộc thấp. Dáng người vừa, vai thẳng, không trang điểm đậm. Có thói quen miết ngón cái lên đường vá túi khi bị tổn thương. Không đồng nhất giản dị với luộm thuộm. Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.",
+        "view": "Bộ ảnh nhận diện: chính diện, 3/4 trái/phải, toàn thân cùng ánh sáng; không tạo ba người khác nhau"
+      },
+      {
+        "id": "REF_MAI",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "description": "TRẦN MAI, nữ Việt 32 tuổi, mặt thon dài, mắt sắc, tóc nâu đen búi thấp gọn, môi màu đỏ đất; tay phải thường vuốt bảng tên khi muốn kiểm soát tình huống. Biểu cảm thay từ cười nghề nghiệp sang nhếch môi rồi môi cứng, mắt tránh. Không diễn thành ác nhân hoạt hình. Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.",
+        "view": "Bộ ảnh nhận diện: chính diện, 3/4 trái/phải, toàn thân cùng ánh sáng; không tạo ba người khác nhau"
+      },
+      {
+        "id": "REF_MINH",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          }
+        ],
+        "description": "LÊ MINH, nam Việt 35 tuổi, mặt góc cạnh, tóc đen cắt ngắn rẽ nhẹ, sạch râu, dáng cao vừa, cử động tiết chế. Luôn nhìn người đang nói; giọng vững, không quát. Không ôm eo hoặc chạm vào An. Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.",
+        "view": "Bộ ảnh nhận diện: chính diện, 3/4 trái/phải, toàn thân cùng ánh sáng; không tạo ba người khác nhau"
+      },
+      {
+        "id": "REF_BAG",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "description": "Túi tote vải bạt be xám, thân chữ nhật khoảng 34×38 cm, không chữ, hai quai cùng vải; chân quai trước bên trái có đường khâu chữ X màu xanh lam dài 3 cm. Vết vá cũ bền chắc, không rách thêm. Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_CAR",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "description": "Một crossover năm chỗ màu bạc ánh kim, hình dáng nguyên bản hư cấu, đầu xe thanh ngang không logo, cụm đèn LED hai nét, mâm năm chấu kép; nội thất nâu tối, vô lăng đen. Không đổi sang xe thể thao. Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_PHONE",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "PHONE",
+            "variant_id": "PHONE_V1"
+          }
+        ],
+        "description": "Điện thoại màn hình phẳng màu đen, ốp xám trơn, không logo. Màn hình dùng đồ họa ngân hàng hư cấu chỉ dựng hậu kỳ. Màn hình chưa mở giao dịch khi lấy khỏi túi; Q32 gửi khoản 1.080.000.000 đồng, không lộ thông tin xác thực. Tay phải An cầm; tay trái chạm xác nhận.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_TABLET",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "description": "Máy tính bảng bạc 11 inch, ốp xanh than, giao diện quản lý bán hàng hư cấu, không logo. Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_DOCS",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "DOCS",
+            "variant_id": "DOCS_V1"
+          }
+        ],
+        "description": "Tập hợp đồng A4 bìa trắng, kẹp đen góc trên trái, bút đen kẹp gáy. Trang chủ có ba vùng chữ cần hậu kỳ: tên chủ, giá, khoản cọc. Hồ sơ đã soạn trước đúng tên NGUYỄN HOÀI AN, tổng 1.280.000.000 đồng; An kiểm tra rồi ký Q31, không xuất hiện chữ ký trước đó.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_KEY",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          }
+        ],
+        "description": "Chìa khóa ô tô màu đen hình chữ nhật bo góc, viền bạc, khoen tròn gắn thẻ trắng nhỏ không chữ. Chỉ một chìa trong phim. Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_LEAFLET",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "LEAFLET",
+            "variant_id": "LEAFLET_V1"
+          }
+        ],
+        "description": "Một tờ giấy A5 màu trắng ngà in ảnh xe đã qua sử dụng, không thương hiệu; tiêu đề XE ĐÃ QUA SỬ DỤNG dựng hậu kỳ khi cần đọc. Tờ đơn đặt trên bục nhỏ gần xe bạc, Mai đẩy về phía An Q14 và để ở đó đến hết phim.",
+        "view": "Chính diện, 3/4 và cận dấu nhận diện; nền trung tính"
+      },
+      {
+        "id": "REF_EXT",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "EXT",
+            "variant_id": "EXT_V1"
+          }
+        ],
+        "description": "Mặt tiền showroom hư cấu cửa kính bốn cánh, khung đen, đá xám, biển chữ hình khối không tên thương hiệu; thấy xe bạc bên trái bên trong. Ban ngày khô ráo, nắng dịu 09:58; không có xe khác hay người qua đường nhận diện được.",
+        "view": "Toàn cảnh thiết lập và góc ngược có đánh dấu địa lý bằng mô tả, không chữ trong ảnh"
+      },
+      {
+        "id": "REF_INT",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          }
+        ],
+        "description": "Showroom khoảng 12×16 m, đá xám nhạt, cửa kính nam, xe bạc phía tây, bục tài liệu sát sườn xe, bàn hợp đồng gỗ óc chó phía đông, văn phòng kính mờ phía bắc. Bàn có ba ghế và không đổi vị trí. Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.",
+        "view": "Toàn cảnh thiết lập và góc ngược có đánh dấu địa lý bằng mô tả, không chữ trong ảnh"
+      },
+      {
+        "id": "REF_BLOCKING",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          },
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          }
+        ],
+        "description": "An trái, Mai phải, Minh sau giữa gần văn phòng, tablet trong tay trái; xe bên trái, bàn bên phải. An mang túi vai trái. Xe đóng cửa. Khóa vị trí trước cảnh đối đầu.",
+        "view": "Toàn cảnh 35 mm từ góc đông nam, một ảnh master"
+      },
+      {
+        "id": "REF_TABLE",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "PHONE",
+            "variant_id": "PHONE_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          },
+          {
+            "entity_id": "DOCS",
+            "variant_id": "DOCS_V1"
+          },
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          },
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          }
+        ],
+        "description": "Sau kiểm xe: An ngồi trái hình, túi đặt sát trái An; Minh ngồi phía đối diện bên phải, Mai đứng lùi phía sau bên phải. Hồ sơ trước An, key sát hồ sơ, tablet trước Minh; điện thoại vẫn trong túi ở đầu Q31. Xe bạc cửa đóng trong nền trái.",
+        "view": "Toàn cảnh bàn hợp đồng, 35 mm, một ảnh master"
+      },
+      {
+        "id": "REF_END",
+        "version": "r1",
+        "status": "planned",
+        "covers": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          },
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          }
+        ],
+        "description": "Khung đầu kết: An ở tiền cảnh trái vừa đứng dậy, túi vai trái, chìa đã cất; Mai bên phải sát kính, Minh còn ở bàn ngoài nét, xe bạc chờ phía tây. Cửa xe đóng, không cảnh lái.",
+        "view": "Toàn cảnh hướng từ bàn ra xe, 50 mm"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "SC01",
+        "story_time": "09:58, buổi sáng hiện tại",
+        "location_variant_id": "EXT_V1",
+        "summary": "Thiết lập nơi mua xe trước khi An vào.",
+        "emotional_arc": "Sáng sủa, tưởng sẽ là cuộc gặp vui."
+      },
+      {
+        "id": "SC02",
+        "story_time": "09:59–10:03, liên tục",
+        "location_variant_id": "INT_V1",
+        "summary": "Gặp lại bạn cũ; Mai từ chối tra hẹn, xúc phạm và dọa bảo vệ.",
+        "emotional_arc": "Vui mừng → ngượng → tổn thương → tự bảo vệ."
+      },
+      {
+        "id": "SC03",
+        "story_time": "10:03–10:05, liên tục",
+        "location_variant_id": "INT_V1",
+        "summary": "Minh can thiệp và buộc Mai trả lời đã kiểm tra hay chưa.",
+        "emotional_arc": "Bức bối → một khoảng an toàn nhỏ → chờ sự thật."
+      },
+      {
+        "id": "SC04",
+        "story_time": "10:05–10:27; montage Q29–Q34 lược thời gian",
+        "location_variant_id": "INT_V1",
+        "summary": "Tra đúng đơn đặt; An kiểm xe, kiểm hồ sơ và trả tiền; Mai chờ một cơ hội chống chế.",
+        "emotional_arc": "Thế cờ đảo → bình tĩnh → căng thẳng trong im lặng → xác nhận."
+      },
+      {
+        "id": "SC05",
+        "story_time": "10:27–10:28, liên tục",
+        "location_variant_id": "INT_V1",
+        "summary": "An chọn Minh bàn giao, chỉ ra sai phạm, cất chìa khóa vào túi cũ và bước về xe.",
+        "emotional_arc": "Bẽ mặt → hậu quả → lời xin lỗi → tiếc một tình bạn."
+      }
+    ],
+    "shots": [
+      {
+        "id": "Q01",
+        "scene_id": "SC01",
+        "start": 0,
+        "end": 5,
+        "role": "Thiết lập không gian và chiếc xe sẽ gây xung đột.",
+        "framing": "Toàn mặt tiền 28 mm, tầm mắt",
+        "camera": "Trượt ngang rất nhẹ 30 cm",
+        "appearances": [
+          {
+            "entity_id": "EXT",
+            "variant_id": "EXT_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "Ánh nắng lướt trên cửa kính, thấy chiếc xe bạc đứng yên phía trái bên trong. Không người, không tiêu đề chồng cảnh.",
+        "emotion": "Sạch, sáng, hứa hẹn một ngày thuận lợi.",
+        "dialogue": [],
+        "sound": "Âm đường xa rất nhỏ, điều hòa vọng qua kính.",
+        "music": "Hai nốt piano thưa, âm lượng thấp.",
+        "transition": "Cắt vào trong ở cùng phía cửa nam.",
+        "continuity_in": "Cửa kính đóng; xe bạc phía tây nhìn qua kính, không người.",
+        "continuity_out": "Địa lý mặt tiền đã rõ; không vật đổi trạng thái.",
+        "reference_ids": [
+          "REF_EXT",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Toàn mặt tiền 28 mm, tầm mắt. Cửa kính đóng; xe bạc phía tây nhìn qua kính, không người. Các thực thể trong hình: EXT: Ban ngày khô ráo, nắng dịu 09:58; không có xe khác hay người qua đường nhận diện được.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 5 giây. Máy: Trượt ngang rất nhẹ 30 cm. Hành động: Ánh nắng lướt trên cửa kính, thấy chiếc xe bạc đứng yên phía trái bên trong. Không người, không tiêu đề chồng cảnh. Diễn xuất: Sạch, sáng, hứa hẹn một ngày thuận lợi. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: Địa lý mặt tiền đã rõ; không vật đổi trạng thái. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q02",
+        "scene_id": "SC02",
+        "start": 5,
+        "end": 11,
+        "role": "Giới thiệu An giản dị nhưng có mục đích.",
+        "framing": "Trung toàn An 35 mm từ bên trong hướng cửa",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An đẩy cửa vào, dừng một nhịp nhìn chiếc xe bạc rồi nhận ra Mai ở ngoài mép phải hình. Tay phải rời tay nắm; vai trái mang túi.",
+        "emotion": "Nụ cười nhỏ xuất hiện vì nhận ra bạn, không ngắm xe kiểu choáng ngợp.",
+        "dialogue": [],
+        "sound": "Cửa kính, hai bước giày vải, điều hòa.",
+        "music": "Piano hai nốt còn nhẹ.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An trước cửa nam, túi trên vai trái, xe ở nền trái; cửa kính vừa hé.",
+        "continuity_out": "An đứng cách cửa hai bước, cửa tự khép chậm, nhìn sang phải về Mai.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung toàn An 35 mm từ bên trong hướng cửa. An trước cửa nam, túi trên vai trái, xe ở nền trái; cửa kính vừa hé. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 6 giây. Máy: Máy tĩnh. Hành động: An đẩy cửa vào, dừng một nhịp nhìn chiếc xe bạc rồi nhận ra Mai ở ngoài mép phải hình. Tay phải rời tay nắm; vai trái mang túi. Diễn xuất: Nụ cười nhỏ xuất hiện vì nhận ra bạn, không ngắm xe kiểu choáng ngợp. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: An đứng cách cửa hai bước, cửa tự khép chậm, nhìn sang phải về Mai. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q03",
+        "scene_id": "SC02",
+        "start": 11,
+        "end": 19,
+        "role": "Xác lập quan hệ cũ bằng niềm vui thật.",
+        "framing": "Trung đôi 50 mm: An trái, Mai phải",
+        "camera": "Tiến rất chậm 20 cm",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "An bước một bước về Mai rồi dừng cách khoảng một mét rưỡi, mỉm cười gọi tên. Mai từ nụ cười tiếp khách chuyển sang nhận diện.",
+        "emotion": "An mắt sáng, hơi nghiêng đầu; Mai chớp mắt, mất nửa nhịp mới nhận ra.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Mai? Có phải Mai không? Mười mấy năm rồi nhỉ!",
+            "start": 12,
+            "end": 17.5,
+            "delivery": "Vui bất ngờ, xưng tên thân mật, chừa khoảng chờ sau câu đầu.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Piano tắt dần sau chữ Mai.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An vừa nhìn thấy Mai; Mai đứng gần bục cạnh xe, hai tay trước bụng.",
+        "continuity_out": "Hai người đứng đối diện cùng trục; không ôm hoặc bắt tay.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MAI",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi 50 mm: An trái, Mai phải. An vừa nhìn thấy Mai; Mai đứng gần bục cạnh xe, hai tay trước bụng. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Tiến rất chậm 20 cm. Hành động: An bước một bước về Mai rồi dừng cách khoảng một mét rưỡi, mỉm cười gọi tên. Mai từ nụ cười tiếp khách chuyển sang nhận diện. Diễn xuất: An mắt sáng, hơi nghiêng đầu; Mai chớp mắt, mất nửa nhịp mới nhận ra. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 1–6.5s: “Mai? Có phải Mai không? Mười mấy năm rồi nhỉ!”; Vui bất ngờ, xưng tên thân mật, chừa khoảng chờ sau câu đầu. Trạng thái kết: Hai người đứng đối diện cùng trục; không ôm hoặc bắt tay. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q04",
+        "scene_id": "SC02",
+        "start": 19,
+        "end": 27,
+        "role": "Cái nhìn đầu tiên phơi thành kiến.",
+        "framing": "Cận vừa Mai 75 mm; mép túi An ở trái tiền cảnh",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "Mắt Mai đi từ mặt An ngoài khung xuống quai túi; nụ cười nhạt đi, tay phải sửa bảng tên.",
+        "emotion": "Nhận ra bạn nhưng giữ khoảng cách, khóe môi hơi kéo lệch.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "An đấy à? Cậu vẫn dùng cái túi này sao?",
+            "start": 20,
+            "end": 25,
+            "delivery": "Đầu câu nhận ra, cuối câu nhẹ nhưng có ý xem thường.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai nhìn An ngang tầm mắt; túi chỉ vào mép hình, không nhân đôi tay.",
+        "continuity_out": "Mai nhìn xuống đường vá, tay đã rời bảng tên.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận vừa Mai 75 mm; mép túi An ở trái tiền cảnh. Mai nhìn An ngang tầm mắt; túi chỉ vào mép hình, không nhân đôi tay. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Mắt Mai đi từ mặt An ngoài khung xuống quai túi; nụ cười nhạt đi, tay phải sửa bảng tên. Diễn xuất: Nhận ra bạn nhưng giữ khoảng cách, khóe môi hơi kéo lệch. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 1–6s: “An đấy à? Cậu vẫn dùng cái túi này sao?”; Đầu câu nhận ra, cuối câu nhẹ nhưng có ý xem thường. Trạng thái kết: Mai nhìn xuống đường vá, tay đã rời bảng tên. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q05",
+        "scene_id": "SC02",
+        "start": 27,
+        "end": 34,
+        "role": "Gieo ký ức tình bạn qua vật, không dùng hồi tưởng.",
+        "framing": "Đặc tả quai túi, 85 mm; không mặt",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "Đường khâu chữ X xanh trên quai vải hiện rõ; túi khẽ đung đưa rồi đứng yên theo nhịp An dừng lại. Không thấy bàn tay.",
+        "emotion": "Vật cũ mang niềm tin, trái với nụ cười lạnh vừa thấy.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Ừ. Quai cậu khâu vẫn chắc lắm.",
+            "start": 28,
+            "end": 32,
+            "delivery": "Mỉm cười chân thành, người nói ngoài khung ở đúng vị trí An.",
+            "onscreen": false
+          }
+        ],
+        "sound": "Tiếng vải cọ áo nhỏ; giọng An ngoài hình.",
+        "music": "Không nhạc; cho lời nói có khoảng trống.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Túi còn trên vai trái An ngoài khung, quai vá hướng về máy.",
+        "continuity_out": "Túi vẫn trên vai, đường vá giữ nguyên.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Đặc tả quai túi, 85 mm; không mặt. Túi còn trên vai trái An ngoài khung, quai vá hướng về máy. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Đường khâu chữ X xanh trên quai vải hiện rõ; túi khẽ đung đưa rồi đứng yên theo nhịp An dừng lại. Không thấy bàn tay. Diễn xuất: Vật cũ mang niềm tin, trái với nụ cười lạnh vừa thấy. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (ngoài hình), 1–5s: “Ừ. Quai cậu khâu vẫn chắc lắm.”; Mỉm cười chân thành, người nói ngoài khung ở đúng vị trí An. Trạng thái kết: Túi vẫn trên vai, đường vá giữ nguyên. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q06",
+        "scene_id": "SC02",
+        "start": 34,
+        "end": 42,
+        "role": "Cho khán giả biết An đã nói rõ danh tính từ đầu.",
+        "framing": "Trung cận An, 65 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "An bỏ ý định hỏi thăm dài, hướng bàn tay phải mở về xe ngoài khung và nêu lịch hẹn.",
+        "emotion": "Tự nhiên, tin tưởng bạn giúp mình.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tớ có hẹn nhận xe lúc mười giờ. Nguyễn Hoài An.",
+            "start": 34.7,
+            "end": 40.7,
+            "delivery": "Rõ tên, không thì thầm, không đưa danh thiếp bí mật.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An đối diện Mai; tay phải thả bên hông, túi vai trái.",
+        "continuity_out": "Tay phải trở về bên hông sau khi chỉ hướng, An chờ kiểm tra.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung cận An, 65 mm. An đối diện Mai; tay phải thả bên hông, túi vai trái. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: An bỏ ý định hỏi thăm dài, hướng bàn tay phải mở về xe ngoài khung và nêu lịch hẹn. Diễn xuất: Tự nhiên, tin tưởng bạn giúp mình. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.7–6.7s: “Tớ có hẹn nhận xe lúc mười giờ. Nguyễn Hoài An.”; Rõ tên, không thì thầm, không đưa danh thiếp bí mật. Trạng thái kết: Tay phải trở về bên hông sau khi chỉ hướng, An chờ kiểm tra. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q07",
+        "scene_id": "SC02",
+        "start": 42,
+        "end": 50,
+        "role": "Mai chủ động chọn phán đoán thay vì xác minh.",
+        "framing": "Cận Mai, 75 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai liếc áo An ngoài hình, cười như vừa nghe chuyện khó tin, không đi lấy thiết bị tra cứu.",
+        "emotion": "Sự thân mật biến thành quyền đánh giá.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Cậu mua xe ở đây? Hay đến hỏi việc cho người quen?",
+            "start": 42.7,
+            "end": 48.8,
+            "delivery": "Nhấn nhẹ mua, cười mỏng giữa hai câu.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai đã nghe đầy đủ tên và hẹn nhưng chưa kiểm tra.",
+        "continuity_out": "Mai vẫn đứng chắn hướng sang xe, không có dữ liệu mới.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai, 75 mm. Mai đã nghe đầy đủ tên và hẹn nhưng chưa kiểm tra. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Mai liếc áo An ngoài hình, cười như vừa nghe chuyện khó tin, không đi lấy thiết bị tra cứu. Diễn xuất: Sự thân mật biến thành quyền đánh giá. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.7–6.8s: “Cậu mua xe ở đây? Hay đến hỏi việc cho người quen?”; Nhấn nhẹ mua, cười mỏng giữa hai câu. Trạng thái kết: Mai vẫn đứng chắn hướng sang xe, không có dữ liệu mới. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q08",
+        "scene_id": "SC02",
+        "start": 50,
+        "end": 57,
+        "role": "An khẳng định mục đích, cho Mai cơ hội sửa đầu tiên.",
+        "framing": "Trung cận An, 65 mm",
+        "camera": "Pan nhẹ theo ánh nhìn về xe",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An nhìn Mai rồi nhìn xe bạc phía sau trái, nụ cười dịu lại.",
+        "emotion": "Bắt đầu khó chịu nhưng tự giải thích là hiểu lầm.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tớ mua. Cho tớ xem chiếc màu bạc bên kia.",
+            "start": 50.8,
+            "end": 56,
+            "delivery": "Bình thường, không nhấn giàu hay tự ái.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An chưa bị chạm, khoảng cách với Mai một mét rưỡi.",
+        "continuity_out": "An xoay người nửa bước về phía xe, túi vẫn vai trái.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung cận An, 65 mm. An chưa bị chạm, khoảng cách với Mai một mét rưỡi. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Pan nhẹ theo ánh nhìn về xe. Hành động: An nhìn Mai rồi nhìn xe bạc phía sau trái, nụ cười dịu lại. Diễn xuất: Bắt đầu khó chịu nhưng tự giải thích là hiểu lầm. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.8–6s: “Tớ mua. Cho tớ xem chiếc màu bạc bên kia.”; Bình thường, không nhấn giàu hay tự ái. Trạng thái kết: An xoay người nửa bước về phía xe, túi vẫn vai trái. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q09",
+        "scene_id": "SC02",
+        "start": 57,
+        "end": 64,
+        "role": "Biến khinh thường thành hành động cản trở.",
+        "framing": "Trung đôi cạnh sườn xe, 50 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An tiến một bước, Mai dịch ngang chắn trước tay nắm cửa. Không chạm An, không chạm sơn xe.",
+        "emotion": "Mai giữ cười nhưng vai cứng; An dừng, môi khép.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Chiếc này đã có khách đặt rồi.",
+            "start": 58.3,
+            "end": 62.4,
+            "delivery": "Lịch sự bề ngoài, cắt ngắn ý định đến gần.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Một bước giày gót thấp, không có tiếng chạm xe.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Cửa xe đóng; An cách tay nắm một sải tay; Mai chưa chắn.",
+        "continuity_out": "Mai chắn lối, An đứng yên trước cô; cửa xe vẫn đóng.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MAI",
+          "REF_BAG",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi cạnh sườn xe, 50 mm. Cửa xe đóng; An cách tay nắm một sải tay; Mai chưa chắn. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: An tiến một bước, Mai dịch ngang chắn trước tay nắm cửa. Không chạm An, không chạm sơn xe. Diễn xuất: Mai giữ cười nhưng vai cứng; An dừng, môi khép. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 1.3–5.4s: “Chiếc này đã có khách đặt rồi.”; Lịch sự bề ngoài, cắt ngắn ý định đến gần. Trạng thái kết: Mai chắn lối, An đứng yên trước cô; cửa xe vẫn đóng. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q10",
+        "scene_id": "SC02",
+        "start": 64,
+        "end": 72,
+        "role": "An nói rõ tiền cọc; cắt đường chống chế về sau.",
+        "framing": "Cận vừa An, 65 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "An hơi nhíu mày, nhìn thẳng Mai ngoài hình, tay không lấy điện thoại để khoe tiền.",
+        "emotion": "Kiên nhẫn còn lại, mỗi câu ngắn hơn.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Đúng rồi. Tớ đã đặt cọc. Cậu kiểm tra giúp tên tớ.",
+            "start": 64.7,
+            "end": 71,
+            "delivery": "Nói rành mạch, ngừng ngắn sau Đúng rồi.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An bị chắn cạnh cửa xe đóng; tay phải trống.",
+        "continuity_out": "An đứng vững, chờ Mai kiểm tra chứ chưa quay đi.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận vừa An, 65 mm. An bị chắn cạnh cửa xe đóng; tay phải trống. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: An hơi nhíu mày, nhìn thẳng Mai ngoài hình, tay không lấy điện thoại để khoe tiền. Diễn xuất: Kiên nhẫn còn lại, mỗi câu ngắn hơn. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.7–7s: “Đúng rồi. Tớ đã đặt cọc. Cậu kiểm tra giúp tên tớ.”; Nói rành mạch, ngừng ngắn sau Đúng rồi. Trạng thái kết: An đứng vững, chờ Mai kiểm tra chứ chưa quay đi. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q11",
+        "scene_id": "SC02",
+        "start": 72,
+        "end": 81,
+        "role": "Mai viện quá khứ để phủ nhận hiện tại.",
+        "framing": "Cận Mai, 85 mm",
+        "camera": "Tiến nhẹ, gần như không thấy",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai hạ giọng kiểu khuyên nhủ nhưng không bớt lạnh; lắc đầu rất nhỏ.",
+        "emotion": "Mai tin mình hiểu An hơn dữ kiện An vừa đưa.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "An ơi, tớ nhớ hoàn cảnh nhà cậu mà. Đừng làm tớ khó xử.",
+            "start": 72.8,
+            "end": 79.7,
+            "delivery": "Giọng ngọt, nhấn hoàn cảnh; câu cuối như ban ơn.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai đã nghe có cọc nhưng chưa hỏi tên lại hay tra hệ thống.",
+        "continuity_out": "Mai khép người chắn lối, mắt nhìn thẳng An ngoài khung.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai, 85 mm. Mai đã nghe có cọc nhưng chưa hỏi tên lại hay tra hệ thống. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 9 giây. Máy: Tiến nhẹ, gần như không thấy. Hành động: Mai hạ giọng kiểu khuyên nhủ nhưng không bớt lạnh; lắc đầu rất nhỏ. Diễn xuất: Mai tin mình hiểu An hơn dữ kiện An vừa đưa. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.8–7.7s: “An ơi, tớ nhớ hoàn cảnh nhà cậu mà. Đừng làm tớ khó xử.”; Giọng ngọt, nhấn hoàn cảnh; câu cuối như ban ơn. Trạng thái kết: Mai khép người chắn lối, mắt nhìn thẳng An ngoài khung. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q12",
+        "scene_id": "SC02",
+        "start": 81,
+        "end": 88,
+        "role": "Tổn thương chuyển thành yêu cầu được nghe.",
+        "framing": "Cận An, 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          }
+        ],
+        "action": "An hít vào ngắn, nhìn vào mắt Mai thay vì cúi xuống; không rơi nước mắt.",
+        "emotion": "Nụ cười hết hẳn, lòng tin bị rạn.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Cậu nhớ chuyện nhà tớ. Sao không kiểm tra cuộc hẹn?",
+            "start": 81.5,
+            "end": 87,
+            "delivery": "Nửa đầu chậm, câu hỏi dứt khoát, không gắt.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An còn chờ giải thích hiểu lầm.",
+        "continuity_out": "An nâng cằm rất nhẹ, giữ ánh nhìn.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận An, 85 mm. An còn chờ giải thích hiểu lầm. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: An hít vào ngắn, nhìn vào mắt Mai thay vì cúi xuống; không rơi nước mắt. Diễn xuất: Nụ cười hết hẳn, lòng tin bị rạn. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.5–6s: “Cậu nhớ chuyện nhà tớ. Sao không kiểm tra cuộc hẹn?”; Nửa đầu chậm, câu hỏi dứt khoát, không gắt. Trạng thái kết: An nâng cằm rất nhẹ, giữ ánh nhìn. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q13",
+        "scene_id": "SC02",
+        "start": 88,
+        "end": 96,
+        "role": "Đỉnh xúc phạm: biến bí mật bạn bè thành vũ khí.",
+        "framing": "Cận Mai, 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai buột nói rõ hơn mức cần thiết; vừa dứt đã thoáng liếc về phía văn phòng nhưng không thu lời.",
+        "emotion": "Tự tin thắng thế, không nhận ra đã vượt giới hạn.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Ngày xưa tiền học còn phải vay. Giờ cậu mua xe tiền tỷ?",
+            "start": 88.5,
+            "end": 95.2,
+            "delivery": "Nhấn tiền học và tiền tỷ, âm lượng tăng vừa đủ gây nhục.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Một xung trầm rất nhỏ bắt đầu sau chữ vay; không giật nhạc.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai giữ nụ cười mỏng.",
+        "continuity_out": "Môi Mai hơi nhếch rồi khép lại, lối sang xe vẫn bị chắn.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai, 85 mm. Mai giữ nụ cười mỏng. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Mai buột nói rõ hơn mức cần thiết; vừa dứt đã thoáng liếc về phía văn phòng nhưng không thu lời. Diễn xuất: Tự tin thắng thế, không nhận ra đã vượt giới hạn. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.5–7.2s: “Ngày xưa tiền học còn phải vay. Giờ cậu mua xe tiền tỷ?”; Nhấn tiền học và tiền tỷ, âm lượng tăng vừa đủ gây nhục. Trạng thái kết: Môi Mai hơi nhếch rồi khép lại, lối sang xe vẫn bị chắn. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q14",
+        "scene_id": "SC02",
+        "start": 96,
+        "end": 102,
+        "role": "Cụ thể hóa sự phân loại qua tờ giấy.",
+        "framing": "Đặc tả tay Mai, tờ giới thiệu và bục 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "LEAFLET",
+            "variant_id": "LEAFLET_V1"
+          }
+        ],
+        "action": "Chỉ tay áo và bàn tay phải Mai hiện trong hình: cô đẩy tờ giới thiệu xe cũ 15 cm sang phía An ngoài khung. Tờ giấy dừng ngay mép bục.",
+        "emotion": "Cử chỉ thản nhiên khiến sự coi thường nặng hơn.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Xe cũ ở cuối đường. Hợp với cậu hơn.",
+            "start": 96.5,
+            "end": 101.4,
+            "delivery": "Giọng ngoài khung mặt; bàn tay trong hình không cần khẩu hình.",
+            "onscreen": false
+          }
+        ],
+        "sound": "Tiếng giấy cọ mặt bục nghe rõ, lời Mai sát.",
+        "music": "Giữ xung trầm thấp, không tăng kịch quá mức.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Tờ giấy nằm giữa bục cạnh xe, tay Mai chưa chạm.",
+        "continuity_out": "Tờ giấy nằm gần mép phía An, tay Mai rút khỏi giấy.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI",
+          "REF_LEAFLET"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Đặc tả tay Mai, tờ giới thiệu và bục 85 mm. Tờ giấy nằm giữa bục cạnh xe, tay Mai chưa chạm. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; LEAFLET: Tờ đơn đặt trên bục nhỏ gần xe bạc, Mai đẩy về phía An Q14 và để ở đó đến hết phim.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 6 giây. Máy: Máy tĩnh. Hành động: Chỉ tay áo và bàn tay phải Mai hiện trong hình: cô đẩy tờ giới thiệu xe cũ 15 cm sang phía An ngoài khung. Tờ giấy dừng ngay mép bục. Diễn xuất: Cử chỉ thản nhiên khiến sự coi thường nặng hơn. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (ngoài hình), 0.5–5.4s: “Xe cũ ở cuối đường. Hợp với cậu hơn.”; Giọng ngoài khung mặt; bàn tay trong hình không cần khẩu hình. Trạng thái kết: Tờ giấy nằm gần mép phía An, tay Mai rút khỏi giấy. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q15",
+        "scene_id": "SC02",
+        "start": 102,
+        "end": 110,
+        "role": "An tự bảo vệ trước khi có người cứu viện.",
+        "framing": "Trung cận An 65 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          }
+        ],
+        "action": "An không nhận tờ giấy ngoài hình; đứng thẳng, một lần siết nhẹ quai túi bằng tay trái rồi buông.",
+        "emotion": "Bị phản bội, chủ động chuyển sang ranh giới rõ ràng.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Cậu không muốn bán thì gọi người khác. Đừng nói chuyện với tớ như thế.",
+            "start": 102.5,
+            "end": 109.5,
+            "delivery": "Âm lượng vừa, ngắt giữa hai câu, không xin xỏ.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Xung trầm ngắn, nền không át câu cuối.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Túi trên vai trái, tay An không giữ tờ giới thiệu.",
+        "continuity_out": "An không lùi, nhìn Mai ổn định.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung cận An 65 mm. Túi trên vai trái, tay An không giữ tờ giới thiệu. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: An không nhận tờ giấy ngoài hình; đứng thẳng, một lần siết nhẹ quai túi bằng tay trái rồi buông. Diễn xuất: Bị phản bội, chủ động chuyển sang ranh giới rõ ràng. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.5–7.5s: “Cậu không muốn bán thì gọi người khác. Đừng nói chuyện với tớ như thế.”; Âm lượng vừa, ngắt giữa hai câu, không xin xỏ. Trạng thái kết: An không lùi, nhìn Mai ổn định. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q16",
+        "scene_id": "SC02",
+        "start": 110,
+        "end": 117,
+        "role": "Mai đổi xưng hô và đe dọa quyền ở lại.",
+        "framing": "Cận Mai 75 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai lạnh mặt, quay đầu nửa hướng cửa như định gọi người nhưng chưa cất tiếng gọi.",
+        "emotion": "Cố giành quyền lực bằng đồng phục và vị trí.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Hay tôi gọi bảo vệ mời chị ra?",
+            "start": 110.7,
+            "end": 115.5,
+            "delivery": "Tôi–chị cố ý xa lạ, ngắn, dọa chứ không hét.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Xung trầm giữ một nốt kéo nhỏ.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai còn nhìn An; chưa có bảo vệ xuất hiện.",
+        "continuity_out": "Mai nghiêng đầu về cửa, dừng trước khi gọi.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai 75 mm. Mai còn nhìn An; chưa có bảo vệ xuất hiện. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Mai lạnh mặt, quay đầu nửa hướng cửa như định gọi người nhưng chưa cất tiếng gọi. Diễn xuất: Cố giành quyền lực bằng đồng phục và vị trí. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.7–5.5s: “Hay tôi gọi bảo vệ mời chị ra?”; Tôi–chị cố ý xa lạ, ngắn, dọa chứ không hét. Trạng thái kết: Mai nghiêng đầu về cửa, dừng trước khi gọi. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q17",
+        "scene_id": "SC03",
+        "start": 117,
+        "end": 122,
+        "role": "Nam chính chặn hành vi, chưa biết ai có tiền.",
+        "framing": "Trung toàn ba người 35 mm, văn phòng ở hậu cảnh",
+        "camera": "Pan ngắn theo Minh vào giữa trục, không vượt trục",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "Minh mang tablet tay trái, bước hai bước từ cửa văn phòng đến cách hai người khoảng hai mét, nói một câu. An và Mai cùng quay mắt về anh.",
+        "emotion": "Một nhịp dừng khiến thế áp đảo của Mai đứt.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Khoan đã.",
+            "start": 118.2,
+            "end": 119.8,
+            "delivery": "Trầm, rõ, một hơi; không quát.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Hai bước chân da, điều hòa, câu chặn rõ.",
+        "music": "Cắt xung trầm ngay khi Minh lên tiếng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An trái, Mai phải cạnh xe; Minh vừa ra văn phòng phía bắc.",
+        "continuity_out": "Minh dừng ở khoảng trung gian, tablet tay trái, không đứng chắn hoặc chạm An.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MAI",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_CAR",
+          "REF_TABLET",
+          "REF_BLOCKING"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung toàn ba người 35 mm, văn phòng ở hậu cảnh. An trái, Mai phải cạnh xe; Minh vừa ra văn phòng phía bắc. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 5 giây. Máy: Pan ngắn theo Minh vào giữa trục, không vượt trục. Hành động: Minh mang tablet tay trái, bước hai bước từ cửa văn phòng đến cách hai người khoảng hai mét, nói một câu. An và Mai cùng quay mắt về anh. Diễn xuất: Một nhịp dừng khiến thế áp đảo của Mai đứt. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 1.2–2.8s: “Khoan đã.”; Trầm, rõ, một hơi; không quát. Trạng thái kết: Minh dừng ở khoảng trung gian, tablet tay trái, không đứng chắn hoặc chạm An. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q18",
+        "scene_id": "SC03",
+        "start": 122,
+        "end": 130,
+        "role": "Buộc nêu sự việc thay vì theo người có chức danh.",
+        "framing": "Trung Minh 65 mm; An và Mai ngoài khung hai phía",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "Minh nhìn Mai, dừng ngắn cho cô trả lời; tay phải mở thấp, không chỉ mặt.",
+        "emotion": "Kiểm soát tình huống, không vội kết luận.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Có chuyện gì mà phải gọi bảo vệ?",
+            "start": 123,
+            "end": 127.2,
+            "delivery": "Hỏi nhân viên bình tĩnh, không hàm ý khách có lỗi.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Minh vừa dừng, tablet tay trái, chưa nghe lời giải thích.",
+        "continuity_out": "Minh chờ, mắt không rời Mai ngoài hình.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_TABLET",
+          "REF_BLOCKING"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung Minh 65 mm; An và Mai ngoài khung hai phía. Minh vừa dừng, tablet tay trái, chưa nghe lời giải thích. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Minh nhìn Mai, dừng ngắn cho cô trả lời; tay phải mở thấp, không chỉ mặt. Diễn xuất: Kiểm soát tình huống, không vội kết luận. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 1–5.2s: “Có chuyện gì mà phải gọi bảo vệ?”; Hỏi nhân viên bình tĩnh, không hàm ý khách có lỗi. Trạng thái kết: Minh chờ, mắt không rời Mai ngoài hình. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q19",
+        "scene_id": "SC03",
+        "start": 130,
+        "end": 138,
+        "role": "Mai chỉnh câu chuyện để bảo toàn vị trí.",
+        "framing": "Cận Mai 75 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai quay hẳn về Minh, hạ vai và bày vẻ khó xử, bàn tay phải mở về An ngoài hình.",
+        "emotion": "Nịnh cấp trên, cố biến tự vệ của khách thành gây rối.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Chị ấy nói có hẹn nhận xe. Em nhắc đừng chạm xe thì chị ấy làm ầm lên.",
+            "start": 130.5,
+            "end": 137.7,
+            "delivery": "Nhanh hơn bình thường nhưng rõ; đây là lời kể sai của Mai, không diễn lại bằng hình.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai bị hỏi bất ngờ nhưng chưa biết đơn thật.",
+        "continuity_out": "Tay Mai hạ xuống sau giải thích, chờ được bênh.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai 75 mm. Mai bị hỏi bất ngờ nhưng chưa biết đơn thật. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Mai quay hẳn về Minh, hạ vai và bày vẻ khó xử, bàn tay phải mở về An ngoài hình. Diễn xuất: Nịnh cấp trên, cố biến tự vệ của khách thành gây rối. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.5–7.7s: “Chị ấy nói có hẹn nhận xe. Em nhắc đừng chạm xe thì chị ấy làm ầm lên.”; Nhanh hơn bình thường nhưng rõ; đây là lời kể sai của Mai, không diễn lại bằng hình. Trạng thái kết: Tay Mai hạ xuống sau giải thích, chờ được bênh. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q20",
+        "scene_id": "SC03",
+        "start": 138,
+        "end": 145,
+        "role": "Đặt câu hỏi có thể kiểm chứng.",
+        "framing": "Cận Minh 75 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          }
+        ],
+        "action": "Minh không nhìn theo tay Mai; hỏi rồi giữ khoảng im, để lời nói dối tự lộ.",
+        "emotion": "Không bị kéo vào cách Mai đánh giá khách.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Cô đã kiểm tra lịch hẹn của khách chưa?",
+            "start": 138.8,
+            "end": 143.2,
+            "delivery": "Nhấn kiểm tra, không nhấn ai giàu nghèo.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Minh chỉ biết từ Mai rằng khách nói có hẹn.",
+        "continuity_out": "Minh đợi câu trả lời cụ thể.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Minh 75 mm. Minh chỉ biết từ Mai rằng khách nói có hẹn. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Minh không nhìn theo tay Mai; hỏi rồi giữ khoảng im, để lời nói dối tự lộ. Diễn xuất: Không bị kéo vào cách Mai đánh giá khách. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 0.8–5.2s: “Cô đã kiểm tra lịch hẹn của khách chưa?”; Nhấn kiểm tra, không nhấn ai giàu nghèo. Trạng thái kết: Minh đợi câu trả lời cụ thể. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q21",
+        "scene_id": "SC03",
+        "start": 145,
+        "end": 151,
+        "role": "Khoảng im đầu tiên Mai không làm chủ.",
+        "framing": "Cận Mai 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai mở miệng rồi dừng, nhìn xuống bảng tên trước khi trả lời.",
+        "emotion": "Nụ cười nghề nghiệp rơi mất; ngượng nhưng chưa nhận lỗi.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Em... chưa.",
+            "start": 147.2,
+            "end": 149.6,
+            "delivery": "Khoảng ngập ngừng nghe thật, không nói lắp hài.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai muốn giải thích thêm, môi hé.",
+        "continuity_out": "Mai thừa nhận chưa kiểm tra, mắt tránh Minh.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai 85 mm. Mai muốn giải thích thêm, môi hé. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 6 giây. Máy: Máy tĩnh. Hành động: Mai mở miệng rồi dừng, nhìn xuống bảng tên trước khi trả lời. Diễn xuất: Nụ cười nghề nghiệp rơi mất; ngượng nhưng chưa nhận lỗi. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 2.2–4.6s: “Em... chưa.”; Khoảng ngập ngừng nghe thật, không nói lắp hài. Trạng thái kết: Mai thừa nhận chưa kiểm tra, mắt tránh Minh. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q22",
+        "scene_id": "SC03",
+        "start": 151,
+        "end": 159,
+        "role": "Thiết lập chuẩn tôn trọng trước cú lật tài chính.",
+        "framing": "Trung đôi Minh phải, An trái, 50 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "Minh quay sang An, hơi cúi đầu xin lỗi, giữ khoảng cách lịch sự. An thở ra một nhịp.",
+        "emotion": "An được lắng nghe, chưa trở lại vui; Minh nghiêm túc nhận trách nhiệm.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Tôi là Minh, quản lý. Xin lỗi chị. Cho tôi xin tên đặt xe.",
+            "start": 151.5,
+            "end": 158.3,
+            "delivery": "Xin lỗi không điều kiện, chưa gọi VIP hay đặc biệt.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An vẫn đứng với túi vai trái, Minh giữ tablet tay trái, chưa ai biết đơn khớp hay không.",
+        "continuity_out": "Minh chờ tên đặt xe, An chuẩn bị trả lời.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_AN",
+          "REF_BAG",
+          "REF_TABLET"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi Minh phải, An trái, 50 mm. An vẫn đứng với túi vai trái, Minh giữ tablet tay trái, chưa ai biết đơn khớp hay không. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Minh quay sang An, hơi cúi đầu xin lỗi, giữ khoảng cách lịch sự. An thở ra một nhịp. Diễn xuất: An được lắng nghe, chưa trở lại vui; Minh nghiêm túc nhận trách nhiệm. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 0.5–7.3s: “Tôi là Minh, quản lý. Xin lỗi chị. Cho tôi xin tên đặt xe.”; Xin lỗi không điều kiện, chưa gọi VIP hay đặc biệt. Trạng thái kết: Minh chờ tên đặt xe, An chuẩn bị trả lời. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q23",
+        "scene_id": "SC03",
+        "start": 159,
+        "end": 165,
+        "role": "An cung cấp dữ kiện ngắn, không diễn màn khoe quyền.",
+        "framing": "Cận An 75 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          }
+        ],
+        "action": "An nhìn Minh, đọc lại tên và đuôi mã; mắt không liếc Mai để trả đũa.",
+        "emotion": "Tự chủ, vẫn đau vì phải nhắc lại điều đã nói.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Nguyễn Hoài An. Mã hẹn cuối là hai bảy.",
+            "start": 159.4,
+            "end": 164.6,
+            "delivery": "Rõ từng phần, bình thường, không mỉm cười chiến thắng.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An chưa lấy điện thoại, hai tay thả.",
+        "continuity_out": "An đã cung cấp tên và mã đúng.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận An 75 mm. An chưa lấy điện thoại, hai tay thả. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 6 giây. Máy: Máy tĩnh. Hành động: An nhìn Minh, đọc lại tên và đuôi mã; mắt không liếc Mai để trả đũa. Diễn xuất: Tự chủ, vẫn đau vì phải nhắc lại điều đã nói. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.4–5.6s: “Nguyễn Hoài An. Mã hẹn cuối là hai bảy.”; Rõ từng phần, bình thường, không mỉm cười chiến thắng. Trạng thái kết: An đã cung cấp tên và mã đúng. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q24",
+        "scene_id": "SC04",
+        "start": 165,
+        "end": 172,
+        "role": "Cú lật thứ nhất bằng bằng chứng, không thêm nhân vật quyền lực.",
+        "framing": "Insert tablet và tay trái Minh, 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "Tablet đã mở lịch trong chuyển cảnh; Minh chạm một lần bằng tay phải. Lớp hậu kỳ hiện: NGUYỄN HOÀI AN; 10:00; MÃ …27; ĐÃ CỌC 200.000.000 Đ. Không lộ thông tin khác.",
+        "emotion": "Thông tin lạnh và rõ, không cần giật gân.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Nguyễn Hoài An. Đã cọc hai trăm triệu.",
+            "start": 166.1,
+            "end": 171,
+            "delivery": "Ngoài hình, đọc nhỏ để xác nhận cho khách, không loan báo showroom.",
+            "onscreen": false
+          }
+        ],
+        "sound": "Một chạm màn hình nhỏ và giọng Minh ngoài hình.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Tablet trên tay trái Minh, giao diện lịch trung tính; tay phải chưa chạm dòng.",
+        "continuity_out": "Dòng đúng khách mở; tablet còn trên tay trái.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_TABLET"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Insert tablet và tay trái Minh, 85 mm. Tablet trên tay trái Minh, giao diện lịch trung tính; tay phải chưa chạm dòng. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Tablet đã mở lịch trong chuyển cảnh; Minh chạm một lần bằng tay phải. Lớp hậu kỳ hiện: NGUYỄN HOÀI AN; 10:00; MÃ …27; ĐÃ CỌC 200.000.000 Đ. Không lộ thông tin khác. Diễn xuất: Thông tin lạnh và rõ, không cần giật gân. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (ngoài hình), 1.1–6s: “Nguyễn Hoài An. Đã cọc hai trăm triệu.”; Ngoài hình, đọc nhỏ để xác nhận cho khách, không loan báo showroom. Trạng thái kết: Dòng đúng khách mở; tablet còn trên tay trái. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q25",
+        "scene_id": "SC04",
+        "start": 172,
+        "end": 179,
+        "role": "Xác nhận chiếc xe Mai đang chắn chính là xe của An.",
+        "framing": "Trung cận Minh 65 mm, xe trong nền trái",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "Minh nâng mắt khỏi tablet, hướng bàn tay phải mở về xe bạc; không làm điệu ngạc nhiên.",
+        "emotion": "Lịch sự nhất quán, không đổi thái độ theo tiền.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Chiếc màu bạc, đúng lịch mười giờ. Hồ sơ của chị đã sẵn sàng.",
+            "start": 172.3,
+            "end": 178.8,
+            "delivery": "Giọng phục vụ bình thường, dừng nhẹ sau màu bạc.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Minh đã thấy đơn đúng, tablet tay trái.",
+        "continuity_out": "Minh mời kiểm xe bằng cử chỉ, chưa bàn giao chìa.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_TABLET",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung cận Minh 65 mm, xe trong nền trái. Minh đã thấy đơn đúng, tablet tay trái. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Minh nâng mắt khỏi tablet, hướng bàn tay phải mở về xe bạc; không làm điệu ngạc nhiên. Diễn xuất: Lịch sự nhất quán, không đổi thái độ theo tiền. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 0.3–6.8s: “Chiếc màu bạc, đúng lịch mười giờ. Hồ sơ của chị đã sẵn sàng.”; Giọng phục vụ bình thường, dừng nhẹ sau màu bạc. Trạng thái kết: Minh mời kiểm xe bằng cử chỉ, chưa bàn giao chìa. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q26",
+        "scene_id": "SC04",
+        "start": 179,
+        "end": 186,
+        "role": "Mai tự phơi mình bằng lời chống chế.",
+        "framing": "Cận Mai 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai nhìn về xe rồi nhìn An ngoài hình; cố nở lại nụ cười nhưng môi không đều.",
+        "emotion": "Choáng, tìm cách chuyển trách nhiệm cho người bị xúc phạm.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Chị An... sao chị không nói ngay từ đầu?",
+            "start": 179.7,
+            "end": 185.4,
+            "delivery": "Ngọt gượng, ngập một nhịp trước câu hỏi.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai đã nghe đơn thật và số cọc.",
+        "continuity_out": "Mai nuốt khan, xưng chị lần đầu với sắc thái phục vụ.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai 85 mm. Mai đã nghe đơn thật và số cọc. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Mai nhìn về xe rồi nhìn An ngoài hình; cố nở lại nụ cười nhưng môi không đều. Diễn xuất: Choáng, tìm cách chuyển trách nhiệm cho người bị xúc phạm. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.7–6.4s: “Chị An... sao chị không nói ngay từ đầu?”; Ngọt gượng, ngập một nhịp trước câu hỏi. Trạng thái kết: Mai nuốt khan, xưng chị lần đầu với sắc thái phục vụ. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q27",
+        "scene_id": "SC04",
+        "start": 186,
+        "end": 192,
+        "role": "Câu phản đòn đầu tiên ngắn, khớp dữ kiện đã gieo.",
+        "framing": "Cận An 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          }
+        ],
+        "action": "An quay mắt sang Mai, không quay cả thân, trả lời rồi nhìn lại Minh.",
+        "emotion": "Không hả hê; sự thất vọng sâu hơn tức giận.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tôi đã nói. Cậu không nghe.",
+            "start": 187,
+            "end": 191,
+            "delivery": "Chậm vừa, hai câu tách rõ, âm cuối thấp.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An nghe lời đổ trách nhiệm, còn đứng cạnh xe.",
+        "continuity_out": "An cắt cuộc đôi co, chuẩn bị quay lại việc mua xe.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận An 85 mm. An nghe lời đổ trách nhiệm, còn đứng cạnh xe. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 6 giây. Máy: Máy tĩnh. Hành động: An quay mắt sang Mai, không quay cả thân, trả lời rồi nhìn lại Minh. Diễn xuất: Không hả hê; sự thất vọng sâu hơn tức giận. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 1–5s: “Tôi đã nói. Cậu không nghe.”; Chậm vừa, hai câu tách rõ, âm cuối thấp. Trạng thái kết: An cắt cuộc đôi co, chuẩn bị quay lại việc mua xe. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q28",
+        "scene_id": "SC04",
+        "start": 192,
+        "end": 199,
+        "role": "An giữ mục tiêu độc lập với cuộc trả đũa.",
+        "framing": "Trung đôi An–Minh 50 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "An hướng bàn tay phải về xe; Minh gật nhẹ và nhường lối.",
+        "emotion": "Trở lại vai trò người quyết định, không xin phép Mai.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Mình kiểm tra lại xe và hồ sơ trước khi thanh toán nhé.",
+            "start": 192.4,
+            "end": 198.5,
+            "delivery": "Thực tế, tập trung công việc, không cao giọng.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt sang toàn cảnh thiết lập khu xe trước montage, bắt đầu lược thời gian.",
+        "continuity_in": "Lối xe vừa được Mai lùi khỏi ở ngoài khung sau Q27; An chưa mở cửa.",
+        "continuity_out": "An và Minh sẵn sàng kiểm xe, túi vẫn vai trái.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_TABLET"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi An–Minh 50 mm. Lối xe vừa được Mai lùi khỏi ở ngoài khung sau Q27; An chưa mở cửa. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: An hướng bàn tay phải về xe; Minh gật nhẹ và nhường lối. Diễn xuất: Trở lại vai trò người quyết định, không xin phép Mai. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.4–6.5s: “Mình kiểm tra lại xe và hồ sơ trước khi thanh toán nhé.”; Thực tế, tập trung công việc, không cao giọng. Trạng thái kết: An và Minh sẵn sàng kiểm xe, túi vẫn vai trái. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q29",
+        "scene_id": "SC04",
+        "start": 199,
+        "end": 204,
+        "role": "Cho thấy có kiểm xe thật, thiết lập lại trục.",
+        "framing": "Toàn khu xe 35 mm, cửa ghế lái ở bên thấy rõ",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An dùng tay phải mở một lần cửa ghế lái, Minh đứng cách sau một mét. Mai không có trong khung. Không gộp thêm thao tác ngồi.",
+        "emotion": "An chú ý kỹ thuật, không trình diễn giàu có.",
+        "dialogue": [],
+        "sound": "Tay nắm bật, bản lề và gioăng cửa xe.",
+        "music": "Hai nốt nhịp vừa, nhỏ, bắt đầu montage.",
+        "transition": "Cắt theo ánh nhìn vào cabin; lược thời gian kiểm xe.",
+        "continuity_in": "Cửa xe đóng, An cạnh tay nắm, túi vai trái, Minh bên sau.",
+        "continuity_out": "Cửa ghế lái mở, An nhìn vào cabin, chưa ngồi.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_CAR",
+          "REF_BLOCKING"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Toàn khu xe 35 mm, cửa ghế lái ở bên thấy rõ. Cửa xe đóng, An cạnh tay nắm, túi vai trái, Minh bên sau. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 5 giây. Máy: Máy tĩnh. Hành động: An dùng tay phải mở một lần cửa ghế lái, Minh đứng cách sau một mét. Mai không có trong khung. Không gộp thêm thao tác ngồi. Diễn xuất: An chú ý kỹ thuật, không trình diễn giàu có. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: Cửa ghế lái mở, An nhìn vào cabin, chưa ngồi. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q30",
+        "scene_id": "SC04",
+        "start": 204,
+        "end": 209,
+        "role": "Một kiểm tra cụ thể và khoảng nghỉ khỏi đối đầu.",
+        "framing": "Cận chếch cabin 65 mm, mặt An và đường ghế",
+        "camera": "Trượt vào rất ngắn theo ánh nhìn",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An đứng ngoài cửa mở, cúi nhìn đường may ghế nâu và bảng điều khiển tắt, mắt rà từ trái sang phải. Không đưa tay kiểm nhiều nút.",
+        "emotion": "Tập trung, tỉnh táo; cô mua đúng nhu cầu đã tính.",
+        "dialogue": [],
+        "sound": "Nền phòng giảm nhẹ theo điểm nghe cabin.",
+        "music": "Nhịp hai nốt nối montage.",
+        "transition": "Match cut đường may sang mép hợp đồng; lược quá trình kiểm tra còn lại và đóng cửa xe, tới bàn khoảng 10:23.",
+        "continuity_in": "Cửa ghế lái đang mở, An chưa ngồi; túi áp sườn trái, không vướng cửa.",
+        "continuity_out": "An hoàn tất cái nhìn, vẫn ngoài cửa mở.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG",
+          "REF_CAR"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận chếch cabin 65 mm, mặt An và đường ghế. Cửa ghế lái đang mở, An chưa ngồi; túi áp sườn trái, không vướng cửa. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 5 giây. Máy: Trượt vào rất ngắn theo ánh nhìn. Hành động: An đứng ngoài cửa mở, cúi nhìn đường may ghế nâu và bảng điều khiển tắt, mắt rà từ trái sang phải. Không đưa tay kiểm nhiều nút. Diễn xuất: Tập trung, tỉnh táo; cô mua đúng nhu cầu đã tính. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: An hoàn tất cái nhìn, vẫn ngoài cửa mở. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q31",
+        "scene_id": "SC04",
+        "start": 209,
+        "end": 216,
+        "role": "Kiểm giấy tờ rồi mới trả tiền, gieo vị trí chìa khóa.",
+        "framing": "Trung chếch bàn 50 mm, An trái, Minh phải ngoài nét",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "DOCS",
+            "variant_id": "DOCS_V1"
+          },
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An đã ngồi tại bàn, nhìn ba dòng thông tin, nói xác nhận rồi ký một chữ ký ở ô cuối bằng bút tay phải. Không ký nhiều trang trong clip.",
+        "emotion": "Điềm tĩnh, chắc chắn, có quyền kiểm tra.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Thông tin đúng rồi. Tôi thanh toán phần còn lại.",
+            "start": 209.4,
+            "end": 214.5,
+            "delivery": "Nói khi đã đọc xong, dứt câu rồi ký.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Giấy, nét bút, tiếng điều hòa.",
+        "music": "Hai nốt kết nhẹ, dừng khi ký xong.",
+        "transition": "Cắt insert điện thoại; lược thao tác lấy máy và nhập giao dịch, không lược việc xác nhận.",
+        "continuity_in": "Túi trên mặt bàn sát trái An; điện thoại vẫn bên trong không thấy. Hồ sơ mở chưa ký, bút trên gáy, chìa cạnh hồ sơ, tablet trước Minh. Xe nền đã đóng cửa sau lược thời gian.",
+        "continuity_out": "Trang cuối có chữ ký An, bút đặt lại trên gáy, chìa vẫn trên bàn.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_DOCS",
+          "REF_KEY",
+          "REF_TABLET",
+          "REF_CAR",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung chếch bàn 50 mm, An trái, Minh phải ngoài nét. Túi trên mặt bàn sát trái An; điện thoại vẫn bên trong không thấy. Hồ sơ mở chưa ký, bút trên gáy, chìa cạnh hồ sơ, tablet trước Minh. Xe nền đã đóng cửa sau lược thời gian. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; DOCS: Hồ sơ đã soạn trước đúng tên NGUYỄN HOÀI AN, tổng 1.280.000.000 đồng; An kiểm tra rồi ký Q31, không xuất hiện chữ ký trước đó.; KEY: Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: An đã ngồi tại bàn, nhìn ba dòng thông tin, nói xác nhận rồi ký một chữ ký ở ô cuối bằng bút tay phải. Không ký nhiều trang trong clip. Diễn xuất: Điềm tĩnh, chắc chắn, có quyền kiểm tra. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.4–5.5s: “Thông tin đúng rồi. Tôi thanh toán phần còn lại.”; Nói khi đã đọc xong, dứt câu rồi ký. Trạng thái kết: Trang cuối có chữ ký An, bút đặt lại trên gáy, chìa vẫn trên bàn. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q32",
+        "scene_id": "SC04",
+        "start": 216,
+        "end": 223,
+        "role": "Bắt đầu khoảng chờ quyết định, không dùng tiền mặt khoe của.",
+        "framing": "Insert điện thoại trong hai tay An 85 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "PHONE",
+            "variant_id": "PHONE_V1"
+          }
+        ],
+        "action": "Điện thoại tay phải, ngón trỏ trái chạm nút xác nhận một lần. Đồ họa hậu kỳ: số tiền 1.080.000.000 Đ, người nhận ĐẠI LÝ, rồi ĐANG XỬ LÝ. Không nhập PIN hay OTP trên hình.",
+        "emotion": "Quyết định đã thực hiện, kết quả chưa tới.",
+        "dialogue": [],
+        "sound": "Một chạm kính, nền phòng; không âm thành công.",
+        "music": "Không nhạc; nhịp chờ bằng âm thật.",
+        "transition": "Cắt phản ứng Mai trong lúc chờ, cùng thời điểm.",
+        "continuity_in": "An đã lấy điện thoại từ túi trong khoảng cắt; màn hình hư cấu ở bước duyệt cuối, chưa gửi.",
+        "continuity_out": "Giao dịch đang xử lý, điện thoại vẫn trong tay An; trong Q33 ngoài khung An đặt máy úp xuống cạnh túi, cho một tiếng chạm bàn rất nhỏ.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_PHONE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Insert điện thoại trong hai tay An 85 mm. An đã lấy điện thoại từ túi trong khoảng cắt; màn hình hư cấu ở bước duyệt cuối, chưa gửi. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; PHONE: Màn hình chưa mở giao dịch khi lấy khỏi túi; Q32 gửi khoản 1.080.000.000 đồng, không lộ thông tin xác thực. Tay phải An cầm; tay trái chạm xác nhận.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Điện thoại tay phải, ngón trỏ trái chạm nút xác nhận một lần. Đồ họa hậu kỳ: số tiền 1.080.000.000 Đ, người nhận ĐẠI LÝ, rồi ĐANG XỬ LÝ. Không nhập PIN hay OTP trên hình. Diễn xuất: Quyết định đã thực hiện, kết quả chưa tới. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: Giao dịch đang xử lý, điện thoại vẫn trong tay An; trong Q33 ngoài khung An đặt máy úp xuống cạnh túi, cho một tiếng chạm bàn rất nhỏ. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q33",
+        "scene_id": "SC04",
+        "start": 223,
+        "end": 230,
+        "role": "Cho Mai hy vọng sai cuối cùng, tăng sức nặng cú lật.",
+        "framing": "Cận Mai 85 mm; nền bàn ngoài nét, không thấy màn hình",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai liếc xuống nơi điện thoại ngoài hình rồi cố đưa lời giúp đỡ, mắt sáng lên một thoáng vì tưởng mình đoán đúng.",
+        "emotion": "Chưa chịu bỏ thành kiến, sau câu nói lại ngậm miệng chờ.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Nếu ngân hàng báo hạn mức... mình có thể để hôm khác.",
+            "start": 223.5,
+            "end": 229.5,
+            "delivery": "Nói chậm giả ân cần, bỏ lửng sau hạn mức; không có sự thật nào về ngân hàng xác nhận lời này.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai đứng lùi sau bàn phía phải; giao dịch chưa được kế toán xác nhận.",
+        "continuity_out": "Mai chờ phản hồi, không chạm vào tài sản An.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận Mai 85 mm; nền bàn ngoài nét, không thấy màn hình. Mai đứng lùi sau bàn phía phải; giao dịch chưa được kế toán xác nhận. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Mai liếc xuống nơi điện thoại ngoài hình rồi cố đưa lời giúp đỡ, mắt sáng lên một thoáng vì tưởng mình đoán đúng. Diễn xuất: Chưa chịu bỏ thành kiến, sau câu nói lại ngậm miệng chờ. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.5–6.5s: “Nếu ngân hàng báo hạn mức... mình có thể để hôm khác.”; Nói chậm giả ân cần, bỏ lửng sau hạn mức; không có sự thật nào về ngân hàng xác nhận lời này. Trạng thái kết: Mai chờ phản hồi, không chạm vào tài sản An. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q34",
+        "scene_id": "SC04",
+        "start": 230,
+        "end": 237,
+        "role": "Khoảng im rồi bằng chứng hoàn tất từ phía đại lý.",
+        "framing": "Đặc tả tablet trên bàn 85 mm, không người",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "Hai giây đầu chữ ĐANG ĐỐI SOÁT giữ nguyên, sau đó đổi sang ĐÃ NHẬN 1.080.000.000 Đ; bên dưới TỔNG ĐÃ THANH TOÁN 1.280.000.000 Đ và NGUYỄN HOÀI AN. Chữ tạo hậu kỳ, không chồng thêm cuộc gọi.",
+        "emotion": "Chờ đủ lâu để Mai tin nhầm, kết quả gọn làm mọi lời chống chế mất chỗ đứng.",
+        "dialogue": [],
+        "sound": "Điều hòa; đúng lúc đổi trạng thái có một tiếng báo nhỏ.",
+        "music": "Không nhạc, không hiệu ứng tiền rơi.",
+        "transition": "Giữ kết quả đọc được hai giây rồi cắt Minh.",
+        "continuity_in": "Tablet nằm trước Minh, màn hình đối soát trung tính, chưa có dấu xác nhận.",
+        "continuity_out": "Khoản cuối được hệ thống kế toán đại lý xác nhận, không chỉ ảnh chuyển tiền của An.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_TABLET"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Đặc tả tablet trên bàn 85 mm, không người. Tablet nằm trước Minh, màn hình đối soát trung tính, chưa có dấu xác nhận. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: Hai giây đầu chữ ĐANG ĐỐI SOÁT giữ nguyên, sau đó đổi sang ĐÃ NHẬN 1.080.000.000 Đ; bên dưới TỔNG ĐÃ THANH TOÁN 1.280.000.000 Đ và NGUYỄN HOÀI AN. Chữ tạo hậu kỳ, không chồng thêm cuộc gọi. Diễn xuất: Chờ đủ lâu để Mai tin nhầm, kết quả gọn làm mọi lời chống chế mất chỗ đứng. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: Khoản cuối được hệ thống kế toán đại lý xác nhận, không chỉ ảnh chuyển tiền của An. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q35",
+        "scene_id": "SC05",
+        "start": 237,
+        "end": 245,
+        "role": "Xác nhận giao dịch hoàn tất, không tôn sùng tiền.",
+        "framing": "Trung cận Minh 65 mm tại bàn",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          },
+          {
+            "entity_id": "DOCS",
+            "variant_id": "DOCS_V1"
+          },
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          }
+        ],
+        "action": "Minh xem xác nhận trên tablet rồi nhìn An ngoài hình; tay phải đặt gần chìa trên bàn nhưng chưa đẩy.",
+        "emotion": "Quy trình bình thường, bình tĩnh như lúc chưa biết đơn.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Kế toán đã xác nhận đủ một tỷ không trăm tám mươi triệu. Xe đứng tên chị.",
+            "start": 237.5,
+            "end": 244.7,
+            "delivery": "Đọc rõ số tiền, nhấn rất nhẹ đứng tên chị, không gọi VIP.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Minh ngồi đối diện An, tablet đã xác nhận, hồ sơ ký, chìa vẫn cạnh tập giấy.",
+        "continuity_out": "Minh xác nhận đủ tiền, chưa giao chìa.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_TABLET",
+          "REF_DOCS",
+          "REF_KEY",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung cận Minh 65 mm tại bàn. Minh ngồi đối diện An, tablet đã xác nhận, hồ sơ ký, chìa vẫn cạnh tập giấy. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.; DOCS: Hồ sơ đã soạn trước đúng tên NGUYỄN HOÀI AN, tổng 1.280.000.000 đồng; An kiểm tra rồi ký Q31, không xuất hiện chữ ký trước đó.; KEY: Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Minh xem xác nhận trên tablet rồi nhìn An ngoài hình; tay phải đặt gần chìa trên bàn nhưng chưa đẩy. Diễn xuất: Quy trình bình thường, bình tĩnh như lúc chưa biết đơn. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 0.5–7.7s: “Kế toán đã xác nhận đủ một tỷ không trăm tám mươi triệu. Xe đứng tên chị.”; Đọc rõ số tiền, nhấn rất nhẹ đứng tên chị, không gọi VIP. Trạng thái kết: Minh xác nhận đủ tiền, chưa giao chìa. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q36",
+        "scene_id": "SC05",
+        "start": 245,
+        "end": 254,
+        "role": "Sự đổi giọng khiến Mai bẽ mặt bằng chính hành động mình.",
+        "framing": "Trung Mai đứng bên bàn, 65 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai nhích nửa bước về bàn, nở nụ cười phục vụ, hai tay khép trước người; không cướp chìa khóa. Dứt câu, cô đợi An nhưng nụ cười yếu dần.",
+        "emotion": "Lo mất quan hệ khách hàng, chưa biết xin lỗi thế nào cho đúng.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "Để em bàn giao xe cho chị nhé. Chuyện lúc nãy... em chỉ...",
+            "start": 245.7,
+            "end": 252.5,
+            "delivery": "Ân cần gượng, câu xin lỗi không thành, rơi giọng cuối.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai lùi sau bàn bên phải, không có đạo cụ trong tay.",
+        "continuity_out": "Mai dừng gần hơn nửa bước, không ai đáp nụ cười.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MAI",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung Mai đứng bên bàn, 65 mm. Mai lùi sau bàn bên phải, không có đạo cụ trong tay. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 9 giây. Máy: Máy tĩnh. Hành động: Mai nhích nửa bước về bàn, nở nụ cười phục vụ, hai tay khép trước người; không cướp chìa khóa. Dứt câu, cô đợi An nhưng nụ cười yếu dần. Diễn xuất: Lo mất quan hệ khách hàng, chưa biết xin lỗi thế nào cho đúng. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.7–7.5s: “Để em bàn giao xe cho chị nhé. Chuyện lúc nãy... em chỉ...”; Ân cần gượng, câu xin lỗi không thành, rơi giọng cuối. Trạng thái kết: Mai dừng gần hơn nửa bước, không ai đáp nụ cười. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q37",
+        "scene_id": "SC05",
+        "start": 254,
+        "end": 263,
+        "role": "Nữ chính quyết định: mua vì đã chọn, đổi người phục vụ.",
+        "framing": "Trung đôi An trái, Minh phải 50 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "PHONE",
+            "variant_id": "PHONE_V1"
+          },
+          {
+            "entity_id": "DOCS",
+            "variant_id": "DOCS_V1"
+          },
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          },
+          {
+            "entity_id": "TABLET",
+            "variant_id": "TABLET_V1"
+          }
+        ],
+        "action": "An nhìn Minh, đề nghị anh bàn giao. Dứt câu Minh mới đẩy chìa 15 cm tới trước An; cô cầm lên bằng tay phải. Điện thoại đặt trên bàn bên trái hồ sơ từ khoảng cắt sau Q32.",
+        "emotion": "Tự chủ, không cười thắng; Minh gật nhận trách nhiệm.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tôi vẫn mua vì đã chọn xe từ trước. Nhờ anh Minh bàn giao giúp tôi.",
+            "start": 254.4,
+            "end": 261.7,
+            "delivery": "Nửa đầu giải thích lựa chọn, nửa sau yêu cầu rõ, không nhìn Mai để khiêu khích.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Lời rõ, tiếng chìa trượt nhẹ rồi nhấc, điều hòa.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An còn ngồi, túi trên bàn bên trái, key gần hồ sơ chưa tới tay, phone mặt xuống cạnh túi.",
+        "continuity_out": "An cầm một chìa tay phải; hồ sơ và tablet ở bàn, túi chưa đeo.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_PHONE",
+          "REF_DOCS",
+          "REF_KEY",
+          "REF_TABLET",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi An trái, Minh phải 50 mm. An còn ngồi, túi trên bàn bên trái, key gần hồ sơ chưa tới tay, phone mặt xuống cạnh túi. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; PHONE: Màn hình chưa mở giao dịch khi lấy khỏi túi; Q32 gửi khoản 1.080.000.000 đồng, không lộ thông tin xác thực. Tay phải An cầm; tay trái chạm xác nhận.; DOCS: Hồ sơ đã soạn trước đúng tên NGUYỄN HOÀI AN, tổng 1.280.000.000 đồng; An kiểm tra rồi ký Q31, không xuất hiện chữ ký trước đó.; KEY: Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.; TABLET: Q24 trong tay trái Minh tra lịch hẹn; Q31 nằm phía Minh trên bàn, Q34 cập nhật trạng thái từ đối soát sang đã nhận đủ khoản cuối.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 9 giây. Máy: Máy tĩnh. Hành động: An nhìn Minh, đề nghị anh bàn giao. Dứt câu Minh mới đẩy chìa 15 cm tới trước An; cô cầm lên bằng tay phải. Điện thoại đặt trên bàn bên trái hồ sơ từ khoảng cắt sau Q32. Diễn xuất: Tự chủ, không cười thắng; Minh gật nhận trách nhiệm. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.4–7.7s: “Tôi vẫn mua vì đã chọn xe từ trước. Nhờ anh Minh bàn giao giúp tôi.”; Nửa đầu giải thích lựa chọn, nửa sau yêu cầu rõ, không nhìn Mai để khiêu khích. Trạng thái kết: An cầm một chìa tay phải; hồ sơ và tablet ở bàn, túi chưa đeo. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q38",
+        "scene_id": "SC05",
+        "start": 263,
+        "end": 272,
+        "role": "Câu chốt giải quyết xung đột đạo đức đã gieo.",
+        "framing": "Cận An 85 mm, không khoe chìa",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          }
+        ],
+        "action": "An quay mắt sang Mai, giữ im một nhịp rồi nói; không chỉ tay. Cuối câu cô thở ra, nhìn xuống rất ngắn.",
+        "emotion": "Cứng rắn vì bị phản bội, không lấy giàu có chứng minh giá trị.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Kể cả hôm nay tôi không mua, cậu cũng không có quyền nói với tôi như vậy.",
+            "start": 263.5,
+            "end": 271.3,
+            "delivery": "Rõ, thấp, nhấn không mua; có hơi buồn ở như vậy.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Tuyệt đối không nhạc dưới câu này.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An vẫn ngồi tại bàn, chìa tay phải ở dưới mép hình.",
+        "continuity_out": "An nói xong ranh giới, mắt không đòi Mai van xin.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Cận An 85 mm, không khoe chìa. An vẫn ngồi tại bàn, chìa tay phải ở dưới mép hình. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 9 giây. Máy: Máy tĩnh. Hành động: An quay mắt sang Mai, giữ im một nhịp rồi nói; không chỉ tay. Cuối câu cô thở ra, nhìn xuống rất ngắn. Diễn xuất: Cứng rắn vì bị phản bội, không lấy giàu có chứng minh giá trị. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (trong hình), 0.5–8.3s: “Kể cả hôm nay tôi không mua, cậu cũng không có quyền nói với tôi như vậy.”; Rõ, thấp, nhấn không mua; có hơi buồn ở như vậy. Trạng thái kết: An nói xong ranh giới, mắt không đòi Mai van xin. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q39",
+        "scene_id": "SC05",
+        "start": 272,
+        "end": 280,
+        "role": "Sai phạm có hậu quả cụ thể, không sa thải để mua vui.",
+        "framing": "Trung Minh ngồi và Mai đứng, 50 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Minh quay về Mai, nói ngắn. Mai nhìn anh một thoáng rồi hạ mắt; tay phải định sửa bảng tên nhưng dừng giữa chừng.",
+        "emotion": "Minh nghiêm, Mai lần đầu không còn chỗ chống chế.",
+        "dialogue": [
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1",
+            "voice_id": "VOICE_MINH",
+            "text": "Mai, bàn giao ca. Chiều nay làm việc với tôi về việc này.",
+            "start": 272.7,
+            "end": 278.6,
+            "delivery": "Giọng công việc, không quát, không nói đuổi việc.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Không nhạc dưới câu thoại; giữ khoảng im phản ứng.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "Mai bên phải sau bàn, Minh ngồi phía đối diện An ngoài khung.",
+        "continuity_out": "Mai nhận yêu cầu bàn giao ca, tay rơi xuống, không bị xé bảng tên.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_MINH",
+          "REF_MAI",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung Minh ngồi và Mai đứng, 50 mm. Mai bên phải sau bàn, Minh ngồi phía đối diện An ngoài khung. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Minh quay về Mai, nói ngắn. Mai nhìn anh một thoáng rồi hạ mắt; tay phải định sửa bảng tên nhưng dừng giữa chừng. Diễn xuất: Minh nghiêm, Mai lần đầu không còn chỗ chống chế. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MINH (trong hình), 0.7–6.6s: “Mai, bàn giao ca. Chiều nay làm việc với tôi về việc này.”; Giọng công việc, không quát, không nói đuổi việc. Trạng thái kết: Mai nhận yêu cầu bàn giao ca, tay rơi xuống, không bị xé bảng tên. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q40",
+        "scene_id": "SC05",
+        "start": 280,
+        "end": 288,
+        "role": "Từ khách hàng trở lại hai người bạn, lời xin lỗi đến muộn.",
+        "framing": "Trung đôi An trái ngồi, Mai phải đứng, 65 mm",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          }
+        ],
+        "action": "Mai nhìn An, môi mím rồi xin lỗi. An ngước lên, đợi một nhịp rồi trả lời. Không ôm, không bắt tay làm hòa ngay.",
+        "emotion": "Mai hết cười, lời xin lỗi lần này không kèm điều kiện; An tiếc niềm vui gặp lại.",
+        "dialogue": [
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1",
+            "voice_id": "VOICE_MAI",
+            "text": "An... tớ xin lỗi.",
+            "start": 280.4,
+            "end": 283,
+            "delivery": "Thấp, ít hơi, xưng tớ trở lại, không gào khóc.",
+            "onscreen": true
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tớ đã mong được gặp lại cậu.",
+            "start": 283.9,
+            "end": 287.8,
+            "delivery": "Nói với người bạn cũ, hơi nghẹn một chút, không chua cay.",
+            "onscreen": true
+          }
+        ],
+        "sound": "Nền điều hòa showroom thấp, thoại khô rõ; không thêm tiếng đám đông.",
+        "music": "Một nốt piano ấm, rất thấp sau câu của An.",
+        "transition": "Cắt túi sau khi An đứng dậy và đeo lại trong khoảng chuyển, không nhảy sang ngoài đường.",
+        "continuity_in": "An ngồi, Mai đứng cạnh bàn, cả hai im sau yêu cầu của Minh.",
+        "continuity_out": "An khép cuộc nói chuyện; Mai không còn lời chống chế.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MAI",
+          "REF_TABLE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung đôi An trái ngồi, Mai phải đứng, 65 mm. An ngồi, Mai đứng cạnh bàn, cả hai im sau yêu cầu của Minh. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 8 giây. Máy: Máy tĩnh. Hành động: Mai nhìn An, môi mím rồi xin lỗi. An ngước lên, đợi một nhịp rồi trả lời. Không ôm, không bắt tay làm hòa ngay. Diễn xuất: Mai hết cười, lời xin lỗi lần này không kèm điều kiện; An tiếc niềm vui gặp lại. Thoại tiếng Việt và cửa sổ tính từ đầu clip: MAI (trong hình), 0.4–3s: “An... tớ xin lỗi.”; Thấp, ít hơi, xưng tớ trở lại, không gào khóc. | AN (trong hình), 3.9–7.8s: “Tớ đã mong được gặp lại cậu.”; Nói với người bạn cũ, hơi nghẹn một chút, không chua cay. Trạng thái kết: An khép cuộc nói chuyện; Mai không còn lời chống chế. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q41",
+        "scene_id": "SC05",
+        "start": 288,
+        "end": 295,
+        "role": "Trả nghĩa chi tiết mở đầu: xe mới, túi cũ, tình bạn đã khác.",
+        "framing": "Đặc tả túi và bàn tay, 85 mm; không mặt",
+        "camera": "Máy tĩnh",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "KEY",
+            "variant_id": "KEY_V1"
+          },
+          {
+            "entity_id": "PHONE",
+            "variant_id": "PHONE_V1"
+          }
+        ],
+        "action": "An đã đứng, đeo túi vai trái; điện thoại nằm trong ngăn được thấy thoáng. Tay phải giữ chìa ở ngay miệng túi, rồi thả chìa vào cạnh điện thoại; tay trái miết một lần đường khâu xanh.",
+        "emotion": "Túi không đáng vứt, niềm tin mới là thứ tổn thương. Không biểu diễn chiến thắng.",
+        "dialogue": [
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1",
+            "voice_id": "VOICE_AN",
+            "text": "Tớ vẫn giữ cái túi cậu khâu.",
+            "start": 288.8,
+            "end": 293.5,
+            "delivery": "Ngoài khung mặt, rất nhẹ như nói điều chưa kịp nói lúc vào.",
+            "onscreen": false
+          }
+        ],
+        "sound": "Tiếng vải, một tiếng chìa chạm nhẹ, giọng An ngoài hình.",
+        "music": "Giữ một nốt piano ấm, không bi lụy.",
+        "transition": "Cắt thẳng theo ánh nhìn, giữ trục và âm nền.",
+        "continuity_in": "An đã cất phone lại vào ngăn trong khi đứng dậy ở khoảng cắt; túi đeo vai trái. Chìa còn ngoài miệng túi ở tay phải, chưa thả.",
+        "continuity_out": "Chìa đã vào ngăn trong cạnh phone, tay phải rời túi; đường khâu vẫn nguyên.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_BAG",
+          "REF_KEY",
+          "REF_PHONE"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Đặc tả túi và bàn tay, 85 mm; không mặt. An đã cất phone lại vào ngăn trong khi đứng dậy ở khoảng cắt; túi đeo vai trái. Chìa còn ngoài miệng túi ở tay phải, chưa thả. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; KEY: Nằm trên bàn cạnh tập hợp đồng từ Q31; Minh đẩy tới An Q37, An cầm tay phải; Q41 đi vào ngăn trong túi, không chìa tự xuất hiện trong tay Mai.; PHONE: Màn hình chưa mở giao dịch khi lấy khỏi túi; Q32 gửi khoản 1.080.000.000 đồng, không lộ thông tin xác thực. Tay phải An cầm; tay trái chạm xác nhận.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 7 giây. Máy: Máy tĩnh. Hành động: An đã đứng, đeo túi vai trái; điện thoại nằm trong ngăn được thấy thoáng. Tay phải giữ chìa ở ngay miệng túi, rồi thả chìa vào cạnh điện thoại; tay trái miết một lần đường khâu xanh. Diễn xuất: Túi không đáng vứt, niềm tin mới là thứ tổn thương. Không biểu diễn chiến thắng. Thoại tiếng Việt và cửa sổ tính từ đầu clip: AN (ngoài hình), 0.8–5.5s: “Tớ vẫn giữ cái túi cậu khâu.”; Ngoài khung mặt, rất nhẹ như nói điều chưa kịp nói lúc vào. Trạng thái kết: Chìa đã vào ngăn trong cạnh phone, tay phải rời túi; đường khâu vẫn nguyên. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      },
+      {
+        "id": "Q42",
+        "scene_id": "SC05",
+        "start": 295,
+        "end": 300,
+        "role": "Kết bằng khoảng cách và phản chiếu, Mai tự đối mặt hậu quả.",
+        "framing": "Trung toàn 50 mm từ bàn hướng xe, Mai sát kính bên phải",
+        "camera": "Máy tĩnh, lấy nét chuyển An sang phản chiếu Mai ở cuối",
+        "appearances": [
+          {
+            "entity_id": "INT",
+            "variant_id": "INT_V1"
+          },
+          {
+            "entity_id": "AN",
+            "variant_id": "AN_V1"
+          },
+          {
+            "entity_id": "MAI",
+            "variant_id": "MAI_V1"
+          },
+          {
+            "entity_id": "MINH",
+            "variant_id": "MINH_V1"
+          },
+          {
+            "entity_id": "BAG",
+            "variant_id": "BAG_V1"
+          },
+          {
+            "entity_id": "CAR",
+            "variant_id": "CAR_V1"
+          }
+        ],
+        "action": "An đi ba bước về xe bạc ở phía trái và ra mép khung. Minh còn ở bàn ngoài nét, chờ tiếp tục bàn giao; Mai ở lại, nhìn bóng mình trên kính, không gọi với theo. Cắt đen ở giây cuối, không lái xe.",
+        "emotion": "An đi tiếp, Mai đứng lặng. Khán giả nhận sự bẽ mặt mà không có ai ăn mừng.",
+        "dialogue": [],
+        "sound": "Ba bước chân xa dần, điều hòa. Không tiếng động cơ hay vỗ tay.",
+        "music": "Nốt piano tắt dần, chừa nửa giây âm phòng.",
+        "transition": "Cắt đen gọn ở 05:00; không thêm màn chữ kéo dài thời lượng.",
+        "continuity_in": "An vừa đứng cạnh bàn, túi vai trái và chìa đã cất; Mai bên phải gần vách kính, Minh còn tại bàn; xe đóng cửa.",
+        "continuity_out": "An ra mép khung trái gần xe, Mai đứng lại trong phản chiếu; chưa rời showroom.",
+        "reference_ids": [
+          "REF_INT",
+          "REF_AN",
+          "REF_MAI",
+          "REF_MINH",
+          "REF_BAG",
+          "REF_CAR",
+          "REF_END"
+        ],
+        "image_prompt": "Khung đầu 16:9, điện ảnh hiện thực, da tự nhiên, ánh sáng trắng trung tính. Trung toàn 50 mm từ bàn hướng xe, Mai sát kính bên phải. An vừa đứng cạnh bàn, túi vai trái và chìa đã cất; Mai bên phải gần vách kính, Minh còn tại bàn; xe đóng cửa. Các thực thể trong hình: INT: Ánh sáng trắng trung tính và nắng dịu từ phía nam. Khu xe và khu bàn cùng một phòng, môi trường không đổi thời tiết. Khi cận, nền mờ vẫn giữ tông và phương hướng.; AN: Sơ mi linen màu ngà, xắn tay đến dưới khuỷu, quần đen ống thẳng, giày vải trắng hơi cũ nhưng sạch, đồng hồ dây nâu nhỏ. Không trang sức nổi bật. Mọi shot giữ cùng khuôn mặt, chiều cao và tóc.; MAI: Blazer xanh than, áo lụa kem, chân váy bút chì cùng màu, giày gót thấp đen. Bảng tên bạc bên ngực trái, chữ MAI dựng hậu kỳ. Không đổi trang phục khi bẽ mặt.; MINH: Vest xám than mở cúc, sơ mi trắng không cà vạt, giày da đen, thẻ quản lý nhỏ. Tay trái cầm tablet khi tra hẹn, sau đặt bàn.; BAG: Vải hơi bạc màu, sạch, mép mềm. Quai vá luôn hướng ra ngoài khi trên vai trái An. Có ngăn trong chứa điện thoại và sau cùng chìa khóa.; CAR: Xe mới sạch, đỗ cố định đầu hướng nam, ghế lái bên trái; bảng thông tin chỉ có hình khối trung tính. Cửa ghế lái đóng trừ Q29–Q30.. Khóa đúng ảnh reference_ids; chỉ một bản mỗi thực thể. Màn hình và vùng chữ trung tính để chèn hậu kỳ; không đặt trước trạng thái kết thúc.",
+        "video_prompt": "Clip dựng 5 giây. Máy: Máy tĩnh, lấy nét chuyển An sang phản chiếu Mai ở cuối. Hành động: An đi ba bước về xe bạc ở phía trái và ra mép khung. Minh còn ở bàn ngoài nét, chờ tiếp tục bàn giao; Mai ở lại, nhìn bóng mình trên kính, không gọi với theo. Cắt đen ở giây cuối, không lái xe. Diễn xuất: An đi tiếp, Mai đứng lặng. Khán giả nhận sự bẽ mặt mà không có ai ăn mừng. Thoại tiếng Việt và cửa sổ tính từ đầu clip: Không thoại, không tự thêm lời dẫn. Trạng thái kết: An ra mép khung trái gần xe, Mai đứng lại trong phản chiếu; chưa rời showroom. Giữ nhận diện, vị trí, hướng nhìn và đạo cụ từ khung đầu. Không cho người nghe mấp máy theo thoại ngoài hình; dùng voice track chuẩn nếu engine không khóa giọng, kiểm khẩu hình. Không thêm chữ tự sinh, nhân vật hoặc cử động ngoài chỉ đạo."
+      }
+    ],
+    "continuity_rules": [
+      "Toàn bộ nhân vật cùng độ tuổi và cùng trang phục trong phim. An không biến thành người mặc đồ hiệu sau khi trả tiền; Mai không rách áo hay đổi tóc khi thất thế.",
+      "An: đầu phim mang túi bên vai trái; quai vá xanh ở phía ngoài hướng máy. Túi chỉ được đặt lên bàn ở Q31; Q41 đeo lại vai trái rồi mới cất chìa khóa bằng tay phải. Điện thoại luôn ở ngăn trong, chỉ lấy ra Q32.",
+      "Sơ đồ showroom: cửa kính phía nam, xe bạc ở tây, bàn hợp đồng ở đông, cửa văn phòng ở bắc. Máy ở nửa đông nam trục An–Mai; An bên trái hình, Mai bên phải trong đối đáp. Q29 toàn cảnh thiết lập lại trục trước khi sang bàn. Không đảo hướng nhìn vô cớ.",
+      "Chiếc xe duy nhất cần khóa là crossover bạc năm chỗ, đèn LED hai nét ngang, mâm năm chấu kép, nội thất nâu tối. Q09 cửa xe đóng, chưa ai chạm; Q29 An mở cửa ghế lái, Q30 cửa đang mở, sau montage Q31 đã đóng bởi thao tác lược qua dựng. Không cho xe tự di chuyển.",
+      "Bàn hợp đồng đã có tập hồ sơ trắng, bút đen kẹp gáy và chìa khóa có thẻ trơn từ đầu cảnh bàn. Không tự tạo thêm xe, bó hoa, khách vỗ tay, bảo vệ hoặc nhân viên kế toán hiện hình.",
+      "Q14 Mai đẩy tờ giới thiệu xe cũ trên bục nhỏ sát xe bạc; tờ đó ở lại bục, không tự nằm trên bàn hợp đồng. Không nhân đôi túi, điện thoại hay chìa khóa.",
+      "Minh mang tablet ở tay trái từ khi bước ra văn phòng Q17, giữ đến Q28; các cận khuôn mặt có thể cắt khỏi khung. Sau kiểm tra xe tablet được đặt trên bàn Q31. Q34 chỉ chuyển chữ đang đối soát sang xác nhận; không giả lập thanh toán ngân hàng thật, không lộ số tài khoản hay OTP.",
+      "Khoản cọc luôn 200.000.000 đồng; khoản cuối 1.080.000.000 đồng; giá hợp đồng 1.280.000.000 đồng. Tên chủ xe NGUYỄN HOÀI AN; mã hẹn đuôi 27. Số tiền là dữ kiện truyện, không là báo giá thị trường.",
+      "An không giấu danh tính để thử lòng: đã nói tên và hẹn ở Q06, nhắc tiền cọc ở Q10. Minh không gọi cô là chủ tịch, không có quan hệ từ trước, không trả tiền hộ.",
+      "Q17 Minh chỉ vừa xuất hiện khi nghe lời dọa bảo vệ; anh biết khách nói có hẹn từ lời Mai Q19. Không để anh đọc được suy nghĩ hoặc biết đơn trước khi tra Q24.",
+      "Lời thoại chuẩn nằm trong dialogue. Những nhân vật nghe trong reaction không được mấp máy theo giọng ngoài hình. Không thêm giọng khách, bảo vệ hoặc lời dẫn đạo lý.",
+      "Các insert Q01, Q05, Q24, Q32, Q34 và phản chiếu cuối có chức năng cung cấp thông tin/đổi nghĩa. Không thêm cảnh drone hay đường phố không liên quan.",
+      "Trước tạo clip đầu tiên: tạo, kiểm tra và khóa TẤT CẢ ảnh tham chiếu, kể cả ảnh bàn ký và cảnh kết. Mỗi yêu cầu video phải đính kèm ảnh thật đúng reference_ids và trạng thái mở đầu; prompt chữ chưa phải ảnh tham chiếu.",
+      "Nếu engine giới hạn clip ngắn hơn shot: chia tại khoảng thở hoặc đổi góc có chủ đích, giữ đúng thời gian tổng; không freeze frame hay kéo chậm khẩu hình để lấp giây. Sửa ảnh gốc phải rà lại mọi shot phụ thuộc.",
+      "Chữ giao dịch, tên, giá và phụ đề dựng lớp hậu kỳ; ảnh sinh để màn hình trống hoặc trung tính. Không dùng logo ngân hàng/hãng xe thật. Dùng biển số hư cấu mờ ngoài nét nếu thấy.",
+      "Q29–Q34 là montage có lược khoảng 20 phút kiểm xe và hồ sơ; nhạc/âm nền nối nhưng không giả vờ thanh toán trước khi kiểm tra. Xe được đặt trước và đủ hồ sơ nên cuối phim chỉ bàn giao, không cần mô tả thủ tục hành chính ngoài truyện."
+    ],
+    "audio_plan": [
+      "00:00–00:34: điều hòa, cửa kính, đế giày trên đá; hai nốt piano thưa biểu thị mong đợi. Không lời dẫn.",
+      "00:34–01:57: rút piano, giữ nền điều hòa; xung trầm rất nhỏ bắt đầu sau câu nói về vay học phí. Tiếng giấy trượt thay cú đánh nhạc. Không hiệu ứng hài chế giễu.",
+      "01:57–03:19: khi Minh nói Khoan đã, cắt xung trầm ngay; tiếng người khô, rõ, có khoảng im trước Em... chưa. Tên và số cọc nói bình thường, không hô thông báo.",
+      "03:19–03:57: montage kiểm xe có nhịp hai nốt gọn; khi chờ thanh toán chỉ còn điều hòa và đầu ngón tay trên bàn. Tiếng xác nhận Q34 nhỏ, không tiếng két tiền.",
+      "03:57–04:40: nhạc dừng dưới câu chốt của An; sau yêu cầu bàn giao ca chỉ còn nền phòng. Mai hụt hơi, giảm âm lượng tự nhiên, không thêm tiếng đám đông.",
+      "04:40–05:00: một nốt piano ấm trở lại cùng tiếng vải và chìa khóa. Kết bằng tiếng bước chân xa dần, không tiếng động cơ vì xe chưa rời showroom.",
+      "Thu hoặc tạo ba giọng ổn định riêng, đồng nhất với voice bible; xuất thoại, foley, ambience, nhạc thành stem riêng. Nếu video engine không giữ giọng, tắt thoại tự sinh, dùng track chuẩn và đồng bộ khẩu hình, không chồng hai giọng. Mix thoại luôn rõ, nhạc hạ dưới thoại; kiểm tra bằng tai trên bản dựng trước khi xác nhận hoàn tất."
+    ]
+  }
+}

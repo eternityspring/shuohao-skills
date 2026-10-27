@@ -4,7 +4,7 @@
 
 **Agent-agnostic skills for AI short-drama production**
 
-English | [中文](README.zh.md) | [X @eternityspring](https://x.com/eternityspring)
+[Tiếng Việt](README.vi.md) | English | [中文](README.zh.md) | [X @eternityspring](https://x.com/eternityspring)
 
 **[Skills](#skills) · [Install](#install) · [Requirements](#requirements) · [Repository conventions](#repository-conventions)**
 

@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shuohao · Studio dự án</title>
+<style>
+:root{--bg:#f7f5ef;--ink:#20251e;--muted:#697064;--line:#dedfd4;--accent:#47583a;--accent-2:#c9d2bd;--card:#fffefa;--ok:#3d6b4f;--bad:#8a3324;--warn:#8a6a24;--rail:#eeece3}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid #96ab84;outline-offset:4px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+button{font-family:inherit}
+.landing{max-width:1240px;margin:0 auto;padding:0 26px 60px}
+.brandbar{display:flex;align-items:center;justify-content:space-between;height:66px;border-bottom:1px solid var(--line)}
+.brand{font-size:19px;font-weight:750;letter-spacing:-.5px}.brand span{font-weight:400;color:var(--muted)}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;padding:44px 0 30px;align-items:start}
+h1.land{font-family:Georgia,serif;font-size:clamp(30px,4vw,44px);line-height:1.12;font-weight:500;letter-spacing:-1.4px;margin:10px 0 14px;max-width:12ch}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);font-size:15.5px;margin:0 0 22px;max-width:520px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.cta{display:inline-block;text-decoration:none;padding:11px 19px;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;font-weight:650}
+.cta.secondary{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
+.cmdb{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px}
+.cmdb p{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.cmd{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#1f241f;color:#e9eee4;border-radius:7px;padding:8px 12px;font:12.5px ui-monospace,Menlo,Consolas,monospace;margin:6px 0}
+.cmd button{border:0;border-radius:5px;padding:4px 9px;font:11.5px/1.4 system-ui,sans-serif;font-weight:650;cursor:pointer;background:#47583a;color:#fff}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:24px}
+.card{display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 16px}
+.card:hover{border-color:#c6cdb9}
+.card .num{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.card h3{margin:4px 0 4px;font-size:15.5px}
+.card p{margin:0;color:var(--muted);font-size:13px}
+.card .open{display:inline-block;margin-top:9px;font-size:12.5px;color:var(--accent)}
+.note{color:var(--muted);font-size:12.5px;margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+/* ---- studio app ---- */
+header.top{height:66px;display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5}
+header.top .brand{font-size:18px;cursor:pointer}
+.crumbs{display:flex;gap:7px;align-items:center;font-size:13px;color:var(--muted);min-width:0;overflow:hidden;white-space:nowrap}
+.crumbs a{cursor:pointer;text-decoration:none;border-bottom:1px dashed transparent}
+.crumbs a:hover{border-bottom-color:var(--muted)}
+.crumbs .sep{opacity:.5}
+.hd-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.pill{font-size:12px;border:1px solid var(--line);padding:4px 10px;border-radius:30px;color:var(--muted);white-space:nowrap}
+.pill.ok{color:var(--ok);border-color:#cfdcc6;background:#eaf1e6}
+.pill.bad{color:var(--bad);border-color:#e6ccc3;background:#f9ebe7}
+#app{max-width:1440px;margin:0 auto;padding:26px 28px 70px}
+h2,h3{font-family:Georgia,serif;font-weight:500;letter-spacing:-.4px;margin:0}
+h2{font-size:28px}h3{font-size:16px;font-family:inherit;font-weight:700;letter-spacing:0}
+.sub{color:var(--muted);font-size:13.5px;margin:4px 0 18px}
+.page-head{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.btn{border:0;border-radius:7px;padding:9px 15px;font-size:14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px 11px;font-size:12.5px;font-weight:500}
+.btn.danger{background:transparent;border:1px solid #e6ccc3;color:var(--bad);font-weight:500}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:0 0 20px;flex-wrap:wrap}
+.tab{border:0;background:transparent;padding:9px 14px;font-size:13.5px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent);font-weight:650}
+.tab .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:6px;background:#cfcfc4;vertical-align:middle}
+.tab .dot.ok{background:var(--ok)}.tab .dot.bad{background:var(--bad)}.tab .dot.draft{background:#c8a94a}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:24px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:18px}
+input,select{font-family:inherit}select{border:1px solid var(--line);border-radius:7px;padding:8px;background:#fcfbf7;color:var(--ink);max-width:100%}
+.ai-box{margin-bottom:20px}.ai-progress{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:14px 0}.ai-step{padding:10px;border:1px solid var(--line);border-radius:7px;font-size:12px}.ai-step.running{border-color:var(--accent);background:#edf0e7}.ai-step.passed{color:var(--ok);background:#edf4ea}.ai-step.failed{color:var(--bad)}.ai-step b{display:block}.ai-box progress{width:100%;height:9px;accent-color:var(--accent)}@media(max-width:760px){.ai-progress{grid-template-columns:repeat(2,minmax(0,1fr))}}
+textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:14px;font:13.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#fcfbf7;color:var(--ink)}
+textarea:focus{outline:2px solid var(--accent-2)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+label.fld{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+input[type=text],input[type=number]{border:1px solid var(--line);border-radius:7px;padding:8px 10px;font:inherit;background:#fcfbf7;min-width:150px}
+input[type=search]{border:1px solid var(--line);border-radius:7px;padding:8px 11px;font:inherit;background:#fcfbf7;min-width:240px}
+.hint{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.kpi{background:#f2f3ec;border-radius:8px;padding:9px 10px}
+.kpi b{display:block;font-size:20px;line-height:1.2}.kpi small{color:var(--muted);font-size:11.5px}
+.warn{background:#fbf4e6;border:1px solid #ece0c4;color:#6d531f;border-radius:8px;padding:9px 12px;font-size:12.5px;margin-top:10px}
+.warn b{display:block;margin-bottom:2px}
+.okline{background:#eef3ea;border:1px solid #cfdcc6;color:#3d5b46;border-radius:8px;padding:9px 12px;font-size:12.5px;margin-top:10px}
+.drop{border:1.5px dashed #cfd2c4;border-radius:9px;padding:13px 15px;margin-bottom:10px;background:#fbfaf4;font-size:13px;text-align:center}
+.drop.on{border-color:var(--accent);background:#eef2e6}
+.drop button{margin:0 4px}
+.filelist{display:flex;flex-direction:column;gap:4px;margin:0 0 10px}
+.frow{display:flex;gap:8px;align-items:center;font-size:12.5px;background:#f6f7f0;border:1px solid var(--line);border-radius:7px;padding:5px 10px}
+.frow .k{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:#e9ece0;border-radius:20px;padding:1px 7px;color:var(--accent)}
+.frow .k.bad{background:#f7e6e1;color:var(--bad)}
+.frow .x{margin-left:auto;cursor:pointer;font-weight:700;color:var(--muted)}
+.filebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;background:#eef3ea;border:1px solid #cfdcc6;color:#3d5b46;border-radius:8px;padding:6px 11px;margin-bottom:8px}
+.filebar .x{margin-left:auto;cursor:pointer;color:#3d5b46;font-weight:700}
+.msg{margin-top:12px;font-size:13px}.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.projcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 16px;cursor:pointer;display:flex;flex-direction:column;gap:7px;text-align:left}
+.pcard:hover{border-color:#c6cdb9}
+.pcard .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pcard .name{font-weight:700;font-size:15.5px}
+.pcard .meta{font-size:11.5px;color:var(--muted)}
+.stages{display:flex;gap:4px;flex-wrap:wrap}
+.st{font-size:10.5px;padding:1px 7px;border-radius:20px;border:1px solid var(--line);color:var(--muted);background:#fbfbf6}
+.st.ok{background:#eaf1e6;border-color:#cfdcc6;color:var(--ok)}
+.st.bad{background:#f9ebe7;border-color:#e6ccc3;color:var(--bad)}
+.st.draft{background:#f6f1e2;border-color:#e7dcc2;color:var(--warn)}
+.empty{color:var(--muted);font-size:13.5px;padding:26px;text-align:center;border:1px dashed var(--line);border-radius:11px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+td.num{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:11px;border:1px solid var(--line);border-radius:20px;padding:1px 8px;color:var(--muted);background:#fbfbf6}
+.beat-l{color:var(--ink)}
+.beat-a{color:var(--muted)}
+.beat-l .who{font-weight:650;margin-right:5px}
+details{border:1px solid var(--line);border-radius:9px;padding:0;margin-bottom:8px;background:#fcfbf7}
+details>summary{cursor:pointer;padding:9px 12px;font-size:13.5px;font-weight:600;list-style:none;display:flex;gap:9px;align-items:baseline}
+details>summary::-webkit-details-marker{display:none}
+details>summary .n{color:var(--muted);font-size:11.5px;font-weight:400;margin-left:auto}
+details .body{padding:2px 13px 12px}
+.seg{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:10px;background:#fcfbf7}
+.seg .h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:7px}
+.seg .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;font-size:12.5px}
+.cut{display:grid;grid-template-columns:58px 64px 1fr;gap:10px;padding:6px 0;border-top:1px dashed var(--line);font-size:13px}
+.cut .t{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.cut .s b{display:block;font-size:11.5px;color:var(--accent)}
+pre{background:#1f241f;color:#e9eee4;padding:13px;border-radius:9px;font-size:12px;line-height:1.55;max-height:320px;overflow:auto;margin:10px 0 0;white-space:pre-wrap}
+.viewer{display:grid;grid-template-columns:230px minmax(0,1fr);border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card);min-height:70vh}
+.viewer .side{border-right:1px solid var(--line);background:var(--rail);padding:10px;display:flex;flex-direction:column;gap:3px;max-height:82vh;overflow:auto}
+.viewer .side button{border:0;background:transparent;text-align:left;padding:7px 9px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--ink)}
+.viewer .side button:hover{background:#e5e3d9}
+.viewer .side button.active{background:var(--card);font-weight:650}
+.viewer .side .grp{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:12px 9px 4px}
+.viewer iframe{width:100%;height:82vh;border:0;background:#fff}
+/* thanh ngôn ngữ dùng chung (language.js) nằm trên header; header dính dưới nó */
+body:has(.sh-langbar) header.top{top:48px}
+body:has(.sh-langbar) .landing .brandbar{padding-top:6px}
+@media (max-width:980px){.grid2{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+
+/* Báo cáo giữ nguyên năm mục; ảnh chỉ bổ sung lối vào trực quan. */
+.hero{grid-template-columns:1.05fr 1fr;gap:48px;padding:42px 0 32px;align-items:center}
+h1.land{max-width:16ch;font-size:clamp(36px,4.4vw,58px);line-height:1.13;letter-spacing:-1.5px}
+.lead{font-size:16px;line-height:1.75}
+.report-meta{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.report-meta span{border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--muted)}
+.visual-preview{margin:0;display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;background:#e8e9df;overflow:hidden;position:relative}
+.visual-preview img{display:block;width:100%;height:370px;object-fit:contain;background:#e5e5db}
+.visual-preview .visual-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 16px;background:var(--card);font-size:12px;color:var(--muted)}
+.visual-caption strong{display:block;color:var(--ink);font-size:14px;font-weight:650}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin:12px 0 18px}
+.section-head h2{font-size:26px}.section-head p{margin:0;color:var(--muted);font-size:13px}
+.report-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.report-card{display:flex;flex-direction:column;overflow:hidden;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:10px;transition:transform .15s,border-color .15s}
+.report-card:hover{transform:translateY(-3px);border-color:#8b9a7d}
+.report-card img{display:block;width:100%;height:auto;aspect-ratio:1.5;object-fit:cover;object-position:top;border-bottom:1px solid var(--line);background:#eceee7}
+.report-card .card-body{padding:14px;display:flex;flex-direction:column;flex:1}
+.report-card .num{font:italic 19px Georgia,serif;color:#7c8a70}
+.report-card h3{margin:5px 0 6px;font-size:15px}
+.report-card p{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.6}
+.report-card .open{font-size:12px;color:var(--accent);margin-top:auto}
+.utility-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.utility-card{display:flex;align-items:center;gap:18px;padding:18px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--card);min-width:0}
+.utility-card img{width:116px;height:90px;object-fit:cover;object-position:top;border-radius:6px;border:1px solid var(--line)}
+.utility-card h3{margin:0 0 4px;font-size:15px}.utility-card p{font-size:12.5px;color:var(--muted);margin:0}.utility-card .open{display:block;color:var(--accent);font-size:12px;margin-top:7px}
+.studio-entry{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px;background:#edf0e7;border:1px solid #d9dfcf;border-radius:10px;margin-top:26px}
+.studio-entry h3{margin:0 0 5px}.studio-entry p{color:var(--muted);font-size:13px;margin:0}
+.sample-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sample-toolbar h2{font-size:24px}.sample-toolbar p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.sample-links{display:flex;flex-wrap:wrap;gap:8px}
+.sample-links a{font-size:12px;padding:6px 11px;border:1px solid var(--line);border-radius:7px;text-decoration:none}
+.sample-viewer{display:block;width:100%;height:calc(100vh - 226px);min-height:580px;border:1px solid var(--line);border-radius:10px;background:#fff}
+@media(max-width:1050px){.report-cards{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{gap:24px}}
+@media(max-width:760px){.landing{padding:0 18px 34px}.brandbar{height:auto;min-height:66px;gap:10px}.brandbar .cta{font-size:12px;padding:8px 10px}.hero{grid-template-columns:1fr;padding:30px 0;gap:24px}h1.land{max-width:20ch;font-size:40px}.visual-preview img{height:300px}.report-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.report-card .card-body{padding:12px}.section-head{display:block}.section-head p{margin-top:6px}.utility-row{grid-template-columns:1fr}.studio-entry{align-items:flex-start;flex-direction:column;gap:16px}.actions{gap:8px}.cta{padding:10px 14px}#app{padding:20px 14px 40px}header.top{padding:10px 14px;height:auto;min-height:66px;gap:10px;flex-wrap:wrap}.crumbs{order:3;width:100%;font-size:12px}.hd-right{gap:6px}.projcards{grid-template-columns:1fr}.viewer{grid-template-columns:1fr}.viewer .side{border-right:0;border-bottom:1px solid var(--line);flex-direction:row;max-height:130px;flex-wrap:wrap}.viewer .side .grp{width:100%;padding:3px 9px}.viewer iframe{height:75vh}.sample-viewer{height:calc(100dvh - 260px);min-height:620px}.sample-toolbar h2{font-size:22px}.visual-caption{flex-wrap:wrap}.tabs{flex-wrap:nowrap;overflow:auto}.tab{white-space:nowrap}.panel{padding:14px;overflow:auto}}
+@media(prefers-reduced-motion:reduce){.report-card{transition:none}}
+
+</style></head>
+<body>
+<!-- ───────── trang giới thiệu (mặc định khi mở cổng) ───────── -->
+<div id="landing" class="landing" hidden>
+  <div class="brandbar"><div class="brand">shuohao <span>/ studio</span></div><a class="cta secondary" href="#/projects">Dự án của bạn →</a></div>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Từ câu chuyện đến phân cảnh</div>
+      <h1 class="land">Một câu chuyện.<br>Từng bước thành hình.</h1>
+      <p class="lead">Xem dàn ý, nhân vật, mỹ thuật, kịch bản và phân cảnh trong cùng một báo cáo. Giữ trọn mạch câu chuyện, chuyển từng mục để xem chi tiết.</p>
+      <div class="report-meta"><span>Dự án mẫu · Bến đò</span><span>5 mục báo cáo</span><span>Xuất JSON theo ngôn ngữ đang chọn</span></div>
+      <div class="actions"><a class="cta" href="#/sample/outline">Mở hồ sơ sản xuất →</a><a class="cta secondary" href="#/new">＋ Dự án mới từ kịch bản</a></div>
+    </div>
+    <a class="visual-preview" href="#/sample/refs"><img src="/images/test-anchor.png" alt="Ảnh tham chiếu nhân vật mẫu A Hòa đã tạo qua 9router" width="1024" height="1536"><div class="visual-caption"><div><strong>Ảnh tham chiếu · A Hòa</strong><span>Ảnh thử riêng, không thuộc dàn nhân vật Bến đò.</span></div><span>Xem ảnh →</span></div></a>
+  </section>
+  <div class="section-head"><h2>Hồ sơ sản xuất · Bến đò</h2><p>Bố cục báo cáo 5 mục · Chọn ảnh để mở đúng phần</p></div>
+  <section class="report-cards" aria-label="Các mục báo cáo"><a class="report-card" href="#/sample/outline"><img src="/images/report-outline.webp" alt="Xem trước báo cáo dàn ý" loading="lazy" width="590" height="410"><div class="card-body"><span class="num">01</span><h3>Dàn ý</h3><p>Câu chuyện, nhân vật và diễn biến từng tập.</p><span class="open">Xem báo cáo →</span></div></a>
+<a class="report-card" href="#/sample/characters"><img src="/images/report-characters.webp" alt="Xem trước báo cáo nhân vật" loading="lazy" width="590" height="410"><div class="card-body"><span class="num">02</span><h3>Nhân vật</h3><p>Hồ sơ, ngoại hình và quan hệ nhân vật.</p><span class="open">Xem báo cáo →</span></div></a>
+<a class="report-card" href="#/sample/art"><img src="/images/report-art.webp" alt="Xem trước báo cáo mỹ thuật" loading="lazy" width="590" height="410"><div class="card-body"><span class="num">03</span><h3>Mỹ thuật</h3><p>Bối cảnh, đạo cụ và tính nhất quán hình ảnh.</p><span class="open">Xem báo cáo →</span></div></a>
+<a class="report-card" href="#/sample/script"><img src="/images/report-script.webp" alt="Xem trước báo cáo kịch bản" loading="lazy" width="590" height="410"><div class="card-body"><span class="num">04</span><h3>Kịch bản</h3><p>Từng cảnh, hành động và lời thoại.</p><span class="open">Xem báo cáo →</span></div></a>
+<a class="report-card" href="#/sample/storyboard"><img src="/images/report-storyboard.webp" alt="Xem trước báo cáo phân cảnh" loading="lazy" width="590" height="410"><div class="card-body"><span class="num">05</span><h3>Phân cảnh</h3><p>Nhịp dựng, cỡ cảnh và hướng dẫn từng đoạn.</p><span class="open">Xem báo cáo →</span></div></a></section>
+  <div class="utility-row">
+    <a class="utility-card" href="#/sample/staging"><img src="/images/report-staging.webp" alt="Sơ đồ bố trí nhân vật nhìn từ trên xuống" loading="lazy" width="590" height="410"><div><h3>Bố trí nhân vật</h3><p>Kéo thả vị trí trên sơ đồ, xem hướng nhìn và xuất phương án bố trí.</p><span class="open">Mở sơ đồ →</span></div></a>
+    <a class="utility-card" href="#/sample/refs"><img src="/images/test-anchor.png" alt="Ảnh mẫu A Hòa" loading="lazy" width="1024" height="1536" style="object-position:center 25%"><div><h3>Ảnh tham chiếu</h3><p>Xem ảnh mẫu đã tạo và hồ sơ nhân vật đi kèm.</p><span class="open">Mở hồ sơ ảnh →</span></div></a>
+  </div>
+  <section class="studio-entry"><div><h3>Làm việc với kịch bản của bạn</h3><p>Dán nội dung hoặc tải tệp để tạo dự án và xem báo cáo từng bước.</p></div><div class="actions"><a class="cta secondary" href="#/projects">Danh sách dự án</a><label class="cta" style="cursor:pointer">⤒ Tải file kịch bản<input type="file" id="land-file" accept=".txt,.md,.markdown,.text,.json,text/plain,application/json" hidden></label></div></section>
+  <p class="note">Các báo cáo đang dùng dữ liệu mẫu. Ảnh A Hòa là kết quả thử tạo ảnh riêng; các cảnh chưa có ảnh vẫn hiển thị trạng thái chưa tạo trong báo cáo.</p>
+</div>
+
+<!-- ───────── studio app ───────── -->
+<header class="top" id="appbar" hidden>
+  <div class="brand" data-nav="#/">shuohao <span>/ studio</span></div>
+  <nav class="crumbs" id="crumbs"></nav>
+  <div class="hd-right"><a class="btn ghost" href="#/">Trang chủ</a><span class="pill" id="server-pill">…</span></div>
+</header>
+<div id="app" hidden><div class="empty">Đang tải…</div></div>
+
+<script>
+/* ---------------- tiện ích ---------------- */
+const $ = (s, r = document) => r.querySelector(s);
+const app = () => $('#app');
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtKB = (n) => (!n ? '' : n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
+const MAXLEN = 16;
+const trunc = (s, n = MAXLEN) => { const t = String(s ?? '').replace(/\s+/g, ' ').trim(); return t.length > n ? `${t.slice(0, n)}…` : t; };
+const toast = (msg, kind = '') => {
+  let el = $('#toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f241f;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:99;box-shadow:0 6px 20px #0003;white-space:pre-wrap;max-width:70vw'; document.body.appendChild(el); }
+  el.textContent = msg; el.style.background = kind === 'bad' ? '#8a3324' : kind === 'ok' ? '#3d6b4f' : '#1f241f';
+  clearTimeout(el._t); el._t = setTimeout(() => el.remove(), 3200);
+};
+const STAGES = [
+  ['outline', 'Dàn ý'], ['cast', 'Nhân vật'], ['art', 'Mỹ thuật'], ['script', 'Kịch bản'],
+  ['staging', 'Bố trí'], ['storyboard', 'Phân cảnh'], ['images', 'Ảnh sheet'], ['frames', 'Keyframe'],
+  ['packs', 'Pack H3'], ['video', 'Video'],
+];
+const stageClass = (v) => (['done', 'passed', 'seeded'].includes(v) ? 'ok' : v === 'failed' ? 'bad' : ['draft', 'skeleton'].includes(v) ? 'draft' : '');
+const stageName = (id) => (STAGES.find(([k]) => k === id) ?? [id, id])[1];
+
+const api = async (path, opts) => {
+  const r = await fetch(path, { cache: 'no-store', headers: { 'Content-Type': 'application/json' }, ...opts });
+  const text = await r.text();
+  let body = {};
+  try { body = JSON.parse(text); } catch { body = { error: text.slice(0, 200) }; }
+  if (!r.ok) throw new Error(body.error || `HTTP ${r.status}`);
+  return body;
+};
+
+/* ---------------- state + router ---------------- */
+/* Mở bằng file:// (double-click) thì không có API: hiện hướng dẫn thay vì treo. */
+const OFFLINE = location.protocol === 'file:';
+const START_CMD = 'node preview/pipeline/studio.mjs';
+const state = { list: null, detail: null, split: null, cache: new Map(), offline: OFFLINE, base: OFFLINE ? '.' : '' };
+const parseHash = () => {
+  const h = (location.hash || '#/').replace(/^#\/?/, '');
+  const [page, ...rest] = h.split('/').map(decodeURIComponent);
+  return { page: page || 'home', rest };
+};
+const go = (path) => { location.hash = path; };
+window.addEventListener('hashchange', render);
+
+function staticNotice(what) {
+  return `<div class="panel"><div class="warn"><b>Đây là bản tĩnh — chỉ xem được báo cáo đã render</b>
+    ${esc(what ?? '')} Việc dán kịch bản, chia phần và ghi dự án cần studio có server; mọi thứ nằm chung một cổng:</div>
+    <div class="row"><button class="btn" id="copy-cmd">Chép lệnh</button></div>
+    <pre>cd ${esc('<thư mục repo shuohao-skills>')}
+${START_CMD}
+# rồi mở http://127.0.0.1:8765/</pre></div>`;
+}
+const bindCopy = () => { const b = $('#copy-cmd'); if (b) b.onclick = async () => { try { await navigator.clipboard.writeText(START_CMD); b.textContent = 'Đã chép'; } catch { b.textContent = 'Chép tay'; } }; };
+
+function showChrome(on) {
+  $('#landing').hidden = on;
+  $('#appbar').hidden = !on;
+  app().hidden = !on;
+}
+
+function crumbs(items) {
+  $('#crumbs').innerHTML = items.map((it, i) => `${i ? '<span class="sep">/</span>' : ''}${it.href ? `<a href="${it.href}" data-nav="${it.href}">${esc(it.label)}</a>` : `<span>${esc(it.label)}</span>`}`).join('');
+}
+
+function render() {
+  clearTimeout(window.__aiPoll);
+  const { page, rest } = parseHash();
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => window.scrollTo(0, 0));
+  if (page === 'home') { showChrome(false); initLanding(); return; }
+  showChrome(true);
+  if (!state.list) loadList();
+  if (page === 'sample') return renderSample(rest[0]);
+  if (page === 'projects') return renderProjects();
+  if (page === 'new') return renderNew();
+  if (page === 'project') return renderProject(rest[0], rest[1] ?? 'overview');
+  if (page === 'report') return renderReport(rest[0], rest[1]);
+  if (['outline', 'cast', 'art', 'script', 'staging', 'storyboard', 'overview', 'files'].includes(page)) return renderProject(rest[0], page);
+  go('#/');
+}
+
+/* Báo cáo mẫu giữ nguyên sidebar và năm mục trong iframe. */
+const SAMPLE_PANES = new Set(['outline', 'characters', 'art', 'script', 'storyboard']);
+function renderSample(section = 'outline') {
+  if (!SAMPLE_PANES.has(section) && !['staging', 'refs'].includes(section)) return go('#/sample/outline');
+  const label = section === 'staging' ? 'Bố trí nhân vật' : section === 'refs' ? 'Ảnh tham chiếu' : 'Hồ sơ sản xuất · Bến đò';
+  crumbs([{ label: 'Trang chủ', href: '#/' }, { label }]);
+  const lang = window.shuohaoLanguage?.get() || 'vi';
+  const file = section === 'staging' ? 'staging.html' : section === 'refs' ? 'character-refs.html' : 'report.html';
+  const hash = SAMPLE_PANES.has(section) ? '#pane-' + section : '';
+  app().innerHTML = `<div class="sample-toolbar"><div><h2>${label}</h2><p>Báo cáo mẫu · Giữ nguyên bố cục và các chức năng xuất dữ liệu</p></div><nav class="sample-links"><a href="#/">← Trang chủ</a><a href="#/sample/outline">Hồ sơ sản xuất</a><a href="#/sample/staging">Bố trí nhân vật</a><a href="#/sample/refs">Ảnh tham chiếu</a></nav></div><iframe class="sample-viewer" id="frame" src="/${file}?lang=${lang}${hash}" title="${label}"></iframe>`;
+  const frame = $('#frame');
+  frame.addEventListener('load', () => {
+    prepareEmbeddedReport(frame);
+    // Trang chủ trong báo cáo quay về ứng dụng, không lồng thêm Studio vào iframe.
+    const home = frame.contentDocument?.querySelector('.sh-home');
+    if (home) { home.setAttribute('href', '/#/'); home.addEventListener('click', e => { e.preventDefault(); go('#/'); }); }
+    syncReportLocale();
+    requestAnimationFrame(() => { frame.contentWindow.scrollTo(0, 0); window.scrollTo(0, 0); });
+  });
+}
+function prepareEmbeddedReport(frame) {
+  const doc = frame.contentDocument;
+  if (!doc || doc.getElementById('studio-embed-style')) return;
+  const style = doc.createElement('style');
+  style.id = 'studio-embed-style';
+  style.textContent = `
+    .sh-langbar{display:none!important}
+    body:has(.sh-langbar) .rp-rail{top:0!important;height:100vh!important}
+    @media(max-width:900px){
+      body:has(.sh-langbar) .rp-rail{height:auto!important}
+      .rp-rail{padding:12px!important;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+      .rp-brand{grid-column:1/-1;padding:0 0 8px!important;margin-bottom:4px}
+      .rp-brand h1{font-size:20px}.rp-brand p,.rp-brand .rp-sub,.rp-navlab,.rp-railfoot p{display:none!important}
+      .rp-nv .rp-nv-t small{display:none}.rp-nv{padding:7px 6px!important}
+      .rp-railfoot{grid-column:1/-1;padding:8px 0 0!important}
+    }
+    @media(max-width:560px){
+      .rp-pane .page{padding:18px 14px 50px}
+      .rp-pane .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .rp-pane .kpi{min-width:0;padding:10px}.rp-pane .kpi .v{font-size:24px}
+      .rp-pane .eps{grid-template-columns:minmax(0,1fr)}
+    }`;
+
+  doc.head.appendChild(style);
+}
+function syncReportLocale() {
+  const frame = $('#frame');
+  try { frame?.contentWindow?.shuohaoLanguage?.set(window.shuohaoLanguage?.get() || 'vi', false); } catch { /* Báo cáo còn đang tải. */ }
+}
+document.addEventListener('shuohao:language', syncReportLocale);
+
+function initLanding() {
+  const landFile = document.getElementById('land-file');
+  if (landFile && !landFile._bound) {
+    landFile._bound = true;
+    landFile.onchange = (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      // Chuyển chính File sang trang nhập, không chỉ lưu tên file.
+      window.__pendingUpload = f;
+      e.target.value = '';
+      go('#/new');
+    };
+  }
+  document.querySelectorAll('[data-copy]').forEach((b) => {
+    if (b._bound) return;
+    b._bound = true;
+    b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'đã chép'; } catch { b.textContent = 'chép tay'; } setTimeout(() => { b.textContent = 'chép'; }, 1500); };
+  });
+}
+
+async function loadList() {
+  if (OFFLINE) { state.offline = true; state.list = []; paintPill(); return; }
+  try {
+    const data = await api('/api/projects');
+    state.list = data.projects;
+    state.offline = false;
+    paintPill();
+  } catch {
+    state.offline = true;
+    state.list = [];
+    paintPill();
+  }
+}
+function paintPill() {
+  const pill = $('#server-pill');
+  if (!pill) return;
+  if (state.offline) { pill.className = 'pill bad'; pill.textContent = 'chưa có server'; }
+  else { pill.className = 'pill ok'; pill.textContent = `server · ${(state.list ?? []).length} dự án`; }
+}
+
+/* ---------------- trang: danh sách dự án ---------------- */
+async function renderProjects() {
+  crumbs([{ label: 'Dự án' }]);
+  if (!state.list) await loadList();
+  await refreshStaticProjects();
+  const list = state.list ?? [];
+  app().innerHTML = `
+    <div class="page-head">
+      <div><h2>Dự án</h2><p class="sub">Mọi dự án trong <span class="mono">projects/</span>${state.offline ? '' : ' — bấm để mở, hoặc bắt đầu bằng cách dán kịch bản'}.${state.offline ? ' Đây là bản tĩnh: chỉ các dự án đã render mới mở được báo cáo.' : ''}</p></div>
+      <div class="row" style="margin:0"><input type="search" id="q" placeholder="Tìm theo tên hoặc mã dự án">${state.offline ? '' : '<button class="btn" data-nav="#/new">＋ Dự án mới</button>'}</div>
+    </div>
+    ${state.offline ? '<div class="warn">Không thấy API. Nếu đây là bản tĩnh (<span class="mono">preview/studio.html</span> hoặc <span class="mono">file://</span>), chạy <span class="mono">node preview/pipeline/studio.mjs</span> rồi mở <span class="mono">http://127.0.0.1:8765/</span> — một cổng cho cả studio lẫn báo cáo.</div>' : ''}
+    <div class="projcards" id="cards"></div>`;
+  const draw = (q = '') => {
+    const needle = q.trim().toLowerCase();
+    const rows = list.filter((p) => !needle || `${p.slug} ${p.source}`.toLowerCase().includes(needle));
+    $('#cards').innerHTML = rows.length ? rows.map((p) => `
+      <a class="pcard" href="#/project/${encodeURIComponent(p.slug)}" style="text-decoration:none">
+        <span class="top"><span class="name">${esc(p.source || p.slug)}</span><span class="meta">${esc(p.origin)}</span></span>
+        <span class="meta mono">${esc(p.slug)} · ${p.episodes.length} tập${p.params?.minutesPerEpisode ? ` · ${p.params.minutesPerEpisode} phút/tập` : ''}</span>
+        <span class="stages">${STAGES.filter(([k]) => p.stages?.[k]).map(([k, label]) => `<span class="st ${stageClass(p.stages[k])}">${label}</span>`).join('')}</span>
+      </a>`).join('') : `<div class="empty">Không có dự án nào khớp “${esc(q)}”.</div>`;
+  };
+  draw();
+  const q = $('#q');
+  if (q) q.oninput = (e) => draw(e.target.value);
+}
+
+/* bản tĩnh: copier.json do build-preview sinh ra */
+async function refreshStaticProjects() {
+  if (state.list?.length) return;
+  try {
+    const r = await fetch('./copier.json', { cache: 'no-store' });
+    if (!r.ok) return;
+    const data = await r.json();
+    state.list = (data.projects ?? []).map((p) => ({ ...p, origin: 'bản tĩnh' }));
+    state.staticBase = './';
+  } catch { /* không có */ }
+}
+
+/* ---------------- trang: tạo dự án từ kịch bản ---------------- */
+const DEMO = `# Sương trên cầu
+
+> Thể loại: trinh thám. 3 tập × 90 giây.
+
+## Nhân vật
+- C01 A Minh — nam 28 tuổi, cảnh sát
+- C02 Lý lão — nam 55 tuổi, chủ quán
+
+## Tập 1 — Cầu sương
+Bối cảnh: S01 (quán ăn đêm), S02 (cây cầu)
+
+1. Trời mưa, A Minh bước vào quán.
+2. A Minh: Cho tôi một bát mì.
+3. Lý lão: Khuya thế này, cậu là cảnh sát à?
+4. A Minh im lặng, nhìn ra cây cầu ngoài cửa sổ.
+
+## Tập 2 — Người thứ ba
+Bối cảnh: S02 (cây cầu)
+
+1. A Minh đứng giữa cầu, đèn đường hỏng.
+2. Lý lão: Tối qua có người nhảy cầu.
+3. A Minh: Ai báo?
+4. Lý lão: Tôi. Nhưng tôi không thấy mặt.
+
+## Tập 3 — Sương tan
+Bối cảnh: S01 (quán ăn đêm)
+
+1. Sáng, A Minh quay lại quán.
+2. A Minh: Bát mì tối qua, ông nấu chưa?
+3. Lý lão cúi đầu, không trả lời.
+`;
+
+function renderNew() {
+  crumbs([{ label: 'Dự án', href: '#/projects' }, { label: 'Dự án mới' }]);
+  if (state.offline) {
+    app().innerHTML = `<div class="page-head"><div><h2>Dự án mới từ kịch bản</h2></div></div>` + staticNotice('Không phân tích được kịch bản ở bản tĩnh.');
+    bindCopy();
+    return;
+  }
+  app().innerHTML = `
+    <div class="page-head">
+      <div><h2>Dự án mới từ kịch bản</h2><p class="sub">Dán kịch bản hoặc cốt truyện. AI qua 9router sẽ biên soạn dàn ý, nhân vật, mỹ thuật, kịch bản chi tiết, bố trí và phân cảnh, rồi dựng báo cáo.</p></div>
+      <button class="btn secondary" data-nav="#/projects">← Danh sách dự án</button>
+    </div>
+    <div class="grid2">
+      <section class="panel">
+        <h3>Kịch bản gốc</h3>
+        <p class="hint" style="margin-top:6px">Nhận kịch bản hoàn chỉnh hoặc mô tả cốt truyện tự do. Nếu đã có nhân vật và phân tập, hãy giữ chúng trong nội dung.</p>
+        <div class="drop" id="drop">
+          <input type="file" id="file" multiple accept=".txt,.md,.markdown,.text,.json,text/plain,application/json" hidden>
+          <div><b>Kéo file vào đây</b> hoặc <button class="btn ghost" id="pick" type="button">chọn file</button> <span class="hint">(chọn được nhiều file)</span></div>
+          <div class="hint" style="margin-top:4px">Kịch bản: <span class="mono">.txt</span> · <span class="mono">.md</span> · <span class="mono">.json</span>. Bộ dự án: <span class="mono">outline · script · cast · art · staging · storyboard</span>. Tối đa 2 MB/file — hoặc dán trực tiếp vào ô dưới.</div>
+        </div>
+        <textarea id="script" spellcheck="false" placeholder="Dán kịch bản ở đây…"></textarea>
+        <div class="row">
+          <label class="fld">Mã dự án<input type="text" id="slug" placeholder="tự lấy từ tên phim"></label>
+          <label class="fld">Số tập<input type="number" id="eps" min="1" max="60" placeholder="tự đọc"></label>
+          <label class="fld">Giây mỗi tập<input type="number" id="secs" min="15" max="600" step="5" placeholder="nhập thời lượng"></label>
+          <label class="fld">Thể loại<input type="text" id="genre" placeholder="Ví dụ: tâm lý, trinh thám"></label>
+          <label class="fld">Model biên kịch<select id="ai-model" disabled><option>Đang kết nối 9router…</option></select></label>
+          <label class="fld">Khung hình<select id="ai-aspect"><option value="16:9">16:9</option><option value="9:16">9:16</option></select></label>
+        </div>
+        <div class="row">
+          <button class="btn" id="ai-generate" disabled>AI biên soạn đầy đủ</button>
+          <button class="btn secondary" id="analyze">Đọc cấu trúc</button>
+          <button class="btn ghost" id="create" disabled>Tạo bản nháp không AI</button>
+          <button class="btn ghost" id="demo">Nạp kịch bản mẫu</button>
+          <button class="btn ghost" id="clear">Xoá ô</button>
+        </div>
+        <p class="hint" id="ai-connection" role="status">Đang kết nối 9router…</p><p class="hint">AI giữ cốt truyện và lời thoại gốc, bổ sung chi tiết cần cho sản xuất. Ảnh và video là bước tiếp theo.</p>
+        <div id="msg" class="msg" role="status" aria-live="polite"></div>
+      </section>
+      <section class="panel">
+        <h3 id="res-title">Cấu trúc đọc được</h3>
+        <p class="sub" id="res-sub">Dán nội dung và chọn AI biên soạn đầy đủ. Có thể đọc cấu trúc trước để xem số tập và nhân vật nhận diện được.</p>
+        <div class="kpis" id="kpis" hidden>
+          <div class="kpi"><b id="k-eps">0</b><small>tập</small></div>
+          <div class="kpi"><b id="k-lines">0</b><small>câu thoại</small></div>
+          <div class="kpi"><b id="k-chars">0</b><small>nhân vật</small></div>
+          <div class="kpi"><b id="k-secs">0</b><small>giây ước lượng</small></div>
+        </div>
+        <div id="warns"></div>
+        <div id="episodes"></div>
+        <div id="files"></div>
+      </section>
+    </div>`;
+  const say = (t, k = '') => { const m = $('#msg'); m.className = 'msg ' + k; m.textContent = t; };
+  async function analyze() {
+    const script = $('#script').value;
+    if (!script.trim()) { say('Chưa có kịch bản.', 'bad'); return; }
+    $('#analyze').disabled = true; say('Đang đọc…');
+    try {
+      const data = await api('/api/preview', { method: 'POST', body: JSON.stringify({ script }) });
+      state.split = data.split;
+      if (!$('#slug').value) $('#slug').value = data.suggestedSlug;
+      showSplit(data.split, data.warnings);
+      say(data.split.episodes.length ? `Đọc được ${data.split.episodes.length} tập. Kiểm tra lại rồi bấm “Tạo dự án”.` : 'Chưa nhận ra tập nào — thêm tiêu đề “## Tập 1”.', data.split.episodes.length ? 'ok' : 'bad');
+    } catch (e) { say('Lỗi: ' + e.message, 'bad'); } finally { $('#analyze').disabled = false; }
+  }
+
+  /** Vẽ khối “cấu trúc đọc được” — dùng cho cả dán và tải file. */
+  function showSplit(sp, warnings) {
+      $('#res-title').textContent = sp.meta.title || 'Kịch bản chưa có tên';
+      $('#res-sub').textContent = `${sp.meta.genre || 'chưa rõ thể loại'} · ${sp.episodes.length} tập · ước lượng ${Math.round(sp.stats.estimateSeconds)} giây`;
+      $('#kpis').hidden = false;
+      $('#k-eps').textContent = sp.episodes.length;
+      if (!$('#eps').value) $('#eps').value = sp.meta.episodes || sp.episodes.length || '';
+      if (!$('#secs').value) $('#secs').value = sp.meta.secondsPerEpisode || (sp.meta.minutesPerEpisode ? sp.meta.minutesPerEpisode * 60 : '');
+      if (!$('#genre').value) $('#genre').value = sp.meta.genre || '';
+      $('#k-lines').textContent = sp.stats.lines;
+      $('#k-chars').textContent = sp.stats.characters;
+      $('#k-secs').textContent = Math.round(sp.stats.estimateSeconds);
+      $('#warns').innerHTML = (warnings ?? []).map((w) => `<div class="warn">${esc(w)}</div>`).join('');
+      $('#episodes').innerHTML = sp.episodes.map((e) => {
+        const lines = e.beats.filter((b) => b.kind === 'line').length;
+        const acts = e.beats.filter((b) => b.kind === 'action').length;
+        return `<div style="display:grid;grid-template-columns:44px 1fr auto;gap:10px;padding:9px 0;border-top:1px solid var(--line)">
+          <div style="font-weight:700;color:var(--accent)">T${esc(e.ep)}</div>
+          <div><div style="font-size:13.5px">${esc(e.title || '(không tiêu đề)')}</div>
+          <div style="font-size:11.5px;color:var(--muted)">${e.sceneIds.length ? esc(e.sceneIds.join('+')) : '—'} · ${lines} thoại · ${acts} beat</div></div>
+          <div style="font-size:12px;color:var(--muted)">${e.estimateSeconds}s</div></div>`;
+      }).join('');
+      $('#files').innerHTML = `<div class="warn"><b>Sẽ tạo</b>kichban.md · split.json · outline.json · script.json (nháp) · briefs.json · book.txt · project.json — rồi agent viết tiếp 6 tầng theo <span class="mono">/new-project-from-script</span>.</div>`;
+      $('#create').disabled = !sp.episodes.length;
+      $('#analyze').disabled = false;
+  }
+  $('#analyze').onclick = analyze;
+  const modelSelect = $('#ai-model');
+  api('/api/ai/config').then(config => {
+    if (!modelSelect.isConnected) return;
+    modelSelect.innerHTML = (config.models.length ? config.models : [config.model]).map(model => `<option value="${esc(model)}">${esc(model)}</option>`).join('');
+    modelSelect.value = config.model;
+    modelSelect.disabled = !config.configured;
+    $('#ai-generate').disabled = !config.configured || Boolean(config.error);
+    $('#ai-connection').textContent = config.error || (config.configured ? 'Đã kết nối 9router. Khóa API chỉ nằm ở server.' : 'Chưa có khóa 9router ở server. Cấu hình NINE_ROUTER_API_KEY để biên soạn.');
+  }).catch(e => { if (modelSelect.isConnected) $('#ai-connection').textContent = e.message; });
+  $('#ai-generate').onclick = async () => {
+    const button = $('#ai-generate');
+    if (!$('#script').value.trim()) return say('Dán kịch bản hoặc cốt truyện trước.', 'bad');
+    if (!$('#eps').value || !$('#secs').value || !$('#genre').value.trim()) return say('Nhập số tập, giây mỗi tập và thể loại trước khi biên soạn.', 'bad');
+    button.disabled = true; say('Đang tạo lượt biên soạn AI…');
+    try {
+      const result = await api('/api/ai/projects', {method:'POST', body:JSON.stringify({script:$('#script').value,slug:$('#slug').value.trim(),episodes:Number($('#eps').value),seconds:Number($('#secs').value),genre:$('#genre').value.trim(),model:modelSelect.value,aspectRatio:$('#ai-aspect').value,lang:window.shuohaoLanguage?.get() || 'vi'})});
+      state.detail = null; state.list = null; state.cache.clear();
+      go('#/project/' + encodeURIComponent(result.slug) + '/overview');
+    } catch(e) {say(e.message,'bad');button.disabled = false;}
+  };
+  /* ---- tải file lên ---- */
+  /* bộ file đã đọc: mỗi phần tử {name, bytes, kind, text, layer} */
+  const picked = [];
+  const LAYER_LABEL = { outline: 'dàn ý', script: 'kịch bản', cast: 'nhân vật', art: 'mỹ thuật', staging: 'bố trí', storyboard: 'phân cảnh', txt: 'văn bản', text: 'văn bản', md: 'văn bản', html: 'văn bản' };
+  const renderPicked = () => {
+    let list = $('#filelist');
+    if (!list) { list = document.createElement('div'); list.id = 'filelist'; list.className = 'filelist'; $('#drop').after(list); }
+    if (!picked.length) { list.remove(); $('#assemble')?.remove(); return; }
+    list.innerHTML = picked.map((f, i) => `<div class="frow"><span class="k ${LAYER_LABEL[f.kind] ? '' : 'bad'}">${esc(LAYER_LABEL[f.kind] ?? f.kind)}</span>
+      <span>${esc(f.name)}</span><span class="hint">${fmtKB(f.bytes) || f.bytes + ' B'}</span>
+      ${f.episodes ? `<span class="hint">· ${f.episodes} tập</span>` : ''}
+      <span class="x" data-i="${i}" title="bỏ">✕</span></div>`).join('')
+      + (picked.some((f) => f.layer) ? `<div class="row" style="margin-top:6px"><button class="btn secondary" id="assemble">Tạo dự án từ ${picked.filter((f) => f.layer).length} file tầng</button><span class="hint">bỏ qua file văn bản khi ghép</span></div>` : '');
+    list.querySelectorAll('.x').forEach((x) => { x.onclick = () => { picked.splice(Number(x.dataset.i), 1); renderPicked(); }; });
+    const asm = $('#assemble');
+    if (asm) asm.onclick = async () => {
+      asm.disabled = true; say('Đang ghép dự án…');
+      try {
+        const res = await api('/api/assemble', { method: 'POST', body: JSON.stringify({ files: picked.filter((f) => f.layer).map((f) => ({ name: f.name, content: f.raw })), slug: $('#slug').value.trim() || undefined }) });
+        await loadList();
+        toast(`Đã tạo ${res.dir} (${res.wrote.join(', ')})`, 'ok');
+        go(`#/project/${encodeURIComponent(res.slug)}/overview`);
+      } catch (e) { say('Lỗi ghép: ' + e.message, 'bad'); asm.disabled = false; }
+    };
+  };
+  async function uploadMany(list) {
+    const filesArr = [...(list ?? [])];
+    if (!filesArr.length) return;
+    for (const file of filesArr) {
+      const lower = file.name.toLowerCase();
+      if (!/\.(txt|md|markdown|text|json)$/.test(lower)) { say(`Bỏ qua “${file.name}” — nhận .txt, .md, .json`, 'bad'); continue; }
+      if (file.size > 2 * 1024 * 1024) { say(`Bỏ qua “${file.name}” — ${(file.size / 1048576).toFixed(1)} MB, giới hạn 2 MB`, 'bad'); continue; }
+      say(`Đang đọc ${file.name}…`);
+      try {
+        const raw = await file.text();
+        const res = await fetch('/api/upload?name=' + encodeURIComponent(file.name), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: raw });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        const entry = { name: file.name, bytes: data.file.bytes, kind: data.file.kind, raw, layer: data.layer ?? null, text: data.text, episodes: data.split?.episodes?.length ?? 0 };
+        const dup = picked.findIndex((f) => f.kind === entry.kind && entry.layer);
+        if (dup >= 0) picked[dup] = entry; else picked.push(entry);
+        if (data.text) {
+          // kịch bản (txt/md/script.json): điền luôn vào ô + bảng cấu trúc
+          $('#script').value = data.text;
+          state.split = data.split;
+          if (!$('#slug').value) $('#slug').value = data.suggestedSlug;
+          showSplit(data.split, data.warnings);
+        }
+        renderPicked();
+        const layers = picked.filter((f) => f.layer).map((f) => LAYER_LABEL[f.kind] ?? f.kind);
+        say(data.text
+          ? `Đọc ${file.name}: ${data.split.episodes.length} tập, ${data.split.stats.lines} câu thoại. Bấm “Tạo dự án”.`
+          : `Đã nhận ${file.name} (${LAYER_LABEL[data.file.kind] ?? data.file.kind}). ${layers.length ? `Bộ file: ${layers.join(', ')} — bấm “Tạo dự án từ … file tầng”.` : 'Thêm file kịch bản nữa nếu cần.'}`,
+          'ok');
+      } catch (e) { say(`Lỗi đọc ${file.name}: ${e.message}`, 'bad'); }
+    }
+  }
+  const upload = (file) => uploadMany(file ? [file] : []);
+  const pendingUpload = window.__pendingUpload;
+  delete window.__pendingUpload;
+  sessionStorage.removeItem('studio.uploadPending');
+  if (pendingUpload) upload(pendingUpload);
+  const drop = $('#drop');
+  $('#pick').onclick = () => $('#file').click();
+  $('#file').onchange = (e) => { uploadMany(e.target.files); e.target.value = ''; };
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('on'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('on'));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('on'); uploadMany(e.dataTransfer?.files); });
+  // dán file trực tiếp vào trang cũng nhận
+  const onPasteFile = (e) => {
+    const f = [...(e.clipboardData?.files ?? [])][0];
+    if (f && /drop|script/i.test(e.target?.id ?? '')) { e.preventDefault(); upload(f); }
+  };
+  document.addEventListener('paste', onPasteFile, { once: true });
+
+  $('#demo').onclick = () => { $('#script').value = DEMO; $('#slug').value = ''; analyze(); };
+  $('#clear').onclick = () => { $('#script').value = ''; $('#slug').value = ''; say(''); };
+  $('#create').onclick = async () => {
+    if (!state.split) return say('Đọc kịch bản trước.', 'bad');
+    const slug = ($('#slug').value || '').trim();
+    $('#create').disabled = true; say('Đang tạo dự án…');
+    try {
+      let res;
+      try {
+        res = await api('/api/projects', { method: 'POST', body: JSON.stringify({ script: $('#script').value, slug }) });
+      } catch (e) {
+        if (!/đã tồn tại/.test(e.message)) throw e;
+        if (!confirm(`Dự án "${slug}" đã có. Ghi đè?`)) { say('Đã huỷ.', 'bad'); return; }
+        res = await api('/api/projects', { method: 'POST', body: JSON.stringify({ script: $('#script').value, slug, overwrite: true }) });
+      }
+      await loadList();
+      toast(`Đã tạo ${res.dir}`, 'ok');
+      go(`#/project/${encodeURIComponent(res.slug)}/overview`);
+    } catch (e) { say('Lỗi: ' + e.message, 'bad'); $('#create').disabled = false; }
+  };
+}
+
+/* ---------------- trang: một dự án ---------------- */
+async function getProject(slug) {
+  if (state.detail?.slug === slug) return state.detail;
+  const d = await api('/api/projects/' + encodeURIComponent(slug));
+  state.detail = d;
+  return d;
+}
+async function getFile(slug, name) {
+  const key = `${slug}/${name}`;
+  if (!state.cache.has(key)) state.cache.set(key, await api('/api/projects/' + encodeURIComponent(slug) + '/file?name=' + encodeURIComponent(name)));
+  return state.cache.get(key);
+}
+const REPORT_TABS = [
+  ['report.html', 'Tổng hợp', null],
+  ['outline-report.html', 'Dàn ý', 'outline.json'],
+  ['cast-report.html', 'Nhân vật', 'cast.json'],
+  ['art-report.html', 'Mỹ thuật', 'art.json'],
+  ['script-report.html', 'Kịch bản', 'script.json'],
+  ['staging-report.html', 'Bố trí', 'staging.json'],
+  ['storyboard-report.html', 'Phân cảnh', 'storyboard.json'],
+];
+const PAGES = [
+  ['overview', 'Tổng quan'], ['outline', 'Dàn ý'], ['cast', 'Nhân vật'], ['art', 'Mỹ thuật'],
+  ['script', 'Kịch bản'], ['staging', 'Bố trí'], ['storyboard', 'Phân cảnh'], ['files', 'Tệp & báo cáo'],
+];
+const stageDot = (k, v) => (['overview', 'files'].includes(k) ? '' : `<span class="dot ${stageClass(v)}"></span>`);
+
+async function renderProject(slug, page) {
+  if (!slug) return go('#/projects');
+  let d;
+  try { d = await getProject(slug); } catch {
+    if (state.offline) {
+      crumbs([{ label: 'Dự án', href: '#/projects' }, { label: slug }]);
+      app().innerHTML = `<div class="page-head"><div><h2>${esc(slug)}</h2></div></div>` + staticNotice('Dữ liệu dự án nằm trong projects/<slug>/, bản tĩnh không đọc được.');
+      bindCopy();
+      return;
+    }
+    toast('Không thấy dự án ' + slug, 'bad');
+    return go('#/projects');
+  }
+  crumbs([{ label: 'Dự án', href: '#/projects' }, { label: trunc(d.source || d.slug, 20), href: `#/project/${encodeURIComponent(slug)}` }, { label: (PAGES.find(([k]) => k === page) ?? PAGES[0])[1] }]);
+  app().innerHTML = `
+    <div class="page-head">
+      <div><h2 title="${esc(d.source || d.slug)}">${esc(d.source || d.slug)}</h2>
+      <p class="sub mono">${esc(d.slug)} · ${d.episodes.length} tập${d.params?.minutesPerEpisode ? ` · ${d.params.minutesPerEpisode} phút/tập` : ''}${d.params?.genre ? ` · ${esc(trunc(d.params.genre, 40))}` : ''} · ${esc(d.origin)}</p></div>
+      <div class="row" style="margin:0">
+        <button class="btn ghost" data-run="gates">Chạy gate</button>
+        <button class="btn ghost" data-run="render">Render báo cáo</button>
+        <button class="btn ghost" data-run="packs">Export pack</button>
+        <button class="btn ghost" data-run="video">Ghép video</button>
+        <button class="btn danger" id="del">Xoá</button>
+      </div>
+    </div>
+    <div class="tabs">${PAGES.map(([k, label]) => `<button class="tab ${k === page ? 'active' : ''}" data-nav="#/project/${encodeURIComponent(slug)}/${k}">${label}${stageDot(k, d.stages?.[k])}</button>`).join('')}</div>
+    <section id="ai-job" class="panel ai-box" hidden></section>
+    <div id="page"></div>
+    <pre id="log" hidden></pre>`;
+  document.querySelectorAll('[data-run]').forEach((btn) => { btn.onclick = () => runScenario(btn, slug); });
+  document.querySelectorAll('.tab[data-nav]').forEach((el) => { el.onclick = () => go(el.dataset.nav); });
+  $('#del').onclick = async () => {
+    if (!confirm(`Xoá vĩnh viễn projects/${slug}?`)) return;
+    await api('/api/projects/' + encodeURIComponent(slug), { method: 'DELETE' });
+    state.detail = null; await loadList(); toast('Đã xoá ' + slug, 'ok'); go('#/projects');
+  };
+  paintAIJob(d.ai, slug);
+  const host = $('#page');
+  host.innerHTML = '<div class="empty">Đang tải dữ liệu tầng…</div>';
+  try {
+    if (page === 'overview') return renderOverview(host, d, slug);
+    if (page === 'files') return renderFiles(host, d, slug);
+    return await renderStage(host, d, slug, page);
+  } catch (e) {
+    host.innerHTML = `<div class="warn"><b>Không tải được tầng này</b>${esc(e.message)}</div>`;
+  }
+}
+
+/* Công việc AI lưu ở server; chuyển trang vẫn tiếp tục chạy. */
+const AI_STAGES = ['outline','cast','art','script','staging','storyboard'];
+const AI_STATUS = {pending:'Chờ',running:'Đang viết',passed:'Đã kiểm tra',failed:'Cần sửa',cancelled:'Đã dừng'};
+const AI_JOB_STATUS = {queued:'Đang chờ AI',running:'AI đang biên soạn',completed:'Đã biên soạn đủ 6 phần',failed:'Biên soạn cần xử lý',cancelled:'Đã dừng biên soạn',interrupted:'Biên soạn bị gián đoạn'};
+function paintAIJob(job, slug) {
+  const box = $('#ai-job'); if (!box) return;
+  box.hidden = !job; if (!job) return;
+  const count = AI_STAGES.filter(stage => job.stages?.[stage]?.status === 'passed').length;
+  const running = ['queued','running'].includes(job.status);
+  box.dataset.passed = String(count);
+  box.innerHTML = `<div class="page-head"><div><h3>${AI_JOB_STATUS[job.status] || job.status}</h3><p class="hint">${esc(job.options?.model)} · ${count}/6 phần đã kiểm tra</p></div><div class="actions">${running ? '<button class="btn secondary" id="ai-stop">Dừng biên soạn</button>' : job.status !== 'completed' ? '<button class="btn" id="ai-continue">Chạy tiếp từ phần đã lưu</button>' : `<a class="cta" href="#/report/${encodeURIComponent(slug)}/report.html">Mở hồ sơ sản xuất →</a>`}</div></div><progress max="6" value="${count}" aria-label="Tiến độ biên soạn"></progress><div class="ai-progress">${AI_STAGES.map(stage => {const item=job.stages?.[stage] || {};return `<div class="ai-step ${esc(item.status || '')}"><b>${stageName(stage)}</b><span>${AI_STATUS[item.status] || 'Chờ'}${item.episode ? ' · Tập '+esc(item.episode) : ''}</span></div>`}).join('')}</div>${job.error ? `<div class="warn" role="alert">${esc(job.error)}</div>` : ''}${job.current === 'reports' ? '<p class="hint">Đang kiểm tra toàn bộ và dựng báo cáo…</p>' : ''}<p class="hint">${job.status === 'completed' ? 'Đã có báo cáo. Bố trí đang suy từ mô tả; ảnh và video chưa được tạo.' : 'Mỗi phần được lưu sau khi qua kiểm tra. Bạn có thể chuyển trang trong lúc AI viết.'}</p>`;
+  $('#ai-stop')?.addEventListener('click', async () => {try {await api('/api/projects/'+encodeURIComponent(slug)+'/ai/cancel',{method:'POST'});await pollAI(slug)} catch(e){toast(e.message,'bad')}});
+  $('#ai-continue')?.addEventListener('click', () => resumeAI(slug));
+  if (running) window.__aiPoll = setTimeout(() => pollAI(slug), 1800);
+}
+async function pollAI(slug) {
+  const route=parseHash();if(route.page !== 'project' || route.rest[0] !== slug)return;
+  try {
+    const {job} = await api('/api/projects/'+encodeURIComponent(slug)+'/ai');
+    const current=parseHash();if(current.page !== 'project' || current.rest[0] !== slug)return;
+    const previous=Number($('#ai-job')?.dataset.passed || 0);
+    const completed=AI_STAGES.filter(stage=>job?.stages?.[stage]?.status==='passed').length;
+    paintAIJob(job,slug);
+    if (completed !== previous || !['queued','running'].includes(job?.status)) {
+      clearTimeout(window.__aiPoll);
+      state.detail=null;state.cache.clear();await loadList();
+      const latest=parseHash();if(latest.page==='project' && latest.rest[0]===slug)await renderProject(slug,latest.rest[1] || 'overview');
+    }
+  } catch(e) {toast(e.message,'bad');window.__aiPoll=setTimeout(()=>pollAI(slug),4000)}
+}
+async function resumeAI(slug) {
+  try {
+    const d=await getProject(slug);
+    const options={episodes:d.params.episodes || d.episodes.length,seconds:(d.params.minutesPerEpisode || 0)*60,genre:d.params.genre,lang:window.shuohaoLanguage?.get() || 'vi'};
+    if(!options.episodes || !options.seconds || !options.genre) {toast('Dự án thiếu số tập, thời lượng hoặc thể loại. Tạo dự án AI mới để nhập đủ thông tin.','bad');return}
+    const result=await api('/api/projects/'+encodeURIComponent(slug)+'/ai',{method:'POST',body:JSON.stringify(options)});
+    paintAIJob(result.job,slug);$('#ai-resume')?.setAttribute('disabled','');
+  } catch(e) {toast(e.message,'bad')}
+}
+
+async function runScenario(btn, slug) {
+  const label = btn.textContent;
+  btn.disabled = true;
+  const log = $('#log'); log.hidden = false; log.textContent = `$ ${btn.dataset.run}\n…`;
+  try {
+    const res = await api('/api/run', { method: 'POST', body: JSON.stringify({ scenario: btn.dataset.run, slug }) });
+    log.textContent = `$ ${btn.dataset.run} (exit ${res.code})\n${res.output || '(không có output)'}`;
+    state.detail = null; state.cache.clear();
+    await loadList();
+    const { page } = parseHash();
+    const scroll = window.scrollY;
+    await renderProject(slug, page);
+    window.scrollTo(0, scroll);
+    toast(res.ok ? `${btn.dataset.run}: xong` : `${btn.dataset.run}: có lỗi (xem log)`, res.ok ? 'ok' : 'bad');
+  } catch (e) { log.textContent = `$ ${btn.dataset.run}\n✗ ${e.message}`; toast(e.message, 'bad'); } finally { btn.disabled = false; btn.textContent = label; }
+}
+
+function renderOverview(host, d, slug) {
+  const missing = STAGES.filter(([k]) => !d.stages?.[k] || ['none', 'draft', 'failed'].includes(d.stages[k])).map(([, l]) => l);
+  const reports = REPORT_TABS.filter(([f, , needs]) => (f === 'report.html' ? d.files.report > 0 : d.files[`${(needs ?? '').replace('.json', '')}Report`] > 0));
+  host.innerHTML = `
+    <div class="grid2">
+      <section class="panel">
+        <h3>Các tầng</h3>
+        <table><thead><tr><th>Tầng</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+        ${STAGES.map(([k, label]) => `<tr><td>${label}</td><td><span class="st ${stageClass(d.stages?.[k])}">${esc(d.stages?.[k] ?? 'none')}</span></td>
+          <td class="num">${['outline', 'cast', 'art', 'script', 'staging', 'storyboard'].includes(k) ? `<a href="#/project/${encodeURIComponent(slug)}/${k}" data-nav="#/project/${encodeURIComponent(slug)}/${k}">mở →</a>` : ''}</td></tr>`).join('')}
+        <tr><td>Quality gate</td><td><span class="st ${stageClass(d.stages?.gates)}">${esc(d.stages?.gates ?? 'chưa chạy')}</span></td><td class="num"><button class="btn ghost" data-run="gates">chạy</button></td></tr>
+        </tbody></table>
+      </section>
+      <div class="stack">
+        <section class="panel">
+          <h3>Bước tiếp theo</h3>
+          ${missing.length
+            ? `<div class="warn" style="margin-top:10px"><b>Còn thiếu</b>${esc(missing.join(', '))}</div>
+               <p class="hint">AI có thể biên soạn tiếp các phần từ kịch bản gốc và kiểm tra tính nhất quán sau mỗi phần.</p>`
+            : '<div class="okline">Đủ 6 tầng dữ liệu. Bước còn lại: sinh ảnh (<span class="mono">character-refs</span>), đặt vào <span class="mono">images/</span> và <span class="mono">frames/</span>, rồi export pack + ghép video.</div>'}
+          <div class="row"><button class="btn" id="ai-resume" ${['running','queued','completed'].includes(d.ai?.status) ? 'disabled' : ''}>AI biên soạn tiếp</button><button class="btn ghost" data-run="sample">Chạy dự án mẫu 渡口</button><button class="btn ghost" data-run="build">Dựng lại báo cáo tĩnh</button></div>
+        </section>
+        <section class="panel">
+          <h3>Báo cáo</h3>
+          ${reports.length ? `<div class="chips" style="margin-top:10px">${reports.map(([f, label]) => `<a class="chip" style="cursor:pointer;padding:4px 11px;font-size:12px" href="#/report/${encodeURIComponent(slug)}/${f}" data-nav="#/report/${encodeURIComponent(slug)}/${f}">${label} →</a>`).join('')}</div>` : '<p class="hint">Chưa render báo cáo — bấm “Render báo cáo”.</p>'}
+        </section>
+        ${d.video?.length ? `<section class="panel"><h3>Video</h3><video controls style="width:100%;margin-top:10px;border-radius:8px;background:#000" src="/project/${encodeURIComponent(slug)}/video/${encodeURIComponent(d.video[0])}"></video><p class="hint mono">${esc(d.video[0])}</p></section>` : ''}
+      </div>
+    </div>`;
+  $('#ai-resume')?.addEventListener('click', () => resumeAI(slug));
+  host.querySelectorAll('[data-run]').forEach((btn) => { btn.onclick = () => runScenario(btn, slug); });
+  host.querySelectorAll('a[data-nav]').forEach((el) => { el.onclick = (e) => { e.preventDefault(); go(el.dataset.nav); }; });
+}
+
+async function renderStage(host, d, slug, stage) {
+  const file = { outline: 'outline.json', cast: 'cast.json', art: 'art.json', script: 'script.json', staging: 'staging.json', storyboard: 'storyboard.json' }[stage];
+  const badge = `<span class="st ${stageClass(d.stages?.[stage])}">${esc(d.stages?.[stage] ?? 'none')}</span>`;
+  if (!d.files?.[stage]) {
+    host.innerHTML = `<div class="panel"><div class="page-head"><h3>${stageName(stage)} ${badge}</h3></div>
+      <div class="empty">Tầng này chưa có dữ liệu.<br>Chọn AI biên soạn tiếp trong trang Tổng quan để viết phần này.</div></div>`;
+    return;
+  }
+  const doc = await getFile(slug, file);
+  const fn = { outline: renderOutline, cast: renderCast, art: renderArt, script: renderScript, staging: renderStaging, storyboard: renderStoryboard }[stage];
+  const rep = REPORT_TABS.find(([, , needs]) => needs === file)?.[0];
+  host.innerHTML = `<div class="panel"><div class="page-head"><h3>${stageName(stage)} ${badge}</h3>
+      <button class="btn ghost" ${rep ? `id="open-rep"` : 'disabled'}>Xem báo cáo đầy đủ →</button></div>
+      ${fn(doc, d)}</div>`;
+  const b = $('#open-rep'); if (b) b.onclick = () => go(`#/report/${encodeURIComponent(slug)}/${rep}`);
+}
+
+const flowView = (doc) => {
+  const names = new Map((doc.characters ?? []).map((c) => [c.id, c.name]));
+  return (doc.episodes ?? []).map((ep) => {
+    const beats = (ep.scenes ?? []).reduce((a, s) => a + (s.flow ?? []).length, 0);
+    const lines = (ep.scenes ?? []).reduce((a, s) => a + (s.flow ?? []).filter((f) => f.line).length, 0);
+    return `<details ${ep.ep === 1 ? 'open' : ''}><summary>Tập ${esc(ep.ep)} · ${esc((ep.scenes ?? []).map((s) => s.sceneId).join('+'))}
+      <span class="n">${(ep.scenes ?? []).length} cảnh · ${lines} thoại · ${beats} beat · mục tiêu ${esc(ep.targetSeconds ?? '?')}s</span></summary>
+      <div class="body">
+        ${ep.hook ? `<p class="hint"><b>Hook:</b> ${esc(ep.hook)}</p>` : ''}
+        ${ep.cliff ? `<p class="hint"><b>Cliff:</b> ${esc(ep.cliff)}</p>` : ''}
+        ${(ep.scenes ?? []).map((sc) => `<div style="margin:8px 0 4px" class="mono">${esc(sc.sceneId)}${sc.lighting ? ` · ${esc(sc.lighting)}` : ''} · ${esc((sc.characters ?? []).map((c) => names.get(c) ?? c).join(', '))}</div>
+          <table><tbody>${(sc.flow ?? []).map((f, i) => f.line
+            ? `<tr><td class="num">${i + 1}</td><td class="beat-l"><span class="who">${esc(names.get(f.speaker) ?? f.speaker ?? 'VO')}:</span>${esc(f.line)}${f.delivery ? ` <span class="hint">(${esc(f.delivery)})</span>` : ''}</td></tr>`
+            : `<tr><td class="num">${i + 1}</td><td class="beat-a">${esc(f.action)}</td></tr>`).join('')}</tbody></table>`).join('')}
+      </div></details>`;
+  }).join('');
+};
+
+function renderScript(doc) {
+  const eps = doc.episodes ?? [];
+  const lines = eps.reduce((a, e) => a + (e.scenes ?? []).reduce((x, s) => x + (s.flow ?? []).filter((f) => f.line).length, 0), 0);
+  const beats = eps.reduce((a, e) => a + (e.scenes ?? []).reduce((x, s) => x + (s.flow ?? []).length, 0), 0);
+  return `<div class="kpis"><div class="kpi"><b>${eps.length}</b><small>tập</small></div><div class="kpi"><b>${lines}</b><small>câu thoại</small></div><div class="kpi"><b>${beats}</b><small>beat</small></div><div class="kpi"><b>${eps.reduce((a, e) => a + (e.targetSeconds ?? 0), 0)}</b><small>giây mục tiêu</small></div></div>${flowView(doc)}`;
+}
+
+function renderOutline(doc) {
+  const p = doc.params ?? {};
+  return `<p class="sub">${esc(p.genre ?? '')} · ${p.episodes ?? 0} tập × ${p.minutesPerEpisode ?? '?'} phút · ${esc(p.adaptMode ?? '')}</p>
+    ${doc.adaptation?.core ? `<div class="okline"><b>Core</b>${esc(doc.adaptation.core)}</div>` : '<div class="warn">Chưa có <span class="mono">adaptation.core</span></div>'}
+    <h3 style="margin:18px 0 6px">Nhân vật</h3>
+    <table><thead><tr><th>ID</th><th>Tên</th><th>Vai</th><th>Tier</th><th>Arc</th></tr></thead><tbody>
+    ${(doc.characters ?? []).map((c) => `<tr><td class="num">${esc(c.id)}</td><td><b>${esc(c.name)}</b></td><td>${esc(c.role ?? '')}</td><td><span class="chip">${esc(c.tier ?? '')}</span></td><td>${esc(c.arc ?? '') || '<span class="hint">(trống)</span>'}</td></tr>`).join('')}</tbody></table>
+    <h3 style="margin:18px 0 6px">Cảnh &amp; đạo cụ</h3>
+    <div class="chips">${(doc.scenes ?? []).map((s) => `<span class="chip">${esc(s.id)} ${esc(s.name)}${s.primary ? ' · chính' : ''}</span>`).join('')}${(doc.props ?? []).map((s) => `<span class="chip">${esc(s.id)} ${esc(s.name)}</span>`).join('')}</div>
+    <h3 style="margin:18px 0 6px">Beat</h3>
+    <table><thead><tr><th>ID</th><th>Loại</th><th>Tập</th><th>Setup → Payoff</th></tr></thead><tbody>
+    ${(doc.beats ?? []).map((b) => `<tr><td class="num">${esc(b.id)}</td><td>${esc(b.type)} <span class="chip">${esc(b.weight ?? '')}</span></td><td class="num">${esc(b.episode ?? '')}</td><td>${esc(b.setup ?? '')} → ${esc(b.payoff ?? '')}</td></tr>`).join('')}</tbody></table>
+    <h3 style="margin:18px 0 6px">Tóm tắt tập</h3>
+    <table><thead><tr><th>Tập</th><th>Synopsis</th><th>Hook</th></tr></thead><tbody>
+    ${(doc.episodes ?? []).map((e) => `<tr><td class="num">${esc(e.ep)}</td><td>${esc(e.synopsis ?? '')}</td><td>${esc(e.hook ?? '')}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderCast(doc) {
+  return `${doc.summary ? `<p class="sub">${esc(doc.summary)}</p>` : ''}
+    <div class="projcards">${(doc.characters ?? []).map((c) => `
+      <div class="pcard" style="cursor:default">
+        <span class="top"><span class="name">${esc(c.name)}</span><span class="meta">${esc(c.importance ?? '')}</span></span>
+        <span class="meta">${esc(c.oneLiner ?? '')}</span>
+        <span class="chips">${(c.persona?.personality ?? []).map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</span>
+        <span class="meta">${esc(c.persona?.identity ?? '')} · ${esc(c.persona?.ageRange ?? '')}</span>
+        ${c.voice ? `<span class="meta">🎙 ${esc(c.voice.timbre ?? '')} · ${esc(c.voice.pace ?? '')}</span>` : ''}
+      </div>`).join('')}</div>`;
+}
+
+function renderArt(doc) {
+  return `${doc.dynasty ? `<p class="sub">Niên đại: ${esc(doc.dynasty)}</p>` : ''}
+    <div class="grid2" style="gap:14px">
+      <div class="stack">${(doc.scenes ?? []).map((s) => `<div class="seg">
+        <div class="h"><span class="id">${esc(s.id)}</span><b>${esc(s.name)}</b>${s.primary ? '<span class="chip">chính</span>' : ''}${s.variantOf ? `<span class="chip">variant của ${esc(s.variantOf)}</span>` : ''}</div>
+        <div class="hint">${esc(s.summary ?? '')}</div>
+        <div class="chips" style="margin-top:6px">${(s.anchors ?? []).map((a) => `<span class="chip" title="${esc(a.desc)}">${esc(a.name)}</span>`).join('')}</div>
+        <div class="chips" style="margin-top:4px">${(s.lighting ?? []).map((l) => `<span class="chip">☀ ${esc(l.state)}</span>`).join('')}</div>
+      </div>`).join('')}</div>
+      <div class="stack">${(doc.props ?? []).map((p) => `<div class="seg">
+        <div class="h"><span class="id">${esc(p.id)}</span><b>${esc(p.name)}</b><span class="chip">${esc(p.scale ?? '')}</span></div>
+        <div class="hint">${esc(p.summary ?? '')}</div>
+        <div class="chips" style="margin-top:6px">${(p.states ?? []).map((s) => `<span class="chip">${esc(s.state)}</span>`).join('')}</div>
+      </div>`).join('')}</div>
+    </div>`;
+}
+
+function renderStaging(doc) {
+  return `<p class="sub">${(doc.locations ?? []).length} địa điểm · ${(doc.scenes ?? []).length} cảnh. Sơ đồ kéo-thả nằm trong báo cáo bố trí.</p>
+    <table><thead><tr><th>Tập</th><th>Cảnh</th><th>Địa điểm</th><th>Ai ở đâu</th></tr></thead><tbody>
+    ${(doc.scenes ?? []).map((s) => `<tr>
+      <td class="num">${esc(s.ep)}.${esc(s.scene)}</td><td>${esc(s.sceneId)}</td><td>${esc((doc.locations ?? []).find((l) => l.sceneId === s.sceneId)?.name ?? '')}</td>
+      <td>${(s.places ?? []).filter((p) => p.present).map((p) => `${esc(p.name)} — ${esc(p.posture ?? '')} ${esc(p.item ?? '')}`).join('<br>') || '<span class="hint">không ai có mặt</span>'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function renderStoryboard(doc) {
+  const eps = doc.episodes ?? [];
+  const segs = eps.reduce((a, e) => a + (e.segments ?? []).length, 0);
+  const cuts = eps.reduce((a, e) => a + (e.segments ?? []).reduce((x, s) => x + (s.cuts ?? []).length, 0), 0);
+  const seconds = eps.reduce((a, e) => a + (e.segments ?? []).reduce((x, s) => x + (s.cuts ?? []).reduce((y, c) => y + (c.seconds ?? 0), 0), 0), 0);
+  return `<div class="kpis"><div class="kpi"><b>${segs}</b><small>đoạn</small></div><div class="kpi"><b>${cuts}</b><small>cut</small></div><div class="kpi"><b>${Math.round(seconds)}</b><small>giây</small></div><div class="kpi"><b>${esc(doc.aspectRatio ?? '16:9')}</b><small>khung</small></div></div>
+    ${eps.map((ep) => `<details ${ep.ep === 1 ? 'open' : ''}><summary>Tập ${esc(ep.ep)}
+      <span class="n">${(ep.segments ?? []).length} đoạn · ${(ep.segments ?? []).reduce((x, s) => x + (s.cuts ?? []).length, 0)} cut</span></summary>
+      <div class="body">${(ep.segments ?? []).map((s) => `<div class="seg">
+        <div class="h"><span class="id">${esc(s.id)}</span><span class="chip">${(s.cuts ?? []).reduce((x, c) => x + (c.seconds ?? 0), 0)}s</span><span class="chip">${esc(s.cuts?.[0]?.size ?? '')}</span></div>
+        ${(s.cuts ?? []).map((c, i) => `<div class="cut"><div class="t">#${i + 1} · ${c.seconds}s</div><div class="t">${esc(c.size ?? '')}<br>${esc(c.camera ?? '')}</div>
+          <div><div class="s"><b>${esc((c.beats ?? []).join('–'))} · ${esc(c.frame ?? '')}</b></div><div class="hint">${esc(c.shot ?? '')}</div></div></div>`).join('')}
+      </div>`).join('')}</div></details>`).join('')}`;
+}
+
+/* ---------------- trang: báo cáo (trong app) ---------------- */
+async function renderReport(slug, file) {
+  if (!slug) return go('#/projects');
+  if (state.detail?.slug !== slug) { try { await getProject(slug); } catch { /* tĩnh */ } }
+  const title = state.detail?.slug === slug ? (state.detail.source ?? slug) : (state.list?.find((x) => x.slug === slug)?.source ?? slug);
+  crumbs([{ label: 'Dự án', href: '#/projects' }, { label: trunc(title, 20), href: `#/project/${encodeURIComponent(slug)}` }, { label: `Báo cáo · ${REPORT_TABS.find(([f]) => f === file)?.[1] ?? file}` }]);
+  const src = state.offline && state.staticBase ? `${state.staticBase}${file}` : `/project/${encodeURIComponent(slug)}/${encodeURIComponent(file)}`;
+  app().innerHTML = `
+    <div class="page-head">
+      <div><h2>Báo cáo</h2><p class="sub">Chuyển giữa các tầng ở thanh bên; nút quay lại đưa về dự án.</p></div>
+      <div class="row" style="margin:0"><button class="btn secondary" id="back">← Về dự án</button></div>
+    </div>
+    <div class="viewer">
+      <div class="side">
+        <div class="grp">Báo cáo</div>
+        ${REPORT_TABS.map(([f, label]) => `<button data-nav="#/report/${encodeURIComponent(slug)}/${encodeURIComponent(f)}" class="${f === file ? 'active' : ''}">${label}</button>`).join('')}
+        <div class="grp">Dữ liệu</div>
+        ${PAGES.filter(([k]) => !['overview', 'files'].includes(k)).map(([k, label]) => `<button data-nav="#/project/${encodeURIComponent(slug)}/${k}">${label}</button>`).join('')}
+      </div>
+      <iframe id="frame" src="${src}" title="báo cáo"></iframe>
+    </div>`;
+  $('#frame').addEventListener('load', () => { prepareEmbeddedReport($('#frame')); syncReportLocale(); });
+  $('#back').onclick = () => go(`#/project/${encodeURIComponent(slug)}`);
+  document.querySelectorAll('.viewer [data-nav]').forEach((el) => { el.onclick = () => go(el.dataset.nav); });
+}
+
+/* ---------------- trang: tệp ---------------- */
+function renderFiles(host, d, slug) {
+  const rows = [
+    ['outline.json', 'Dàn ý', d.files.outline], ['cast.json', 'Nhân vật', d.files.cast], ['art.json', 'Mỹ thuật', d.files.art],
+    ['script.json', 'Kịch bản', d.files.script], ['staging.json', 'Bố trí', d.files.staging], ['storyboard.json', 'Phân cảnh', d.files.storyboard],
+    ['split.json', 'Kết quả đọc kịch bản', d.files.split], ['kichban.md', 'Kịch bản gốc đã dán', d.files.kichban],
+  ];
+  const reports = REPORT_TABS.map(([f, label]) => [f, label, f === 'report.html' ? d.files.report : d.files[`${f.replace('-report.html', 'Report')}`]]);
+  host.innerHTML = `<div class="grid2">
+    <section class="panel"><h3>Dữ liệu</h3>
+      <table><thead><tr><th>Tệp</th><th>Kích thước</th><th></th></tr></thead><tbody>
+      ${rows.map(([f, label, size]) => `<tr><td><span class="mono">${esc(f)}</span><br><span class="hint">${esc(label)}</span></td><td class="num">${size ? fmtKB(size) : '—'}</td><td class="num"><button class="btn ghost" data-view="${esc(f)}" ${size ? '' : 'disabled'}>xem</button></td></tr>`).join('')}
+      </tbody></table>
+      <h3 style="margin:16px 0 6px">Thư mục</h3>
+      <div class="chips"><span class="chip">images · ${d.images} sheet</span><span class="chip">frames · ${d.frames} đoạn</span><span class="chip">packs · ${d.packs} đoạn</span><span class="chip">video · ${d.video.length} file</span></div>
+    </section>
+    <section class="panel"><h3>Báo cáo HTML</h3>
+      <table><thead><tr><th>Báo cáo</th><th></th></tr></thead><tbody>
+      ${reports.map(([f, label, size]) => `<tr><td>${esc(label)}</td><td class="num">${size ? `<button class="btn ghost" data-rep="${esc(f)}">mở →</button>` : '<span class="hint">chưa render</span>'}</td></tr>`).join('')}
+      </tbody></table>
+      <div id="preview" style="margin-top:14px"></div>
+    </section>
+  </div>`;
+  host.querySelectorAll('[data-view]').forEach((btn) => {
+    btn.onclick = async () => {
+      const f = btn.dataset.view;
+      const box = host.querySelector('#preview');
+      if (!f.endsWith('.json')) {
+        const r = await fetch(`/project/${encodeURIComponent(slug)}/${encodeURIComponent(f)}`);
+        box.innerHTML = `<pre>${esc(await r.text())}</pre>`;
+        return;
+      }
+      const doc = await getFile(slug, f);
+      box.innerHTML = `<h3>${esc(f)}</h3><pre>${esc(JSON.stringify(doc, null, 2))}</pre>`;
+    };
+  });
+  host.querySelectorAll('[data-rep]').forEach((btn) => { btn.onclick = () => go(`#/report/${encodeURIComponent(slug)}/${btn.dataset.rep}`); });
+}
+
+/* nút điều hướng mang data-nav ở mọi nơi — nhưng KHÔNG can thiệp vào
+   <a href="#..."> thật, nếu không lịch sử trình duyệt (back/forward) bị bỏ qua. */
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-nav]');
+  if (!el) return;
+  if (el.tagName === 'A' && el.getAttribute('href') === el.dataset.nav) return;
+  e.preventDefault();
+  go(el.dataset.nav);
+});
+document.addEventListener('DOMContentLoaded', render);
+if (document.readyState !== 'loading') render();
+</script>
+</body></html>

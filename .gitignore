@@ -35,3 +35,16 @@ node_modules/
 
 # 各 skill 的本机配置（character-refs 的出图模型选择等），每台机器不同
 skills/*/config.local.json
+
+# Local generated preview reports and image-generation output
+# (studio + pipeline lives in preview/pipeline and IS tracked — see below)
+/preview/*
+!/preview/pipeline/
+# video dựng sẵn cho người đọc repo (nặng, dựng lại được bằng lệnh trong preview/README.vi.md)
+/preview/pipeline/*.mp4
+
+# Project do pipeline sinh ra (video / ảnh / báo cáo), dựng lại được từ JSON + preview/pipeline
+/projects/
+
+# Server-only 9router credentials
+.env.local

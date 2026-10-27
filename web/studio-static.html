@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shuohao · Studio (bản tĩnh)</title>
+<style>
+:root{--bg:#f7f5ef;--ink:#20251e;--muted:#697064;--line:#dedfd4;--accent:#47583a;--card:#fffefa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding:22px 26px 60px}
+.brand{font-size:18px;font-weight:750;letter-spacing:-.5px}.brand span{font-weight:400;color:var(--muted)}
+nav{display:flex;gap:14px;font-size:13px;color:var(--muted);margin:6px 0 24px;border-bottom:1px solid var(--line);padding-bottom:12px;flex-wrap:wrap}
+nav a{text-decoration:none;border-bottom:1px dashed transparent}nav a:hover{border-bottom-color:var(--muted)}
+h1{font-family:Georgia,serif;font-weight:500;letter-spacing:-.5px;margin:0 0 6px;font-size:29px}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 20px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
+.warn{background:#fbf4e6;border:1px solid #ece0c4;color:#6d531f;border-radius:8px;padding:11px 13px;font-size:13px}
+.warn b{display:block;margin-bottom:3px}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:#1f241f;color:#e9eee4;padding:12px 14px;border-radius:8px;font-size:12.5px;overflow:auto;margin:8px 0}
+.cmd{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#1f241f;color:#e9eee4;border-radius:8px;padding:9px 13px;font:12.5px ui-monospace,Menlo,Consolas,monospace;margin:6px 0}
+button{border:0;border-radius:6px;padding:5px 10px;font:12px/1.4 system-ui,sans-serif;font-weight:600;cursor:pointer;background:#47583a;color:#fff}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.chip{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:20px;padding:1px 8px;color:var(--muted);background:#fbfbf6;margin-right:4px}
+.ok{color:#3d6b4f}
+ol{padding-left:20px;font-size:13.5px}ol li{margin:6px 0}
+</style></head>
+<body><div class="wrap">
+<div class="brand">shuohao <span>/ studio</span></div>
+<nav><a href="index.html">← Trang chủ</a><a href="report.html">Báo cáo mẫu</a><a href="staging.html">Bố trí</a><a href="character-refs.html">Ảnh tham chiếu</a><a href="studio.html">Studio</a></nav>
+
+<h1>Tạo dự án từ kịch bản</h1>
+<p class="sub">Dán kịch bản → app đọc cấu trúc, chia thành dàn ý / nhân vật / mỹ thuật / kịch bản / bố trí / phân cảnh, rồi có báo cáo và video.</p>
+
+<div class="panel">
+  <div class="warn"><b>Trang này là bản tĩnh — không tạo được dự án</b>
+  Việc chia kịch bản và ghi file chạy trên server Node ở máy bạn. Bản tĩnh chỉ mở được, không gửi được gì đi. Hãy chạy studio rồi mở đúng địa chỉ của nó.</div>
+  <div class="cmd"><span>node preview/pipeline/studio.mjs</span><button data-copy="node preview/pipeline/studio.mjs">chép</button></div>
+  <div class="cmd"><span>http://127.0.0.1:4321/</span><button data-copy="http://127.0.0.1:4321/">chép</button></div>
+  <p class="sub" style="margin:12px 0 0">Server chỉ nghe trên máy (<code>127.0.0.1</code>), không mở ra mạng ngoài. Cổng khác: <code>node preview/pipeline/studio.mjs --port 4400</code>.</p>
+</div>
+
+<div class="panel">
+  <h2 style="font-family:inherit;font-size:15px;font-weight:700;margin:0 0 8px">Studio có gì</h2>
+  <table><thead><tr><th>Màn</th><th>Địa chỉ</th><th>Làm gì</th></tr></thead><tbody>
+    <tr><td>Dự án</td><td><code>#/</code></td><td>Liệt kê mọi dự án trong <code>projects/</code>, tìm theo tên, mở dự án</td></tr>
+    <tr><td>Dự án mới</td><td><code>#/new</code></td><td>Dán kịch bản, đọc &amp; chia phần, tạo project</td></tr>
+    <tr><td>Một dự án</td><td><code>#/project/&lt;slug&gt;</code></td><td>8 tab: Tổng quan · Dàn ý · Nhân vật · Mỹ thuật · Kịch bản · Bố trí · Phân cảnh · Tệp; chạy gate / render / pack / video</td></tr>
+    <tr><td>Báo cáo</td><td><code>#/report/&lt;slug&gt;/&lt;file&gt;</code></td><td>Report HTML mở ngay trong app, thanh bên đổi tầng</td></tr>
+  </tbody></table>
+</div>
+
+<div class="panel">
+  <h2 style="font-family:inherit;font-size:15px;font-weight:700;margin:0 0 8px">Không mở được bằng trình duyệt? Dùng dòng lệnh</h2>
+  <div class="cmd"><span>node preview/pipeline/split.mjs kichban.md</span><button data-copy="node preview/pipeline/split.mjs kichban.md">chép</button></div>
+  <div class="cmd"><span>node preview/pipeline/project.mjs gates projects/&lt;slug&gt;</span><button data-copy="node preview/pipeline/project.mjs gates projects/">chép</button></div>
+  <ol>
+    <li>Đặt kịch bản vào file <code>.md</code> (mẫu ở trang này bên dưới).</li>
+    <li>Chạy lệnh đầu: tạo <code>projects/&lt;slug&gt;/</code> với <code>split.json</code>, <code>outline.json</code>, <code>script.json</code> nháp.</li>
+    <li>Trong Kilo gõ <code>/new-project-from-script &lt;slug&gt;</code> để agent viết tiếp 6 tầng.</li>
+    <li><code>project.mjs render</code>, <code>packs</code>, <code>video</code> để ra báo cáo và mp4.</li>
+  </ol>
+</div>
+
+<div class="panel">
+  <h2 style="font-family:inherit;font-size:15px;font-weight:700;margin:0 0 8px">Kịch bản mẫu</h2>
+  <p class="sub" style="margin:0 0 8px">Định dạng app đọc được: tiêu đề phim, thể loại + số tập + giây/tập, danh sách <code>C01 名字 (Tên)</code>, tiêu đề <code>## Tập N</code>, <code>Bối cảnh: S01 (tên cảnh)</code>, dòng đánh số, và <code>Tên: lời thoại</code>.</p>
+  <pre id="demo"># Sương trên cầu
+
+> Thể loại: trinh thám. 3 tập × 90 giây.
+
+## Nhân vật
+- C01 阿明 (A Minh) — nam 28 tuổi, cảnh sát
+- C02 老李 (Lý lão) — nam 55 tuổi, chủ quán
+
+## Tập 1 — Cầu sương
+Bối cảnh: S01 (quán ăn đêm), S02 (cây cầu)
+
+1. Trời mưa, A Minh bước vào quán.
+2. A Minh: Cho tôi một bát mì.
+3. Lý lão: Khuya thế này, cậu là cảnh sát à?
+4. A Minh im lặng, nhìn ra cây cầu ngoài cửa sổ.</pre>
+  <button id="copydemo">Chép kịch bản mẫu</button>
+</div>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach((b) => {
+  b.onclick = async () => {
+    const text = b.dataset.copy;
+    try { await navigator.clipboard.writeText(text); b.textContent = 'đã chép'; }
+    catch { b.textContent = 'chép tay'; }
+    setTimeout(() => { b.textContent = 'chép'; }, 1600);
+  };
+});
+document.getElementById('copydemo').onclick = async (e) => {
+  const text = document.getElementById('demo').textContent;
+  try { await navigator.clipboard.writeText(text); e.target.textContent = 'Đã chép kịch bản mẫu'; }
+  catch { e.target.textContent = 'Không chép được — bôi đen để chép'; }
+};
+</script>
+</body></html>
