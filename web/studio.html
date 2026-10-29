@@ -87,6 +87,7 @@ input[type=search]{border:1px solid var(--line);border-radius:7px;padding:8px 11
 .filebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;background:#eef3ea;border:1px solid #cfdcc6;color:#3d5b46;border-radius:8px;padding:6px 11px;margin-bottom:8px}
 .filebar .x{margin-left:auto;cursor:pointer;color:#3d5b46;font-weight:700}
 .msg{margin-top:12px;font-size:13px}.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.reference-preview{display:block;margin-top:12px}.reference-preview img{width:100%;max-height:310px;object-fit:contain;border-radius:8px;background:#eeeee8}.reference-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px;margin-top:16px}.reference-card{border:1px solid var(--line);border-radius:9px;padding:14px;min-width:0}.reference-gallery>summary{cursor:pointer}.image-prompt{margin:12px 0 0}.image-prompt pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;max-height:220px;overflow:auto}.image-prompt summary{font-size:12px;color:var(--muted);cursor:pointer}.image-variants{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line)}.image-variants>summary{cursor:pointer;font-size:12px}.image-variants article{margin-top:14px}.image-slot{min-width:0}.reference-gallery{margin-bottom:0}#image-gallery{margin:16px 0}
 .projcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 16px;cursor:pointer;display:flex;flex-direction:column;gap:7px;text-align:left}
 .pcard:hover{border-color:#c6cdb9}
@@ -168,6 +169,7 @@ h1.land{max-width:16ch;font-size:clamp(36px,4.4vw,58px);line-height:1.13;letter-
 @media(max-width:760px){.landing{padding:0 18px 34px}.brandbar{height:auto;min-height:66px;gap:10px}.brandbar .cta{font-size:12px;padding:8px 10px}.hero{grid-template-columns:1fr;padding:30px 0;gap:24px}h1.land{max-width:20ch;font-size:40px}.visual-preview img{height:300px}.report-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.report-card .card-body{padding:12px}.section-head{display:block}.section-head p{margin-top:6px}.utility-row{grid-template-columns:1fr}.studio-entry{align-items:flex-start;flex-direction:column;gap:16px}.actions{gap:8px}.cta{padding:10px 14px}#app{padding:20px 14px 40px}header.top{padding:10px 14px;height:auto;min-height:66px;gap:10px;flex-wrap:wrap}.crumbs{order:3;width:100%;font-size:12px}.hd-right{gap:6px}.projcards{grid-template-columns:1fr}.viewer{grid-template-columns:1fr}.viewer .side{border-right:0;border-bottom:1px solid var(--line);flex-direction:row;max-height:130px;flex-wrap:wrap}.viewer .side .grp{width:100%;padding:3px 9px}.viewer iframe{height:75vh}.sample-viewer{height:calc(100dvh - 260px);min-height:620px}.sample-toolbar h2{font-size:22px}.visual-caption{flex-wrap:wrap}.tabs{flex-wrap:nowrap;overflow:auto}.tab{white-space:nowrap}.panel{padding:14px;overflow:auto}}
 @media(prefers-reduced-motion:reduce){.report-card{transition:none}}
 
+.original-subtitle{display:block;margin-top:4px;color:#657268;font-size:.9em;line-height:1.5}
 </style></head>
 <body>
 <!-- ───────── trang giới thiệu (mặc định khi mở cổng) ───────── -->
@@ -205,6 +207,7 @@ h1.land{max-width:16ch;font-size:clamp(36px,4.4vw,58px);line-height:1.13;letter-
 </header>
 <div id="app" hidden><div class="empty">Đang tải…</div></div>
 
+<script src="/image-controls.js"></script>
 <script>
 /* ---------------- tiện ích ---------------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -271,6 +274,8 @@ function crumbs(items) {
 
 function render() {
   clearTimeout(window.__aiPoll);
+  clearTimeout(window.__englishPoll);
+  window.shuohaoImages?.stop();
   const { page, rest } = parseHash();
   window.scrollTo(0, 0);
   requestAnimationFrame(() => window.scrollTo(0, 0));
@@ -330,6 +335,13 @@ function prepareEmbeddedReport(frame) {
     }`;
 
   doc.head.appendChild(style);
+  // Existing director reports predate localized downloads. Upgrade their button without regenerating AI data.
+  const dossier = doc.getElementById('dossier-data');
+  const download = doc.getElementById('download');
+  if (dossier && download) download.onclick = () => {
+    const project = /^\/project\/([^/]+)\//.exec(new URL(frame.src, location.href).pathname)?.[1];
+    window.shuohaoLanguage.downloadJson(JSON.parse(dossier.textContent), 'production.json', {project:project && decodeURIComponent(project)});
+  };
 }
 function syncReportLocale() {
   const frame = $('#frame');
@@ -378,6 +390,11 @@ function paintPill() {
 }
 
 /* ---------------- trang: danh sách dự án ---------------- */
+function runtimeEstimate(project) {
+  const seconds=project.timing?.storyboardSeconds ?? project.timing?.scriptSeconds;
+  if(seconds!=null)return ` · ${esc(Math.round(seconds*10)/10)} <span>giây ước tính</span>`;
+  return project.params?.minutesPerEpisode ? ` · ${esc(project.params.minutesPerEpisode)} phút/tập (ước tính)` : '';
+}
 async function renderProjects() {
   crumbs([{ label: 'Dự án' }]);
   if (!state.list) await loadList();
@@ -396,7 +413,7 @@ async function renderProjects() {
     $('#cards').innerHTML = rows.length ? rows.map((p) => `
       <a class="pcard" href="#/project/${encodeURIComponent(p.slug)}" style="text-decoration:none">
         <span class="top"><span class="name">${esc(p.source || p.slug)}</span><span class="meta">${esc(p.origin)}</span></span>
-        <span class="meta mono">${esc(p.slug)} · ${p.episodes.length} tập${p.params?.minutesPerEpisode ? ` · ${p.params.minutesPerEpisode} phút/tập` : ''}</span>
+        <span class="meta mono">${esc(p.slug)} · ${p.episodes.length} tập${runtimeEstimate(p)}</span>
         <span class="stages">${STAGES.filter(([k]) => p.stages?.[k]).map(([k, label]) => `<span class="st ${stageClass(p.stages[k])}">${label}</span>`).join('')}</span>
       </a>`).join('') : `<div class="empty">Không có dự án nào khớp “${esc(q)}”.</div>`;
   };
@@ -474,10 +491,11 @@ function renderNew() {
         <textarea id="script" spellcheck="false" placeholder="Dán kịch bản ở đây…"></textarea>
         <div class="row">
           <label class="fld">Mã dự án<input type="text" id="slug" placeholder="tự lấy từ tên phim"></label>
-          <label class="fld">Số tập<input type="number" id="eps" min="1" max="60" placeholder="tự đọc"></label>
-          <label class="fld">Giây mỗi tập<input type="number" id="secs" min="15" max="600" step="5" placeholder="nhập thời lượng"></label>
-          <label class="fld">Thể loại<input type="text" id="genre" placeholder="Ví dụ: tâm lý, trinh thám"></label>
+          <label class="fld">Số tập ước tính<input type="number" id="eps" min="1" step="1" placeholder="AI tự chia nếu để trống"></label>
+          <label class="fld">Giây mỗi tập ước tính<input type="number" id="secs" min="0.1" step="any" placeholder="AI tự tính theo nội dung"></label>
+          <label class="fld">Thể loại<input type="text" id="genre" placeholder="AI tự xác định hoặc nhập gợi ý"></label>
           <label class="fld">Model biên kịch<select id="ai-model" disabled><option>Đang kết nối 9router…</option></select></label>
+          <label class="fld">Ngôn ngữ thoại<select id="ai-dialogue"><option value="source">Giữ ngôn ngữ kịch bản gốc</option><option value="en">Tiếng Anh + phụ đề gốc</option></select></label>
           <label class="fld">Khung hình<select id="ai-aspect"><option value="16:9">16:9</option><option value="9:16">9:16</option></select></label>
         </div>
         <div class="row">
@@ -487,7 +505,10 @@ function renderNew() {
           <button class="btn ghost" id="demo">Nạp kịch bản mẫu</button>
           <button class="btn ghost" id="clear">Xoá ô</button>
         </div>
-        <p class="hint" id="ai-connection" role="status">Đang kết nối 9router…</p><p class="hint">AI giữ cốt truyện và lời thoại gốc, bổ sung chi tiết cần cho sản xuất. Ảnh và video là bước tiếp theo.</p>
+        <p class="hint" id="ai-connection" role="status">Đang kết nối 9router…</p><p class="hint">Prompt sản xuất luôn bằng tiếng Anh. Có thể chọn thoại tiếng Anh ngay từ đầu; phụ đề giữ nguyên câu thoại trong kịch bản. Ảnh và video là bước tiếp theo.</p>
+        <p class="hint">Bấm một lần để chạy lần lượt toàn bộ quy trình. AI có thể xử lý lâu; hệ thống tự chờ và tự thử lại khi kết nối tạm gián đoạn.</p>
+        <p class="hint">Số tập và thời lượng chỉ là gợi ý. AI ưu tiên câu chuyện đầy đủ, diễn xuất, hình ảnh và tính liên tục; tự chia tập và dành đủ thời gian cần thiết. Có thể để trống cả thể loại.</p>
+        <p class="hint">Bộ não đạo diễn đọc hiểu kịch bản trước, khóa DNA nhân vật, diễn xuất, ánh sáng và trạng thái nối shot cho cả sáu phần.</p>
         <div id="msg" class="msg" role="status" aria-live="polite"></div>
       </section>
       <section class="panel">
@@ -557,10 +578,10 @@ function renderNew() {
   $('#ai-generate').onclick = async () => {
     const button = $('#ai-generate');
     if (!$('#script').value.trim()) return say('Dán kịch bản hoặc cốt truyện trước.', 'bad');
-    if (!$('#eps').value || !$('#secs').value || !$('#genre').value.trim()) return say('Nhập số tập, giây mỗi tập và thể loại trước khi biên soạn.', 'bad');
+    if (!$('#eps').checkValidity() || !$('#secs').checkValidity()) return say('Nhập ước tính dương hợp lệ hoặc để trống để AI tự quyết định.', 'bad');
     button.disabled = true; say('Đang tạo lượt biên soạn AI…');
     try {
-      const result = await api('/api/ai/projects', {method:'POST', body:JSON.stringify({script:$('#script').value,slug:$('#slug').value.trim(),episodes:Number($('#eps').value),seconds:Number($('#secs').value),genre:$('#genre').value.trim(),model:modelSelect.value,aspectRatio:$('#ai-aspect').value,lang:window.shuohaoLanguage?.get() || 'vi'})});
+      const result = await api('/api/ai/projects', {method:'POST', body:JSON.stringify({script:$('#script').value,slug:$('#slug').value.trim(),episodes:$('#eps').value ? Number($('#eps').value) : null,seconds:$('#secs').value ? Number($('#secs').value) : null,genre:$('#genre').value.trim(),model:modelSelect.value,aspectRatio:$('#ai-aspect').value,dialogueLanguage:$('#ai-dialogue').value,lang:window.shuohaoLanguage?.get() || 'vi'})});
       state.detail = null; state.list = null; state.cache.clear();
       go('#/project/' + encodeURIComponent(result.slug) + '/overview');
     } catch(e) {say(e.message,'bad');button.disabled = false;}
@@ -674,8 +695,69 @@ async function getFile(slug, name) {
   if (!state.cache.has(key)) state.cache.set(key, await api('/api/projects/' + encodeURIComponent(slug) + '/file?name=' + encodeURIComponent(name)));
   return state.cache.get(key);
 }
+const EXPORT_PARTS = ['outline','cast','art','script','staging','storyboard','reading','production','split','subtitles','references'];
+function exportButtons(part = null, available = true) {
+  return `${part ? `<button class="btn secondary" data-export-json="${esc(part)}" ${available ? '' : 'disabled'}>Xuất JSON phần này</button>` : ''}<button class="btn secondary" data-export-json="all">Xuất toàn bộ JSON</button>`;
+}
+async function projectJsonBundle(slug) {
+  const detail = await api('/api/projects/' + encodeURIComponent(slug));
+  const project = {...await api('/api/projects/' + encodeURIComponent(slug) + '/file?name=project.json'), slug:detail.slug};
+  const parts = await Promise.all(EXPORT_PARTS.map(async key => [key, detail.files?.[key]
+    ? await api('/api/projects/' + encodeURIComponent(slug) + '/file?name=' + (key==='references'?'reference-images':key) + '.json') : null]));
+  let sourceText = null;
+  if (detail.files?.kichban) {
+    // This is the pasted source, not the rendered script.md report.
+    const response = await fetch('/project/' + encodeURIComponent(slug) + '/kichban.md', {cache:'no-store'});
+    if (!response.ok && response.status !== 404) throw new Error('Không đọc được kịch bản gốc.');
+    if (response.ok) sourceText = await response.text();
+  }
+  return {schemaVersion:1, kind:'shuohao-project', project, sourceText, ...Object.fromEntries(parts)};
+}
+function bindJsonExports(host, slug, frame = null) {
+  host.querySelectorAll('[data-export-json]').forEach(button => {
+    button.onclick = async () => {
+      const section = button.dataset.exportJson;
+      button.disabled = true;
+      try {
+        // Let the report export its live state, including unsaved staging edits.
+        if (section !== 'all' && frame) {
+          const native = frame.contentDocument?.querySelector(section === 'production' ? '#download' : '.expo');
+          if (native && frame.contentWindow?.shuohaoLanguage && !frame.contentDocument.documentElement.classList.contains('sh-locale-loading')) { native.click(); return; }
+        }
+        const data = section === 'all' ? await projectJsonBundle(slug)
+          : await api('/api/projects/' + encodeURIComponent(slug) + '/file?name=' + (section==='references'?'reference-images':section) + '.json');
+        window.shuohaoLanguage.downloadJson(data, section + '.json', {project:slug});
+      } catch (error) { toast('Không xuất được JSON: ' + error.message, 'bad'); }
+      finally { if (button.isConnected) button.disabled = false; }
+    };
+  });
+}
+function paintEnglishJob(detail, slug) {
+  const box=$('#english-panel');if(!box)return;
+  clearTimeout(window.__englishPoll);
+  const job=detail.english,active=job&&['queued','running'].includes(job.status);
+  const complete=['outline','cast','art','script','staging','storyboard'].every(k=>detail.files?.[k]);
+  box.hidden=!complete&&!job;
+  if(box.hidden)return;
+  const busy=active||['queued','running'].includes(detail.ai?.status);
+  box.innerHTML=`<div class="page-head"><div><h3>Ngôn ngữ sản xuất</h3><p class="hint">Prompt luôn bằng tiếng Anh. Thoại tiếng Anh có phụ đề nguyên bản bên dưới.</p></div><div class="row" style="margin:0">${active?'<button class="btn secondary" id="english-cancel">Dừng chuyển đổi</button>':`<button class="btn" id="english-convert" ${busy||!complete?'disabled':''}>Chuyển toàn bộ sang tiếng Anh</button>${detail.edition==='en'?'<button class="btn secondary" id="english-source">Xem bản gốc</button>':''}`}</div></div>${active?`<p class="hint">Đang chuyển sang tiếng Anh · ${job.completed || 0}/${job.total || '…'} mục đã lưu${job.transport?.phase==='recovering'?' · Đang chờ 9router sẵn sàng':''}</p><progress max="${job.total || 1}" value="${job.completed || 0}" style="width:100%"></progress>`:''}${job?.error?`<div class="warn" role="alert">${esc(job.error)}</div>`:''}${detail.edition==='en'?`<p class="hint">Đang dùng bản tiếng Anh. Bản gốc được giữ nguyên.</p><div class="row"><a class="btn secondary" download="${esc(slug)}-phu-de-goc.srt" href="/project/${encodeURIComponent(slug)}/subtitles-original.srt">Tải phụ đề gốc SRT</a><a class="btn secondary" download="${esc(slug)}-phu-de-song-ngu.srt" href="/project/${encodeURIComponent(slug)}/subtitles-bilingual.srt">Tải phụ đề song ngữ SRT</a></div>`:''}`;
+  const refresh=()=>{state.detail=null;state.list=null;for(const key of state.cache.keys())if(key.startsWith(slug+'/'))state.cache.delete(key);render()};
+  $('#english-convert')?.addEventListener('click',async()=>{
+    const button=$('#english-convert');button.disabled=true;
+    try{const result=await api('/api/projects/'+encodeURIComponent(slug)+'/english',{method:'POST',body:'{}'});paintEnglishJob({...detail,english:result.job},slug)}catch(error){toast(error.message,'bad');button.disabled=false}
+  });
+  $('#english-source')?.addEventListener('click',async()=>{try{await api('/api/projects/'+encodeURIComponent(slug)+'/english/source',{method:'POST',body:'{}'});refresh()}catch(error){toast(error.message,'bad')}});
+  $('#english-cancel')?.addEventListener('click',async()=>{try{await api('/api/projects/'+encodeURIComponent(slug)+'/english/cancel',{method:'POST',body:'{}'})}catch(error){toast(error.message,'bad')}});
+  if(active)window.__englishPoll=setTimeout(async()=>{
+    try{const {job:next}=await api('/api/projects/'+encodeURIComponent(slug)+'/english');
+      if(next?.status==='completed'){window.shuohaoLanguage?.set('en');refresh()}
+      else paintEnglishJob({...detail,english:next},slug);
+    }catch{paintEnglishJob(detail,slug)}
+  },2200);
+}
 const REPORT_TABS = [
   ['report.html', 'Tổng hợp', null],
+  ['production-report.html', 'Hồ sơ đạo diễn', 'production.json'],
   ['outline-report.html', 'Dàn ý', 'outline.json'],
   ['cast-report.html', 'Nhân vật', 'cast.json'],
   ['art-report.html', 'Mỹ thuật', 'art.json'],
@@ -706,8 +788,9 @@ async function renderProject(slug, page) {
   app().innerHTML = `
     <div class="page-head">
       <div><h2 title="${esc(d.source || d.slug)}">${esc(d.source || d.slug)}</h2>
-      <p class="sub mono">${esc(d.slug)} · ${d.episodes.length} tập${d.params?.minutesPerEpisode ? ` · ${d.params.minutesPerEpisode} phút/tập` : ''}${d.params?.genre ? ` · ${esc(trunc(d.params.genre, 40))}` : ''} · ${esc(d.origin)}</p></div>
+      <p class="sub mono">${esc(d.slug)} · ${d.episodes.length} tập${runtimeEstimate(d)}${d.params?.genre ? ` · ${esc(trunc(d.params.genre, 40))}` : ''} · ${esc(d.origin)}</p></div>
       <div class="row" style="margin:0">
+        ${exportButtons(EXPORT_PARTS.includes(page) ? page : null, Boolean(d.files?.[page]))}
         <button class="btn ghost" data-run="gates">Chạy gate</button>
         <button class="btn ghost" data-run="render">Render báo cáo</button>
         <button class="btn ghost" data-run="packs">Export pack</button>
@@ -717,6 +800,7 @@ async function renderProject(slug, page) {
     </div>
     <div class="tabs">${PAGES.map(([k, label]) => `<button class="tab ${k === page ? 'active' : ''}" data-nav="#/project/${encodeURIComponent(slug)}/${k}">${label}${stageDot(k, d.stages?.[k])}</button>`).join('')}</div>
     <section id="ai-job" class="panel ai-box" hidden></section>
+    <section id="english-panel" class="panel" hidden></section>
     <div id="page"></div>
     <pre id="log" hidden></pre>`;
   document.querySelectorAll('[data-run]').forEach((btn) => { btn.onclick = () => runScenario(btn, slug); });
@@ -726,7 +810,9 @@ async function renderProject(slug, page) {
     await api('/api/projects/' + encodeURIComponent(slug), { method: 'DELETE' });
     state.detail = null; await loadList(); toast('Đã xoá ' + slug, 'ok'); go('#/projects');
   };
+  bindJsonExports(app(), slug);
   paintAIJob(d.ai, slug);
+  paintEnglishJob(d, slug);
   const host = $('#page');
   host.innerHTML = '<div class="empty">Đang tải dữ liệu tầng…</div>';
   try {
@@ -740,18 +826,49 @@ async function renderProject(slug, page) {
 
 /* Công việc AI lưu ở server; chuyển trang vẫn tiếp tục chạy. */
 const AI_STAGES = ['outline','cast','art','script','staging','storyboard'];
-const AI_STATUS = {pending:'Chờ',running:'Đang viết',passed:'Đã kiểm tra',failed:'Cần sửa',cancelled:'Đã dừng'};
+const AI_STATUS = {pending:'Chờ',running:'Đang viết',passed:'Đã kiểm tra',failed:'Có lỗi',cancelled:'Đã dừng'};
 const AI_JOB_STATUS = {queued:'Đang chờ AI',running:'AI đang biên soạn',completed:'Đã biên soạn đủ 6 phần',failed:'Biên soạn cần xử lý',cancelled:'Đã dừng biên soạn',interrupted:'Biên soạn bị gián đoạn'};
 function paintAIJob(job, slug) {
+  clearTimeout(window.__aiPoll);
   const box = $('#ai-job'); if (!box) return;
   box.hidden = !job; if (!job) return;
   const count = AI_STAGES.filter(stage => job.stages?.[stage]?.status === 'passed').length;
   const running = ['queued','running'].includes(job.status);
-  box.dataset.passed = String(count);
-  box.innerHTML = `<div class="page-head"><div><h3>${AI_JOB_STATUS[job.status] || job.status}</h3><p class="hint">${esc(job.options?.model)} · ${count}/6 phần đã kiểm tra</p></div><div class="actions">${running ? '<button class="btn secondary" id="ai-stop">Dừng biên soạn</button>' : job.status !== 'completed' ? '<button class="btn" id="ai-continue">Chạy tiếp từ phần đã lưu</button>' : `<a class="cta" href="#/report/${encodeURIComponent(slug)}/report.html">Mở hồ sơ sản xuất →</a>`}</div></div><progress max="6" value="${count}" aria-label="Tiến độ biên soạn"></progress><div class="ai-progress">${AI_STAGES.map(stage => {const item=job.stages?.[stage] || {};return `<div class="ai-step ${esc(item.status || '')}"><b>${stageName(stage)}</b><span>${AI_STATUS[item.status] || 'Chờ'}${item.episode ? ' · Tập '+esc(item.episode) : ''}</span></div>`}).join('')}</div>${job.error ? `<div class="warn" role="alert">${esc(job.error)}</div>` : ''}${job.current === 'reports' ? '<p class="hint">Đang kiểm tra toàn bộ và dựng báo cáo…</p>' : ''}<p class="hint">${job.status === 'completed' ? 'Đã có báo cáo. Bố trí đang suy từ mô tả; ảnh và video chưa được tạo.' : 'Mỗi phần được lưu sau khi qua kiểm tra. Bạn có thể chuyển trang trong lúc AI viết.'}</p>`;
+  box.dataset.passed = String(count);box.dataset.status=job.status;box.dataset.updatedAt=job.updatedAt || '';box.dataset.error=job.error || '';
+  box.innerHTML = `<div class="page-head"><div><h3>${AI_JOB_STATUS[job.status] || job.status}</h3><p class="hint">${esc(job.options?.model)} · ${count}/6 phần đã kiểm tra</p></div><div class="actions">${running ? '<button class="btn secondary" id="ai-stop">Dừng biên soạn</button>' : job.status !== 'completed' ? '<button class="btn" id="ai-continue">Chạy tiếp từ phần đã lưu</button>' : `<a class="cta" href="#/report/${encodeURIComponent(slug)}/report.html">Mở hồ sơ sản xuất →</a>`}</div></div><progress max="6" value="${count}" aria-label="Tiến độ biên soạn"></progress><div class="ai-progress">${AI_STAGES.map(stage => {const item=job.stages?.[stage] || {};return `<div class="ai-step ${esc(item.status || '')}"><b>${stageName(stage)}</b><span>${AI_STATUS[item.status] || 'Chờ'}${item.episode ? ' · Tập '+esc(item.episode) : ''}</span></div>`}).join('')}</div>${!running && job.status!=='cancelled' && job.error ? `<div class="warn" role="alert">${esc(job.error)}</div>${job.errors?.length ? `<details class="ai-errors"><summary>Chi tiết lỗi</summary><pre>${esc(job.errors.map(item=>item.at+' · '+item.stage+' · '+item.message).join('\n'))}</pre></details>` : ''}` : ''}${job.current === 'reports' ? '<p class="hint">Đang kiểm tra toàn bộ và dựng báo cáo…</p>' : job.current==='english'?'<p class="hint">Đang tạo bản tiếng Anh và phụ đề gốc…</p>':''}<p class="hint">${job.status === 'completed' ? 'Đã có báo cáo. Bố trí đang suy từ mô tả; ảnh và video chưa được tạo.' : 'Mỗi phần được lưu sau khi qua kiểm tra. Bạn có thể chuyển trang trong lúc AI viết.'}</p>`;
+  if(running) {
+    const waiting=document.createElement('p');waiting.className='hint';waiting.id='ai-waiting';waiting.setAttribute('role','status');
+    const labels={waiting:'Đang chờ phản hồi AI',receiving:'Đang nhận kết quả AI',retrying:'Kết nối gián đoạn; đang tự thử lại',recovering:'9router tạm thời chưa sẵn sàng; hệ thống đang chờ để tiếp tục.'};
+    waiting.innerHTML='<span>'+esc(labels[job.transport?.phase] || 'Đang xử lý lần lượt các phần')+'</span> · <span>Không cần bấm chạy tiếp; kết quả sẽ tự cập nhật.</span>';
+    if(job.transport?.nextAttemptAt && ['retrying','recovering'].includes(job.transport.phase)){
+      const next=new Date(job.transport.nextAttemptAt);
+      if(Number.isFinite(next.getTime()))waiting.innerHTML+=' · <span>Tự thử lại lúc</span>: '+esc(next.toLocaleTimeString());
+    }
+    box.querySelector('progress').before(waiting);
+  }
+  if(job.options?.productionProfile) {
+    const line=document.createElement('p');line.className='hint';
+    line.textContent='Đọc hiểu kịch bản'+' · '+(AI_STATUS[job.reading?.status] || AI_STATUS.pending);
+    if(job.stages?.storyboard?.segment && !job.stages.storyboard.activeSegments?.length)line.textContent+=' · '+job.stages.storyboard.segment;
+    box.querySelector('progress').before(line);
+  }
+  if(job.stages?.storyboard?.total) {
+    const board=job.stages.storyboard,detail=document.createElement('p');detail.className='hint';detail.id='ai-storyboard-progress';
+    detail.innerHTML='<span>Đoạn phân cảnh đã kiểm tra</span>: '+esc(board.completed || 0)+'/'+esc(board.total)+
+      (running && board.activeSegments?.length?' · <span>'+(board.continuityMode==='sequential-v1'?'Đang viết theo mạch phim':'Đang xử lý')+'</span>: '+esc(board.activeSegments.join(', ')):'');
+    box.querySelector('progress').before(detail);
+  }
+  if(job.timing?.mode==='content-first') {
+    const timing=document.createElement('p');timing.className='hint';
+    timing.innerHTML='<span>Ưu tiên nội dung đầy đủ</span>'+
+      (job.timing.plannedEpisodes ? ` · ${esc(job.timing.plannedEpisodes)} <span>tập đã chia</span>` : '')+
+      (job.timing.scriptSeconds!=null ? ` · <span>Kịch bản ước tính</span>: ${esc(job.timing.scriptSeconds)}s` : '')+
+      (job.timing.storyboardSeconds!=null ? ` · <span>Thời lượng phân cảnh</span>: ${esc(Math.round(job.timing.storyboardSeconds*10)/10)}s` : '');
+    box.querySelector('progress').before(timing);
+  }
   $('#ai-stop')?.addEventListener('click', async () => {try {await api('/api/projects/'+encodeURIComponent(slug)+'/ai/cancel',{method:'POST'});await pollAI(slug)} catch(e){toast(e.message,'bad')}});
   $('#ai-continue')?.addEventListener('click', () => resumeAI(slug));
-  if (running) window.__aiPoll = setTimeout(() => pollAI(slug), 1800);
+  if (running || ['failed','interrupted'].includes(job.status)) window.__aiPoll = setTimeout(() => pollAI(slug), running?1800:5000);
 }
 async function pollAI(slug) {
   const route=parseHash();if(route.page !== 'project' || route.rest[0] !== slug)return;
@@ -759,20 +876,28 @@ async function pollAI(slug) {
     const {job} = await api('/api/projects/'+encodeURIComponent(slug)+'/ai');
     const current=parseHash();if(current.page !== 'project' || current.rest[0] !== slug)return;
     const previous=Number($('#ai-job')?.dataset.passed || 0);
+    const previousStatus=$('#ai-job')?.dataset.status;
+    const unchanged=previousStatus===job?.status && $('#ai-job')?.dataset.updatedAt===(job?.updatedAt || '') && $('#ai-job')?.dataset.error===(job?.error || '');
+    if(unchanged && !['queued','running'].includes(job?.status)){clearTimeout(window.__aiPoll);if(['failed','interrupted'].includes(job?.status))window.__aiPoll=setTimeout(()=>pollAI(slug),5000);return;}
     const completed=AI_STAGES.filter(stage=>job?.stages?.[stage]?.status==='passed').length;
     paintAIJob(job,slug);
-    if (completed !== previous || !['queued','running'].includes(job?.status)) {
+    if (completed !== previous || job?.status!==previousStatus) {
       clearTimeout(window.__aiPoll);
       state.detail=null;state.cache.clear();await loadList();
       const latest=parseHash();if(latest.page==='project' && latest.rest[0]===slug)await renderProject(slug,latest.rest[1] || 'overview');
     }
-  } catch(e) {toast(e.message,'bad');window.__aiPoll=setTimeout(()=>pollAI(slug),4000)}
+  } catch(e) {
+    const current=parseHash();if(current.page!=='project' || current.rest[0]!==slug)return;
+    const box=$('#ai-job');let notice=$('#ai-connection-wait');
+    if(box && !notice){notice=document.createElement('p');notice.id='ai-connection-wait';notice.className='hint';notice.setAttribute('role','status');box.append(notice)}
+    if(notice)notice.textContent='Đang kết nối lại để cập nhật tiến độ. Tác vụ vẫn chạy trên server.';
+    window.__aiPoll=setTimeout(()=>pollAI(slug),4000);
+  }
 }
 async function resumeAI(slug) {
   try {
     const d=await getProject(slug);
-    const options={episodes:d.params.episodes || d.episodes.length,seconds:(d.params.minutesPerEpisode || 0)*60,genre:d.params.genre,lang:window.shuohaoLanguage?.get() || 'vi'};
-    if(!options.episodes || !options.seconds || !options.genre) {toast('Dự án thiếu số tập, thời lượng hoặc thể loại. Tạo dự án AI mới để nhập đủ thông tin.','bad');return}
+    const options={episodes:d.params.episodes || d.episodes.length || null,seconds:d.params.minutesPerEpisode ? d.params.minutesPerEpisode*60 : null,genre:d.params.genre,lang:window.shuohaoLanguage?.get() || 'vi'};
     const result=await api('/api/projects/'+encodeURIComponent(slug)+'/ai',{method:'POST',body:JSON.stringify(options)});
     paintAIJob(result.job,slug);$('#ai-resume')?.setAttribute('disabled','');
   } catch(e) {toast(e.message,'bad')}
@@ -842,8 +967,10 @@ async function renderStage(host, d, slug, stage) {
   const rep = REPORT_TABS.find(([, , needs]) => needs === file)?.[0];
   host.innerHTML = `<div class="panel"><div class="page-head"><h3>${stageName(stage)} ${badge}</h3>
       <button class="btn ghost" ${rep ? `id="open-rep"` : 'disabled'}>Xem báo cáo đầy đủ →</button></div>
+      ${d.files.productionReport ? `<p><a href="#/report/${encodeURIComponent(slug)}/production-report.html">Hồ sơ đạo diễn →</a></p>` : ''}
       ${fn(doc, d)}</div>`;
   const b = $('#open-rep'); if (b) b.onclick = () => go(`#/report/${encodeURIComponent(slug)}/${rep}`);
+  if(host.querySelector('[data-image-slot]'))await window.shuohaoImages?.mount(host,slug,{onDone:()=>{state.detail=null;state.list=null}});
 }
 
 const flowView = (doc) => {
@@ -852,13 +979,13 @@ const flowView = (doc) => {
     const beats = (ep.scenes ?? []).reduce((a, s) => a + (s.flow ?? []).length, 0);
     const lines = (ep.scenes ?? []).reduce((a, s) => a + (s.flow ?? []).filter((f) => f.line).length, 0);
     return `<details ${ep.ep === 1 ? 'open' : ''}><summary>Tập ${esc(ep.ep)} · ${esc((ep.scenes ?? []).map((s) => s.sceneId).join('+'))}
-      <span class="n">${(ep.scenes ?? []).length} cảnh · ${lines} thoại · ${beats} beat · mục tiêu ${esc(ep.targetSeconds ?? '?')}s</span></summary>
+      <span class="n">${(ep.scenes ?? []).length} cảnh · ${lines} thoại · ${beats} beat · ${doc.params?.timingMode === 'content-first' ? 'ước tính' : 'mục tiêu'} ${esc(ep.targetSeconds ?? '?')}s</span></summary>
       <div class="body">
         ${ep.hook ? `<p class="hint"><b>Hook:</b> ${esc(ep.hook)}</p>` : ''}
         ${ep.cliff ? `<p class="hint"><b>Cliff:</b> ${esc(ep.cliff)}</p>` : ''}
         ${(ep.scenes ?? []).map((sc) => `<div style="margin:8px 0 4px" class="mono">${esc(sc.sceneId)}${sc.lighting ? ` · ${esc(sc.lighting)}` : ''} · ${esc((sc.characters ?? []).map((c) => names.get(c) ?? c).join(', '))}</div>
           <table><tbody>${(sc.flow ?? []).map((f, i) => f.line
-            ? `<tr><td class="num">${i + 1}</td><td class="beat-l"><span class="who">${esc(names.get(f.speaker) ?? f.speaker ?? 'VO')}:</span>${esc(f.line)}${f.delivery ? ` <span class="hint">(${esc(f.delivery)})</span>` : ''}</td></tr>`
+            ? `<tr><td class="num">${i + 1}</td><td class="beat-l"><span class="who">${esc(names.get(f.speaker) ?? f.speaker ?? 'VO')}:</span><span data-no-translate>${esc(f.line)}</span>${f.subtitle?`<small class="original-subtitle" data-no-translate>${esc(f.subtitle)}</small>`:''}${f.delivery ? ` <span class="hint">(${esc(f.delivery)})</span>` : ''}</td></tr>`
             : `<tr><td class="num">${i + 1}</td><td class="beat-a">${esc(f.action)}</td></tr>`).join('')}</tbody></table>`).join('')}
       </div></details>`;
   }).join('');
@@ -868,7 +995,7 @@ function renderScript(doc) {
   const eps = doc.episodes ?? [];
   const lines = eps.reduce((a, e) => a + (e.scenes ?? []).reduce((x, s) => x + (s.flow ?? []).filter((f) => f.line).length, 0), 0);
   const beats = eps.reduce((a, e) => a + (e.scenes ?? []).reduce((x, s) => x + (s.flow ?? []).length, 0), 0);
-  return `<div class="kpis"><div class="kpi"><b>${eps.length}</b><small>tập</small></div><div class="kpi"><b>${lines}</b><small>câu thoại</small></div><div class="kpi"><b>${beats}</b><small>beat</small></div><div class="kpi"><b>${eps.reduce((a, e) => a + (e.targetSeconds ?? 0), 0)}</b><small>giây mục tiêu</small></div></div>${flowView(doc)}`;
+  return `<div class="kpis"><div class="kpi"><b>${eps.length}</b><small>tập</small></div><div class="kpi"><b>${lines}</b><small>câu thoại</small></div><div class="kpi"><b>${beats}</b><small>beat</small></div><div class="kpi"><b>${eps.reduce((a, e) => a + (e.targetSeconds ?? 0), 0)}</b><small>${doc.params?.timingMode === 'content-first' ? 'giây ước tính' : 'giây mục tiêu'}</small></div></div>${flowView(doc)}`;
 }
 
 function renderOutline(doc) {
@@ -897,6 +1024,7 @@ function renderCast(doc) {
         <span class="chips">${(c.persona?.personality ?? []).map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</span>
         <span class="meta">${esc(c.persona?.identity ?? '')} · ${esc(c.persona?.ageRange ?? '')}</span>
         ${c.voice ? `<span class="meta">🎙 ${esc(c.voice.timbre ?? '')} · ${esc(c.voice.pace ?? '')}</span>` : ''}
+        <div class="image-slot" data-image-slot="character:${esc(c.id)}"></div>
       </div>`).join('')}</div>`;
 }
 
@@ -908,17 +1036,22 @@ function renderArt(doc) {
         <div class="hint">${esc(s.summary ?? '')}</div>
         <div class="chips" style="margin-top:6px">${(s.anchors ?? []).map((a) => `<span class="chip" title="${esc(a.desc)}">${esc(a.name)}</span>`).join('')}</div>
         <div class="chips" style="margin-top:4px">${(s.lighting ?? []).map((l) => `<span class="chip">☀ ${esc(l.state)}</span>`).join('')}</div>
+        <div class="image-slot" data-image-slot="scene:${esc(s.id)}"></div>
+        ${(s.lighting??[]).some(l=>l.prompt)?`<details class="image-variants"><summary>Ảnh theo ánh sáng</summary>${(s.lighting??[]).map((l,i)=>`<article><b>${esc(l.state)}</b><div class="image-slot" data-image-slot="lighting:${esc(s.id)}:${i+1}"></div></article>`).join('')}</details>`:''}
       </div>`).join('')}</div>
       <div class="stack">${(doc.props ?? []).map((p) => `<div class="seg">
         <div class="h"><span class="id">${esc(p.id)}</span><b>${esc(p.name)}</b><span class="chip">${esc(p.scale ?? '')}</span></div>
         <div class="hint">${esc(p.summary ?? '')}</div>
         <div class="chips" style="margin-top:6px">${(p.states ?? []).map((s) => `<span class="chip">${esc(s.state)}</span>`).join('')}</div>
+        <div class="image-slot" data-image-slot="prop:${esc(p.id)}"></div>
+        ${(p.states??[]).some(s=>s.prompt)?`<details class="image-variants"><summary>Ảnh theo trạng thái</summary>${(p.states??[]).map((s,i)=>`<article><b>${esc(s.state)}</b><div class="image-slot" data-image-slot="state:${esc(p.id)}:${i+1}"></div></article>`).join('')}</details>`:''}
       </div>`).join('')}</div>
     </div>`;
 }
 
 function renderStaging(doc) {
   return `<p class="sub">${(doc.locations ?? []).length} địa điểm · ${(doc.scenes ?? []).length} cảnh. Sơ đồ kéo-thả nằm trong báo cáo bố trí.</p>
+    <div class="reference-grid">${(doc.locations??[]).map(l=>`<article class="reference-card"><h3>${esc(l.name||l.sceneId)}</h3><div class="image-slot" data-image-slot="scene:${esc(l.sceneId)}"></div></article>`).join('')}</div>
     <table><thead><tr><th>Tập</th><th>Cảnh</th><th>Địa điểm</th><th>Ai ở đâu</th></tr></thead><tbody>
     ${(doc.scenes ?? []).map((s) => `<tr>
       <td class="num">${esc(s.ep)}.${esc(s.scene)}</td><td>${esc(s.sceneId)}</td><td>${esc((doc.locations ?? []).find((l) => l.sceneId === s.sceneId)?.name ?? '')}</td>
@@ -937,7 +1070,7 @@ function renderStoryboard(doc) {
       <div class="body">${(ep.segments ?? []).map((s) => `<div class="seg">
         <div class="h"><span class="id">${esc(s.id)}</span><span class="chip">${(s.cuts ?? []).reduce((x, c) => x + (c.seconds ?? 0), 0)}s</span><span class="chip">${esc(s.cuts?.[0]?.size ?? '')}</span></div>
         ${(s.cuts ?? []).map((c, i) => `<div class="cut"><div class="t">#${i + 1} · ${c.seconds}s</div><div class="t">${esc(c.size ?? '')}<br>${esc(c.camera ?? '')}</div>
-          <div><div class="s"><b>${esc((c.beats ?? []).join('–'))} · ${esc(c.frame ?? '')}</b></div><div class="hint">${esc(c.shot ?? '')}</div></div></div>`).join('')}
+          <div><div class="s"><b>${esc((c.beats ?? []).join('–'))} · ${esc(c.frame ?? '')}</b></div><div class="hint">${esc(c.shot ?? '')}</div><div class="image-slot" data-image-slot="frame:${esc(s.id)}:${i+1}"></div></div></div>`).join('')}
       </div>`).join('')}</div></details>`).join('')}`;
 }
 
@@ -951,18 +1084,23 @@ async function renderReport(slug, file) {
   app().innerHTML = `
     <div class="page-head">
       <div><h2>Báo cáo</h2><p class="sub">Chuyển giữa các tầng ở thanh bên; nút quay lại đưa về dự án.</p></div>
-      <div class="row" style="margin:0"><button class="btn secondary" id="back">← Về dự án</button></div>
+      <div class="row" style="margin:0">${exportButtons(REPORT_TABS.find(([name]) => name === file)?.[2]?.replace('.json',''))}<button class="btn secondary" id="back">← Về dự án</button></div>
     </div>
+    <section id="english-panel" class="panel" hidden></section>
+    <section id="image-gallery" class="panel" hidden></section>
     <div class="viewer">
       <div class="side">
         <div class="grp">Báo cáo</div>
-        ${REPORT_TABS.map(([f, label]) => `<button data-nav="#/report/${encodeURIComponent(slug)}/${encodeURIComponent(f)}" class="${f === file ? 'active' : ''}">${label}</button>`).join('')}
+        ${REPORT_TABS.filter(([f]) => f !== 'production-report.html' || state.detail?.files?.productionReport).map(([f, label]) => `<button data-nav="#/report/${encodeURIComponent(slug)}/${encodeURIComponent(f)}" class="${f === file ? 'active' : ''}">${label}</button>`).join('')}
         <div class="grp">Dữ liệu</div>
         ${PAGES.filter(([k]) => !['overview', 'files'].includes(k)).map(([k, label]) => `<button data-nav="#/project/${encodeURIComponent(slug)}/${k}">${label}</button>`).join('')}
       </div>
       <iframe id="frame" src="${src}" title="báo cáo"></iframe>
     </div>`;
   $('#frame').addEventListener('load', () => { prepareEmbeddedReport($('#frame')); syncReportLocale(); });
+  bindJsonExports(app(), slug, $('#frame'));
+  if(state.detail?.slug===slug)paintEnglishJob(state.detail,slug);
+  if(!state.offline){const kinds={'report.html':['character','scene','prop'],'production-report.html':['character','scene','prop','frame'],'cast-report.html':['character'],'art-report.html':['scene','lighting','prop','state'],'staging-report.html':['scene'],'storyboard-report.html':['frame']}[file];if(kinds)window.shuohaoImages?.mount($('#image-gallery'),slug,{gallery:true,kinds,onDone:()=>{state.detail=null;state.list=null}})}
   $('#back').onclick = () => go(`#/project/${encodeURIComponent(slug)}`);
   document.querySelectorAll('.viewer [data-nav]').forEach((el) => { el.onclick = () => go(el.dataset.nav); });
 }
@@ -973,12 +1111,14 @@ function renderFiles(host, d, slug) {
     ['outline.json', 'Dàn ý', d.files.outline], ['cast.json', 'Nhân vật', d.files.cast], ['art.json', 'Mỹ thuật', d.files.art],
     ['script.json', 'Kịch bản', d.files.script], ['staging.json', 'Bố trí', d.files.staging], ['storyboard.json', 'Phân cảnh', d.files.storyboard],
     ['split.json', 'Kết quả đọc kịch bản', d.files.split], ['kichban.md', 'Kịch bản gốc đã dán', d.files.kichban],
+    ['reference-images.json', 'Ảnh tham chiếu đã tạo', d.files.references],
+    ['reading.json', 'Đọc hiểu kịch bản', d.files.reading], ['production.json', 'Hồ sơ đạo diễn', d.files.production],
   ];
   const reports = REPORT_TABS.map(([f, label]) => [f, label, f === 'report.html' ? d.files.report : d.files[`${f.replace('-report.html', 'Report')}`]]);
   host.innerHTML = `<div class="grid2">
     <section class="panel"><h3>Dữ liệu</h3>
       <table><thead><tr><th>Tệp</th><th>Kích thước</th><th></th></tr></thead><tbody>
-      ${rows.map(([f, label, size]) => `<tr><td><span class="mono">${esc(f)}</span><br><span class="hint">${esc(label)}</span></td><td class="num">${size ? fmtKB(size) : '—'}</td><td class="num"><button class="btn ghost" data-view="${esc(f)}" ${size ? '' : 'disabled'}>xem</button></td></tr>`).join('')}
+      ${rows.map(([f, label, size]) => `<tr><td><span class="mono">${esc(f)}</span><br><span class="hint">${esc(label)}</span></td><td class="num">${size ? fmtKB(size) : '—'}</td><td class="num"><button class="btn ghost" data-view="${esc(f)}" ${size ? '' : 'disabled'}>xem</button>${f.endsWith('.json') ? `<button class="btn ghost" data-export-json="${esc(f==='reference-images.json'?'references':f.replace('.json',''))}" ${size ? '' : 'disabled'}>Xuất JSON</button>` : ''}</td></tr>`).join('')}
       </tbody></table>
       <h3 style="margin:16px 0 6px">Thư mục</h3>
       <div class="chips"><span class="chip">images · ${d.images} sheet</span><span class="chip">frames · ${d.frames} đoạn</span><span class="chip">packs · ${d.packs} đoạn</span><span class="chip">video · ${d.video.length} file</span></div>
@@ -990,6 +1130,7 @@ function renderFiles(host, d, slug) {
       <div id="preview" style="margin-top:14px"></div>
     </section>
   </div>`;
+  bindJsonExports(host, slug);
   host.querySelectorAll('[data-view]').forEach((btn) => {
     btn.onclick = async () => {
       const f = btn.dataset.view;

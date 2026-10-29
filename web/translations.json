@@ -16910,5 +16910,1748 @@
     "vi": "Nhận kịch bản hoàn chỉnh hoặc mô tả cốt truyện tự do. Nếu đã có nhân vật và phân tập, hãy giữ chúng trong nội dung.",
     "en": "Accepts a complete script or a free-form story. Keep any existing characters and episode divisions in the text.",
     "zh": "支持完整剧本或自由格式故事。如已有角色和分集，请保留在正文中。"
+  },
+  {
+    "id": "79e0edcb9adb78ba",
+    "source": "Bộ não đạo diễn đọc hiểu kịch bản trước, khóa DNA nhân vật, diễn xuất, ánh sáng và trạng thái nối shot cho cả sáu phần.",
+    "vi": "Bộ não đạo diễn đọc hiểu kịch bản trước, khóa DNA nhân vật, diễn xuất, ánh sáng và trạng thái nối shot cho cả sáu phần.",
+    "en": "The director brain reads the screenplay first, then locks character DNA, acting, lighting and shot continuity across all six departments.",
+    "zh": "导演引擎先解读剧本，再统一六个部门的角色视觉基因、表演、光线与镜头连续性。"
+  },
+  {
+    "id": "ff1fc9a0987d66e9",
+    "source": "Đọc hiểu kịch bản",
+    "vi": "Đọc hiểu kịch bản",
+    "en": "Screenplay reading",
+    "zh": "剧本解读"
+  },
+  {
+    "id": "62ea5f34fd743f57",
+    "source": "Hồ sơ đạo diễn",
+    "vi": "Hồ sơ đạo diễn",
+    "en": "Director dossier",
+    "zh": "导演制作档案"
+  },
+  {
+    "id": "a594ba6ed4b74143",
+    "source": "Hồ sơ đạo diễn →",
+    "vi": "Hồ sơ đạo diễn →",
+    "en": "Director dossier →",
+    "zh": "导演制作档案 →"
+  },
+  {
+    "id": "ce289ffd4f39fa05",
+    "source": "Tác phẩm",
+    "vi": "Tác phẩm",
+    "en": "Work",
+    "zh": "作品"
+  },
+  {
+    "id": "b4bb30647518cbd0",
+    "source": "Tóm tắt",
+    "vi": "Tóm tắt",
+    "en": "Summary",
+    "zh": "梗概"
+  },
+  {
+    "id": "6408ac71ca01e98f",
+    "source": "Kết thúc gốc",
+    "vi": "Kết thúc gốc",
+    "en": "Source ending",
+    "zh": "原作结局"
+  },
+  {
+    "id": "4001d3692a767b94",
+    "source": "Định hướng thể loại",
+    "vi": "Định hướng thể loại",
+    "en": "Genre direction",
+    "zh": "类型方向"
+  },
+  {
+    "id": "27f960163d25f139",
+    "source": "Cơ học chuyển động",
+    "vi": "Cơ học chuyển động",
+    "en": "Motion physics",
+    "zh": "运动物理"
+  },
+  {
+    "id": "b868bdaa5ad0ba67",
+    "source": "Ngôn ngữ máy quay",
+    "vi": "Ngôn ngữ máy quay",
+    "en": "Camera language",
+    "zh": "摄影语言"
+  },
+  {
+    "id": "24b4ff33ed27f8df",
+    "source": "Ngôn ngữ ánh sáng",
+    "vi": "Ngôn ngữ ánh sáng",
+    "en": "Lighting language",
+    "zh": "光线语言"
+  },
+  {
+    "id": "4714495c5735683b",
+    "source": "Dữ kiện có nguồn",
+    "vi": "Dữ kiện có nguồn",
+    "en": "Sourced facts",
+    "zh": "原文事实"
+  },
+  {
+    "id": "cf0822fd576ce6a9",
+    "source": "Trích dẫn nguyên văn",
+    "vi": "Trích dẫn nguyên văn",
+    "en": "Exact source quote",
+    "zh": "原文引用"
+  },
+  {
+    "id": "84da895ef3b41986",
+    "source": "Ý nghĩa",
+    "vi": "Ý nghĩa",
+    "en": "Meaning",
+    "zh": "含义"
+  },
+  {
+    "id": "3929f58695c7ffe9",
+    "source": "Điểm chưa rõ",
+    "vi": "Điểm chưa rõ",
+    "en": "Unknowns",
+    "zh": "未知事项"
+  },
+  {
+    "id": "33e7dd25ef5ef154",
+    "source": "Đề xuất bổ sung",
+    "vi": "Đề xuất bổ sung",
+    "en": "Inferred proposals",
+    "zh": "推断提案"
+  },
+  {
+    "id": "e762d926984bb1fb",
+    "source": "Chi tiết",
+    "vi": "Chi tiết",
+    "en": "Detail",
+    "zh": "细节"
+  },
+  {
+    "id": "1a51692b3430fb20",
+    "source": "Lý do",
+    "vi": "Lý do",
+    "en": "Reason",
+    "zh": "原因"
+  },
+  {
+    "id": "42b756f264892f2b",
+    "source": "Ràng buộc gốc",
+    "vi": "Ràng buộc gốc",
+    "en": "Source constraints",
+    "zh": "原作约束"
+  },
+  {
+    "id": "3a5f51cac0f9b559",
+    "source": "Tóm tắt phim",
+    "vi": "Tóm tắt phim",
+    "en": "Logline",
+    "zh": "故事主线"
+  },
+  {
+    "id": "15b3cf5bb57c06a9",
+    "source": "Thông điệp",
+    "vi": "Thông điệp",
+    "en": "Theme",
+    "zh": "主题"
+  },
+  {
+    "id": "741e9877884bca6c",
+    "source": "Dữ kiện tham chiếu",
+    "vi": "Dữ kiện tham chiếu",
+    "en": "Fact references",
+    "zh": "事实引用"
+  },
+  {
+    "id": "fef0becd78074e06",
+    "source": "Nhịp phim",
+    "vi": "Nhịp phim",
+    "en": "Pacing",
+    "zh": "节奏"
+  },
+  {
+    "id": "c1fb55f3f905400b",
+    "source": "Tập",
+    "vi": "Tập",
+    "en": "Episode",
+    "zh": "集数"
+  },
+  {
+    "id": "82cafdb2ca6aac5a",
+    "source": "Các màn",
+    "vi": "Các màn",
+    "en": "Acts",
+    "zh": "幕次"
+  },
+  {
+    "id": "aa70a1931e9665fb",
+    "source": "Giai đoạn",
+    "vi": "Giai đoạn",
+    "en": "Phase",
+    "zh": "阶段"
+  },
+  {
+    "id": "b3cacc46a7dba138",
+    "source": "Bắt đầu",
+    "vi": "Bắt đầu",
+    "en": "Start",
+    "zh": "开始"
+  },
+  {
+    "id": "35184912fa636159",
+    "source": "Kết thúc",
+    "vi": "Kết thúc",
+    "en": "End",
+    "zh": "结束"
+  },
+  {
+    "id": "aa2536da4d39f62b",
+    "source": "Hành động thị giác",
+    "vi": "Hành động thị giác",
+    "en": "Visual beat",
+    "zh": "视觉节拍"
+  },
+  {
+    "id": "c8b172595aa87b1b",
+    "source": "Tên",
+    "vi": "Tên",
+    "en": "Name",
+    "zh": "名称"
+  },
+  {
+    "id": "293922fa3d97116e",
+    "source": "DNA ngoại hình cố định",
+    "vi": "DNA ngoại hình cố định",
+    "en": "Immutable visual DNA",
+    "zh": "固定视觉基因"
+  },
+  {
+    "id": "9b487f4c9da43a23",
+    "source": "Ngôn ngữ hình khối",
+    "vi": "Ngôn ngữ hình khối",
+    "en": "Shape language",
+    "zh": "形状语言"
+  },
+  {
+    "id": "85562cda35e7070b",
+    "source": "Trọng tâm",
+    "vi": "Trọng tâm",
+    "en": "Centre of weight",
+    "zh": "重心"
+  },
+  {
+    "id": "8c0bd357aa11e9a2",
+    "source": "Dáng đi",
+    "vi": "Dáng đi",
+    "en": "Gait",
+    "zh": "步态"
+  },
+  {
+    "id": "a24d0c8fad01b268",
+    "source": "Thói quen vô thức",
+    "vi": "Thói quen vô thức",
+    "en": "Signature tics",
+    "zh": "习惯动作"
+  },
+  {
+    "id": "2d273c40d2dd023e",
+    "source": "Khi suy nghĩ",
+    "vi": "Khi suy nghĩ",
+    "en": "When thinking",
+    "zh": "思考时"
+  },
+  {
+    "id": "a4471e8f2facc525",
+    "source": "Khi phấn khích",
+    "vi": "Khi phấn khích",
+    "en": "When excited",
+    "zh": "兴奋时"
+  },
+  {
+    "id": "df22b925460bea9d",
+    "source": "Khi sợ hãi",
+    "vi": "Khi sợ hãi",
+    "en": "When afraid",
+    "zh": "害怕时"
+  },
+  {
+    "id": "aabf75fdfaf14fcc",
+    "source": "Bốn vùng biểu cảm",
+    "vi": "Bốn vùng biểu cảm",
+    "en": "Four facial zones",
+    "zh": "四区表情"
+  },
+  {
+    "id": "55d63fd5b5b2dee4",
+    "source": "Mắt và đồng tử",
+    "vi": "Mắt và đồng tử",
+    "en": "Eyes and pupils",
+    "zh": "眼睛与瞳孔"
+  },
+  {
+    "id": "f099099c5a2b897a",
+    "source": "Lông mày",
+    "vi": "Lông mày",
+    "en": "Brows",
+    "zh": "眉毛"
+  },
+  {
+    "id": "32c1091a7ba56628",
+    "source": "Mũi và má",
+    "vi": "Mũi và má",
+    "en": "Nose and cheeks",
+    "zh": "鼻子与脸颊"
+  },
+  {
+    "id": "c9e7b3a6aa429ef5",
+    "source": "Miệng và hàm",
+    "vi": "Miệng và hàm",
+    "en": "Mouth and jaw",
+    "zh": "嘴与下颌"
+  },
+  {
+    "id": "9e7df15c723dbfa4",
+    "source": "Nhịp giọng",
+    "vi": "Nhịp giọng",
+    "en": "Vocal cadence",
+    "zh": "声音节奏"
+  },
+  {
+    "id": "b34a69a9e623b722",
+    "source": "Phong cách hình ảnh cố định",
+    "vi": "Phong cách hình ảnh cố định",
+    "en": "Style DNA",
+    "zh": "固定画风"
+  },
+  {
+    "id": "b50492c7bf20adf2",
+    "source": "Bảng màu",
+    "vi": "Bảng màu",
+    "en": "Palette",
+    "zh": "配色"
+  },
+  {
+    "id": "e9de62f20cce1844",
+    "source": "Ánh sáng chính",
+    "vi": "Ánh sáng chính",
+    "en": "Key light",
+    "zh": "主光"
+  },
+  {
+    "id": "6fbbbb6d83666c67",
+    "source": "Ánh sáng viền",
+    "vi": "Ánh sáng viền",
+    "en": "Rim light",
+    "zh": "轮廓光"
+  },
+  {
+    "id": "2e482f12fde48a6e",
+    "source": "Khí quyển",
+    "vi": "Khí quyển",
+    "en": "Atmosphere",
+    "zh": "氛围"
+  },
+  {
+    "id": "d0b682991f8ee1f7",
+    "source": "Bối cảnh",
+    "vi": "Bối cảnh",
+    "en": "Scenes",
+    "zh": "场景"
+  },
+  {
+    "id": "9ee1020e6c4febdb",
+    "source": "Đạo cụ",
+    "vi": "Đạo cụ",
+    "en": "Props",
+    "zh": "道具"
+  },
+  {
+    "id": "09ac1d71cc88587a",
+    "source": "Tiền cảnh",
+    "vi": "Tiền cảnh",
+    "en": "Foreground",
+    "zh": "前景"
+  },
+  {
+    "id": "cf2950ca12af8a1b",
+    "source": "Trung cảnh",
+    "vi": "Trung cảnh",
+    "en": "Midground",
+    "zh": "中景"
+  },
+  {
+    "id": "40bb6698542b6a3f",
+    "source": "Hậu cảnh",
+    "vi": "Hậu cảnh",
+    "en": "Background",
+    "zh": "背景"
+  },
+  {
+    "id": "117f93ab1a8c2acd",
+    "source": "Hướng sáng chính",
+    "vi": "Hướng sáng chính",
+    "en": "Key light direction",
+    "zh": "主光方向"
+  },
+  {
+    "id": "74364f3ab3e1abbd",
+    "source": "Chất liệu",
+    "vi": "Chất liệu",
+    "en": "Material",
+    "zh": "材质"
+  },
+  {
+    "id": "878d2e4e6c4c67f4",
+    "source": "Tỷ lệ tương quan",
+    "vi": "Tỷ lệ tương quan",
+    "en": "Relative scale",
+    "zh": "相对尺度"
+  },
+  {
+    "id": "f4d1bd687a67350e",
+    "source": "Tương tác vật lý",
+    "vi": "Tương tác vật lý",
+    "en": "Physical interaction",
+    "zh": "物理互动"
+  },
+  {
+    "id": "165cf3de63ac21c9",
+    "source": "Cảnh số",
+    "vi": "Cảnh số",
+    "en": "Scene number",
+    "zh": "场次"
+  },
+  {
+    "id": "06bbae476a17b638",
+    "source": "Nhịp hành động và thoại",
+    "vi": "Nhịp hành động và thoại",
+    "en": "Action and dialogue beats",
+    "zh": "动作与台词节拍"
+  },
+  {
+    "id": "ccf586e4b95f494a",
+    "source": "Hành động",
+    "vi": "Hành động",
+    "en": "Action",
+    "zh": "动作"
+  },
+  {
+    "id": "9620707bb3aed007",
+    "source": "Người nói",
+    "vi": "Người nói",
+    "en": "Speaker",
+    "zh": "说话者"
+  },
+  {
+    "id": "4ed8372848589d6c",
+    "source": "Lời thoại",
+    "vi": "Lời thoại",
+    "en": "Dialogue",
+    "zh": "台词"
+  },
+  {
+    "id": "bfe12d7e577b8711",
+    "source": "Cách nói",
+    "vi": "Cách nói",
+    "en": "Delivery",
+    "zh": "语气"
+  },
+  {
+    "id": "818c7f54867dd2e5",
+    "source": "Chỉ dẫn diễn xuất",
+    "vi": "Chỉ dẫn diễn xuất",
+    "en": "Acting directions",
+    "zh": "表演指示"
+  },
+  {
+    "id": "6fcddcb26dc97c89",
+    "source": "Cử chỉ theo từ nhấn",
+    "vi": "Cử chỉ theo từ nhấn",
+    "en": "Beat gesture",
+    "zh": "节拍手势"
+  },
+  {
+    "id": "76cf4e915088a2b7",
+    "source": "Cơ thể và trọng tâm",
+    "vi": "Cơ thể và trọng tâm",
+    "en": "Body and weight",
+    "zh": "身体与重心"
+  },
+  {
+    "id": "2de1ccda5dcc0394",
+    "source": "Giải phẫu biểu cảm",
+    "vi": "Giải phẫu biểu cảm",
+    "en": "Facial acting",
+    "zh": "面部表演"
+  },
+  {
+    "id": "871691e1ba630c32",
+    "source": "Diễn ngầm của người nghe",
+    "vi": "Diễn ngầm của người nghe",
+    "en": "Listener acting",
+    "zh": "倾听者表演"
+  },
+  {
+    "id": "bdaaa0353730c36b",
+    "source": "Mã nhân vật",
+    "vi": "Mã nhân vật",
+    "en": "Character ID",
+    "zh": "角色编号"
+  },
+  {
+    "id": "0b04a646df89c5db",
+    "source": "Trục hành động",
+    "vi": "Trục hành động",
+    "en": "Action axis",
+    "zh": "动作轴线"
+  },
+  {
+    "id": "7f470bb08142cea3",
+    "source": "Phía đặt máy",
+    "vi": "Phía đặt máy",
+    "en": "Camera side",
+    "zh": "摄影机侧"
+  },
+  {
+    "id": "1cafa7ecbc9d9f54",
+    "source": "Hướng ánh sáng",
+    "vi": "Hướng ánh sáng",
+    "en": "Light direction",
+    "zh": "光线方向"
+  },
+  {
+    "id": "3510d539b3edfc63",
+    "source": "Vị trí trong khung",
+    "vi": "Vị trí trong khung",
+    "en": "Screen positions",
+    "zh": "画面位置"
+  },
+  {
+    "id": "be293ea359f2dc90",
+    "source": "Vị trí",
+    "vi": "Vị trí",
+    "en": "Position",
+    "zh": "位置"
+  },
+  {
+    "id": "a0ffa005fa7c714c",
+    "source": "Hướng nhìn",
+    "vi": "Hướng nhìn",
+    "en": "Gaze",
+    "zh": "视线"
+  },
+  {
+    "id": "c4c81227f901192e",
+    "source": "Tư thế",
+    "vi": "Tư thế",
+    "en": "Pose",
+    "zh": "姿势"
+  },
+  {
+    "id": "085ece48a72a17c3",
+    "source": "Đoạn video",
+    "vi": "Đoạn video",
+    "en": "Video segments",
+    "zh": "视频段落"
+  },
+  {
+    "id": "8c50949cbb9e034f",
+    "source": "Các shot",
+    "vi": "Các shot",
+    "en": "Shots",
+    "zh": "镜头"
+  },
+  {
+    "id": "4b4ecfa02cc0c515",
+    "source": "Shot số",
+    "vi": "Shot số",
+    "en": "Shot number",
+    "zh": "镜头序号"
+  },
+  {
+    "id": "dd1608966e904581",
+    "source": "Thời lượng (giây)",
+    "vi": "Thời lượng (giây)",
+    "en": "Duration (seconds)",
+    "zh": "时长（秒）"
+  },
+  {
+    "id": "85ab548d440c00cf",
+    "source": "Chuyển động máy",
+    "vi": "Chuyển động máy",
+    "en": "Camera move",
+    "zh": "运镜"
+  },
+  {
+    "id": "2851bf91026fe5d5",
+    "source": "Ống kính",
+    "vi": "Ống kính",
+    "en": "Lens",
+    "zh": "镜头焦距"
+  },
+  {
+    "id": "b31ade73e379eb82",
+    "source": "Khung hình đầu",
+    "vi": "Khung hình đầu",
+    "en": "Starting frame",
+    "zh": "起始画面"
+  },
+  {
+    "id": "727ac5158b4ebfcd",
+    "source": "Tốc độ máy",
+    "vi": "Tốc độ máy",
+    "en": "Camera speed",
+    "zh": "运镜速度"
+  },
+  {
+    "id": "fe203073ab42b2c2",
+    "source": "Ba lớp chiều sâu",
+    "vi": "Ba lớp chiều sâu",
+    "en": "Depth layers",
+    "zh": "三层纵深"
+  },
+  {
+    "id": "2dbb92ba168061bc",
+    "source": "Diễn hoạt theo giây",
+    "vi": "Diễn hoạt theo giây",
+    "en": "Animation timeline",
+    "zh": "逐秒动画"
+  },
+  {
+    "id": "c1303271503dacb5",
+    "source": "Âm thanh",
+    "vi": "Âm thanh",
+    "en": "Audio",
+    "zh": "声音"
+  },
+  {
+    "id": "271fb2929b05ba25",
+    "source": "Nhạc nền",
+    "vi": "Nhạc nền",
+    "en": "Background music",
+    "zh": "配乐"
+  },
+  {
+    "id": "d305caf5ed40bd28",
+    "source": "Tiếng động theo giây",
+    "vi": "Tiếng động theo giây",
+    "en": "Timed foley",
+    "zh": "定时拟音"
+  },
+  {
+    "id": "687fbaefcb06f468",
+    "source": "Giây",
+    "vi": "Giây",
+    "en": "Second",
+    "zh": "秒"
+  },
+  {
+    "id": "128eca3d94757e3c",
+    "source": "Tiếng động",
+    "vi": "Tiếng động",
+    "en": "Sound",
+    "zh": "音效"
+  },
+  {
+    "id": "e25a4ade9a17f233",
+    "source": "Trạng thái đầu shot",
+    "vi": "Trạng thái đầu shot",
+    "en": "Start state",
+    "zh": "起始状态"
+  },
+  {
+    "id": "61ea013a7883ba59",
+    "source": "Trạng thái cuối shot",
+    "vi": "Trạng thái cuối shot",
+    "en": "End state",
+    "zh": "结束状态"
+  },
+  {
+    "id": "989bdb00ee371676",
+    "source": "Mã đạo cụ",
+    "vi": "Mã đạo cụ",
+    "en": "Prop ID",
+    "zh": "道具编号"
+  },
+  {
+    "id": "c6ec193fbe3cf2c7",
+    "source": "Vị trí hoặc người giữ",
+    "vi": "Vị trí hoặc người giữ",
+    "en": "Location or holder",
+    "zh": "位置或持有者"
+  },
+  {
+    "id": "34d66dbed52278c1",
+    "source": "Trạng thái vật lý",
+    "vi": "Trạng thái vật lý",
+    "en": "Physical state",
+    "zh": "物理状态"
+  },
+  {
+    "id": "529d7a348890e60b",
+    "source": "Nối sang shot tiếp",
+    "vi": "Nối sang shot tiếp",
+    "en": "Next-shot handover",
+    "zh": "衔接下个镜头"
+  },
+  {
+    "id": "f33e64b5b9bff7d5",
+    "source": "Kiểu chuyển",
+    "vi": "Kiểu chuyển",
+    "en": "Transition type",
+    "zh": "转场类型"
+  },
+  {
+    "id": "98f74480d35603cf",
+    "source": "Prompt ảnh đầu shot",
+    "vi": "Prompt ảnh đầu shot",
+    "en": "Keyframe prompt",
+    "zh": "首帧提示词"
+  },
+  {
+    "id": "a0b4b14efc12a733",
+    "source": "Prompt chuyển động",
+    "vi": "Prompt chuyển động",
+    "en": "Motion prompt",
+    "zh": "运动提示词"
+  },
+  {
+    "id": "c17364e552b7093f",
+    "source": "Thoại nguyên bản của shot",
+    "vi": "Thoại nguyên bản của shot",
+    "en": "Original shot dialogue",
+    "zh": "镜头原始台词"
+  },
+  {
+    "id": "e0c790c016c072f9",
+    "source": "Máy quay và ống kính",
+    "vi": "Máy quay và ống kính",
+    "en": "Camera and lens",
+    "zh": "摄影与焦距"
+  },
+  {
+    "id": "5a7adcf115c424f9",
+    "source": "Không gian và ánh sáng",
+    "vi": "Không gian và ánh sáng",
+    "en": "Space and lighting",
+    "zh": "空间与光线"
+  },
+  {
+    "id": "9d36e78aec32fdf8",
+    "source": "Người nghe và hậu cảnh",
+    "vi": "Người nghe và hậu cảnh",
+    "en": "Listeners and background",
+    "zh": "倾听者与背景"
+  },
+  {
+    "id": "cfcfab880fb29136",
+    "source": "Âm thanh và thoại",
+    "vi": "Âm thanh và thoại",
+    "en": "Audio and dialogue",
+    "zh": "声音与台词"
+  },
+  {
+    "id": "2db674d6a8fe5c12",
+    "source": "Trạng thái nối shot",
+    "vi": "Trạng thái nối shot",
+    "en": "Shot continuity",
+    "zh": "镜头连续性"
+  },
+  {
+    "id": "fa6db722d1a58359",
+    "source": "Prompt sản xuất",
+    "vi": "Prompt sản xuất",
+    "en": "Production prompts",
+    "zh": "制作提示词"
+  },
+  {
+    "id": "bb5d3a8f1783ea0e",
+    "source": "Dàn ý và nhịp phim",
+    "vi": "Dàn ý và nhịp phim",
+    "en": "Outline and pacing",
+    "zh": "大纲与节奏"
+  },
+  {
+    "id": "fe4aa1a3feaadbdf",
+    "source": "DNA nhân vật",
+    "vi": "DNA nhân vật",
+    "en": "Character DNA",
+    "zh": "角色视觉基因"
+  },
+  {
+    "id": "bf6b30ed126f7df6",
+    "source": "Mỹ thuật và đạo cụ",
+    "vi": "Mỹ thuật và đạo cụ",
+    "en": "Art and props",
+    "zh": "美术与道具"
+  },
+  {
+    "id": "161f677638f22eaa",
+    "source": "Diễn xuất theo thoại",
+    "vi": "Diễn xuất theo thoại",
+    "en": "Dialogue acting",
+    "zh": "台词表演"
+  },
+  {
+    "id": "0a02f114d2d2b309",
+    "source": "Không gian và trục máy",
+    "vi": "Không gian và trục máy",
+    "en": "Space and camera axis",
+    "zh": "空间与摄影轴线"
+  },
+  {
+    "id": "81def6b07dd673de",
+    "source": "Phân cảnh chi tiết",
+    "vi": "Phân cảnh chi tiết",
+    "en": "Detailed shots",
+    "zh": "详细分镜"
+  },
+  {
+    "id": "af927708614e195f",
+    "source": "Tải hồ sơ JSON",
+    "vi": "Tải hồ sơ JSON",
+    "en": "Download dossier JSON",
+    "zh": "下载制作档案 JSON"
+  },
+  {
+    "id": "fd3d8bea7166268c",
+    "source": "Đây là thiết kế tiền kỳ đã qua kiểm tra cấu trúc. Cần đạo diễn duyệt; ảnh, âm thanh và video chưa được tạo.",
+    "vi": "Đây là thiết kế tiền kỳ đã qua kiểm tra cấu trúc. Cần đạo diễn duyệt; ảnh, âm thanh và video chưa được tạo.",
+    "en": "This is a preproduction design with structural checks. Director review is required; images, audio and video have not been generated.",
+    "zh": "这是通过结构检查的前期设计，仍需导演审核；尚未生成图像、音频或视频。"
+  },
+  {
+    "id": "827a627b5a8c3ff5",
+    "source": "Số tập ước tính",
+    "vi": "Số tập ước tính",
+    "en": "Estimated episodes",
+    "zh": "预计集数"
+  },
+  {
+    "id": "99f1c6a184f40ea4",
+    "source": "Estimated episodes",
+    "vi": "Số tập ước tính",
+    "en": "Estimated episodes",
+    "zh": "预计集数"
+  },
+  {
+    "id": "a480f321d7fa4397",
+    "source": "预计集数",
+    "vi": "Số tập ước tính",
+    "en": "Estimated episodes",
+    "zh": "预计集数"
+  },
+  {
+    "id": "2ec5b558e611ed5d",
+    "source": "Giây mỗi tập ước tính",
+    "vi": "Giây mỗi tập ước tính",
+    "en": "Estimated seconds per episode",
+    "zh": "每集预计秒数"
+  },
+  {
+    "id": "3fb456a4b7c1d802",
+    "source": "Estimated seconds per episode",
+    "vi": "Giây mỗi tập ước tính",
+    "en": "Estimated seconds per episode",
+    "zh": "每集预计秒数"
+  },
+  {
+    "id": "cdb3c4c2a628a590",
+    "source": "每集预计秒数",
+    "vi": "Giây mỗi tập ước tính",
+    "en": "Estimated seconds per episode",
+    "zh": "每集预计秒数"
+  },
+  {
+    "id": "3e7a6555a5c19b4d",
+    "source": "AI tự chia nếu để trống",
+    "vi": "AI tự chia nếu để trống",
+    "en": "Leave blank for AI to divide the story",
+    "zh": "留空由 AI 划分剧集"
+  },
+  {
+    "id": "6c6400e18d787dbd",
+    "source": "Leave blank for AI to divide the story",
+    "vi": "AI tự chia nếu để trống",
+    "en": "Leave blank for AI to divide the story",
+    "zh": "留空由 AI 划分剧集"
+  },
+  {
+    "id": "ebbad1bbf8f8b3d7",
+    "source": "留空由 AI 划分剧集",
+    "vi": "AI tự chia nếu để trống",
+    "en": "Leave blank for AI to divide the story",
+    "zh": "留空由 AI 划分剧集"
+  },
+  {
+    "id": "8c1594ec2dd6084b",
+    "source": "AI tự tính theo nội dung",
+    "vi": "AI tự tính theo nội dung",
+    "en": "AI estimates from the content",
+    "zh": "AI 根据内容估算"
+  },
+  {
+    "id": "c7a79244807deb5a",
+    "source": "AI estimates from the content",
+    "vi": "AI tự tính theo nội dung",
+    "en": "AI estimates from the content",
+    "zh": "AI 根据内容估算"
+  },
+  {
+    "id": "eb7a990eb762f1cc",
+    "source": "AI 根据内容估算",
+    "vi": "AI tự tính theo nội dung",
+    "en": "AI estimates from the content",
+    "zh": "AI 根据内容估算"
+  },
+  {
+    "id": "b920eeb2863d91e1",
+    "source": "AI tự xác định hoặc nhập gợi ý",
+    "vi": "AI tự xác định hoặc nhập gợi ý",
+    "en": "AI infers the genre, or enter a suggestion",
+    "zh": "AI 判断类型，或输入建议"
+  },
+  {
+    "id": "9dc6ee663b9ca6e6",
+    "source": "AI infers the genre, or enter a suggestion",
+    "vi": "AI tự xác định hoặc nhập gợi ý",
+    "en": "AI infers the genre, or enter a suggestion",
+    "zh": "AI 判断类型，或输入建议"
+  },
+  {
+    "id": "d7632141d572f36d",
+    "source": "AI 判断类型，或输入建议",
+    "vi": "AI tự xác định hoặc nhập gợi ý",
+    "en": "AI infers the genre, or enter a suggestion",
+    "zh": "AI 判断类型，或输入建议"
+  },
+  {
+    "id": "9013731a33895824",
+    "source": "Số tập và thời lượng chỉ là gợi ý. AI ưu tiên câu chuyện đầy đủ, diễn xuất, hình ảnh và tính liên tục; tự chia tập và dành đủ thời gian cần thiết. Có thể để trống cả thể loại.",
+    "vi": "Số tập và thời lượng chỉ là gợi ý. AI ưu tiên câu chuyện đầy đủ, diễn xuất, hình ảnh và tính liên tục; tự chia tập và dành đủ thời gian cần thiết. Có thể để trống cả thể loại.",
+    "en": "Episode count and runtime are suggestions. AI prioritizes the complete story, acting, visuals and continuity, dividing episodes and allowing the time needed. Genre may also be left blank.",
+    "zh": "集数与时长仅供参考。AI 优先保证完整故事、表演、画面和连续性，自行划分剧集并安排所需时间。类型也可以留空。"
+  },
+  {
+    "id": "7ac2b43ab6622d84",
+    "source": "Episode count and runtime are suggestions. AI prioritizes the complete story, acting, visuals and continuity, dividing episodes and allowing the time needed. Genre may also be left blank.",
+    "vi": "Số tập và thời lượng chỉ là gợi ý. AI ưu tiên câu chuyện đầy đủ, diễn xuất, hình ảnh và tính liên tục; tự chia tập và dành đủ thời gian cần thiết. Có thể để trống cả thể loại.",
+    "en": "Episode count and runtime are suggestions. AI prioritizes the complete story, acting, visuals and continuity, dividing episodes and allowing the time needed. Genre may also be left blank.",
+    "zh": "集数与时长仅供参考。AI 优先保证完整故事、表演、画面和连续性，自行划分剧集并安排所需时间。类型也可以留空。"
+  },
+  {
+    "id": "dd1b0be146334850",
+    "source": "集数与时长仅供参考。AI 优先保证完整故事、表演、画面和连续性，自行划分剧集并安排所需时间。类型也可以留空。",
+    "vi": "Số tập và thời lượng chỉ là gợi ý. AI ưu tiên câu chuyện đầy đủ, diễn xuất, hình ảnh và tính liên tục; tự chia tập và dành đủ thời gian cần thiết. Có thể để trống cả thể loại.",
+    "en": "Episode count and runtime are suggestions. AI prioritizes the complete story, acting, visuals and continuity, dividing episodes and allowing the time needed. Genre may also be left blank.",
+    "zh": "集数与时长仅供参考。AI 优先保证完整故事、表演、画面和连续性，自行划分剧集并安排所需时间。类型也可以留空。"
+  },
+  {
+    "id": "73f8b0708efb7aab",
+    "source": "Nhập ước tính dương hợp lệ hoặc để trống để AI tự quyết định.",
+    "vi": "Nhập ước tính dương hợp lệ hoặc để trống để AI tự quyết định.",
+    "en": "Enter a valid positive estimate, or leave it blank for AI to decide.",
+    "zh": "输入有效的正数估计，或留空由 AI 决定。"
+  },
+  {
+    "id": "bc7d963f9589dcf3",
+    "source": "Enter a valid positive estimate, or leave it blank for AI to decide.",
+    "vi": "Nhập ước tính dương hợp lệ hoặc để trống để AI tự quyết định.",
+    "en": "Enter a valid positive estimate, or leave it blank for AI to decide.",
+    "zh": "输入有效的正数估计，或留空由 AI 决定。"
+  },
+  {
+    "id": "3f65ca516ad310af",
+    "source": "输入有效的正数估计，或留空由 AI 决定。",
+    "vi": "Nhập ước tính dương hợp lệ hoặc để trống để AI tự quyết định.",
+    "en": "Enter a valid positive estimate, or leave it blank for AI to decide.",
+    "zh": "输入有效的正数估计，或留空由 AI 决定。"
+  },
+  {
+    "id": "0c947bf908af9a9d",
+    "source": "giây ước tính",
+    "vi": "giây ước tính",
+    "en": "estimated seconds",
+    "zh": "预计秒数"
+  },
+  {
+    "id": "fb590b6a54889f83",
+    "source": "estimated seconds",
+    "vi": "giây ước tính",
+    "en": "estimated seconds",
+    "zh": "预计秒数"
+  },
+  {
+    "id": "918af5c68f6e80db",
+    "source": "预计秒数",
+    "vi": "giây ước tính",
+    "en": "estimated seconds",
+    "zh": "预计秒数"
+  },
+  {
+    "id": "53626d246d7d76c3",
+    "source": "phút/tập (ước tính)",
+    "vi": "phút/tập (ước tính)",
+    "en": "estimated minutes/episode",
+    "zh": "预计分钟/集"
+  },
+  {
+    "id": "10dbeddad2378dc4",
+    "source": "estimated minutes/episode",
+    "vi": "phút/tập (ước tính)",
+    "en": "estimated minutes/episode",
+    "zh": "预计分钟/集"
+  },
+  {
+    "id": "b0d0c342036b1ed2",
+    "source": "预计分钟/集",
+    "vi": "phút/tập (ước tính)",
+    "en": "estimated minutes/episode",
+    "zh": "预计分钟/集"
+  },
+  {
+    "id": "6efa6c2a3f1ca573",
+    "source": "Thời lượng được ước tính từ toàn bộ nội dung",
+    "vi": "Thời lượng được ước tính từ toàn bộ nội dung",
+    "en": "Duration estimated from complete content",
+    "zh": "时长由完整内容估算"
+  },
+  {
+    "id": "d71af4c3eab2eb5b",
+    "source": "Duration estimated from complete content",
+    "vi": "Thời lượng được ước tính từ toàn bộ nội dung",
+    "en": "Duration estimated from complete content",
+    "zh": "时长由完整内容估算"
+  },
+  {
+    "id": "2616d2799ac971b2",
+    "source": "时长由完整内容估算",
+    "vi": "Thời lượng được ước tính từ toàn bộ nội dung",
+    "en": "Duration estimated from complete content",
+    "zh": "时长由完整内容估算"
+  },
+  {
+    "id": "7013218b27571da7",
+    "source": "Tổng thời lượng theo nhịp diễn và các shot đã lập",
+    "vi": "Tổng thời lượng theo nhịp diễn và các shot đã lập",
+    "en": "Runtime follows the complete shot plan",
+    "zh": "总时长随完整镜头计划确定"
+  },
+  {
+    "id": "e5b499f62f14fe60",
+    "source": "Runtime follows the complete shot plan",
+    "vi": "Tổng thời lượng theo nhịp diễn và các shot đã lập",
+    "en": "Runtime follows the complete shot plan",
+    "zh": "总时长随完整镜头计划确定"
+  },
+  {
+    "id": "302cebc5014d349b",
+    "source": "总时长随完整镜头计划确定",
+    "vi": "Tổng thời lượng theo nhịp diễn và các shot đã lập",
+    "en": "Runtime follows the complete shot plan",
+    "zh": "总时长随完整镜头计划确定"
+  },
+  {
+    "id": "1ee961904172277b",
+    "source": "Ưu tiên nội dung đầy đủ",
+    "vi": "Ưu tiên nội dung đầy đủ",
+    "en": "Prioritize complete content",
+    "zh": "优先完整内容"
+  },
+  {
+    "id": "b0dc34cba87d4c67",
+    "source": "Prioritize complete content",
+    "vi": "Ưu tiên nội dung đầy đủ",
+    "en": "Prioritize complete content",
+    "zh": "优先完整内容"
+  },
+  {
+    "id": "5ed90772ecc0b742",
+    "source": "优先完整内容",
+    "vi": "Ưu tiên nội dung đầy đủ",
+    "en": "Prioritize complete content",
+    "zh": "优先完整内容"
+  },
+  {
+    "id": "461e024d7407ffbf",
+    "source": "tập đã chia",
+    "vi": "tập đã chia",
+    "en": "planned episodes",
+    "zh": "已规划集数"
+  },
+  {
+    "id": "34453e54c59aa770",
+    "source": "planned episodes",
+    "vi": "tập đã chia",
+    "en": "planned episodes",
+    "zh": "已规划集数"
+  },
+  {
+    "id": "07d5c9aec7fab614",
+    "source": "已规划集数",
+    "vi": "tập đã chia",
+    "en": "planned episodes",
+    "zh": "已规划集数"
+  },
+  {
+    "id": "db8377f79039ae2c",
+    "source": "Kịch bản ước tính",
+    "vi": "Kịch bản ước tính",
+    "en": "Estimated screenplay",
+    "zh": "剧本预计时长"
+  },
+  {
+    "id": "70b90e72340c8dcc",
+    "source": "Estimated screenplay",
+    "vi": "Kịch bản ước tính",
+    "en": "Estimated screenplay",
+    "zh": "剧本预计时长"
+  },
+  {
+    "id": "c2849f1c86092054",
+    "source": "剧本预计时长",
+    "vi": "Kịch bản ước tính",
+    "en": "Estimated screenplay",
+    "zh": "剧本预计时长"
+  },
+  {
+    "id": "0df7b6e1b90a3668",
+    "source": "Thời lượng phân cảnh",
+    "vi": "Thời lượng phân cảnh",
+    "en": "Storyboard runtime",
+    "zh": "分镜时长"
+  },
+  {
+    "id": "6a7470397a787a69",
+    "source": "Storyboard runtime",
+    "vi": "Thời lượng phân cảnh",
+    "en": "Storyboard runtime",
+    "zh": "分镜时长"
+  },
+  {
+    "id": "f696cff2f3e83f4e",
+    "source": "分镜时长",
+    "vi": "Thời lượng phân cảnh",
+    "en": "Storyboard runtime",
+    "zh": "分镜时长"
+  },
+  {
+    "id": "4a8bf01e1e8b69ea",
+    "source": "Ước tính từ nội dung đầy đủ",
+    "vi": "Ước tính từ nội dung đầy đủ",
+    "en": "Estimated from complete content",
+    "zh": "根据完整内容估算"
+  },
+  {
+    "id": "70bfcbb0eb3e7d4e",
+    "source": "Estimated from complete content",
+    "vi": "Ước tính từ nội dung đầy đủ",
+    "en": "Estimated from complete content",
+    "zh": "根据完整内容估算"
+  },
+  {
+    "id": "b1b049c27d200e38",
+    "source": "根据完整内容估算",
+    "vi": "Ước tính từ nội dung đầy đủ",
+    "en": "Estimated from complete content",
+    "zh": "根据完整内容估算"
+  },
+  {
+    "id": "1eabe67d9f4af19e",
+    "source": "Ước tính từ lời thoại và hành động; không ép thời lượng",
+    "vi": "Ước tính từ lời thoại và hành động; không ép thời lượng",
+    "en": "Estimated from dialogue and action; no duration budget",
+    "zh": "按完整对白和动作估时；没有外部时长预算"
+  },
+  {
+    "id": "89e99b5b062a0a83",
+    "source": "Estimated from dialogue and action; no duration budget",
+    "vi": "Ước tính từ lời thoại và hành động; không ép thời lượng",
+    "en": "Estimated from dialogue and action; no duration budget",
+    "zh": "按完整对白和动作估时；没有外部时长预算"
+  },
+  {
+    "id": "c1646736e31c331f",
+    "source": "按完整对白和动作估时；没有外部时长预算",
+    "vi": "Ước tính từ lời thoại và hành động; không ép thời lượng",
+    "en": "Estimated from dialogue and action; no duration budget",
+    "zh": "按完整对白和动作估时；没有外部时长预算"
+  },
+  {
+    "id": "e8ded5ba87125c00",
+    "source": "Ước tính theo toàn bộ phân cảnh",
+    "vi": "Ước tính theo toàn bộ phân cảnh",
+    "en": "Estimated from the complete shot plan",
+    "zh": "按完整镜头计划估算"
+  },
+  {
+    "id": "c3dfe49abdb2255b",
+    "source": "Estimated from the complete shot plan",
+    "vi": "Ước tính theo toàn bộ phân cảnh",
+    "en": "Estimated from the complete shot plan",
+    "zh": "按完整镜头计划估算"
+  },
+  {
+    "id": "b632d0a89c221f01",
+    "source": "按完整镜头计划估算",
+    "vi": "Ước tính theo toàn bộ phân cảnh",
+    "en": "Estimated from the complete shot plan",
+    "zh": "按完整镜头计划估算"
+  },
+  {
+    "id": "2848ccae97a42042",
+    "source": "Có lỗi",
+    "vi": "Có lỗi",
+    "en": "Error",
+    "zh": "发生错误"
+  },
+  {
+    "id": "54a0e8c17ebb21a1",
+    "source": "Error",
+    "vi": "Có lỗi",
+    "en": "Error",
+    "zh": "发生错误"
+  },
+  {
+    "id": "0cb3fb5b86d7dec6",
+    "source": "发生错误",
+    "vi": "Có lỗi",
+    "en": "Error",
+    "zh": "发生错误"
+  },
+  {
+    "id": "253a97ad94492dee",
+    "source": "Chi tiết lỗi",
+    "vi": "Chi tiết lỗi",
+    "en": "Error details",
+    "zh": "错误详情"
+  },
+  {
+    "id": "5b546022750c1994",
+    "source": "Error details",
+    "vi": "Chi tiết lỗi",
+    "en": "Error details",
+    "zh": "错误详情"
+  },
+  {
+    "id": "4e4e753b50401dd8",
+    "source": "错误详情",
+    "vi": "Chi tiết lỗi",
+    "en": "Error details",
+    "zh": "错误详情"
+  },
+  {
+    "id": "41792199076163e5",
+    "source": "Đang chờ phản hồi AI",
+    "vi": "Đang chờ phản hồi AI",
+    "en": "Waiting for the AI response",
+    "zh": "正在等待 AI 响应"
+  },
+  {
+    "id": "6e5327f3527f36af",
+    "source": "Waiting for the AI response",
+    "vi": "Đang chờ phản hồi AI",
+    "en": "Waiting for the AI response",
+    "zh": "正在等待 AI 响应"
+  },
+  {
+    "id": "902fe34f9780f550",
+    "source": "正在等待 AI 响应",
+    "vi": "Đang chờ phản hồi AI",
+    "en": "Waiting for the AI response",
+    "zh": "正在等待 AI 响应"
+  },
+  {
+    "id": "291e020a55ddfdc2",
+    "source": "Đang nhận kết quả AI",
+    "vi": "Đang nhận kết quả AI",
+    "en": "Receiving the AI response",
+    "zh": "正在接收 AI 结果"
+  },
+  {
+    "id": "72e8147915a1a74a",
+    "source": "Receiving the AI response",
+    "vi": "Đang nhận kết quả AI",
+    "en": "Receiving the AI response",
+    "zh": "正在接收 AI 结果"
+  },
+  {
+    "id": "5e9c77d8ebeabb32",
+    "source": "正在接收 AI 结果",
+    "vi": "Đang nhận kết quả AI",
+    "en": "Receiving the AI response",
+    "zh": "正在接收 AI 结果"
+  },
+  {
+    "id": "2f3380afaee8f9bd",
+    "source": "Kết nối gián đoạn; đang tự thử lại",
+    "vi": "Kết nối gián đoạn; đang tự thử lại",
+    "en": "Connection interrupted; retrying automatically",
+    "zh": "连接中断；正在自动重试"
+  },
+  {
+    "id": "ad3fb8dbcb765734",
+    "source": "Connection interrupted; retrying automatically",
+    "vi": "Kết nối gián đoạn; đang tự thử lại",
+    "en": "Connection interrupted; retrying automatically",
+    "zh": "连接中断；正在自动重试"
+  },
+  {
+    "id": "094b9aeb0bc8727a",
+    "source": "连接中断；正在自动重试",
+    "vi": "Kết nối gián đoạn; đang tự thử lại",
+    "en": "Connection interrupted; retrying automatically",
+    "zh": "连接中断；正在自动重试"
+  },
+  {
+    "id": "a6ba8aefc5210442",
+    "source": "Đang xử lý lần lượt các phần",
+    "vi": "Đang xử lý lần lượt các phần",
+    "en": "Processing the stages in sequence",
+    "zh": "正在依次处理各个阶段"
+  },
+  {
+    "id": "45d8709849d0d529",
+    "source": "Processing the stages in sequence",
+    "vi": "Đang xử lý lần lượt các phần",
+    "en": "Processing the stages in sequence",
+    "zh": "正在依次处理各个阶段"
+  },
+  {
+    "id": "8799ff03878c80a2",
+    "source": "正在依次处理各个阶段",
+    "vi": "Đang xử lý lần lượt các phần",
+    "en": "Processing the stages in sequence",
+    "zh": "正在依次处理各个阶段"
+  },
+  {
+    "id": "57d1c954fbb52c08",
+    "source": "Không cần bấm chạy tiếp; kết quả sẽ tự cập nhật.",
+    "vi": "Không cần bấm chạy tiếp; kết quả sẽ tự cập nhật.",
+    "en": "No further click is needed; results update automatically.",
+    "zh": "无需再次点击继续；结果会自动更新。"
+  },
+  {
+    "id": "2e493553a065df44",
+    "source": "No further click is needed; results update automatically.",
+    "vi": "Không cần bấm chạy tiếp; kết quả sẽ tự cập nhật.",
+    "en": "No further click is needed; results update automatically.",
+    "zh": "无需再次点击继续；结果会自动更新。"
+  },
+  {
+    "id": "358745350711b965",
+    "source": "无需再次点击继续；结果会自动更新。",
+    "vi": "Không cần bấm chạy tiếp; kết quả sẽ tự cập nhật.",
+    "en": "No further click is needed; results update automatically.",
+    "zh": "无需再次点击继续；结果会自动更新。"
+  },
+  {
+    "id": "002afcacda2d7e9a",
+    "source": "Đang kết nối lại để cập nhật tiến độ. Tác vụ vẫn chạy trên server.",
+    "vi": "Đang kết nối lại để cập nhật tiến độ. Tác vụ vẫn chạy trên server.",
+    "en": "Reconnecting for progress updates. The job is still running on the server.",
+    "zh": "正在重新连接以更新进度。任务仍在服务器上运行。"
+  },
+  {
+    "id": "c2873f4468710cc8",
+    "source": "Reconnecting for progress updates. The job is still running on the server.",
+    "vi": "Đang kết nối lại để cập nhật tiến độ. Tác vụ vẫn chạy trên server.",
+    "en": "Reconnecting for progress updates. The job is still running on the server.",
+    "zh": "正在重新连接以更新进度。任务仍在服务器上运行。"
+  },
+  {
+    "id": "a5b819881b968ca8",
+    "source": "正在重新连接以更新进度。任务仍在服务器上运行。",
+    "vi": "Đang kết nối lại để cập nhật tiến độ. Tác vụ vẫn chạy trên server.",
+    "en": "Reconnecting for progress updates. The job is still running on the server.",
+    "zh": "正在重新连接以更新进度。任务仍在服务器上运行。"
+  },
+  {
+    "id": "aecae687ce794deb",
+    "source": "Bấm một lần để chạy lần lượt toàn bộ quy trình. AI có thể xử lý lâu; hệ thống tự chờ và tự thử lại khi kết nối tạm gián đoạn.",
+    "vi": "Bấm một lần để chạy lần lượt toàn bộ quy trình. AI có thể xử lý lâu; hệ thống tự chờ và tự thử lại khi kết nối tạm gián đoạn.",
+    "en": "Click once to run the whole pipeline in sequence. AI may take time; the system waits and retries temporary connection failures automatically.",
+    "zh": "点击一次即可依次运行整个流程。AI 可能需要较长时间；系统会等待并自动重试临时连接故障。"
+  },
+  {
+    "id": "5aa70aa6237a4a99",
+    "source": "Click once to run the whole pipeline in sequence. AI may take time; the system waits and retries temporary connection failures automatically.",
+    "vi": "Bấm một lần để chạy lần lượt toàn bộ quy trình. AI có thể xử lý lâu; hệ thống tự chờ và tự thử lại khi kết nối tạm gián đoạn.",
+    "en": "Click once to run the whole pipeline in sequence. AI may take time; the system waits and retries temporary connection failures automatically.",
+    "zh": "点击一次即可依次运行整个流程。AI 可能需要较长时间；系统会等待并自动重试临时连接故障。"
+  },
+  {
+    "id": "84b7bbff29641c5f",
+    "source": "点击一次即可依次运行整个流程。AI 可能需要较长时间；系统会等待并自动重试临时连接故障。",
+    "vi": "Bấm một lần để chạy lần lượt toàn bộ quy trình. AI có thể xử lý lâu; hệ thống tự chờ và tự thử lại khi kết nối tạm gián đoạn.",
+    "en": "Click once to run the whole pipeline in sequence. AI may take time; the system waits and retries temporary connection failures automatically.",
+    "zh": "点击一次即可依次运行整个流程。AI 可能需要较长时间；系统会等待并自动重试临时连接故障。"
+  },
+  {
+    "id": "6e853f06f179d0ec",
+    "source": "Đoạn phân cảnh đã kiểm tra",
+    "vi": "Đoạn phân cảnh đã kiểm tra",
+    "en": "Storyboard segments checked",
+    "zh": "已验证分镜段"
+  },
+  {
+    "id": "34fc16660427c3df",
+    "source": "Storyboard segments checked",
+    "vi": "Đoạn phân cảnh đã kiểm tra",
+    "en": "Storyboard segments checked",
+    "zh": "已验证分镜段"
+  },
+  {
+    "id": "b160ba1586a5cd2c",
+    "source": "已验证分镜段",
+    "vi": "Đoạn phân cảnh đã kiểm tra",
+    "en": "Storyboard segments checked",
+    "zh": "已验证分镜段"
+  },
+  {
+    "id": "ebce3d58e60e4157",
+    "source": "Đang xử lý đồng thời",
+    "vi": "Đang xử lý đồng thời",
+    "en": "Processing concurrently",
+    "zh": "正在并行处理"
+  },
+  {
+    "id": "d0a37191995ef33c",
+    "source": "Processing concurrently",
+    "vi": "Đang xử lý đồng thời",
+    "en": "Processing concurrently",
+    "zh": "正在并行处理"
+  },
+  {
+    "id": "d5f696632e25c0d6",
+    "source": "正在并行处理",
+    "vi": "Đang xử lý đồng thời",
+    "en": "Processing concurrently",
+    "zh": "正在并行处理"
+  },
+  {
+    "id": "abfe5658ab1a57b2",
+    "source": "Đang viết theo mạch phim",
+    "vi": "Đang viết theo mạch phim",
+    "en": "Writing in story order",
+    "zh": "正在按故事顺序编写"
+  },
+  {
+    "id": "29b23564f2153565",
+    "source": "Writing in story order",
+    "vi": "Đang viết theo mạch phim",
+    "en": "Writing in story order",
+    "zh": "正在按故事顺序编写"
+  },
+  {
+    "id": "0cb92346cf7d374e",
+    "source": "正在按故事顺序编写",
+    "vi": "Đang viết theo mạch phim",
+    "en": "Writing in story order",
+    "zh": "正在按故事顺序编写"
+  },
+  {
+    "id": "e84898db736f9ec3",
+    "source": "Đang xử lý",
+    "vi": "Đang xử lý",
+    "en": "Processing",
+    "zh": "正在处理"
+  },
+  {
+    "id": "c8e3e92a62ecf181",
+    "source": "Processing",
+    "vi": "Đang xử lý",
+    "en": "Processing",
+    "zh": "正在处理"
+  },
+  {
+    "id": "3b7e27cb4379da3c",
+    "source": "正在处理",
+    "vi": "Đang xử lý",
+    "en": "Processing",
+    "zh": "正在处理"
+  },
+  {
+    "id": "435f805b40dc4327",
+    "source": "9router tạm thời chưa sẵn sàng; hệ thống đang chờ để tiếp tục.",
+    "vi": "9router tạm thời chưa sẵn sàng; hệ thống đang chờ để tiếp tục.",
+    "en": "9router is temporarily unavailable; waiting to continue.",
+    "zh": "9router 暂时不可用；系统正在等待继续。"
+  },
+  {
+    "id": "6ee6e054c2ec0ab6",
+    "source": "9router is temporarily unavailable; waiting to continue.",
+    "vi": "9router tạm thời chưa sẵn sàng; hệ thống đang chờ để tiếp tục.",
+    "en": "9router is temporarily unavailable; waiting to continue.",
+    "zh": "9router 暂时不可用；系统正在等待继续。"
+  },
+  {
+    "id": "273fa4a778764bf3",
+    "source": "9router 暂时不可用；系统正在等待继续。",
+    "vi": "9router tạm thời chưa sẵn sàng; hệ thống đang chờ để tiếp tục.",
+    "en": "9router is temporarily unavailable; waiting to continue.",
+    "zh": "9router 暂时不可用；系统正在等待继续。"
+  },
+  {
+    "id": "d2030139f33cb289",
+    "source": "Tự thử lại lúc",
+    "vi": "Tự thử lại lúc",
+    "en": "Automatic retry at",
+    "zh": "自动重试时间"
+  },
+  {
+    "id": "682fa7aa866e9d61",
+    "source": "Automatic retry at",
+    "vi": "Tự thử lại lúc",
+    "en": "Automatic retry at",
+    "zh": "自动重试时间"
+  },
+  {
+    "id": "524aecf731f4b534",
+    "source": "自动重试时间",
+    "vi": "Tự thử lại lúc",
+    "en": "Automatic retry at",
+    "zh": "自动重试时间"
+  },
+  {
+    "id": "project-json-export-2632",
+    "source": "Xuất JSON phần này",
+    "vi": "Xuất JSON phần này",
+    "en": "Export this section as JSON",
+    "zh": "导出本部分 JSON"
+  },
+  {
+    "id": "project-json-export-2633",
+    "source": "Xuất toàn bộ JSON",
+    "vi": "Xuất toàn bộ JSON",
+    "en": "Export all as JSON",
+    "zh": "导出全部 JSON"
+  },
+  {
+    "id": "production-language-2634",
+    "source": "Ngôn ngữ thoại",
+    "vi": "Ngôn ngữ thoại",
+    "en": "Dialogue language",
+    "zh": "对白语言"
+  },
+  {
+    "id": "production-language-2635",
+    "source": "Giữ ngôn ngữ kịch bản gốc",
+    "vi": "Giữ ngôn ngữ kịch bản gốc",
+    "en": "Keep the original script language",
+    "zh": "保留原剧本语言"
+  },
+  {
+    "id": "production-language-2636",
+    "source": "Tiếng Anh + phụ đề gốc",
+    "vi": "Tiếng Anh + phụ đề gốc",
+    "en": "English + original subtitles",
+    "zh": "英语及原文字幕"
+  },
+  {
+    "id": "production-language-2637",
+    "source": "Ngôn ngữ sản xuất",
+    "vi": "Ngôn ngữ sản xuất",
+    "en": "Production language",
+    "zh": "制作语言"
+  },
+  {
+    "id": "production-language-2638",
+    "source": "Chuyển toàn bộ sang tiếng Anh",
+    "vi": "Chuyển toàn bộ sang tiếng Anh",
+    "en": "Convert everything to English",
+    "zh": "全部转换为英语"
+  },
+  {
+    "id": "production-language-2639",
+    "source": "Xem bản gốc",
+    "vi": "Xem bản gốc",
+    "en": "View original",
+    "zh": "查看原稿"
+  },
+  {
+    "id": "production-language-2640",
+    "source": "Dừng chuyển đổi",
+    "vi": "Dừng chuyển đổi",
+    "en": "Stop conversion",
+    "zh": "停止转换"
+  },
+  {
+    "id": "production-language-2641",
+    "source": "Tải phụ đề gốc SRT",
+    "vi": "Tải phụ đề gốc SRT",
+    "en": "Download original subtitles (SRT)",
+    "zh": "下载原文字幕 SRT"
+  },
+  {
+    "id": "production-language-2642",
+    "source": "Tải phụ đề song ngữ SRT",
+    "vi": "Tải phụ đề song ngữ SRT",
+    "en": "Download bilingual subtitles (SRT)",
+    "zh": "下载双语字幕 SRT"
+  },
+  {
+    "id": "production-language-2643",
+    "source": "Đang dùng bản tiếng Anh. Bản gốc được giữ nguyên.",
+    "vi": "Đang dùng bản tiếng Anh. Bản gốc được giữ nguyên.",
+    "en": "Using the English edition. The original is preserved.",
+    "zh": "正在使用英文版本，原稿已保留。"
+  },
+  {
+    "id": "production-language-2644",
+    "source": "Prompt luôn bằng tiếng Anh. Thoại tiếng Anh có phụ đề nguyên bản bên dưới.",
+    "vi": "Prompt luôn bằng tiếng Anh. Thoại tiếng Anh có phụ đề nguyên bản bên dưới.",
+    "en": "Production prompts stay in English. English dialogue includes original subtitles underneath.",
+    "zh": "制作提示词始终为英语，英文对白下方显示原文字幕。"
+  },
+  {
+    "id": "production-language-2645",
+    "source": "Đang tạo bản tiếng Anh và phụ đề gốc…",
+    "vi": "Đang tạo bản tiếng Anh và phụ đề gốc…",
+    "en": "Creating the English edition and original subtitles…",
+    "zh": "正在创建英文版本及原文字幕……"
+  },
+  {
+    "id": "production-language-2646",
+    "source": "Prompt sản xuất luôn bằng tiếng Anh. Có thể chọn thoại tiếng Anh ngay từ đầu; phụ đề giữ nguyên câu thoại trong kịch bản. Ảnh và video là bước tiếp theo.",
+    "vi": "Prompt sản xuất luôn bằng tiếng Anh. Có thể chọn thoại tiếng Anh ngay từ đầu; phụ đề giữ nguyên câu thoại trong kịch bản. Ảnh và video là bước tiếp theo.",
+    "en": "Production prompts always use English. Choose English dialogue before starting; subtitles preserve the original script lines. Images and video are the next step.",
+    "zh": "制作提示词始终使用英语，可在开始前选择英语对白，字幕保留原剧本台词。图像与视频是后续步骤。"
+  },
+  {
+    "id": "b00d9adf5a815e4e",
+    "source": "Tạo ảnh nhân vật",
+    "vi": "Tạo ảnh nhân vật",
+    "en": "Generate character image",
+    "zh": "生成角色图片"
+  },
+  {
+    "id": "45230d4a59abf4bf",
+    "source": "Tạo ảnh tham chiếu",
+    "vi": "Tạo ảnh tham chiếu",
+    "en": "Generate reference image",
+    "zh": "生成参考图片"
+  },
+  {
+    "id": "c17cfe6ebe17d967",
+    "source": "Tạo keyframe",
+    "vi": "Tạo keyframe",
+    "en": "Generate keyframe",
+    "zh": "生成关键帧"
+  },
+  {
+    "id": "54a49e832626265f",
+    "source": "Tạo lại ảnh",
+    "vi": "Tạo lại ảnh",
+    "en": "Regenerate image",
+    "zh": "重新生成图片"
+  },
+  {
+    "id": "bb992437b74b3732",
+    "source": "Tải ảnh PNG",
+    "vi": "Tải ảnh PNG",
+    "en": "Download PNG",
+    "zh": "下载 PNG"
+  },
+  {
+    "id": "f41c63729a4df4a4",
+    "source": "Dừng tạo ảnh",
+    "vi": "Dừng tạo ảnh",
+    "en": "Stop image generation",
+    "zh": "停止生成图片"
+  },
+  {
+    "id": "6ca44454cab144f4",
+    "source": "Prompt ảnh (tiếng Anh)",
+    "vi": "Prompt ảnh (tiếng Anh)",
+    "en": "Image prompt (English)",
+    "zh": "图片提示词（英语）"
+  },
+  {
+    "id": "8ea6670d311ae46e",
+    "source": "Ảnh tham chiếu qua 9router",
+    "vi": "Ảnh tham chiếu qua 9router",
+    "en": "Reference images via 9router",
+    "zh": "通过 9router 生成参考图"
+  },
+  {
+    "id": "b360aef2cb5346e1",
+    "source": "Đang chờ ảnh từ 9router…",
+    "vi": "Đang chờ ảnh từ 9router…",
+    "en": "Waiting for an image from 9router…",
+    "zh": "正在等待 9router 返回图片…"
+  },
+  {
+    "id": "8faa1a259dbcad13",
+    "source": "Đang nhận ảnh…",
+    "vi": "Đang nhận ảnh…",
+    "en": "Receiving image…",
+    "zh": "正在接收图片…"
+  },
+  {
+    "id": "5c66fc3c97c2cc9e",
+    "source": "Đã lưu ảnh tham chiếu.",
+    "vi": "Đã lưu ảnh tham chiếu.",
+    "en": "Reference image saved.",
+    "zh": "参考图已保存。"
+  },
+  {
+    "id": "5ba1043114cacb17",
+    "source": "Ảnh cần cập nhật theo prompt hoặc ảnh tham chiếu mới.",
+    "vi": "Ảnh cần cập nhật theo prompt hoặc ảnh tham chiếu mới.",
+    "en": "Regenerate to match the updated prompt or references.",
+    "zh": "请根据更新的提示词或参考图重新生成。"
+  },
+  {
+    "id": "4aa7bf5087950734",
+    "source": "Ảnh theo ánh sáng",
+    "vi": "Ảnh theo ánh sáng",
+    "en": "Lighting variants",
+    "zh": "光照变体图片"
+  },
+  {
+    "id": "f7a3f639aa9cf424",
+    "source": "Ảnh theo trạng thái",
+    "vi": "Ảnh theo trạng thái",
+    "en": "State variants",
+    "zh": "状态变体图片"
+  },
+  {
+    "id": "fb73fe6202ac3fc8",
+    "source": "Tạo từng ảnh bằng prompt tiếng Anh đã lưu. Keyframe dùng ảnh tham chiếu đã tạo để giữ nhất quán.",
+    "vi": "Tạo từng ảnh bằng prompt tiếng Anh đã lưu. Keyframe dùng ảnh tham chiếu đã tạo để giữ nhất quán.",
+    "en": "Generate each image using its saved English prompt. Keyframes use existing reference images for consistency.",
+    "zh": "使用已保存的英语提示词逐张生成图片。关键帧使用已有参考图保持一致性。"
+  },
+  {
+    "id": "5f1ddb8080f083d5",
+    "source": "Dự án đang có một lượt AI khác. Vui lòng chờ hoàn tất.",
+    "vi": "Dự án đang có một lượt AI khác. Vui lòng chờ hoàn tất.",
+    "en": "Another AI task is running. Please wait until it finishes.",
+    "zh": "另一个 AI 任务正在运行，请等待完成。"
+  },
+  {
+    "id": "9e8597b72ffc3e6d",
+    "source": "Chưa có prompt ảnh cho mục này.",
+    "vi": "Chưa có prompt ảnh cho mục này.",
+    "en": "No image prompt is available for this item.",
+    "zh": "此项目尚无图片提示词。"
+  },
+  {
+    "id": "ed7a5d7330cc258f",
+    "source": "Chưa cấu hình khóa 9router ở server.",
+    "vi": "Chưa cấu hình khóa 9router ở server.",
+    "en": "The server has no 9router API key configured.",
+    "zh": "服务器尚未配置 9router API 密钥。"
+  },
+  {
+    "id": "87c5ae7cd687d187",
+    "source": "Ảnh tham chiếu đã tạo",
+    "vi": "Ảnh tham chiếu đã tạo",
+    "en": "Generated reference images",
+    "zh": "已生成的参考图片"
   }
 ]

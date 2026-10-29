@@ -87,3 +87,10 @@ non_diegetic_music: …（1–3 句，没有就 N/A）
 ## 时长约束链
 
 台词秒数（按剧本语速折算）≤ 分镜 `seconds` ≤ 5 秒；段 Σ分镜 ≤ 15 秒；集 Σ段 落在剧本 `targetSeconds` ±15%。全部由 validate 逐级对账。
+
+When the upstream script has `params.timingMode = content-first`, total episode duration follows the complete shot plan instead of a target budget. Full ordered beat coverage, dialogue fit, shot lengths and segment generation limits still apply.
+
+
+### Studio English edition (optional fields)
+
+Production prompts remain English independently of report locale. An English spoken beat uses `line` (English), `dialogueLang: "en"`, `originalLine` (exact saved script line), `subtitle` (exact original line), and `subtitleLang` (the original script language). Reports place `subtitle` directly beneath `line`; TTS and H3 `<d>` blocks use only `line`. Storyboard dialogue summaries retain `subtitle` and `subtitleLang`. These additions do not change character IDs, beat indices, or continuity constraints.

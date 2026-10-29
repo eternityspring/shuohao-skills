@@ -1,0 +1,61 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync,writeFileSync,readFileSync,rmSync,existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { BRAIN_VERSION,loadBrain,validateReading,validateProduction,dossierData,renderDossier,buildDossier } from './studio-brain.mjs';
+import { detailErrors,enrichStoryboard } from './production-storyboard.mjs';
+import { productionFixture } from './fixtures/production-story.mjs';
+import { generateProject,jobFile,writeJSON,readJSON,messagesFor,composeH3,validateStage,ROOT } from './ai-project.mjs';
+let count=0;const check=(value,label)=>{assert.ok(value,label);count++};
+const fixture=productionFixture();const ctx={...fixture,brain:loadBrain()};
+check(ctx.brain.reference.includes('BỘ NÃO'),'loads user supplied methodology');
+check(ctx.brain.hash.length===64,'pins brain content');
+assert.deepEqual(validateReading(ctx.reading,ctx.source,ctx.options),[]);count++;
+const badQuote=structuredClone(ctx.reading);badQuote.facts[0].quote='Not in source';check(validateReading(badQuote,ctx.source,ctx.options).some(e=>e.includes('verbatim')),'fabricated evidence rejected');
+for(const stage of ['outline','cast','art','script','staging','storyboard']) {assert.deepEqual(validateProduction(stage,ctx[stage],ctx),[],stage);count++}
+const mutate=(stage,fn,pattern)=>{const doc=structuredClone(ctx[stage]);fn(doc);check(validateProduction(stage,doc,ctx).some(e=>pattern.test(e)),stage+' rejects '+pattern)};
+mutate('outline',d=>d.production.sourceFactIds=['invented'],/reading facts/);
+mutate('cast',d=>d.characters[0].image.prompt='Changed identity',/verbatim/);
+mutate('script',d=>d.episodes[0].scenes[0].flow[1].acting.face='buồn',/emotion label/);
+mutate('script',d=>d.episodes[0].scenes[0].flow[1].acting.listeners=[],/cover exactly/);
+mutate('staging',d=>d.scenes[0].production.screenPositions[0].characterId='UNKNOWN',/cover exactly/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].seconds=2,/3–5/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.timeline[2].to=2.5,/exactly/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.audio.foley[0].at=6,/outside duration/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.keyframePrompt='Generic child',/DNA verbatim/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.endState.props=[],/scene props/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.handover.type='scene-change',/outgoing handover/);
+mutate('storyboard',d=>d.episodes[0].segments[0].cuts[0].production.startState.cameraSide='Other side',/axis/);
+const continuous=structuredClone(ctx.storyboard);const next=structuredClone(continuous.episodes[0].segments[0]);next.id='E01-02';continuous.episodes[0].segments.push(next);
+assert.deepEqual(validateProduction('storyboard',continuous,ctx),[]);count++;
+next.cuts[0].production.startState.props[0].location='In a pocket';check(validateProduction('storyboard',continuous,ctx).some(e=>e.includes('previous endState')),'prop continuity across segment boundaries');
+const original=structuredClone(ctx.storyboard.episodes[0].segments[0]);const altered=structuredClone(original);altered.cuts[0].seconds=4;check(detailErrors(altered,original,1,ctx).length>0,'detail writer cannot change approved cut plan');
+let calls=0;const cache=new Map();
+const enriched=await enrichStoryboard(ctx.storyboard,ctx,ctx.options,{source:ctx.source,request:async()=>{calls++;const doc=structuredClone(original);if(calls===1)doc.cuts[0].production.timeline[2].to=2;return doc},readSaved:id=>cache.get(id),saveApproved:(id,doc)=>cache.set(id,doc)});
+assert.equal(calls,2);count++;check(cache.size===1,'segment saved only after valid repair');
+await enrichStoryboard(ctx.storyboard,ctx,ctx.options,{source:ctx.source,request:()=>{throw Error('must not call')},readSaved:id=>cache.get(id)});count++;
+let protocolCalls=0;
+await enrichStoryboard(ctx.storyboard,ctx,ctx.options,{source:ctx.source,request:async()=>{protocolCalls++;return structuredClone(original)},validateSegment:()=>protocolCalls===1?['H3 protocol violation']:[]});
+assert.equal(protocolCalls,2);count++; // Never cache detail text that fails the downstream protocol gate.
+const cancel=new AbortController();cancel.abort();await assert.rejects(enrichStoryboard(ctx.storyboard,ctx,ctx.options,{signal:cancel.signal}));count++;
+composeH3(enriched,ctx.script,ctx.cast);check(enriched.episodes[0].segments[0].h3Prompt.includes(ctx.cast.characters[0].production.visualDNA),'H3 carries verified DNA');
+const data=dossierData(ctx);const html=renderDossier(data);check(html.includes('8. Prompt sản xuất'),'eight technical shot cards');check(html.includes('00:00.0–00:03.0'),'absolute timeline');
+const hostile=structuredClone(data);hostile.reading.summary='</script><img src=x onerror=alert(1)>';check(!renderDossier(hostile).includes('<img src=x'),'source cannot become report markup');
+const dir=mkdtempSync(join(tmpdir(),'studio-brain-'));
+try {
+ for(const k of ['reading','outline','cast','art','script','staging','storyboard'])writeJSON(join(dir,k+'.json'),ctx[k]);
+ check(buildDossier(dir),'build full dossier');check(existsSync(join(dir,'production.json')),'dossier JSON exists');
+ const opts={...ctx.options,productionProfile:BRAIN_VERSION};
+ writeFileSync(join(dir,'kichban.md'),ctx.source);writeJSON(join(dir,'project.json'),{stages:{}});writeJSON(jobFile(dir),{options:opts,stages:{}});
+ let requests=[];
+ const request=async messages=>{requests.push(messages);if(messages[0].content.includes('screenplay reader'))return ctx.reading;throw Error('stop after reading')};
+ await assert.rejects(generateProject(dir,{config:{key:'test'},request}));count++;
+ assert.equal(readJSON(jobFile(dir)).reading.status,'passed');count++;
+ check(existsSync(join(dir,'.ai','approved','reading.json')),'approved source reading persisted');
+ const second=mkdtempSync(join(tmpdir(),'brain-snapshot-'));try{writeJSON(join(second,'snapshot.json'),readJSON(join(dir,'.ai','brain.json')));check(readJSON(join(second,'snapshot.json')).hash===ctx.brain.hash,'same pinned brain')}finally{rmSync(second,{recursive:true,force:true})}
+ requests=[];await assert.rejects(generateProject(dir,{config:{key:'test'},request}));count++;
+ assert.equal(requests.length,1);count++;check(!requests[0][0].content.includes('screenplay reader'),'resume skips approved reading');
+ writeJSON(join(dir,'reading.json'),{...ctx.reading,summary:'External edit'});
+ requests=[];await assert.rejects(generateProject(dir,{config:{key:'test'},request}),/sửa bên ngoài/);count++;check(requests.length===0,'external reading edits preserved');
+}finally{rmSync(dir,{recursive:true,force:true})}
+console.log('Passed '+count+' production reading, six-department, continuity, repair, resume, prompt and safe-report checks.');

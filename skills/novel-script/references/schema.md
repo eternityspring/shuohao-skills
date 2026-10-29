@@ -63,10 +63,16 @@
 
 - 台词秒数 = 非空白字符数 ÷ `charsPerSecond`（标点算时间——停顿也是时间）
 - 动作秒数 = 动作节拍数 × `actionSeconds`
-- 每集预估 = 全部场次之和，必须落在 `targetSeconds × (1 ± tolerance)` 内
+- 每集预估 = 全部场次之和，默认必须落在 `targetSeconds × (1 ± tolerance)` 内。
+- Optional Studio mode: `params.timingMode = content-first`. Runtime is estimated after the complete episode is written. Set `estimatedSeconds` and the compatible `targetSeconds` field to the computed action/dialogue estimate; neither is a deadline. Validation checks estimate consistency rather than an external duration budget.
 
 三分钟（180 秒）一集的参考体量：约 45–55 个节拍，其中台词 30 句上下。两分钟（120 秒）约 35 拍、台词 20 句上下。
 
 ## ID 纪律
 
 角色用 outline.json 的 `C` 编号（不是 cast.json 的名字），场景道具用 art.json 的 `S` / `P` 编号。报告渲染时给了 `--outline` / `--art` 会自动把编号显示成名字——**数据里存编号，界面上看名字**。
+
+
+### Studio English edition (optional fields)
+
+Production prompts remain English independently of report locale. An English spoken beat uses `line` (English), `dialogueLang: "en"`, `originalLine` (exact saved script line), `subtitle` (exact original line), and `subtitleLang` (the original script language). Reports place `subtitle` directly beneath `line`; TTS and H3 `<d>` blocks use only `line`. Storyboard dialogue summaries retain `subtitle` and `subtitleLang`. These additions do not change character IDs, beat indices, or continuity constraints.

@@ -32,6 +32,9 @@ const output=fs.mkdtempSync(path.join(os.tmpdir(),'shuohao-json-export-'));
     const item=await download(page.locator('#'+pane+' .expo'),pane+'-'+lang+'.json');
     const data=item.data;
     assert.equal(data.lang,lang);
+    const stage={characters:'cast'}[pane.replace('pane-','')] || pane.replace('pane-','');
+    const expected=await page.evaluate(({stage,source,lang})=>window.shuohaoJsonExport.filename(stage,window.shuohaoLanguage.translate(source),lang),{stage,source:raw.source,lang});
+    assert.equal(item.filename,expected);
     assert.equal(data.source,{vi:'Bến đò',en:'The Ferry',zh:'渡口'}[lang]);
     assert.equal(data.episodes?.length??data.characters?.length??data.scenes?.length,raw.episodes?.length??raw.characters?.length??raw.scenes?.length);
     // Every ID, enum, path and numeric value must survive the real download unchanged.
@@ -46,6 +49,7 @@ const output=fs.mkdtempSync(path.join(os.tmpdir(),'shuohao-json-export-'));
     if(lang==='vi') {
      const leftovers=[];
      const scan=(value,key='',at='')=>{
+      if(['line','originalLine','subtitle','quote','evidence','sourceText'].includes(key)||/(?:prompt|promptNegative|sheet|visualDNA|styleDNA|h3Description|soundscapeEn|musicEn)$/i.test(key))return;
       if(Array.isArray(value))value.forEach((item,index)=>scan(item,key,at+'['+index+']'));
       else if(value&&typeof value==='object')Object.entries(value).forEach(([k,v])=>scan(v,k,at+'.'+k));
       else if(typeof value==='string'&&/[\u3400-\u9fff]/.test(value)&&!['adaptMode','file','sheetImage','path','url'].includes(key))leftovers.push(at);
@@ -60,9 +64,9 @@ const output=fs.mkdtempSync(path.join(os.tmpdir(),'shuohao-json-export-'));
    const vi=exports.vi;
    if(pane==='pane-outline')assert.match(vi.episodes[0].synopsis,/Thẩm Tri Vi/);
    if(pane==='pane-characters')assert.equal(vi.characters[0].name,'Thẩm Tri Vi');
-   if(pane==='pane-art')assert.notEqual(vi.scenes[0].image.prompt,raw.scenes[0].image.prompt);
+   if(pane==='pane-art')assert.equal(vi.scenes[0].image.prompt,raw.scenes[0].image.prompt);
    if(pane==='pane-script')assert.notEqual(vi.episodes[0].scenes[0].flow[0].action,raw.episodes[0].scenes[0].flow[0].action);
-   if(pane==='pane-storyboard')assert.notEqual(vi.episodes[0].segments[0].h3Prompt,raw.episodes[0].segments[0].h3Prompt);
+   if(pane==='pane-storyboard')assert.equal(vi.episodes[0].segments[0].h3Prompt,raw.episodes[0].segments[0].h3Prompt);
    const unchanged=await page.locator('#'+pane+' script[type="application/json"]').evaluate(n=>JSON.parse(n.textContent));
    assert.deepEqual(unchanged,raw);
   }
@@ -80,6 +84,7 @@ const output=fs.mkdtempSync(path.join(os.tmpdir(),'shuohao-json-export-'));
    await page.locator('#sh-language').selectOption(lang);
    const {data,filename}=await download(page.locator('.expo'),'staging-'+lang+'.json');
    assert.equal(data.lang,lang);
+   assert.equal(filename,await page.evaluate(({source,lang})=>window.shuohaoJsonExport.filename('staging',window.shuohaoLanguage.translate(source),lang),{source:edited.source,lang}));
    assert.equal(data.scenes[0].extras,edited.scenes[0].extras);
    assert.equal(data.scenes[0].extrasWhere,'Cạnh cửa vào');
    for(let i=0;i<data.scenes.length;i++){

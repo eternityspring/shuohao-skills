@@ -44,7 +44,17 @@
     bar.querySelector('.sh-home').href = new URL('./?lang=' + locale, rootUrl).href;
   }
   updateBar();
-  const skip = node => node.parentElement?.closest('script,style,noscript,[data-no-translate],[contenteditable=true],textarea:not([readonly]),input');
+  const lockedTexts = new Set();
+  const lockedKey = key => ['line','originalLine','subtitle','quote','evidence'].includes(key) || /(?:prompt|promptNegative|sheet|visualDNA|styleDNA|h3Description|soundscapeEn|musicEn)$/i.test(key);
+  function rememberProductionText(value, key='', locked=false) {
+    if (key === 'ui') return;
+    const keep=locked || lockedKey(key);
+    if(Array.isArray(value))value.forEach(item=>rememberProductionText(item,key,keep));
+    else if(value && typeof value==='object')Object.entries(value).forEach(([k,v])=>rememberProductionText(v,k,keep));
+    else if(keep && typeof value==='string')lockedTexts.add(value.trim());
+  }
+  document.querySelectorAll('script[type="application/json"]').forEach(script=>{try{rememberProductionText(JSON.parse(script.textContent))}catch{}});
+  const skip = node => lockedTexts.has(node.data?.trim()) || node.parentElement?.closest('script,style,noscript,pre,[data-no-translate],[contenteditable=true],textarea:not([readonly]),input');
   function translate(value) {
     if (typeof value !== 'string' || !value.trim()) return value;
     const trimmed = value.trim();
@@ -158,10 +168,13 @@
     if (!ready) throw new Error(ui[locale].loading);
     return window.shuohaoJsonExport.localize(data, locale, translate);
   }
-  function downloadJson(data, filename) {
+  function downloadJson(data, filename, options = {}) {
     const localized = exportJson(data);
     const url = URL.createObjectURL(new Blob([JSON.stringify(localized, null, 2) + '\n'], { type: 'application/json;charset=utf-8' }));
-    const name = translate(filename).replace(/[\\/:*?"<>|]/g, '-');
+    const section = /(?:^|-)(outline|cast|art|script|staging|storyboard|reading|production|asset|all|split|subtitles|references)\.json$/i.exec(filename)?.[1]?.toLowerCase() || 'data';
+    const projectPath = /^\/project\/([^/]+)\//.exec(location.pathname);
+    const project = options.project || (projectPath ? decodeURIComponent(projectPath[1]) : data.project?.slug || translate(data.source || 'project'));
+    const name = window.shuohaoJsonExport.filename(section, project, locale);
     const link = Object.assign(document.createElement('a'), { href: url, download: name });
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 10000);

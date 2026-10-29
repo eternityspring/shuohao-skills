@@ -312,6 +312,7 @@ export function expandScript(script) {
           speaker: isLine ? b.speaker : undefined,
           delivery: isLine ? (b.delivery ?? '') : undefined,
           text: isLine ? b.line : b.action,
+          subtitle: isLine ? b.subtitle : undefined, subtitleLang:isLine ? b.subtitleLang : undefined,
         };
       }),
     }));
@@ -470,7 +471,7 @@ export function computeStats(board, script) {
         for (const b of scene.beats.slice((from ?? 1) - 1, to ?? 0)) {
           if (b.kind !== 'line') continue;
           segHasLine = true;
-          dialogue.push({ segment: seg.id, cut: ci + 1, ep: ep.ep, speaker: b.speaker, line: b.text, seconds: b.seconds });
+          dialogue.push({ segment: seg.id, cut: ci + 1, ep: ep.ep, speaker: b.speaker, line: b.text, subtitle:b.subtitle, subtitleLang:b.subtitleLang, seconds: b.seconds });
         }
       });
       if (segHasLine) withLines++;
@@ -758,7 +759,7 @@ export function gateReport(board, ctx = {}) {
       }
 
       // 每集总时长对齐剧本目标
-      if (sEp.targetSeconds > 0) {
+      if (script?.params?.timingMode !== 'content-first' && sEp.targetSeconds > 0) {
         const total = (ep?.segments ?? []).reduce((n, s) => n + segSeconds(s), 0);
         const lo = sEp.targetSeconds * (1 - params.tolerance);
         const hi = sEp.targetSeconds * (1 + params.tolerance);
@@ -777,7 +778,8 @@ export function gateReport(board, ctx = {}) {
   add('segment-cap', `每段 0 < 总秒数 ≤ ${params.maxSegmentSeconds}（一次生成的上限）`, eps.length > 0 && bad.segCap.length === 0, bad.segCap.join('；'));
   add('cut-length', `每个分镜 ${params.minCutSeconds}–${params.maxCutSeconds} 秒——短剧的注意力节奏`, eps.length > 0 && bad.cutLen.length === 0, bad.cutLen.join('；'));
   add('dialogue-fit', '认领节拍的台词装得进分镜秒数', bad.fit.length === 0, script ? bad.fit.join('；') : SKIP_SCRIPT);
-  add('ep-duration', `每集总时长在剧本目标 ±${Math.round(params.tolerance * 100)}% 内`, bad.duration.length === 0, script ? bad.duration.join('；') : SKIP_SCRIPT);
+  add('ep-duration', script?.params?.timingMode === 'content-first' ? ({vi:'Tổng thời lượng theo nhịp diễn và các shot đã lập',en:'Runtime follows the complete shot plan',zh:'总时长随完整镜头计划确定'}[board.lang] || 'Runtime follows the complete shot plan') : `每集总时长在剧本目标 ±${Math.round(params.tolerance * 100)}% 内`, bad.duration.length === 0, script ? bad.duration.join('；') : SKIP_SCRIPT);
+  if (script?.params?.timingMode === 'content-first') gates[gates.length-1].timingMode='content-first';
   add('crowd', `单个分镜同框 ≤ ${params.maxOnScreen} 人，超了必须带拆解说明`, bad.crowd.length === 0, bad.crowd.join('；'));
   add('segment-id', '段号 E01-01 格式、按顺序连号', bad.id.length === 0, bad.id.join('；'));
   add('size-phrase', '景别中文词写进分镜图提示词', bad.size.length === 0, bad.size.join('；'));
@@ -1024,7 +1026,7 @@ const GATE_SKIPS_EN = {
 /** 报告里的门文案：英文界面取映射，未命中或中文界面回落原文。 */
 const gateText = (g, lang) => {
   if (lang !== 'en') return { label: g.label, detail: g.detail };
-  const en = GATE_LABELS_EN[g.id];
+  const en = g.timingMode === 'content-first' ? 'Runtime follows the complete shot plan' : GATE_LABELS_EN[g.id];
   // 阈值仍由门自己算：把中文标签里出现的数字按序填进 {0} {1}
   const nums = String(g.label).match(/\d+(?:\.\d+)?/g) ?? [];
   const label = en ? en.replace(/\{(\d)\}/g, (m, i) => nums[Number(i)] ?? m) : g.label;
@@ -1406,7 +1408,7 @@ export function renderHtml(board, ctx = {}) {
               const summary = beats
                 .map((b) =>
                   b.kind === 'line'
-                    ? `<p class="sline"><b>${esc(n.char(b.speaker))}</b>${esc(b.text)}</p>`
+                    ? `<p class="sline" data-no-translate><b>${esc(n.char(b.speaker))}</b>${esc(b.text)}${b.subtitle?`<small class="original-subtitle">${esc(b.subtitle)}</small>`:''}</p>`
                     : `<p class="sact">${esc(b.text)}</p>`,
                 )
                 .join('');
@@ -1487,7 +1489,7 @@ ${cards}
 
   // ---- 04 配音对齐单 ----
   const dlgRows = stats.dialogue
-    .map((d) => `<tr><td><a href="#seg-${esc(d.segment)}">${esc(d.segment)}</a> #${d.cut}</td><td>${esc(n.char(d.speaker))}</td><td class="serif">${esc(d.line)}</td><td>${d.seconds}</td></tr>`)
+    .map((d) => `<tr><td><a href="#seg-${esc(d.segment)}">${esc(d.segment)}</a> #${d.cut}</td><td>${esc(n.char(d.speaker))}</td><td class="serif" data-no-translate>${esc(d.line)}${d.subtitle?`<small class="original-subtitle">${esc(d.subtitle)}</small>`:''}</td><td>${d.seconds}</td></tr>`)
     .join('\n');
 
   const gateList = `<ul class="gate">
@@ -1628,6 +1630,7 @@ section.top-sec{margin-top:34px}
 .cut:hover .copy{opacity:1}
 .cut p{margin:3px 0 0;font-size:12px;line-height:1.6}
 .sact{color:var(--ink-2)}
+.original-subtitle{display:block;margin-top:4px;color:var(--ink-3);font:400 12px/1.6 var(--sans)}
 .sline{font-family:var(--serif)}
 .sline b{font-weight:500;margin-right:6px;color:var(--seal)}
 .chip{font:400 10.5px/1.6 var(--mono);border:1px solid var(--rule-2);border-radius:2px;
@@ -1720,7 +1723,7 @@ td.serif{font-family:var(--serif)}
 <div class="kpis">
   <div class="kpi accent"><div class="l">${esc(t.kpi.segments)}</div><div class="v">${stats.totals.segments} <small>${esc(t.unitSeg)}</small></div><div class="d">${esc(t.kpi.segmentsSub(params.maxSegmentSeconds))}</div></div>
   <div class="kpi"><div class="l">${esc(t.kpi.cuts)}</div><div class="v">${stats.totals.cuts} <small>${esc(t.unitCut)}</small></div><div class="d">${esc(t.kpi.cutsSub(stats.totals.avgCutSeconds))}</div></div>
-  <div class="kpi"><div class="l">${esc(t.kpi.time)}</div><div class="v">${esc(fmtMin(stats.totals.seconds))}</div><div class="d">${esc(t.kpi.timeSub(fmtMin(stats.totals.targetSeconds)))}</div></div>
+  <div class="kpi"><div class="l">${esc(t.kpi.time)}</div><div class="v">${esc(fmtMin(stats.totals.seconds))}</div><div class="d">${esc(ctx.script?.params?.timingMode==='content-first' ? (lang==='zh'?'按完整镜头计划估算':'Estimated from the complete shot plan') : t.kpi.timeSub(fmtMin(stats.totals.targetSeconds)))}</div></div>
   <div class="kpi"><div class="l">${esc(t.kpi.batches)}</div><div class="v">${stats.batches.length}</div><div class="d">${esc(t.kpi.batchesSub)}</div></div>
   <div class="kpi"><div class="l">${esc(t.kpi.lines)}</div><div class="v">${stats.totals.withLines} <small>${esc(t.unitSeg)}</small></div><div class="d">${esc(t.kpi.linesSub)}</div></div>
 </div>

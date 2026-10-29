@@ -73,7 +73,7 @@ export function computeStats(doc) {
         const key = b.speaker ?? '?';
         if (!byCharacter.has(key)) byCharacter.set(key, { lines: [], chars: 0 });
         const entry = byCharacter.get(key);
-        entry.lines.push({ ep: ep.ep, sceneIndex: idx + 1, sceneId: sc.sceneId, line: b.line, delivery: b.delivery ?? '' });
+        entry.lines.push({ ep: ep.ep, sceneIndex: idx + 1, sceneId: sc.sceneId, line: b.line, subtitle:b.subtitle, subtitleLang:b.subtitleLang, delivery: b.delivery ?? '' });
         entry.chars += lineChars(b.line);
       }
       sceneTable.push({
@@ -135,7 +135,9 @@ export function gateReport(doc, ctx = {}) {
     const label = `第 ${ep?.ep} 集`;
 
     // 时长预算：写超写欠都在这层拦，别流到生成环节才发现
-    if (ep?.targetSeconds > 0) {
+    if (params.timingMode === 'content-first') {
+      if (!(st.est > 0) || !Number.isFinite(ep.estimatedSeconds) || Math.abs(ep.estimatedSeconds-st.est) > 0.11 || Math.abs(ep.targetSeconds-st.est) > 0.11) bad.duration.push(`${label}: duration estimate must match the complete action/dialogue content`);
+    } else if (ep?.targetSeconds > 0) {
       const lo = ep.targetSeconds * (1 - params.tolerance);
       const hi = ep.targetSeconds * (1 + params.tolerance);
       if (st.est < lo) bad.duration.push(`${label}欠 ${r1(lo - st.est)} 秒（估 ${st.est}s / 目标 ${ep.targetSeconds}s）`);
@@ -227,7 +229,8 @@ export function gateReport(doc, ctx = {}) {
   const SKIP_OUTLINE = '未提供 outline.json，本门跳过（视为通过）';
   const SKIP_ART = '未提供 art.json，本门跳过（视为通过）';
 
-  add('duration', `每集时长在目标 ±${Math.round(params.tolerance * 100)}% 内`, eps.length > 0 && bad.duration.length === 0, bad.duration.join('；'));
+  add('duration', params.timingMode === 'content-first' ? ({vi:'Thời lượng được ước tính từ toàn bộ nội dung',en:'Duration estimated from complete content',zh:'时长由完整内容估算'}[doc.lang] || 'Duration estimated from complete content') : `每集时长在目标 ±${Math.round(params.tolerance * 100)}% 内`, eps.length > 0 && bad.duration.length === 0, bad.duration.join('；'));
+  if (params.timingMode === 'content-first') gates[gates.length-1].timingMode='content-first';
   add('line-length', `单句台词 ≤ ${params.maxLineChars} 字`, bad.lineLen.length === 0, bad.lineLen.join('；'));
   add('speaker', '说话人在本场人物里，或明确标画外音 VO', bad.speaker.length === 0, bad.speaker.join('；'));
   add('hook-cliff', '每集开场钩子与结尾悬念都落在纸面', eps.length > 0 && bad.hook.length === 0, bad.hook.join('；'));
@@ -367,7 +370,7 @@ const GATE_SKIPS_EN = {
 /** 报告里的门文案：英文界面取映射，未命中或中文界面回落原文。 */
 const gateText = (g, lang) => {
   if (lang !== 'en') return { label: g.label, detail: g.detail };
-  const en = GATE_LABELS_EN[g.id];
+  const en = g.timingMode === 'content-first' ? 'Duration estimated from complete content' : GATE_LABELS_EN[g.id];
   // 阈值仍由门自己算：把中文标签里出现的数字按序填进 {0} {1}
   const nums = String(g.label).match(/\d+(?:\.\d+)?/g) ?? [];
   const label = en ? en.replace(/\{(\d)\}/g, (m, i) => nums[Number(i)] ?? m) : g.label;
@@ -526,8 +529,15 @@ function namer(ctx = {}, t = tOf()) {
 /** 界面语言：--lang > script.json 顶层 lang 字段 > zh。 */
 const langOf = (doc, ctx) => ctx?.lang ?? doc?.lang ?? 'zh';
 
+function timingText(doc,lang) {
+  const base=tOf(lang);
+  if(doc.params?.timingMode!=='content-first')return base;
+  return {...base,kpi:{...base.kpi,timeSub:()=>lang==='zh'?'根据完整内容估算':'Estimated from complete content'},
+    timingNote:()=>lang==='zh'?'按完整对白和动作估时；没有外部时长预算':'Estimated from dialogue and action; no duration budget',
+    estLabel:seconds=>lang==='zh'?`预计 ${seconds} 秒`:`estimated ${seconds}s`};
+}
 export function renderMarkdown(doc, ctx = {}) {
-  const t = tOf(langOf(doc, ctx));
+  const t = timingText(doc,langOf(doc, ctx));
   const n = namer(ctx, t);
   const stats = computeStats(doc);
   const eps = doc.episodes;
@@ -546,7 +556,7 @@ export function renderMarkdown(doc, ctx = {}) {
       if (sc.characters.length) out.push(t.castProps(sc.characters.map(n.char).join(t.sep), sc.props?.length ? sc.props.map(n.prop).join(t.sep) : ''), '');
       for (const b of sc.flow) {
         if (typeof b.action === 'string') out.push(b.action, '');
-        else out.push(`**${n.char(b.speaker)}**${b.delivery ? t.paren(b.delivery) : ''}${t.colon}${b.line}`, '');
+        else out.push(`**${n.char(b.speaker)}**${b.delivery ? t.paren(b.delivery) : ''}${t.colon}${b.line}${b.subtitle?'\n\n> '+b.subtitle:''}`, '');
       }
     });
   }
@@ -577,7 +587,8 @@ function embedDoc(doc) {
 
 export function renderHtml(doc, ctx = {}) {
   const lang = langOf(doc, ctx);
-  const t = tOf(lang);
+  const t = timingText(doc,lang);
+  const flexible=doc.params?.timingMode==='content-first';
   const n = namer(ctx, t);
   const stats = computeStats(doc);
   const gates = gateReport(doc, ctx);
@@ -595,19 +606,19 @@ export function renderHtml(doc, ctx = {}) {
   const scaleMax = Math.max(...stats.episodes.map((e) => Math.max(e.est, (e.target ?? 0) * (1 + stats.params.tolerance)))) * 1.08;
   const timingRows = stats.episodes
     .map((e) => {
-      const lo = e.target * (1 - stats.params.tolerance);
-      const hi = e.target * (1 + stats.params.tolerance);
+      const lo = flexible ? e.est : e.target * (1 - stats.params.tolerance);
+      const hi = flexible ? e.est : e.target * (1 + stats.params.tolerance);
       const inBand = e.est >= lo && e.est <= hi;
       const pct = (v) => `${r1((v / scaleMax) * 100)}%`;
       const status = inBand ? '' : ` <b class="over">${esc(e.est > hi ? t.overBy(r1(e.est - hi)) : t.underBy(r1(lo - e.est)))}</b>`;
       return `<div class="trow">
   <span class="tep">E${String(e.ep).padStart(2, '0')}</span>
   <div class="track">
-    <span class="band" style="left:${pct(lo)};width:${pct(hi - lo)}"></span>
+    ${flexible ? '' : `<span class="band" style="left:${pct(lo)};width:${pct(hi - lo)}"></span>`}
     <span class="fill dlg" style="width:${pct(e.dialogueSeconds)}"></span>
     <span class="fill act" style="left:${pct(e.dialogueSeconds)};width:${pct(e.actionSeconds)}"></span>
   </div>
-  <span class="tval${inBand ? ' okc' : ''}">${e.est}s / ${e.target}s${status}</span>
+  <span class="tval${inBand ? ' okc' : ''}">${e.est}s${flexible ? '' : ` / ${e.target}s${status}`}</span>
 </div>`;
     })
     .join('\n');
@@ -624,7 +635,7 @@ export function renderHtml(doc, ctx = {}) {
               const hk = hooked ? ' hooked' : '';
               return typeof b.action === 'string'
                 ? `<p class="act-line${hk}"${hooked ? ` title="${esc(t.hookLabel)}"` : ''}>${esc(b.action)}</p>`
-                : `<div class="dlg-line${hk}"><span class="who">${esc(n.char(b.speaker))}${b.delivery ? `<i>${esc(b.delivery)}</i>` : ''}</span><span class="said">${esc(b.line)}</span><button class="copy mini" data-copy="${esc(b.line)}">${esc(t.copy)}</button></div>`;
+                : `<div class="dlg-line${hk}"><span class="who">${esc(n.char(b.speaker))}${b.delivery ? `<i>${esc(b.delivery)}</i>` : ''}</span><span class="said" data-no-translate>${esc(b.line)}${b.subtitle?`<small class="original-subtitle">${esc(b.subtitle)}</small>`:''}</span><button class="copy mini" data-copy="${esc(b.line)}">${esc(t.copy)}</button></div>`;
             })
             .join('\n');
           return `<section class="scene-blk">
@@ -675,7 +686,7 @@ export function renderHtml(doc, ctx = {}) {
     ${n.voice(c.id) ? `<button class="copy" data-copy="${esc(n.voice(c.id))}">${esc(t.voiceBtn)}</button>` : ''}
     <button class="copy" data-copy="${esc(allText)}">${esc(t.copyAllLines)}</button>
   </header>
-  <ol class="cast-lines">${c.lines.map((l) => `<li><i>${esc(t.lineRef(l.ep, l.sceneIndex))}</i><span>${esc(l.line)}</span>${l.delivery ? `<em>${esc(l.delivery)}</em>` : ''}</li>`).join('')}</ol>
+  <ol class="cast-lines">${c.lines.map((l) => `<li><i>${esc(t.lineRef(l.ep, l.sceneIndex))}</i><span data-no-translate>${esc(l.line)}${l.subtitle?`<small class="original-subtitle">${esc(l.subtitle)}</small>`:''}</span>${l.delivery ? `<em>${esc(l.delivery)}</em>` : ''}</li>`).join('')}</ol>
 </section>`;
     })
     .join('\n');
@@ -792,6 +803,7 @@ section.top-sec{margin-top:34px}
 .dlg-line:hover{border-left-color:var(--seal)}
 .who{font:500 13px/1.6 var(--serif)}
 .who i{display:block;font:400 11px var(--sans);color:var(--ink-3);font-style:normal}
+.original-subtitle{display:block;margin-top:4px;color:var(--ink-3);font:400 12px/1.6 var(--sans)}
 .said{font:400 14.5px/1.8 var(--serif)}
 .dlg-line .copy{opacity:0;transition:.15s}
 .dlg-line:hover .copy{opacity:1}
@@ -879,7 +891,7 @@ ${failed.length ? `<div class="galert"><b>✗ ${esc(t.gatesFail(failed.length))}
     <div class="legend">
       <i><span class="sw" style="background:var(--seal)"></span>${esc(t.legendDlg)}</i>
       <i><span class="sw" style="background:var(--seal-2)"></span>${esc(t.legendAct)}</i>
-      <i><span class="sw" style="background:var(--band)"></span>${esc(t.legendBand)}</i>
+      ${flexible ? '' : `<i><span class="sw" style="background:var(--band)"></span>${esc(t.legendBand)}</i>`}
     </div>
 ${timingRows}
   </div>

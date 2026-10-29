@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync
 import { spawnSync } from 'node:child_process';
 import { join, dirname, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildDossier } from '../../scripts/studio-brain.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, '../..');
@@ -44,9 +45,11 @@ const sizeOf = (p) => (exists(p) ? statSync(p).size : 0);
 const stemOf = (p, suffix) => basename(p, '.json').replace(new RegExp(`${suffix}$`), '');
 
 function run(cmd, args, opts = {}) {
-  const r = spawnSync(cmd, args, { encoding: 'utf8', cwd: REPO, ...opts });
-  if (r.status !== 0) {
-    const msg = `${cmd} ${args.join(' ')}\n${(r.stderr || r.stdout || '').slice(-2000)}`;
+  // Detailed storyboards embed full production cards and JSON; their HTML exceeds Node's 1 MiB default.
+  const r = spawnSync(cmd, args, { encoding: 'utf8', cwd: REPO, maxBuffer: 64 * 1024 * 1024, ...opts });
+  if (r.error || r.status !== 0) {
+    const detail = r.error ? `${r.error.code || 'PROCESS_ERROR'}: ${r.error.message}` : (r.stderr || r.stdout || `Process exited with ${r.signal || r.status}`);
+    const msg = `${cmd} ${args.join(' ')}\n${detail.slice(-2000)}`;
     if (opts.allowFail) return { ok: false, out: `${r.stdout ?? ''}`, err: msg };
     throw new Error(msg);
   }
@@ -407,8 +410,9 @@ function cmdRender(args) {
   const outs = [];
   const sh = (skill, argv, file) => {
     const r = run('node', [join(SKILLS, skill, 'scripts', `${skill}.mjs`), ...argv], { allowFail: true });
-    writeFileSync(file, r.out);
-    outs.push([file, r.ok, r.ok ? r.err.trim() : `GATE FAIL: ${r.err.split('\n').slice(1, 4).join(' | ')}`]);
+    // A failed process can return truncated HTML. Preserve any previously complete report.
+    if (r.ok) writeFileSync(file, r.out);
+    outs.push([file, r.ok, r.ok ? r.err.trim() : `RENDER FAIL: ${r.err.split('\n').slice(1, 4).join(' | ')}`]);
   };
 
   if (exists(P.json.outline)) sh('novel-outline', ['render', P.json.outline, '--html', '--lang', lang], join(P.root, 'outline-report.html'));
@@ -459,6 +463,7 @@ function cmdRender(args) {
     if (r.ok) outs.push([merged, true, 'gộp 5 báo cáo']);
     else outs.push([merged, false, r.err.split('\n').slice(-2).join(' | ')]);
   }
+  if(buildDossier(P.root)) outs.push([join(P.root,'production-report.html'),true,'production dossier']);
   for (const [f, good, note] of outs) console.log(`${good ? '✓' : '✗'} ${f.replace(`${P.root}/`, '')}${note ? `  ${note}` : ''}`);
   if (outs.some(([,good]) => !good)) process.exitCode = 1;
   else if (outs.some(([f,good]) => good && f === join(P.root, 'report.html'))) markStage(P, { report: 'done' });

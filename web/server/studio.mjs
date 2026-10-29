@@ -14,6 +14,9 @@ import { spawn, spawnSync } from 'node:child_process';
 import { splitScript, buildProject, buildFromFiles } from './split.mjs';
 import { readScriptFile, ALLOWED } from './upload.mjs';
 import { handleAI, status as aiStatus, isGenerating } from '../../scripts/studio-ai.mjs';
+import {activeEditionDir} from '../../scripts/project-edition.mjs';
+import {englishStatus} from '../../scripts/english-project.mjs';
+import {handleImages} from '../../scripts/studio-images.mjs';
 import { viUiTemplate } from './import-manifest.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -75,6 +78,7 @@ const projectDir = (slug) => {
 };
 
 function projectSummary(slug, dir) {
+  const originalDir=dir;dir=activeEditionDir(dir);
   const p = (f) => join(dir, f);
   const manifest = existsSync(p('project.json')) ? JSON.parse(readFileSync(p('project.json'), 'utf8')) : null;
   const size = (f) => (existsSync(p(f)) ? statSync(p(f)).size : 0);
@@ -86,8 +90,11 @@ function projectSummary(slug, dir) {
     warnings: manifest?.warnings ?? [],
     episodes: manifest?.episodes ?? [],
     params: manifest?.params ?? {},
+    timing: manifest?.timing ?? null,
     stages: manifest?.stages ?? {},
-    ai: aiStatus(dir),
+    ai: aiStatus(originalDir),
+    english: englishStatus(originalDir),
+    edition: dir===originalDir?'source':'en',
     files: {
       outline: size('outline.json'), script: size('script.json'), cast: size('cast.json'),
       art: size('art.json'), staging: size('staging.json'), storyboard: size('storyboard.json'),
@@ -96,6 +103,7 @@ function projectSummary(slug, dir) {
       scriptReport: size('script-report.html'), stagingReport: size('staging-report.html'),
       storyboardReport: size('storyboard-report.html'),
       split: size('split.json'), kichban: size('kichban.md') || size('script.md'),
+      references:existsSync(join(originalDir,'reference-images.json'))?statSync(join(originalDir,'reference-images.json')).size:0, subtitles:size('subtitles.json'), reading: size('reading.json'), production: size('production.json'), productionReport: size('production-report.html'),
     },
     images: count('images', /-sheet\.png$/),
     frames: count('frames', /^E\d+-\d+$/),
@@ -145,7 +153,7 @@ function runScenario(id, slug) {
   const target = sc.needsProject ? projectDir(slug) : null;
   if (target && !existsSync(target.dir)) throw new Error('project chưa tồn tại');
   if (target && isGenerating(target.dir)) throw new Error('AI đang biên soạn. Dừng AI trước khi chạy thao tác này.');
-  const out = spawnSync(process.execPath, sc.args(target ?? {}), { cwd: ROOT, encoding: 'utf8', env: { ...process.env, NODE_OPTIONS: '' } });
+  const out = spawnSync(process.execPath, sc.args(target ? {...target,dir:activeEditionDir(target.dir)} : {}), { cwd: ROOT, encoding: 'utf8', env: { ...process.env, NODE_OPTIONS: '' } });
   return { ok: out.status === 0, code: out.status, output: `${out.stdout ?? ''}${out.stderr ?? ''}`.trim().slice(-8000) };
 }
 
@@ -169,6 +177,7 @@ function buildPreview() {
 async function handle(req, res) {
   const url = new URL(req.url, `http://127.0.0.1:${PORT}`);
   const path = url.pathname;
+  if (await handleImages(req,res,{url,readBody,json,projectDir,isGenerating})) return;
   if (await handleAI(req,res,{url,readBody,json,projectDir,slugify,splitScript})) return;
 
   if (path === '/' || path === '/index.html' || path === '/studio.html') {
@@ -328,13 +337,15 @@ async function handle(req, res) {
     const rel = restParts.map(decodeURIComponent);
     if (!existsSync(dir)) { json(res, 404, { error: 'không thấy project' }); return; }
     // chỉ phục vụ file nằm trong project, chặn '..'
-    const target = resolve(dir, ...rel);
+    const edition=activeEditionDir(dir);
+    const candidate=resolve(edition,...rel);
+    const target=existsSync(candidate)?candidate:resolve(dir,...rel);
     if (!target.startsWith(resolve(dir) + '/') || !existsSync(target) || statSync(target).isDirectory()) {
       json(res, 404, { error: 'không thấy file' });
       return;
     }
     const ext = target === dir ? '' : target.slice(target.lastIndexOf('.') + 1).toLowerCase();
-    const types = { html: 'text/html; charset=utf-8', json: 'application/json; charset=utf-8', md: 'text/plain; charset=utf-8', png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp', mp4: 'video/mp4', wav: 'audio/wav', txt: 'text/plain; charset=utf-8' };
+    const types = { html: 'text/html; charset=utf-8', json: 'application/json; charset=utf-8', md: 'text/plain; charset=utf-8', png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp', mp4: 'video/mp4', wav: 'audio/wav', srt:'application/x-subrip; charset=utf-8', txt: 'text/plain; charset=utf-8' };
     const head = { 'Content-Type': types[ext] ?? 'application/octet-stream', 'Cache-Control': 'no-store' };
     if (types[ext] === 'video/mp4' || types[ext] === 'audio/wav') {
       const total = statSync(target).size;
@@ -352,7 +363,13 @@ async function handle(req, res) {
       return;
     }
     res.writeHead(200, head);
-    res.end(readFileSync(target));
+    if (ext === 'html') {
+      // Older CLI reports may lack shared export/localization support. Add it when serving them.
+      let html = readFileSync(target, 'utf8');
+      if (!html.includes('src="/json-export.js"')) html = html.replace('</head>', '<script src="/json-export.js" defer></script></head>');
+      if (!html.includes('src="/language.js"')) html = html.replace('</head>', '<link rel="stylesheet" href="/language.css"><script src="/language.js" defer></script></head>');
+      res.end(html);
+    } else res.end(readFileSync(target));
     return;
   }
 
@@ -379,7 +396,7 @@ async function handle(req, res) {
     if (m[2] === 'file') {
       const file = url.searchParams.get('name') ?? '';
       if (!/^[\w\u4e00-\u9fff.-]+\.(json|md)$/.test(file)) { json(res, 400, { error: 'tên file không hợp lệ' }); return; }
-      const target = join(dir, file);
+      const target = join(file==='reference-images.json'?dir:activeEditionDir(dir), file);
       if (!existsSync(target)) { json(res, 404, { error: 'không thấy file' }); return; }
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(readFileSync(target));
