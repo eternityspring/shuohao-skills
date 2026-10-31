@@ -4,7 +4,8 @@ description: |
   从小说或短故事里拆出角色表、人物画像、形象提示词、音色提示词，
   其中形象提示词含一张角色设定图的完整版面指令（左半身像 + 右全身三视图 + 细节条），
   产出 JSON + Markdown + 可交互的 report.html。
-  报告语言可指定（--lang），默认中文，任意语言都支持；零依赖、零 API key、不出图。
+  报告语言可指定（--lang），默认中文，任意语言都支持；零依赖、零 API key、脚本不出图，
+  出图配方另附（references/asset-recipe.md：半身像 → 三视图版面 → 1:1 头像三件套）。
   Use when asked to 拆小说角色、分析人物、生成角色卡、character sheets from a novel。
 allowed-tools:
   - Read
@@ -13,7 +14,7 @@ allowed-tools:
   - Task
   - Glob
 metadata:
-  version: 2.0.0
+  version: 2.1.0
   triggers:
     - novel-characters
     - 拆角色
@@ -36,7 +37,7 @@ metadata:
 
 输入一篇小说/短故事，输出每个角色的：人物画像、形象提示词、音色提示词、角色设定图的版面指令。
 
-**本 skill 不出图，只产提示词。**出图是下游的事——它要选模型、选画风、选画幅，那三件事在这里一个都答不了。
+**脚本不出图，只产提示词。**出图要选模型、选画风、选画幅，那三件事在这里一个都答不了——但只要当前环境有出图能力（ImageGen 之类），就按 `{baseDir}/references/asset-recipe.md` 出，那是本 skill 已经踩过坑沉淀下来的配方，不是随便写的一段说明。
 
 `{baseDir}` = 本文件所在目录。脚本 `{baseDir}/scripts/novel-characters.mjs`，零依赖，`node` 直接跑。
 
@@ -194,8 +195,14 @@ node {baseDir}/scripts/novel-characters.mjs render <cast.json> --html > report.h
 
 语言取 `cast.json` 里的 `lang`，要临时覆盖就加 `--lang <code>`。
 
-`render` 默认去 cast.json 同级的 `images/<slug>-sheet.png` 找图；图在别处就用 `--images <目录>`
-指过去（任意路径）。**本 skill 不产生这些文件**——下游出完图，重跑一次 render 就能把图嵌进报告。
+`render` 默认去 cast.json 同级的 `images/` 找两类图，图在别处就用 `--images <目录>` 指过去（任意路径）：
+
+| 文件 | 用在报告哪里 | 找不到时 |
+| --- | --- | --- |
+| `<slug>-avatar.png`（1:1） | 左列 76×76 缩略图，整张铺满 | 回退成从 sheet 左栏切片，会切到肩膀 |
+| `<slug>-sheet.png`（16:9） | 右侧大图（外形设定） | 留空占位 |
+
+**脚本不产生这些文件**——出完图重跑一次 render 就能把图嵌进报告。
 
 report.html 的样式约定见 `{baseDir}/references/report-style.md`——要改样式先读它，别把它改回通用卡片墙。
 
@@ -206,15 +213,27 @@ report.html 的样式约定见 `{baseDir}/references/report-style.md`——要�
 ├── <书名>-cast.json
 ├── <书名>-cast.md
 ├── report.html                    ← 双击就能开
-└── images/                        ← 本 skill 不写这个目录
-    └── <slug>-sheet.png           ← 下游出完图放这儿，render 会捡起来
+└── images/                        ← 脚本不写这个目录
+    ├── <slug>-bust.png            ← 竖版半身像，打样与锁脸用，不进报告
+    ├── <slug>-sheet.png           ← 16:9 版面，报告右侧大图
+    └── <slug>-avatar.png          ← 1:1 头像，报告左列缩略图
 ```
 
-### Step 9 — 汇报
+### Step 9 — 出图（环境有出图能力时才做）
 
-一句话说清：角色数、报告路径。校验一次没过的话，说明修了什么。原文被截断要明确说清楚。
+照 `{baseDir}/references/asset-recipe.md` 走，要点只有三条：
 
-**不要说「已出图」或「已生成设定图」**——这一步不存在了，交付的是提示词。
+1. **按集出，不要一次铺全剧**——只出这一集要用的角色，风格在第 5 个人才定型的话，前面全废
+2. **顺序是 bust → sheet → avatar**，后两张都拿 bust 当参考图（`input_fidelity: high`）锁脸；`sheet` 的提示词直接用 cast.json 的 `image.sheet`，不要自己重写
+3. 出完逐张看（一人一脸、手指、有没有切到脸），去水印，再重跑 `render --images <目录>`，数一下 `<img>` 数量和角色数对不对得上
+
+头像三条硬指标：**脸占画面 62%、头顶留边、下巴不进底边**——少一条就成半身像或被切头。
+
+### Step 10 — 汇报
+
+一句话说清：角色数、报告路径、出了几张图。校验一次没过的话，说明修了什么。原文被截断要明确说清楚。
+
+**没真出图就不要说「已出图」**——交付的是提示词和挂图清单，出没出按实际说。
 
 ---
 
@@ -222,7 +241,7 @@ report.html 的样式约定见 `{baseDir}/references/report-style.md`——要�
 
 - 单次上限 24 块（净覆盖约 93 万字符），超了会明确报 `truncated`，不静默截断
 - 人类可读字段跟随 `--lang`（默认中文）；出图和 TTS 提示词**永远英文**，那些引擎吃英文最稳
-- **本 skill 不出图。**`image.sheet` 是给下游的版面指令，版面最容易崩的几处（一张图两个长相、
+- **脚本不出图。**出图配方在 `references/asset-recipe.md`；`image.sheet` 是版面指令，版面最容易崩的几处（一张图两个长相、
   为了塞细节把人物压扁、左栏收口）靠提示词里写死的几句压住，见 `references/sheet.md`
 - 想要能实时编辑、边跑边看的交互界面，那是另一个东西，不在这个 skill 里
 

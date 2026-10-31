@@ -783,9 +783,11 @@ function renderRosterItem(c, index, t) {
     .filter(Boolean)
     .join(' ');
 
+  const thumbImg = c.faceImage || c.sheetImage;
+
   return `<button class="rost${index === 0 ? ' on' : ''}" data-target="p-${slug(c.name)}" data-hay="${esc(hay)}">
-  <span class="rost-thumb"${
-    c.sheetImage ? ` style="background-image:url('${esc(c.sheetImage)}')"` : ''
+  <span class="rost-thumb${c.faceImage ? ' face' : ''}"${
+    thumbImg ? ` style="background-image:url('${esc(thumbImg)}')"` : ''
   }></span>
   <span class="rost-body">
     <span class="rost-top">
@@ -1156,6 +1158,8 @@ button{font-family:inherit}
    比 <img> + object-position 可控：不依赖浏览器怎么 cover。 */
 .rost-thumb{display:block;width:76px;height:76px;border:1px solid var(--rule-2);border-radius:6px;
   background:#fff no-repeat left top;background-size:294% auto}
+/* 有 <slug>-avatar.png 时整张铺满，略微上偏把眼睛放到视觉中心 */
+.rost-thumb.face{background-position:center 18%;background-size:cover}
 .rost-body{min-width:0}
 .rost-top{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
 .rost-n{font:500 10px/1 var(--mono);color:var(--ink-3);font-style:normal}
@@ -1546,6 +1550,21 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
+// clipboard: the async API is blocked inside cross-origin iframes (composer panes / previews);
+// fall back to a hidden textarea + execCommand, which still works there
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch {}
+  ta.remove();
+  return ok;
+}
+
 // 复制图片本身到剪贴板（不是路径）
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('.copy-img');
@@ -1578,7 +1597,7 @@ document.addEventListener('click', async (e) => {
   e.preventDefault();
   const label = btn.textContent;
   try {
-    await navigator.clipboard.writeText(btn.dataset.copy);
+    await copyText(btn.dataset.copy);
     btn.textContent = L.copied;
     btn.dataset.done = '1';
   } catch {
@@ -1617,7 +1636,9 @@ const USAGE = `novel-characters.mjs — novel-characters skill 的确定性工�
 render 选项：
   --source <name>   报告标题用的书名（默认取 cast.json 的 source 或文件名）
   --images <dir>    设定图所在目录，任意路径（相对当前目录解析）；默认 cast.json 同级的 images/
-                    会去找 <dir>/<slug>-sheet.png；报告里的图片路径按「报告写在 cast.json 旁边」计算`;
+                    会去找 <dir>/<slug>-avatar.png（1:1 头像，左列缩略图用）和
+                    <dir>/<slug>-sheet.png（16:9 三视图版面，大图用）；
+                    报告里的图片路径按「报告写在 cast.json 旁边」计算`;
 
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(path), 'utf8'));
@@ -1826,6 +1847,10 @@ function main(argv) {
     for (const c of characters) {
       const abs = join(imagesDir, `${slug(c.name)}-sheet.png`);
       if (existsSync(abs)) c.sheetImage = relative(outDir, abs).split(sep).join('/');
+      // 头像优先：<slug>-avatar.png 是 1:1 方形大头照，左列列表直接铺满，
+      // 比从 16:9 设定图上抠半身像干净。没有就退回设定图切片。
+      const face = join(imagesDir, `${slug(c.name)}-avatar.png`);
+      if (existsSync(face)) c.faceImage = relative(outDir, face).split(sep).join('/');
     }
 
     process.stdout.write(

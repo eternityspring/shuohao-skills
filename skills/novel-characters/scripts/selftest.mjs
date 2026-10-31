@@ -456,6 +456,15 @@ const shotHtml = renderHtml(withShot, 'x');
 ok(shotHtml.includes('<img src="images/x.png"'), '主区嵌入设定图');
 ok(shotHtml.includes("background-image:url('images/x.png')"), '左栏缩略图用同一张图的切片');
 
+// 有 1:1 头像时缩略图铺满头像，大图仍用设定图
+const withFace = clone();
+withFace[0].sheetImage = 'images/x.png';
+withFace[0].faceImage = 'images/x-avatar.png';
+const faceHtml = renderHtml(withFace, 'x');
+ok(faceHtml.includes("background-image:url('images/x-avatar.png')"), '左栏缩略图优先用头像');
+ok(faceHtml.includes('class="rost-thumb face"'), '有头像时走铺满分文');
+ok(faceHtml.includes('<img src="images/x.png"'), '大图仍用设定图而不是头像');
+
 // XSS：角色数据是模型生成的，不能直接拼进 HTML
 const evil = clone();
 evil[0].name = '<img src=x onerror=alert(1)>';

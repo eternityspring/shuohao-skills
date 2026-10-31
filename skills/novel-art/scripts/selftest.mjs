@@ -57,14 +57,16 @@ const gate = (d, id, names = null) => gateReport(d, names).find((g) => g.id === 
     assets.every((a) => !/photorealistic|3d render|\banime\b/i.test(a.image.negativePrompt)),
     'negativePrompt 不禁画风词',
   );
-  // 表面处理留着，但是两档二选一：它讲的是这个空间被谁在用、保养到什么程度，
+  // 表面处理留着，但是三档二选一：它讲的是这个空间被谁在用、保养到什么程度，
   // 是关于这个对象的事实，不是一句对谁都成立的常量。原来这里钉死了 A 档，于是
   // 金銮殿也拿到「漆面剥落、水渍」——跟「每条提示词必须逐字包含同一句画风」
-  // 是同一个错误，只是换了个词。
+  // 是同一个错误，只是换了个词。后来又发现 A 档「日常使用」措辞太重（掉漆水渍
+  // 积灰），1998 年的宾馆宿舍全选它结果满屏脏破——2026-10 起默认档改为
+  // 「普通使用·保持整洁」，重磨损版降为「失修」例外档。
   ok(
-    assets.every((a) => /Weathered, lived-in materials|Well-kept, actively maintained materials/
+    assets.every((a) => /Modest, well-cared-for materials|Well-kept, actively maintained materials|Weathered, lived-in materials/
       .test(a.image.sheet)),
-    '表面处理句整段保留（日常使用 / 持续维护 二选一）',
+    '表面处理句整段保留（整洁默认 / 持续维护 / 失修 三选一）',
   );
 }
 

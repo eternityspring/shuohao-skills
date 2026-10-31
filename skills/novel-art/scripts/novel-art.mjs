@@ -886,6 +886,21 @@ ${propCards}
 <script>
 const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed })};
 
+// clipboard: the async API is blocked inside cross-origin iframes (composer panes / previews);
+// fall back to a hidden textarea + execCommand, which still works there
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch {}
+  ta.remove();
+  return ok;
+}
+
 // 图片弹层：点图放大，点背景或 Esc 关闭
 const lb = document.querySelector('.lightbox');
 const lbImg = lb.querySelector('img');
@@ -904,7 +919,7 @@ document.addEventListener('click', async (e) => {
   e.preventDefault();
   const label = btn.textContent;
   try {
-    await navigator.clipboard.writeText(btn.dataset.copy);
+    await copyText(btn.dataset.copy);
     btn.textContent = L.copied;
     btn.dataset.done = '1';
   } catch {

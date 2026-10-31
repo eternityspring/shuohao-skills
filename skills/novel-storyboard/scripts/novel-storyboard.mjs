@@ -173,6 +173,76 @@ export function h3CutSlices(prompt, cutCount, lang = 'en') {
   return slices;
 }
 
+/*
+ * 数据派生的 H3 提示词——唯一事实源。
+ * 手写 h3Prompt 容易和分镜数据漂移（实测过：音效次数、shot 与运镜矛盾、硬冲突），
+ * 所以段级 H3 提示词不再手写，全部由本函数从分镜数据确定性拼出：
+ *   对齐指令  = h3AlignmentLine（切点与分镜结构推导，validate 逐字对账）
+ *   每镜段落  = [镜头 k] + 锚定句 + 运镜词 + shot（画面）+ performance（表演）+ 台词 <d> 块
+ *   段尾      = 整体音景（soundscape）+ 非叙事配乐（music）
+ * 这样 H3、Seedance、分镜图三处都从同一份数据长出来，不会再各写各的导致误判。
+ * 手写字段若仍在（旧数据 / 测试 fixture）则优先，缺了才派生——平滑过渡。
+ */
+const H3_ANCHOR = {
+  zh: (k) => `按参考图 ${k} 锚定构图与人物状态：`,
+  en: (k) => `Anchor composition and character state to Reference Picture ${k}: `,
+};
+// 运镜词必须含 CAMERA_MOVES[cut.camera] 的子串，否则 camera-phrase 门拦不住。
+// 这里给三个高频运镜更自然的写法，其余直接回退到官方中文词表。
+const H3_CAMERA_ZH = {
+  'Static Shot': '固定机位',
+  'Push In': '镜头推近',
+  'Pull Out': '镜头拉出',
+};
+const h3CameraPhrase = (camera, lang) => {
+  if (lang === 'en') return String(camera ?? '').toLowerCase();
+  return H3_CAMERA_ZH[camera] ?? CAMERA_MOVES[camera] ?? '';
+};
+
+export function deriveH3(seg, { scene = null, promptLang = 'zh' } = {}) {
+  const lang = promptLang === 'en' ? 'en' : 'zh';
+  const tk = H3_TOKENS[lang] ?? H3_TOKENS.zh;
+  const cuts = seg?.cuts ?? [];
+  const dTag = lang === 'en' ? 'English' : 'Chinese';
+  const out = [h3AlignmentLine(cuts, lang), ''];
+  out.push(tk.fields[0]);
+  const starts = cutStarts(cuts);
+  cuts.forEach((cut, ci) => {
+    const k = ci + 1;
+    const marker = k === 1 ? tk.shot(1) : tk.cutMark(k, h3CutTime(starts[ci]));
+    const cam = h3CameraPhrase(cut?.camera, lang);
+    const shot = String(cut?.shot ?? '').trim().replace(/[。.\s]+$/, '');
+    const perf = String(cut?.performance ?? '').trim();
+    let body = marker + H3_ANCHOR[lang](k) + (cam ? `${cam}，` : '') + shot;
+    if (perf) body += `。${perf}`;
+    const lines = [];
+    if (scene) {
+      const [from, to] = cut?.beats ?? [];
+      if (Number.isInteger(from) && Number.isInteger(to)) {
+        for (const b of scene.beats.slice(from - 1, to)) {
+          if (b.kind === 'line') lines.push(b.text);
+        }
+      }
+    }
+    // 每行台词各占一个 <d>[lang] 文本 </d> 块——门逐块对账，合成一块会漏检
+    for (const text of lines) body += ` <d>[${dTag}] ${text} </d>`;
+    out.push(body);
+  });
+  out.push('');
+  const soundscape = String(seg?.soundscape ?? '').trim();
+  const music = String(seg?.music ?? '').trim();
+  out.push(tk.fields[1] + soundscape);
+  out.push(tk.fields[2] + music);
+  return out.join('\n');
+}
+
+/** 取段级 H3 提示词：手写优先（兼容旧数据 / 测试 fixture），缺了就从数据派生。 */
+export function h3Of(seg, { scene = null, promptLang = 'zh' } = {}) {
+  const stored = seg?.h3Prompt;
+  if (typeof stored === 'string' && stored.trim()) return stored;
+  return deriveH3(seg, { scene, promptLang });
+}
+
 /* ------------------------------------------------------------------ */
 /* Seedance 提示词：程序按官方结构拼                                       */
 /* ------------------------------------------------------------------ */
@@ -197,6 +267,12 @@ export const SEEDANCE_FORBIDDEN = [
 
 export const SEEDANCE_NO_SUBTITLES = '保持无字幕，避免生成任何文字或字幕';
 export const SEEDANCE_NO_TWINS = '视频全程禁止出现外形、着装、配饰完全一致的人物';
+// 分镜图成为视频参考后，身份连续性靠图钉死——这条约束只在真的挂了参考图时才有意义
+export const SEEDANCE_IDENTITY_LOCK = '同一角色的长相、发型与服装在所有镜头中保持一致，以参考图为准，不得中途变化';
+// 多切一次生成时，模型习惯把动作连打成快放——必须显式要留白，不然成片就是“赶”
+export const SEEDANCE_PACING = '每个镜头起手先静止一拍再入动作，动作做完留一拍静止再切镜；不加速、不甩镜、不把两个以上动作挤在同一拍里';
+// 心境不靠台词，靠「不做什么」：给他一个多余的小动作和一处不看镜头的地方
+export const SEEDANCE_INNER_STATE = '人物情绪通过眼神落点、呼吸起伏和一句台词后的停顿表现出来，不做饱满表演、不做表情管理';
 
 /**
  * 附件两条路：这一段每切都有分镜图 → 分镜路径，只挂分镜图；否则 → 参考图路径，
@@ -251,13 +327,19 @@ export function seedancePrompt(seg, { scene = null, names = {}, image = null, co
     const ref = frameRef.get(ci);
     const shot = String(cut?.shot ?? '').trim();
     if (shot) out.push(`画面：${shot}${ref ? `（构图参考 @图片${ref}）` : ''}`);
-    line('光影', cut?.lighting);
+    // 光影：镜级优先；镜级没写就继承场次光照——美术层的设定必须一路带到视频提示词
+    line('光影', cut?.lighting ?? scene?.lighting);
     const [from, to] = cut?.beats ?? [];
     const spoken = scene && Number.isInteger(from) && Number.isInteger(to)
       ? scene.beats.slice(from - 1, to).filter((b) => b.kind === 'line')
       : [];
     // 台词逐字进 {}；身份与语气由镜头正文交代，画外音按官方写法标在 {} 外面
     out.push(`台词：${spoken.length ? spoken.map((b) => `${b.speaker === 'VO' ? '以画外音说' : ''}{${b.text}}`).join(' ') : '{}'}`);
+    // 表演：切级 performance 优先，没写就用剧本 delivery——剧本里写的语气/眼神不能停在 json 里
+    const perf = String(cut?.performance ?? '').trim()
+      || spoken.map((b) => String(b.delivery ?? '').trim()).filter(Boolean).join('；');
+    if (perf) out.push(`表演：${perf}`);
+    line('停顿', cut?.hold);
     line('视线落点', cut?.eyeline);
     line('焦点', cut?.focus);
     line('稳定性', STABILITY[cut?.stability] ?? cut?.stability);
@@ -276,6 +358,11 @@ export function seedancePrompt(seg, { scene = null, names = {}, image = null, co
   if (!rules.includes(SEEDANCE_NO_SUBTITLES)) rules.push(SEEDANCE_NO_SUBTITLES);
   const crowded = cuts.some((c) => (c?.characters ?? []).filter((id) => id !== 'VO').length >= 2);
   if (crowded && !rules.includes(SEEDANCE_NO_TWINS)) rules.push(SEEDANCE_NO_TWINS);
+  // 挂了分镜图参考才追加身份锁——没有参考图时这句话无从执行，反而稀释约束
+  if (frames.some(Boolean) && !rules.includes(SEEDANCE_IDENTITY_LOCK)) rules.push(SEEDANCE_IDENTITY_LOCK);
+  // 多切一次生成：模型会把动作连打成快放，节奏与留白必须写进约束
+  if (cuts.length >= 2 && !rules.includes(SEEDANCE_PACING)) rules.push(SEEDANCE_PACING);
+  if (!rules.includes(SEEDANCE_INNER_STATE)) rules.push(SEEDANCE_INNER_STATE);
   out.push('【约束】', ...rules.map((r, i) => `${i + 1}. ${r}`));
   return { prompt: out.join('\n'), refs };
 }
@@ -387,6 +474,155 @@ export function recipeDrift(cut, card) {
     sizes: sizes.length && !sizes.includes(cut?.size) ? sizes : [],
     cameras: cameras.length && !cameras.includes(cut?.camera) ? cameras : [],
   };
+}
+
+/* ------------------------------------------------------------------ */
+/* 节奏告警                                                             */
+/* ------------------------------------------------------------------ */
+/*
+ * 「画面仓促」不是提示词问题，是配时问题——一次生成里塞的动作数 ÷ 秒数。
+ * 这里只算三件可以客观量的事，**只提示不设门**（同 recipeDrift 的理由）：
+ *   动作密度：≤2.5 秒的切里出现 ≥3 个动作分句，演员只能在动作之间滑过去
+ *   语速：音节 ÷ 秒 > 4.3，中文对白的上限，超了就像在念稿
+ *   留白：整段平均切长 < 2.8 秒，或者 4 切以上没有一处 hold（人不动）
+ * 数字取的是短剧实拍经验值，不是标准答案；调的是「哪一刀该拆」。
+ */
+const spokenSyllables = (text) => (String(text ?? '').match(/[\u4e00-\u9fa5]|[0-9]/g) ?? []).length;
+
+export function pacingWarnings(board, script) {
+  const out = [];
+  const expanded = expandScript(script);
+  for (const ep of board?.episodes ?? []) {
+    const sEp = expanded.get(ep.ep);
+    for (const seg of ep?.segments ?? []) {
+      const cuts = seg?.cuts ?? [];
+      if (!cuts.length) continue;
+      const scene = sEp?.scenes?.[seg.sceneIndex - 1];
+      cuts.forEach((cut, ci) => {
+        const moves = String(cut?.shot ?? '').split(/[，,]/).map((s) => s.trim()).filter(Boolean).length;
+        if (cut.seconds <= 2.5 && moves >= 3) {
+          out.push(`${seg.id}#${ci + 1} 动作过密：${cut.seconds}s 里 ${moves} 个动作，留一个给下一镜`);
+        }
+        const [from, to] = cut?.beats ?? [];
+        const lines = scene && Number.isInteger(from) && Number.isInteger(to)
+          ? scene.beats.slice(from - 1, to).filter((b) => b.kind === 'line')
+          : [];
+        const syl = lines.reduce((n, b) => n + spokenSyllables(b.text), 0);
+        const rate = syl / cut.seconds;
+        if (syl && rate > 4.3) {
+          out.push(`${seg.id}#${ci + 1} 语速偏快：${syl} 音节 / ${cut.seconds}s = ${rate.toFixed(1)} 音节/秒（上限 4.3），延长这一切或把台词拆到下一镜`);
+        }
+      });
+      const avg = segSeconds(seg) / cuts.length;
+      if (cuts.length >= 3 && avg < 2.8) {
+        out.push(`${seg.id} 整段偏赶：${cuts.length} 切平均 ${avg.toFixed(1)}s，低于 2.8s 就没有留白`);
+      }
+      if (cuts.length >= 4 && !cuts.some((c) => String(c?.hold ?? '').trim())) {
+        out.push(`${seg.id} 没有停顿镜：${cuts.length} 切全在动作里，加一处 hold（人不动，只有呼吸或眼神）`);
+      }
+      // 视频提示词里没有表演层，成片就只剩动作——心境只能靠演员的脸和停顿，不靠台词
+      const h3 = h3Of(seg, { scene });
+      if (h3 && !/表演|神情|语气|眼神|呼吸|停顿|盯|绷|咽|低声|压低/.test(h3)) {
+        out.push(`${seg.id} 视频提示词没有表演层：补语气／眼神落点／一处停顿，否则成片只有动作没有心境`);
+      }
+    }
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------------ */
+/* 静帧神情告警                                                         */
+/* ------------------------------------------------------------------ */
+/*
+ * 分镜图是照着 frame 提示词生成的，而分镜图又是视频的参考图——
+ * frame 里没写脸，模型就给一张中性脸，视频全程跟着平。所以「人物没有心境」
+ * 的第一现场在这里，不在视频提示词。
+ *
+ * 两种写法必错：
+ *   缺神情：只写动作和光线，一个五官词都没有 → 模型默认中性脸
+ *   否定式：写「面无表情」「脸上没有任何起伏」→ 模型真的只给一张空脸，
+ *           因为它没有可执行的正向指令；情绪要写成肌群状态（下颌咬住、
+ *           眉压低、嘴唇抿成一条线、眼白里有血丝），不能写成「没有情绪」
+ * 只提示不设门，同 pacingWarnings。
+ */
+const FACE_CUES = /眼|眉|嘴|唇|下颌|腮|脸|表情|神情|眼神|咬|盯|抿|绷|颧/;
+// 手部特写没有脸可写，但张力不能丢——手是刘诚这类「声音平、身体狠」的角色唯一的表情
+const HAND_CUES = /指节|青筋|指腹|拇指|攥|握|抠|按到底|发白|发抖|颤/;
+// 背影/过肩看不到脸，情绪只剩姿态：肩线、后颈、脊背的松紧
+const BACK_CUES = /肩|背|后颈|脊|头微微|头低|头偏|侧脸|耳/;
+const FACE_NEGATION = /面无表情|没有任何起伏|毫无表情|无表情|神色如常|平静如常/;
+
+export function frameFaceWarnings(board) {
+  const out = [];
+  for (const ep of board?.episodes ?? []) {
+    for (const seg of ep?.segments ?? []) {
+      (seg?.cuts ?? []).forEach((cut, ci) => {
+        const f = String(cut?.frame ?? '');
+        if (!f.trim()) return;
+        const neg = f.match(FACE_NEGATION);
+        if (neg) {
+          out.push(`${seg.id}#${ci + 1} 用否定式写表情（「${neg[0]}」）：模型只会给一张空脸，改成肌群状态（下颌咬住／眉压低／嘴唇抿成线）`);
+          return;
+        }
+        // 物件特写（回执、门牌、道具）画面里没有脸，要求写神情只会逼出无意义的句子
+        if (cut?.frameFocus === 'prop') return;
+        // 手部特写改查手：指节、青筋、力道，而不是「眼神」
+        if (cut?.frameFocus === 'hand') {
+          if (!HAND_CUES.test(f)) {
+            out.push(`${seg.id}#${ci + 1} 手部特写没写张力：手指的状态就是这一镜的表情，写指节发白／拇指按到底／手背青筋`);
+          }
+          return;
+        }
+        // 背影/过肩镜看不到脸，改查肩线与后颈——姿态就是它的表情
+        if (cut?.frameFocus === 'back') {
+          if (!BACK_CUES.test(f)) {
+            out.push(`${seg.id}#${ci + 1} 背影镜没写姿态：看不到脸，情绪只能靠肩线松紧／头偏的角度／后颈的僵`);
+          }
+          return;
+        }
+        if (!FACE_CUES.test(f)) {
+          out.push(`${seg.id}#${ci + 1} 静帧没写神情：只有动作和光，模型会给中性脸，视频跟着平`);
+        }
+      });
+    }
+  }
+  return out;
+}
+
+/*
+ * 运镜 vs 画面句：camera 是权威字段（Seedance 单列「运镜：」，H3 摘要也用它），
+ * shot 只该写「画面里发生了什么」。两处都写运镜，就必然出现「运镜：固定镜头」配
+ * 「镜头跟着他」这种自相矛盾的提示词——模型只会挑一个执行，另一句变成噪音。
+ */
+const SHOT_MOVE = /跟着|跟随|推近|推进|拉出|拉开|摇镜|横移|升起|下降|环绕|跟拍|手持/;
+const CAMERA_IS_STILL = /^Static/i;
+const CAMERA_DIRECTION = {
+  'Push In': /推近|推进/,
+  'Pull Out': /拉出|拉开/,
+  'Tracking Shot': /跟着|跟随|跟拍|横移/,
+};
+export function cameraShotWarnings(board) {
+  const out = [];
+  for (const ep of board?.episodes ?? []) {
+    for (const seg of ep?.segments ?? []) {
+      (seg?.cuts ?? []).forEach((cut, ci) => {
+        const shot = String(cut?.shot ?? '');
+        if (!shot.trim()) return;
+        const move = shot.match(SHOT_MOVE);
+        const cam = String(cut?.camera ?? '');
+        if (!move) return;
+        if (CAMERA_IS_STILL.test(cam)) {
+          out.push(`${seg.id}#${ci + 1} 运镜=固定，画面却写「${move[0]}」：运镜只归 camera 字段，画面句删掉镜头动作`);
+          return;
+        }
+        const want = CAMERA_DIRECTION[cam];
+        if (want && !want.test(move[0])) {
+          out.push(`${seg.id}#${ci + 1} 运镜=${cam}，画面却写「${move[0]}」：两处说的不是同一个动作`);
+        }
+      });
+    }
+  }
+  return out;
 }
 
 /* ------------------------------------------------------------------ */
@@ -567,12 +803,13 @@ export function gateReport(board, ctx = {}) {
       const sid = seg?.id ?? '?';
       const cuts = seg?.cuts ?? [];
       const total = segSeconds(seg);
+      const scene = sEp ? sEp.scenes[seg?.sceneIndex - 1] : null;
 
       if (!(total > 0) || total > params.maxSegmentSeconds) {
         bad.segCap.push(`${sid} 共 ${total} 秒`);
       }
 
-      const h3 = String(seg?.h3Prompt ?? '');
+      const h3 = h3Of(seg, { scene, promptLang });
       // H3 结构：首行对齐指令逐字对账（由分镜结构按 promptLang 推导），三字段按序，切点时刻逐个对
       const tk = H3_TOKENS[promptLang] ?? H3_TOKENS.zh;
       const wantLine = h3AlignmentLine(cuts, promptLang);
@@ -607,7 +844,6 @@ export function gateReport(board, ctx = {}) {
       if (/[（）()]/.test(String(seg?.music ?? ''))) bad.sd.push(`${sid} 的 music 自带了括号——程序会套（）`);
 
       const slices = h3CutSlices(h3, cuts.length, promptLang);
-      const scene = sEp ? sEp.scenes[seg?.sceneIndex - 1] : null;
       if (sEp && !scene) bad.refs.push(`${sid} 的 sceneIndex ${seg?.sceneIndex} 在剧本第 ${ep.ep} 集里不存在`);
       if (scene) {
         if (seg.sceneIndex < prevSceneIndex) bad.coverage.push(`${sid} 场次顺序倒退`);
@@ -830,7 +1066,7 @@ export function validateStoryboard(board, ctx = {}) {
       const sid = seg?.id ?? '?';
       if (typeof seg?.id !== 'string') p(`${label}有段缺 id`);
       if (!Number.isInteger(seg?.sceneIndex) || seg.sceneIndex < 1) p(`${sid} 缺 sceneIndex（剧本里第几场）`);
-      if (typeof seg?.h3Prompt !== 'string') p(`${sid} 缺 h3Prompt（H3 视频提示词，写法见 references/h3-prompt.md）`);
+      if (typeof seg?.h3Prompt !== 'string' && !(seg?.cuts?.length)) p(`${sid} 缺 h3Prompt（H3 视频提示词；有分镜时可由分镜数据派生，无分镜则无法派生）`);
       if (!Array.isArray(seg?.cuts) || seg.cuts.length === 0) {
         p(`${sid} 没有分镜`);
         continue;
@@ -943,7 +1179,8 @@ export function exportPack(
       const mapping = (seg.cuts ?? [])
         .map((_, i) => `- Picture ${i + 1} = f${i + 1}.png${i === 0 ? '（**首帧**，钉 0.00 秒）' : `（钉 ${starts[i].toFixed(2)} 秒）`}`)
         .join('\n');
-      const promptMd = `# ${seg.id} · H3 提示词\n\n首帧 = **f1.png**。图片按 Picture 序号挂载：\n\n${mapping}\n\n---\n\n${seg.h3Prompt ?? ''}\n`;
+      const scene = expanded.get(ep.ep)?.scenes?.[seg.sceneIndex - 1] ?? null;
+      const promptMd = `# ${seg.id} · H3 提示词\n\n首帧 = **f1.png**。图片按 Picture 序号挂载：\n\n${mapping}\n\n---\n\n${h3Of(seg, { scene, promptLang: board.promptLang ?? 'zh' })}\n`;
       files.push({ path: `${prefix}${seg.id}/prompt.md`, content: promptMd });
       const pictures = (seg.cuts ?? []).map((_, i) => `${prefix}${seg.id}/f${i + 1}.png`);
       const missing = pictures.filter((rel) => !imageExists(rel));
@@ -1063,17 +1300,28 @@ const I18N = {
     subLabel: (i) => `子分镜 ${i}`,
     frameMissing: (i) => `#${i} 未生成`,
     framePrompt: '分镜图提示词',
+    frameRow: '出图',
+    frameRowTitle: '分镜图提示词：照这句出分镜图（静帧只承载此刻的脸）',
+    shotRow: '画面',
+    shotRowTitle: '本切画面句：只是段级视频提示词里的一行，完整提示词见右侧面板',
     h3Prompt: 'H3 提示词',
     h3Section: 'H3 视频提示词',
     seedancePrompt: 'Seedance 提示词',
     seedanceSection: 'Seedance 视频提示词',
     blockingLabel: '走位',
+    pacingHint: (n) => `\n⚠️ 节奏告警 ${n} 处（不阻塞，但成片会显赶）：`,
+    faceHint: (n) => `\n⚠️ 静帧神情告警 ${n} 处（分镜图照 frame 生成，frame 没写脸，成片就没情绪）：`,
+    camShotHint: (n) => `\n⚠️ 运镜／画面打架 ${n} 处（运镜归 camera，画面句只写发生了什么）：`,
+    segVideo: '成片预览',
+    videoSeekHint: '点切点时间戳，成片跳到该处',
     compLine: (c) => [c.lens, c.cameraPosition, c.composition, c.eyeline && `视线 ${c.eyeline}`, c.focus && `焦点 ${c.focus}`, STABILITY[c.stability] ?? c.stability].filter(Boolean).join(' · '),
     showSegs: '▾ 展开全部段',
     hideSegs: '▴ 收起',
+    allEps: '全部',
+    epJumpHint: '只看这一集',
     copy: '复制', copied: '已复制', copyFailed: '复制失败',
     dialogueCols: ['段 · 切', '说话人', '台词', '台词秒数'],
-    cutCols: ['切', '起点', '秒', '景别', '运镜', '配方', '画面', '人物'],
+    cutCols: ['切', '起点', '秒', '景别', '运镜', '配方', '分镜图提示词', '视频画面', '台词', '人物'],
     batchCols: ['场景', '光照', '段', '需要的角色', '道具'],
     atSec: (t) => `${t.toFixed(2)}s 起`,
     batchLabel: (num) => `批次 ${num}`,
@@ -1128,17 +1376,28 @@ const I18N = {
     subLabel: (i) => `sub-frame ${i}`,
     frameMissing: (i) => `#${i} not generated`,
     framePrompt: 'Frame prompt',
+    frameRow: 'Still',
+    frameRowTitle: 'Frame prompt — this sentence renders the still image',
+    shotRow: 'Picture',
+    shotRowTitle: 'This cut\'s picture sentence — one line inside the segment-level video prompt; the full prompt is in the panel',
     h3Prompt: 'H3 prompt',
     h3Section: 'H3 video prompt',
     seedancePrompt: 'Seedance prompt',
     seedanceSection: 'Seedance video prompt',
     blockingLabel: 'Blocking',
+    pacingHint: (n) => `\n⚠️ ${n} pacing warnings (non-blocking; they show up as rushed cuts):`,
+    faceHint: (n) => `\n⚠️ ${n} frame-expression warnings (frames are rendered from these prompts — no face written, no feeling on screen):`,
+    camShotHint: (n) => `\n⚠️ ${n} camera/picture contradictions (camera owns the move; the picture sentence only says what happens):`,
+    segVideo: 'Rendered cut',
+    videoSeekHint: 'click a cut timestamp to seek the video',
     compLine: (c) => [c.lens, c.cameraPosition, c.composition, c.eyeline && `eyeline ${c.eyeline}`, c.focus && `focus ${c.focus}`, ({ stable: 'stable', 'slight-shake': 'slight shake', handheld: 'handheld' })[c.stability] ?? c.stability].filter(Boolean).join(' · '),
     showSegs: '▾ Show all segments',
     hideSegs: '▴ Collapse',
+    allEps: 'All',
+    epJumpHint: 'Show this episode only',
     copy: 'Copy', copied: 'Copied', copyFailed: 'Copy failed',
     dialogueCols: ['Segment · cut', 'Speaker', 'Line', 'Seconds'],
-    cutCols: ['Cut', 'Start', 'Sec', 'Size', 'Camera', 'Recipe', 'Picture', 'Characters'],
+    cutCols: ['Cut', 'Start', 'Sec', 'Size', 'Camera', 'Recipe', 'Frame prompt', 'Motion', 'Line', 'Characters'],
     batchCols: ['Scene', 'Lighting', 'Segments', 'Characters needed', 'Props'],
     atSec: (t) => `from ${t.toFixed(2)}s`,
     batchLabel: (num) => `Batch ${num}`,
@@ -1236,8 +1495,10 @@ export function renderMarkdown(board, ctx = {}) {
       out.push(mdHead(t.cutCols));
       const starts = cutStarts(seg.cuts);
       seg.cuts.forEach((cut, ci) => {
-        const summary = cutBeats(cut, scene)
-          .map((b) => (b.kind === 'line' ? t.speakerLine(n.char(b.speaker), b.text) : b.text))
+        // 只列真正进生成的两层 + 台词；剧本动作拍不上表（它不进任何提示词）
+        const lines = cutBeats(cut, scene)
+          .filter((b) => b.kind === 'line')
+          .map((b) => t.speakerLine(n.char(b.speaker), b.text))
           .join(' ');
         // md 没有 title 属性，偏离的建议值直接写在格子里
         const rc = cutRecipe(cut, ctx.recipes, t);
@@ -1245,11 +1506,12 @@ export function renderMarkdown(board, ctx = {}) {
           `#${ci + 1}`, `${starts[ci].toFixed(2)}s`, cut.seconds,
           t.sizeName(cut.size), t.cameraLabel(cut.camera),
           rc ? `${rc.name}${rc.drift ? ` ≠（${rc.drift}）` : ''}` : t.recipeNone,
-          summary, (cut.characters ?? []).map(n.char).join(t.listSep),
+          cut.frame ?? '', cut.shot ?? '', lines,
+          (cut.characters ?? []).map(n.char).join(t.listSep),
         ]));
       });
       const sd = seedancePrompt(seg, { scene, names: n, image: ctx.image ?? null, constraints: ctx.constraints ?? [] });
-      out.push('', `**${t.h3Section}**`, '', '```text', seg.h3Prompt ?? '', '```', '');
+      out.push('', `**${t.h3Section}**`, '', '```text', h3Of(seg, { scene, promptLang: board.promptLang ?? 'zh' }), '```', '');
       out.push(`**${t.seedanceSection}**`, '', '```text', sd.prompt, '```', '');
     }
   }
@@ -1313,12 +1575,24 @@ function boardAspect(board) {
   return portrait > landscape ? '9:16' : '16:9';
 }
 
-// 竖屏才追加；横屏一个字节都不多，报告与改动前逐字节一致。主图收窄居中——
-// 整卡宽的 9:16 一张就有一屏多高，子分镜条四格竖缩略图照旧铺满
+// 竖屏才追加；横屏一个字节都不多。图位现在是每切右侧一格固定宽窄栏，
+// 竖屏只是把格子的比例从 16:9 换成 9:16，不再需要给主图单独收窄
 const PORTRAIT_FRAME_CSS = `
 /* 竖屏 9:16：分镜图位跟着画幅改竖（场景设定图 .bimg 仍是 16:9） */
-.frame,.subf{aspect-ratio:9/16}
-img.frame{width:min(100%,300px);margin:0 auto}`;
+.frame{aspect-ratio:9/16}
+img.frame{width:100%;margin:0 auto}`;
+
+// 段级成片：竖屏时播放器按 9:16 收窄，横屏时按 16:9 放宽
+const SEG_VIDEO_CSS = `
+/* 段级成片预览 */
+.segvid{display:flex;gap:16px;align-items:center;margin:14px 0 0;padding:12px 14px;border:1px solid var(--rule-2);border-radius:6px;background:var(--seal-soft)}
+.segvid video{display:block;height:264px;border-radius:4px;background:#000}
+.segvid .vmeta{display:flex;flex-direction:column;gap:6px;min-width:0}
+.segvid .vmeta b{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--seal)}
+.segvid .vmeta .vsec{font:500 10px/1.6 var(--mono);color:var(--ink-2)}
+.segvid .vmeta .vhint{font-size:11px;color:var(--ink-3)}
+button.cut-t.seek{cursor:pointer}
+button.cut-t.seek:hover{color:var(--seal);text-decoration:underline}`;
 
 export function renderHtml(board, ctx = {}) {
   const lang = ctx.lang ?? board?.lang ?? 'zh';
@@ -1353,7 +1627,7 @@ export function renderHtml(board, ctx = {}) {
           return `<span class="rseg" style="width:${r1(gw)}%">${segs}</span>`;
         })
         .join('');
-      return `<div class="rrow"><span class="rep">E${String(ep.ep).padStart(2, '0')}</span><div class="rtrack">${groups}</div><span class="rval">${esc(t.rhythmVal(st.segments, st.cuts, st.totalSeconds))}</span></div>`;
+      return `<div class="rrow"><button class="rep" data-ep="${ep.ep}" title="${esc(t.epJumpHint)}">E${String(ep.ep).padStart(2, '0')}</button><div class="rtrack">${groups}</div><span class="rval">${esc(t.rhythmVal(st.segments, st.cuts, st.totalSeconds))}</span></div>`;
     })
     .join('\n');
   const rhythmLegend = Object.keys(SHOT_SIZES)
@@ -1370,57 +1644,53 @@ export function renderHtml(board, ctx = {}) {
           const scene = sEp?.scenes?.[seg.sceneIndex - 1];
           const starts = cutStarts(seg.cuts);
           const frame = (ci) => (ctx.image ? ctx.image('frame', `${seg.id}/f${ci + 1}.png`) : null);
-          const has = (ci) => frame(ci) != null;
+          // 段级成片：约定路径 <段号>/<段号>.mp4（跟分镜图同一个目录解析器）
+          const video = ctx.video ? ctx.video(`${seg.id}/${seg.id}.mp4`) : null;
+          // 有成片时切点时间戳变成跳播按钮（data-t 秒数，由内嵌脚本接管点击）
+          const cutTime = (ci, cut) =>
+            video
+              ? `<button class="cut-t seek" data-t="${starts[ci]}" title="${esc(t.videoSeekHint)}">${esc(t.atSec(starts[ci]))} · ${cut.seconds}s</button>`
+              : `<span class="cut-t">${esc(t.atSec(starts[ci]))} · ${cut.seconds}s</span>`;
 
-          // 主分镜图区：图出全的段保留原 master+subs 层级；有缺图的段每切一格——
-          // 有图的格显示原图，无图的格显示整宽提示词卡 + 复制按钮（混合情况按格判断）
-          const hasAll = seg.cuts.every((_, ci) => has(ci));
-          let master, subs;
-          if (hasAll) {
-            master = `<img class="frame" src="${esc(frame(0))}" alt="${esc(`${seg.id}#1`)}" loading="lazy">`;
-            subs = seg.cuts.length > 1
-              ? `<div class="subs">${seg.cuts
-                  .slice(1)
-                  .map((cut, ci) => `<img class="subf" src="${esc(frame(ci + 1))}" alt="${esc(`${seg.id}#${ci + 2}`)}" loading="lazy">`)
-                  .join('')}</div>`
-              : '';
-          } else {
-            master = `<div class="fquad">${seg.cuts
-              .map((cut, ci) => {
-                const label = ci === 0 ? t.masterLabel : t.subLabel(ci + 1);
-                const body = has(ci)
-                  ? `<img class="frame" src="${esc(frame(ci))}" alt="${esc(`${seg.id}#${ci + 1}`)}" loading="lazy">`
-                  : `<div class="frame ph fcell"><div class="fcell-h"><b>${esc(`${label} · ${t.frameMissing(ci + 1)}`)}</b><button class="copy mini" data-copy="${esc(cut.frame ?? '')}">${esc(t.copy)}</button></div><span class="fprompt">${esc(cut.frame ?? '')}</span></div>`;
-                return body;
-              })
-              .join('\n')}</div>`;
-            subs = '';
-          }
+          // 分镜图跟着它自己的那一切走：每行描述右侧一格竖图位，
+          // 有图贴图、没图贴提示词卡——图和它描述的是同一件事，不该分离到段首去
 
           const cutRows = seg.cuts
             .map((cut, ci) => {
-              const beats = cutBeats(cut, scene);
-              const summary = beats
-                .map((b) =>
-                  b.kind === 'line'
-                    ? `<p class="sline"><b>${esc(n.char(b.speaker))}</b>${esc(b.text)}</p>`
-                    : `<p class="sact">${esc(b.text)}</p>`,
-                )
+              // 卡片只显示真正参与生成的内容：出图（frame）→ 出片（shot）→ 台词（进提示词的台词拍）。
+              // 剧本动作拍不进任何提示词，不再上卡片——要看剧本去 script.json，别在这里冒充提示词。
+              const lines = cutBeats(cut, scene)
+                .filter((b) => b.kind === 'line')
+                .map((b) => `<p class="sline"><b>${esc(n.char(b.speaker))}</b>${esc(b.text)}</p>`)
                 .join('');
+              const promptRow = (cls, label, title, text) =>
+                text
+                  ? `<p class="spr ${cls}" title="${esc(title)}"><b>${esc(label)}</b><span>${esc(text)}</span><button class="copy mini" data-copy="${esc(text)}">${esc(t.copy)}</button></p>`
+                  : '';
+              const prompts =
+                promptRow('sf', t.frameRow, t.frameRowTitle, cut.frame) +
+                promptRow('sv', t.shotRow, t.shotRowTitle, cut.shot);
               // 「配方」列：偏离建议景别／运镜的加 ≠ 上标，建议值写进 title——提示而已，不是门
               const rc = cutRecipe(cut, ctx.recipes, t);
+              const shot = frame(ci);
+              const fig = shot
+                ? `<a href="${esc(shot)}" target="_blank" rel="noopener"><img class="frame" src="${esc(shot)}" alt="${esc(`${seg.id}#${ci + 1}`)}" loading="lazy"></a>`
+                : `<div class="frame ph"><b>${esc(t.frameMissing(ci + 1))}</b></div>`;
               return `<li class="cut">
-  <div class="cut-h">
-    <b>#${ci + 1}</b>
-    <span class="cut-t">${esc(t.atSec(starts[ci]))} · ${cut.seconds}s</span>
-    <span class="cut-sc">${esc(t.sizeName(cut.size))} · ${esc(cut.camera)}</span>
-    ${rc ? `<span class="cut-rc">${esc(rc.name)}${rc.drift ? `<sup title="${esc(rc.drift)}">≠</sup>` : ''}</span>` : ''}
-    ${(cut.characters ?? []).map((id) => `<span class="chip">${esc(n.char(id))}</span>`).join('')}
-    ${(cut.props ?? []).map((id) => `<span class="chip prop">${esc(n.prop(id))}</span>`).join('')}
-    <button class="copy mini" data-copy="${esc(cut.frame ?? '')}">${esc(t.framePrompt)}</button>
+  <div class="cut-b">
+    <div class="cut-h">
+      <b>#${ci + 1}</b>
+      ${cutTime(ci, cut)}
+      <span class="cut-sc">${esc(t.sizeName(cut.size))} · ${esc(cut.camera)}</span>
+      ${rc ? `<span class="cut-rc">${esc(rc.name)}${rc.drift ? `<sup title="${esc(rc.drift)}">≠</sup>` : ''}</span>` : ''}
+      ${(cut.characters ?? []).map((id) => `<span class="chip">${esc(n.char(id))}</span>`).join('')}
+      ${(cut.props ?? []).map((id) => `<span class="chip prop">${esc(n.prop(id))}</span>`).join('')}
+    </div>
+    ${t.compLine(cut) ? `<p class="scomp">${esc(t.compLine(cut))}</p>` : ''}
+    ${prompts}
+    ${lines}
   </div>
-  ${t.compLine(cut) ? `<p class="scomp">${esc(t.compLine(cut))}</p>` : ''}
-  ${summary}
+  <figure class="cut-fig">${fig}</figure>
 </li>`;
             })
             .join('\n');
@@ -1433,9 +1703,8 @@ export function renderHtml(board, ctx = {}) {
     ${scene?.lighting ? `<span class="chip lite">${esc(scene.lighting)}</span>` : ''}
     <span class="beatsref">${esc(t.beatsLabel(seg.sceneIndex, seg.cuts[0]?.beats?.[0], seg.cuts[seg.cuts.length - 1]?.beats?.[1]))}</span>
   </header>
-  ${master}
-  ${subs}
   ${seg.blocking ? `<p class="seg-block"><b>${esc(t.blockingLabel)}</b>${esc(seg.blocking)}</p>` : ''}
+  ${video ? `<div class="segvid"><video src="${esc(video)}"${frame(0) ? ` poster="${esc(frame(0))}"` : ''} controls preload="metadata" playsinline></video><div class="vmeta"><b>${esc(t.segVideo)}</b><span class="vsec">${esc(t.secBadge(segSeconds(seg), seg.cuts.length))}</span><span class="vhint">${esc(t.videoSeekHint)}</span></div></div>` : ''}
   <div class="duo">
     <ol class="cuts">
 ${cutRows}
@@ -1443,9 +1712,9 @@ ${cutRows}
     <div class="ppanel">
       <div class="pp-h">
         <span class="ptabs"><button class="ptab on" data-i="0">${esc(t.h3Prompt)}</button><button class="ptab" data-i="1">${esc(t.seedancePrompt)}</button></span>
-        <button class="copy" data-copy="${esc(seg.h3Prompt ?? '')}">${esc(t.copy)}</button>
+        <button class="copy" data-copy="${esc(h3Of(seg, { scene, promptLang: board.promptLang ?? 'zh' }))}">${esc(t.copy)}</button>
       </div>
-      <pre class="pp on">${esc(seg.h3Prompt ?? '')}</pre>
+      <pre class="pp on">${esc(h3Of(seg, { scene, promptLang: board.promptLang ?? 'zh' }))}</pre>
       <pre class="pp">${esc(seedancePrompt(seg, { scene, names: n, image: ctx.image ?? null, constraints: ctx.constraints ?? [] }).prompt)}</pre>
     </div>
   </div>
@@ -1453,7 +1722,7 @@ ${cutRows}
 </article>`;
         })
         .join('\n');
-      return `<section class="ep" id="ep-${ep.ep}">
+      return `<section class="ep" id="ep-${ep.ep}" data-ep="${ep.ep}">
   <header class="ep-h">
     <span class="ep-n">E${String(ep.ep).padStart(2, '0')}</span>
     <span class="ep-est">${esc(t.epHead(st.segments, st.cuts, st.totalSeconds, st.target))}</span>
@@ -1468,12 +1737,21 @@ ${cards}
     })
     .join('\n');
 
+  // ---- 集页签：多集时 02 区收成页签，默认全部平铺；≤1 集不出页签，与改动前逐字节一致 ----
+  const epTabBar = eps.length > 1
+    ? `<div class="eptabs" role="tablist"><button class="eptab on" data-ep="all">${esc(t.allEps)}</button>${eps
+        .map((ep) => `<button class="eptab" data-ep="${ep.ep}">E${String(ep.ep).padStart(2, '0')}</button>`)
+        .join('')}</div>`
+    : '';
+
   // ---- 03 生成批次单 ----
+  // data-ep：批次卡跟随集页签过滤；集号从段号前缀推出（同批次同场景同光照，段号必然同集）
   const batchCards = stats.batches
     .map((b, i) => {
       const sheet = ctx.image ? ctx.image('sheet', `${slug(n.scene(b.sceneId))}-sheet.png`) : null;
       const hasSheet = sheet != null;
-      return `<article class="batch">
+      const epn = (/^E(\d+)-/.exec(b.segments[0] ?? '') ?? [])[1] ?? '';
+      return `<article class="batch" data-ep="${epn}">
   ${hasSheet ? `<img class="bimg" src="${esc(sheet)}" alt="${esc(n.scene(b.sceneId))}" loading="lazy">` : ''}
   <header class="batch-h"><b>${esc(t.batchLabel(String(i + 1).padStart(2, '0')))}</b><span class="chip">${esc(`${b.sceneId} ${n.scene(b.sceneId)}`)}</span>${b.lighting ? `<span class="chip lite">${esc(b.lighting)}</span>` : ''}</header>
   <div class="batch-shots">${b.segments.map((s) => `<a class="chip mono" href="#seg-${esc(s)}">${esc(s)}</a>`).join('')}</div>
@@ -1484,7 +1762,7 @@ ${cards}
 
   // ---- 04 配音对齐单 ----
   const dlgRows = stats.dialogue
-    .map((d) => `<tr><td><a href="#seg-${esc(d.segment)}">${esc(d.segment)}</a> #${d.cut}</td><td>${esc(n.char(d.speaker))}</td><td class="serif">${esc(d.line)}</td><td>${d.seconds}</td></tr>`)
+    .map((d) => `<tr data-ep="${d.ep}"><td><a href="#seg-${esc(d.segment)}">${esc(d.segment)}</a> #${d.cut}</td><td>${esc(n.char(d.speaker))}</td><td class="serif">${esc(d.line)}</td><td>${d.seconds}</td></tr>`)
     .join('\n');
 
   const gateList = `<ul class="gate">
@@ -1550,7 +1828,17 @@ section.top-sec{margin-top:34px}
 /* 01 cut rhythm strip */
 .rhythm{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:16px 20px 10px}
 .rrow{display:grid;grid-template-columns:44px minmax(0,1fr) 150px;gap:12px;align-items:center;padding:5px 0}
-.rep{font:500 12px/1 var(--mono);color:var(--ink-2)}
+.rep{font:500 12px/1 var(--mono);color:var(--ink-2);appearance:none;background:none;border:0;padding:0;text-align:left;cursor:pointer;transition:.15s}
+.rep:hover{color:var(--seal)}
+.rep:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+/* 集页签：多集时 02 区一次只铺一集（或全部） */
+.eptabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 14px}
+.eptab{font:500 12px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2);background:var(--paper);
+  border:1px solid var(--rule-2);border-radius:2px;padding:6px 12px;cursor:pointer;transition:.15s}
+.eptab:hover{border-color:var(--seal);color:var(--seal)}
+.eptab.on{color:var(--seal);border-color:var(--seal);background:var(--seal-soft)}
+.eptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.ep.ep-off{display:none}
 .rtrack{display:flex;height:22px;border:1px solid var(--rule);border-radius:2px;overflow:hidden;background:var(--paper)}
 .rseg{display:flex;border-right:2px solid var(--ink-2)}
 .rseg:last-child{border-right:0}
@@ -1590,19 +1878,6 @@ section.top-sec{margin-top:34px}
 .frame.ph span{font:400 10.5px/1.55 var(--mono);color:var(--ink-2);overflow:hidden;display:-webkit-box;
   -webkit-line-clamp:5;-webkit-box-orient:vertical}
 .subs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.fquad{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
-.fquad .frame.ph{aspect-ratio:auto}
-.fquad .fcell{margin:0;min-height:0}
-.fcell-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
-.fcell-h .copy.mini{margin:0;flex:none}
-.frame.ph .fprompt{font:400 10.5px/1.4 var(--mono);color:var(--ink-2);white-space:pre-wrap;word-break:break-word;display:block;
-  -webkit-line-clamp:none;-webkit-box-orient:vertical;overflow:visible}
-.subf{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--rule-2);border-radius:2px;
-  cursor:zoom-in;display:block;background:var(--side)}
-.subf.ph{display:flex;align-items:center;justify-content:center;cursor:default;
-  font:500 10px/1 var(--sans);color:var(--ink-3);letter-spacing:.08em}
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;border-top:1px solid var(--rule);padding-top:4px}
-@media(max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
 .ppanel{border:1px solid var(--rule);border-radius:2px;background:var(--panel);margin-top:7px}
 .pp-h{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid var(--rule)}
 .pp{display:none;margin:0;padding:9px 12px;font:400 12px/1.8 var(--sans);color:var(--ink);
@@ -1611,8 +1886,17 @@ section.top-sec{margin-top:34px}
 .pp.on{display:block}
 .pp::-webkit-scrollbar{width:6px}
 .pp::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:3px}
+.duo{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start;border-top:1px solid var(--rule);padding-top:4px}
 .cuts{margin:0;padding:0;list-style:none}
-.cut{padding:7px 0;border-bottom:1px solid var(--rule)}
+.cut{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:12px;align-items:start;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.cut-b{min-width:0}
+.cut-fig{margin:0;min-width:0}
+.cut-fig .frame{width:100%}
+.cut-fig .frame.ph{padding:7px 8px;gap:5px;align-items:flex-start;justify-content:space-between}
+.cut-fig .frame.ph b{font-size:9px;letter-spacing:.06em;line-height:1.3}
+.cut-fig .frame.ph .copy{margin:0}
+@media(max-width:760px){.cut{grid-template-columns:minmax(0,1fr) 104px;gap:9px}}
 .cut:first-child{padding-top:11px}
 .cut:last-child{border-bottom:0}
 .cut-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -1625,6 +1909,13 @@ section.top-sec{margin-top:34px}
 .cut:hover .copy{opacity:1}
 .cut p{margin:3px 0 0;font-size:12px;line-height:1.6}
 .sact{color:var(--ink-2)}
+/* 每切正文：只显示真正进生成的两层（出图 / 出片）+ 台词，剧本动作拍不再上卡片 */
+.spr{display:flex;gap:8px;align-items:flex-start;margin:3px 0 0;font-size:12.5px;line-height:1.62;color:var(--ink-2)}
+.spr>b{flex:0 0 auto;margin-top:1px;padding:0 5px;border:1px solid var(--rule-2);border-radius:3px;font:500 9.5px/1.7 var(--mono);letter-spacing:.08em;color:var(--seal);white-space:nowrap}
+.spr.sv>b{color:var(--ink-2)}
+.spr>span{min-width:0}
+.spr .copy{flex:0 0 auto;opacity:0;transition:opacity .15s}
+.spr:hover .copy,.spr .copy.copied{opacity:1}
 .sline{font-family:var(--serif)}
 .sline b{font-weight:500;margin-right:6px;color:var(--seal)}
 .chip{font:400 10.5px/1.6 var(--mono);border:1px solid var(--rule-2);border-radius:2px;
@@ -1642,12 +1933,15 @@ a.chip:hover{border-color:var(--seal);color:var(--seal)}
 .ptab{font:500 11px/1 var(--sans);letter-spacing:.08em;color:var(--ink-3);background:none;border:0;
   border-bottom:1.5px solid transparent;padding:4px 6px;cursor:pointer}
 .ptab.on{color:var(--ink);border-bottom-color:var(--seal)}
-.ptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}${frameAspectCss}
+.ptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}${frameAspectCss}${SEG_VIDEO_CSS}
 
 /* 03 generation batches */
 .batches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
 @media(max-width:1100px){.batches{grid-template-columns:minmax(0,1fr)}}
 .batch{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:14px 18px}
+/* episode-tab filter: 03 batch cards and 04 dialogue rows follow the tab; */
+/* anchor clicks into a hidden episode are resolved by the JS below */
+.batch.ep-off,table tr.ep-off{display:none}
 .bimg{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--rule-2);border-radius:2px;
   cursor:zoom-in;display:block;margin-bottom:10px}
 .batch-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -1692,7 +1986,9 @@ td.serif{font-family:var(--serif)}
 .foot{margin-top:40px;font-size:11px;color:var(--ink-3);border-top:1px solid var(--rule);padding-top:14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{
-  .expo,.copy,.shmore{display:none!important}
+  .expo,.copy,.shmore,.eptabs{display:none!important}
+  .ep.ep-off,.batch.ep-off{display:block!important}
+  table tr.ep-off{display:table-row!important}
   .pp{max-height:none;overflow:visible}
   .duo{grid-template-columns:minmax(0,1fr)}
   .shots.clip{max-height:none}
@@ -1733,6 +2029,7 @@ ${rhythmRows}
 
 <section class="top-sec" id="sec-segments">
   <div class="sec-h"><span class="no">02</span><h2>${esc(t.secSegments)}</h2><span class="note">${esc(t.segmentsNote)}</span></div>
+${epTabBar}
 ${epBlocks}
 </section>
 
@@ -1766,6 +2063,21 @@ ${dlgRows}
 <script>
 const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed, show: t.showSegs, hide: t.hideSegs })};
 
+// clipboard: the async API is blocked inside cross-origin iframes (composer panes / previews);
+// fall back to a hidden textarea + execCommand, which still works there
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch {}
+  ta.remove();
+  return ok;
+}
+
 // 分集分镜表：段卡区默认最多 760px。不超高的集直接放开；超高的集点开/收起
 document.querySelectorAll('.shmore').forEach((btn) => {
   const zone = btn.previousElementSibling;
@@ -1779,6 +2091,40 @@ document.querySelectorAll('.shmore').forEach((btn) => {
     btn.textContent = clipped ? L.show : L.hide;
     if (clipped) zone.closest('.ep').scrollIntoView({ block: 'nearest' });
   });
+});
+
+// 集页签：单集 / 全部切换；节奏带左侧的集号可点，点了直接落到该集
+const epTabBtns = document.querySelectorAll('.eptab');
+const epSecs = document.querySelectorAll('.ep');
+if (epTabBtns.length) {
+  const showEp = (v) => {
+    epTabBtns.forEach((b) => b.classList.toggle('on', b.dataset.ep === v));
+    // 用 data-ep 匹配而不是 id：合成报告会给 id 加面板前缀（ep-1 → storyboard--ep-1）
+    epSecs.forEach((sec) => sec.classList.toggle('ep-off', v !== 'all' && sec.dataset.ep !== v));
+    // 03 batches / 04 dialogue follow the tab: only the selected episode's cards and lines
+    document.querySelectorAll('.batch[data-ep]').forEach((card) => card.classList.toggle('ep-off', v !== 'all' && card.dataset.ep !== v));
+    document.querySelectorAll('tr[data-ep]').forEach((tr) => tr.classList.toggle('ep-off', v !== 'all' && tr.dataset.ep !== v));
+  };
+  epTabBtns.forEach((b) => b.addEventListener('click', () => showEp(b.dataset.ep)));
+  document.querySelectorAll('.rrow .rep').forEach((b) => {
+    b.addEventListener('click', () => {
+      showEp(b.dataset.ep);
+      document.getElementById('sec-segments')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+// 锚点跳转：目标段在被页签隐藏的集里时，先激活该集再让浏览器默认跳转生效
+// （节奏带色块、批次单段号、对齐单段号都是 #seg-… 链接，指向 display:none 的元素时浏览器不动）
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#seg-"]');
+  if (!a) return;
+  const target = document.getElementById(a.getAttribute('href').slice(1));
+  const epSec = target && target.closest('.ep');
+  if (epSec && epSec.classList.contains('ep-off')) {
+    const btn = [...document.querySelectorAll('.eptab')].find((b) => b.dataset.ep === epSec.dataset.ep);
+    if (btn) btn.click();
+  }
 });
 
 // 点图放大（主分镜图 / 子分镜图 / 批次场景图）
@@ -1807,6 +2153,18 @@ document.addEventListener('click', (e) => {
   panel.querySelector('.pp-h .copy').dataset.copy = panel.querySelectorAll('.pp')[i].textContent;
 });
 
+// 成片跳播：点切点时间戳，把本段成片跳到该切点并播放
+// （没挂成片的段里时间戳是 span，进不了这个分支）
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button.cut-t.seek');
+  if (!b) return;
+  const v = b.closest('.segcard')?.querySelector('.segvid video');
+  if (!v) return;
+  v.currentTime = Number(b.dataset.t) + 0.01;
+  v.play().catch(() => {});
+  v.closest('.segvid').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+});
+
 // 复制提示词
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('.copy');
@@ -1814,7 +2172,7 @@ document.addEventListener('click', async (e) => {
   e.preventDefault();
   const label = btn.textContent;
   try {
-    await navigator.clipboard.writeText(btn.dataset.copy);
+    await copyText(btn.dataset.copy);
     btn.textContent = L.copied;
     btn.dataset.done = '1';
   } catch {
@@ -1980,6 +2338,15 @@ function main(argv) {
         }
         if (drifted.length) console.error(`\n${I18N.zh.recipeHint(drifted.length)}\n${drifted.join('\n')}`);
       }
+      // 节奏告警：配时问题靠数算，不靠眼力——只提示不设门，跟配方偏离同一档
+      const pacing = pacingWarnings(board, ctx.script);
+      if (pacing.length) console.error(`${I18N.zh.pacingHint(pacing.length)}\n${pacing.map((x) => '  ' + x).join('\n')}`);
+      // 静帧神情：分镜图照着 frame 生成，frame 没写脸就是成片没情绪的第一现场
+      const faces = frameFaceWarnings(board);
+      if (faces.length) console.error(`${I18N.zh.faceHint(faces.length)}\n${faces.map((x) => '  ' + x).join('\n')}`);
+      // 运镜与画面句两处都写运镜 → 提示词自相矛盾，模型只会挑一句执行
+      const camShot = cameraShotWarnings(board);
+      if (camShot.length) console.error(`${I18N.zh.camShotHint(camShot.length)}\n${camShot.map((x) => '  ' + x).join('\n')}`);
       if (failedN) process.exit(1);
       return;
     }
@@ -2012,6 +2379,11 @@ function main(argv) {
       const abs = join(kind === 'sheet' ? sheetsDir : framesDir, rel);
       return existsSync(abs) ? relative(process.cwd(), abs).split(sep).join('/') : null;
     };
+    // 段级成片（<段号>/<段号>.mp4）跟分镜图同一个目录解析
+    ctx.video = (rel) => {
+      const abs = join(framesDir, rel);
+      return existsSync(abs) ? relative(process.cwd(), abs).split(sep).join('/') : null;
+    };
     process.stdout.write((rest.includes('--html') ? renderHtml(board, ctx) : renderMarkdown(board, ctx)) + '\n');
     return;
   }
@@ -2028,10 +2400,19 @@ function main(argv) {
     // 分镜图在哪由用户指定：给了 --frames 就把找得到的拷进包里，不要求用户先手动放进去
     const framesFlag = flag(rest, '--frames');
     let copied = 0;
+    let copiedVids = 0;
     if (framesFlag) {
       const from = resolve(framesFlag);
       for (const ep of board?.episodes ?? []) {
         for (const seg of ep?.segments ?? []) {
+          // 段级成片（<段号>/<段号>.mp4）也一并拷进包
+          const vsrc = join(from, seg.id, `${seg.id}.mp4`);
+          const vdst = resolve(dir, seg.id, `${seg.id}.mp4`);
+          if (existsSync(vsrc) && vsrc !== vdst) {
+            mkdirSync(resolve(vdst, '..'), { recursive: true });
+            copyFileSync(vsrc, vdst);
+            copiedVids += 1;
+          }
           (seg.cuts ?? []).forEach((_, i) => {
             const src = join(from, seg.id, `f${i + 1}.png`);
             const dst = resolve(dir, seg.id, `f${i + 1}.png`);
@@ -2062,13 +2443,13 @@ function main(argv) {
     if (protocol === 'seedance') {
       console.log(`✓ ${segN} 段 Seedance 投产包 → ${resolve(dir)}/（每段一个文件夹：seedance.md + 附件；根部 seedance-manifest.json）`);
       if (pack.copies.length) console.log(`  从 ${sheetsDir} 拷入 ${pack.copies.length} 张设定图`);
-      if (framesFlag) console.log(`  从 ${resolve(framesFlag)} 拷入 ${copied} 张分镜图`);
+      if (framesFlag) console.log(`  从 ${resolve(framesFlag)} 拷入 ${copied} 张分镜图${copiedVids ? `、${copiedVids} 段成片视频` : ''}`);
       if (pack.missingTotal) console.log(`⚠️ 缺 ${pack.missingTotal} 个附件，已在 seedance-manifest.json 的 missing 里标注——提交前先补齐`);
       console.log('  视觉风格（画风层）不在包里，提交时附加');
       return;
     }
     console.log(`✓ ${segN} 段投产包 → ${resolve(dir)}/（每段一个文件夹：分镜图 + prompt.md；根部 manifest.json）`);
-    if (framesFlag) console.log(`  从 ${resolve(framesFlag)} 拷入 ${copied} 张分镜图`);
+    if (framesFlag) console.log(`  从 ${resolve(framesFlag)} 拷入 ${copied} 张分镜图${copiedVids ? `、${copiedVids} 段成片视频` : ''}`);
     if (pack.missingTotal) console.log(`⚠️ 缺 ${pack.missingTotal} 张分镜图，已在 manifest 的 missing 里标注——喂 H3 前先补齐`);
     return;
   }

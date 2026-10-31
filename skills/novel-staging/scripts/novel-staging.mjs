@@ -1094,6 +1094,21 @@ document.addEventListener('pointerup', (e) => {
   drawScene(si);
 });
 
+/* clipboard: the async API is blocked inside cross-origin iframes (composer panes / previews); */
+/* fall back to a hidden textarea + execCommand, which still works there */
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch {}
+  ta.remove();
+  return ok;
+}
+
 /* 选中一个人以后：坐站、朝向、移出 */
 document.addEventListener('click', async (e) => {
   const card = e.target.closest('.scene');
@@ -1116,7 +1131,7 @@ document.addEventListener('click', async (e) => {
   if (copy) {
     const text = copy.closest('.sentence')?.querySelector('.text')?.textContent ?? '';
     const label = copy.textContent;
-    try { await navigator.clipboard.writeText(text); copy.textContent = T.copied; copy.dataset.done = '1'; } catch { copy.textContent = T.copyFailed; }
+    if (await copyText(text)) { copy.textContent = T.copied; copy.dataset.done = '1'; } else { copy.textContent = T.copyFailed; }
     setTimeout(() => { copy.textContent = label; delete copy.dataset.done; }, 1600);
   }
 });
