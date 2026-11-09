@@ -33,6 +33,10 @@ English | [中文](README.zh.md) | [X @eternityspring](https://x.com/eternityspr
 <td width="180"><a href="https://studio.reelbenchai.com"><img src="assets/reelbench-first-screen-en.png" alt="Reelbench Studio" width="150"></a></td>
 <td><a href="https://studio.reelbenchai.com">Reelbench Studio</a> is a paid AI video workspace built by the author of these skills, delivered as source code that runs offline. Local Codex handles understanding, breakdown and orchestration, a self-hosted ComfyUI generates the images and video, and your assets and projects stay on your own machine.</td>
 </tr>
+<tr>
+<td width="180"><img src="assets/reelref-miniapp-qr.png" alt="赛博班底 mini program code" width="150"></td>
+<td>赛博班底 is a WeChat mini program built by the author of these skills: reference images for AI short video, covering characters, costumes, expressions and more, filterable by category and tag. Every image comes with a Chinese prompt you can copy in one tap, and you can long-press the full-size image to save it. Scan the code on the left in WeChat to open it.</td>
+</tr>
 </table>
 
 </details>

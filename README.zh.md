@@ -26,6 +26,10 @@
 <td width="180"><a href="https://studio.reelbenchai.com"><img src="assets/reelbench-first-screen.png" alt="Reelbench Studio" width="150"></a></td>
 <td><a href="https://studio.reelbenchai.com">Reelbench Studio</a> 是本 skill 项目作者开发的付费 AI 影视工作台，交付的是能离线运行的源码。本地 Codex 负责理解、拆解与编排，自部署 ComfyUI 负责图像与视频生成，素材和项目都留在你自己的设备里。</td>
 </tr>
+<tr>
+<td width="180"><img src="assets/reelref-miniapp-qr.png" alt="赛博班底小程序码" width="150"></td>
+<td>「赛博班底」是本 skill 项目作者做的微信小程序，收集 AI 短视频用得上的角色、服装、表情等参考图，按类别和标签交叉筛选。每张参考图都配中文提示词，一键复制；点开大图长按就能保存。微信扫左边的小程序码就能打开。</td>
+</tr>
 </table>
 
 </details>
