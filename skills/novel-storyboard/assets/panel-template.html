@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__PANEL_TITLE__</title>
+<style>
+:root{
+  --paper:#eceded; --panel:#f5f6f5; --side:#e4e6e3; --ink:#191d21; --ink-2:#5b636a; --ink-3:#8c9298;
+  --rule:#d2d5d0; --rule-2:#c2c6bf; --seal:#8a3324; --seal-2:#c56a4e; --seal-soft:#8a332412; --ok:#3d6b4f;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --rail:286px; --bar:46px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font:14px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+h1,h2,h3,h4,p,dl,dd,dt,ol,ul{margin:0;padding:0}
+button{font-family:inherit;color:inherit}
+a{color:inherit}
+.app{display:flex;height:100%}
+
+/* 左栏 */
+.rail{width:var(--rail);flex:none;background:var(--side);border-right:1px solid var(--rule-2);display:flex;flex-direction:column;overflow:hidden}
+.brand{padding:22px 22px 18px;border-bottom:1px solid var(--rule-2)}
+.kicker{font:500 10px/1 var(--mono);letter-spacing:.22em;color:var(--seal)}
+.brand h1{font:400 21px/1.32 var(--serif);letter-spacing:.02em;margin-top:11px}
+.brand .sub{font-size:11.5px;color:var(--ink-2);margin-top:7px;line-height:1.55}
+.brand .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{font:500 10px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2);border:1px solid var(--rule-2);border-radius:2px;padding:4px 6px;background:#00000006}
+.nav{flex:1;overflow-y:auto;padding:10px 0 8px}
+.nav::-webkit-scrollbar{width:8px}
+.nav::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:9px}
+.nav .grp{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--ink-3);padding:14px 22px 8px}
+.item{display:flex;align-items:flex-start;gap:11px;width:100%;background:none;border:0;border-left:2px solid transparent;padding:9px 18px 9px 20px;text-align:left;cursor:pointer;transition:.13s}
+.item:hover{background:#ffffff5c}
+.item[aria-current="true"]{background:var(--panel);border-left-color:var(--seal)}
+.item .no{font:500 10px/1.9 var(--mono);color:var(--ink-3);flex:none;padding-top:1px}
+.item[aria-current="true"] .no{color:var(--seal)}
+.item .body{flex:1;min-width:0}
+.item .nm b{font:400 14.5px/1.5 var(--serif);letter-spacing:.03em}
+.item .k{display:block;font-size:11px;color:var(--ink-2);line-height:1.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .g{font:500 9.5px/1 var(--mono);color:var(--ok);border:1px solid #3d6b4f55;border-radius:99px;padding:3px 6px;flex:none;background:#3d6b4f0e}
+.item .g.wait{color:var(--seal);border-color:#8a332444;background:var(--seal-soft)}
+.item .g.mute{color:var(--ink-3);border-color:var(--rule-2);background:#00000006}
+.rayfoot{padding:14px 22px 18px;border-top:1px solid var(--rule-2);background:#dfe1dd}
+.rayfoot .lab{display:flex;justify-content:space-between;font:500 10px/1 var(--mono);color:var(--ink-2);letter-spacing:.1em}
+.bar{height:4px;background:#00000014;border-radius:9px;margin:8px 0 9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--seal);border-radius:9px;transition:width .5s ease}
+.rayfoot .note{font-size:10.5px;color:var(--ink-2);line-height:1.5}
+
+/* 主区 */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.bar-top{height:var(--bar);flex:none;display:flex;align-items:center;gap:12px;padding:0 14px 0 20px;background:var(--panel);border-bottom:1px solid var(--rule-2)}
+.crumb{font-size:12px;color:var(--ink-2);letter-spacing:.02em;white-space:nowrap}
+.crumb b{font-weight:500;color:var(--ink)}
+.crumb .sep{color:var(--ink-3);margin:0 7px}
+.grow{flex:1}
+.hint{font:400 10.5px/1 var(--mono);color:var(--ink-3);letter-spacing:.04em;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;height:27px;padding:0 11px;border:1px solid var(--rule-2);background:var(--paper);border-radius:2px;font:500 11px/1 var(--sans);color:var(--ink-2);cursor:pointer;text-decoration:none;transition:.14s;white-space:nowrap}
+.btn:hover{border-color:var(--seal);color:var(--seal)}
+.btn:focus-visible{outline:2px solid var(--seal);outline-offset:1px}
+.stage{flex:1;min-height:0;position:relative;background:var(--paper)}
+#frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--paper);display:none}
+.pane{position:absolute;inset:0;overflow-y:auto;display:none}
+.pane.on{display:block}
+.pane::-webkit-scrollbar{width:10px}
+.pane::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:9px}
+
+/* 总览 */
+.wrap{max-width:1180px;margin:0 auto;padding:30px 34px 70px}
+.hero{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.hero h2{font:400 27px/1.15 var(--serif);letter-spacing:.04em}
+.hero .lead{font-size:12.5px;color:var(--ink-2);max-width:430px;line-height:1.65;margin-top:8px}
+.hero .facts{margin-left:auto;display:flex;flex-wrap:wrap}
+.fact{padding:2px 16px;border-left:1px solid var(--rule-2)}
+.fact:first-child{border-left:0;padding-left:0}
+.fact b{display:block;font:400 22px/1.1 var(--serif);letter-spacing:.02em}
+.fact span{font:500 9.5px/1 var(--mono);letter-spacing:.14em;color:var(--ink-3);display:block;margin-top:5px}
+.warns{list-style:none;margin-top:16px;border-left:2px solid var(--seal);background:var(--seal-soft);padding:10px 14px}
+.warns li{font-size:11.5px;color:var(--ink-2);line-height:1.75;padding-left:14px;position:relative}
+.warns li::before{content:"·";position:absolute;left:2px;color:var(--seal);font-weight:700}
+.sect{margin-top:30px}
+.sect>.h{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.sect>.h h3{font:400 16px/1 var(--serif);letter-spacing:.08em}
+.sect>.h .n{font:500 9.5px/1 var(--mono);letter-spacing:.16em;color:var(--seal)}
+.sect>.h .line{flex:1;height:1px;background:var(--rule)}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);list-style:none;position:relative}
+.pipe li{position:relative;padding:0 14px 0 0;cursor:pointer}
+.pipe li:focus-visible{outline:2px solid var(--seal);outline-offset:4px}
+.pipe .track{height:2px;background:var(--rule-2);position:relative;margin-bottom:14px}
+.pipe .track i{position:absolute;inset:0;background:var(--ok);width:100%}
+.pipe .track b{position:absolute;right:-1px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--paper)}
+.pipe li.off .track i{background:var(--rule-2)}
+.pipe li.off .track b{background:var(--rule-2)}
+.pipe .stepno{font:500 9.5px/1 var(--mono);letter-spacing:.16em;color:var(--ink-3)}
+.pipe h4{font:400 17px/1.4 var(--serif);letter-spacing:.05em;margin-top:4px}
+.pipe li:hover h4{color:var(--seal)}
+.pipe .file{font:400 10px/1.5 var(--mono);color:var(--ink-3);margin-top:3px;word-break:break-all}
+.pipe dl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;margin-top:10px;font-size:11.5px}
+.pipe dt{color:var(--ink-3);white-space:nowrap}
+.pipe dd{color:var(--ink);font-variant-numeric:tabular-nums}
+.pipe .gate{display:inline-block;margin-top:10px;font:500 9.5px/1 var(--mono);letter-spacing:.06em;color:var(--ok);border:1px solid #3d6b4f55;background:#3d6b4f0e;border-radius:2px;padding:4px 6px}
+.pipe .gate.mute{color:var(--ink-3);border-color:var(--rule-2);background:#00000006}
+.cols{display:grid;grid-template-columns:1.1fr 1fr;gap:34px;margin-top:30px;align-items:start}
+.assets{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.asset{margin:0;border:1px solid var(--rule-2);background:var(--panel);overflow:hidden;transition:.14s}
+.asset:hover{border-color:var(--seal)}
+.asset a{display:block;background:#00000008}
+.asset img{display:block;width:100%;aspect-ratio:4/3;height:auto;object-fit:cover;object-position:center top}
+.asset .ph{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;height:auto;font:500 10px/1 var(--mono);color:var(--ink-3);background:#00000007}
+.asset figcaption{display:flex;align-items:baseline;gap:6px;padding:7px 9px;font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset figcaption b{font:500 9.5px/1 var(--mono);color:var(--seal);flex:none}
+.sub-h{display:flex;align-items:center;gap:8px;font:500 10px/1 var(--mono);letter-spacing:.14em;color:var(--ink-3);margin-top:20px}
+.sub-h i{flex:1;height:1px;background:var(--rule)}
+.box{border:1px solid var(--rule-2);background:var(--panel)}
+.box .bh{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--rule);background:#00000005}
+.box .bh h4{font:400 13.5px/1 var(--serif);letter-spacing:.06em}
+.box .bh .st{margin-left:auto;font:500 9.5px/1 var(--mono);letter-spacing:.08em;color:var(--seal);border:1px solid #8a332444;background:var(--seal-soft);border-radius:2px;padding:4px 6px}
+.box .bh .st.ok{color:var(--ok);border-color:#3d6b4f55;background:#3d6b4f0e}
+.box .bd{padding:14px}
+.pg{display:flex;justify-content:space-between;font:500 11px/1 var(--mono);color:var(--ink-2);margin-bottom:7px}
+.pg b{font:400 15px/1 var(--serif);color:var(--ink);letter-spacing:.02em}
+.pbar{height:5px;background:#00000014;border-radius:9px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--seal)}
+.milestones{list-style:none;margin-top:14px}
+.milestones li{display:flex;gap:9px;font-size:11.5px;color:var(--ink-2);padding:5px 0;border-top:1px dashed var(--rule)}
+.milestones li em{font:500 10px/1.7 var(--mono);color:var(--seal);font-style:normal;flex:none}
+.files{list-style:none}
+.files li{display:flex;align-items:baseline;gap:10px;font-size:11.5px;padding:6px 0;border-top:1px dashed var(--rule)}
+.files li:first-child{border-top:0;padding-top:0}
+.files li .p{flex:1;min-width:0;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.files li .p:hover{color:var(--seal)}
+.files li .sz{font:500 10px/1 var(--mono);color:var(--ink-3);flex:none}
+.files li .miss{font:500 9px/1 var(--mono);color:var(--seal);border:1px solid #8a332444;padding:2px 4px;border-radius:2px;flex:none}
+
+/* 投产包 */
+.pkgbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.pkgbar .t{font:400 16px/1 var(--serif);letter-spacing:.08em}
+.pkgbar .s{font:500 10px/1 var(--mono);letter-spacing:.12em;color:var(--ink-3)}
+.leg{display:flex;gap:14px;margin-left:auto;font-size:10.5px;color:var(--ink-2)}
+.leg i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.epblk{margin-bottom:22px}
+.epblk .eh{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule-2);padding-bottom:7px;margin-bottom:11px}
+.epblk .eh h4{font:400 14px/1 var(--serif);letter-spacing:.06em}
+.epblk .eh .m{font:500 10px/1 var(--mono);color:var(--ink-3);letter-spacing:.08em}
+.epblk .eh .go{margin-left:auto}
+.segs{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:9px}
+.seg{display:block;text-decoration:none;border:1px solid var(--rule-2);background:var(--panel);padding:10px 11px;transition:.14s}
+.seg:hover{border-color:var(--seal);background:#fff}
+.seg .id{display:flex;align-items:center;gap:7px}
+.seg .id b{font:500 12.5px/1 var(--mono);letter-spacing:.02em}
+.seg .id .dot{width:6px;height:6px;border-radius:50%;background:var(--seal-2);flex:none}
+.seg .id .dot.ok{background:var(--ok)}
+.seg .kv{display:flex;gap:10px;margin-top:7px;font:400 10.5px/1 var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.seg .fs{display:flex;gap:3px;margin-top:9px}
+.seg .fs s{display:block;flex:1;height:16px;text-decoration:none;background:#00000010;border:1px dashed var(--rule-2);font:400 8.5px/15px var(--mono);color:var(--ink-3);text-align:center}
+.seg .fs s.ok{background:#3d6b4f14;border:1px solid #3d6b4f44;color:var(--ok)}
+.seg .fs s.pend{background:#8a332410;border:1px dashed #8a332455;color:var(--seal)}
+.empty{font-size:12px;color:var(--ink-3);line-height:1.8}
+@media (max-width:1180px){
+  :root{--rail:240px}
+  .pipe{grid-template-columns:repeat(3,1fr);row-gap:22px}
+  .cols{grid-template-columns:1fr}
+  .assets{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:760px){
+  .assets{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <div class="kicker">AI 短剧 · 生产控制台</div>
+      <h1 id="brandTitle"></h1>
+      <div class="sub" id="brandSub"></div>
+      <div class="meta" id="brandMeta"></div>
+    </div>
+    <nav class="nav" id="nav" aria-label="生产环节"></nav>
+    <div class="rayfoot">
+      <div class="lab"><span>分镜图</span><span id="pct">0%</span></div>
+      <div class="bar"><i id="barfill" style="width:0"></i></div>
+      <div class="note" id="footNote"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="bar-top">
+      <div class="crumb" id="crumb"></div>
+      <div class="grow"></div>
+      <span class="hint">按 1–6 切换</span>
+      <a class="btn" id="raw" href="#" target="_blank" rel="noopener">源文件</a>
+      <a class="btn" id="open" href="#" target="_blank" rel="noopener">独立打开</a>
+    </header>
+    <div class="stage">
+      <iframe id="frame" title="报告视图"></iframe>
+      <section class="pane on" id="pane-overview"><div class="wrap" id="ovWrap"></div></section>
+      <section class="pane" id="pane-pkg"><div class="wrap" id="pkgWrap"></div></section>
+    </div>
+  </main>
+</div>
+
+<script>
+const DATA = /*__PANEL_DATA__*/;
+
+const ORDER = ['overview', ...DATA.layers.map(l => l.key), 'pkg'];
+const byKey = Object.fromEntries(DATA.layers.map(l => [l.key, l]));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const paneOf = key => key === 'overview' ? 'pane-overview' : key === 'pkg' ? 'pane-pkg' : null;
+
+/* ---- 左栏 ---- */
+function buildRail(){
+  document.getElementById('brandTitle').innerHTML = esc(DATA.title).replace(/\s*[：:]\s*/, '<br>');
+  document.getElementById('brandSub').textContent = DATA.subtitle || '';
+  document.getElementById('brandMeta').innerHTML = (DATA.tags || [])
+    .map(t => `<span class="tag">${esc(t)}</span>`).join('');
+
+  const nav = document.getElementById('nav');
+  let html = '<div class="grp">OVERVIEW</div>' + itemHTML({
+    key:'overview', no:'00', name:'总览看板', note:DATA.overviewNote || '全链路状态与待办',
+    gate: DATA.total ? (DATA.done === DATA.total ? '完成' : '进行中') : '—',
+    tone: !DATA.total ? 'mute' : (DATA.done === DATA.total ? '' : 'wait')
+  }) + '<div class="grp">PIPELINE</div>';
+
+  DATA.layers.forEach(l => { html += itemHTML(l); });
+
+  html += '<div class="grp">DELIVERY</div>' + itemHTML({
+    key:'pkg', no:'06', name:'投产包',
+    note: DATA.total ? `${DATA.segs.length} 段 · ${DATA.done}/${DATA.total} 张图` : '未导出',
+    gate: DATA.total ? `${DATA.done}/${DATA.total}` : '缺',
+    tone: DATA.done === DATA.total && DATA.total ? '' : (DATA.total ? 'wait' : 'mute')
+  });
+  nav.innerHTML = html;
+
+  nav.querySelectorAll('[data-view]').forEach(el => {
+    el.addEventListener('click', () => show(el.dataset.view));
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); show(el.dataset.view); }
+    });
+  });
+}
+function itemHTML(l){
+  return `<button class="item" data-view="${l.key}">
+    <span class="no">${l.no}</span>
+    <span class="body"><span class="nm"><b>${esc(l.name)}</b></span><span class="k">${esc(l.note)}</span></span>
+    <span class="g ${l.tone || ''}">${esc(l.gate || (l.ok ? '就绪' : '缺'))}</span>
+  </button>`;
+}
+
+/* ---- 总览 ---- */
+function buildOverview(){
+  const facts = (DATA.facts || []).map(f =>
+    `<div class="fact"><b>${esc(f[0])}</b><span>${esc(f[1])}</span></div>`).join('');
+
+  const steps = DATA.layers.map(l => `
+    <li data-view="${l.key}" tabindex="0" role="button" class="${l.ok ? '' : 'off'}">
+      <div class="track"><i></i><b></b></div>
+      <div class="stepno">${l.no} · ${esc(l.en || '')}</div>
+      <h4>${esc(l.name)}</h4>
+      <div class="file">${esc(l.file || '—')}</div>
+      <dl>${(l.stats || []).map(s => `<dt>${esc(s[0])}</dt><dd>${esc(s[1])}</dd>`).join('')}</dl>
+      <span class="gate ${l.ok ? '' : 'mute'}">${esc(l.gate || (l.ok ? '已就绪' : '未生成'))}</span>
+    </li>`).join('');
+
+  const full = DATA.total > 0 && DATA.done === DATA.total;
+  const milestone = DATA.episodes.length
+    ? DATA.episodes.map(e => `<li><em>E${String(e.ep).padStart(2,'0')}</em>${e.segs} 段 ${e.cuts} 切 ${e.seconds.toFixed(1)} 秒 — ${e.missing} 张图待出</li>`).join('')
+    : '<li><em>—</em>还没有分镜数据</li>';
+
+  const files = DATA.files.map(f => `<li>
+      <a class="p" href="${esc(f.path)}" target="_blank" rel="noopener" title="${esc(f.path)}">${esc(f.path)}</a>
+      ${f.exists ? `<span class="sz">${esc(f.size)}</span>` : '<span class="miss">缺</span>'}
+    </li>`).join('');
+
+/* ---- 设定资产 ---- */
+function assetGrid(list){
+  if(!list || !list.length) return '<p class="empty">这一层还没有设定图。</p>';
+  return `<div class="assets">${list.map(a => `
+    <figure class="asset">
+      ${a.file
+        ? `<a href="${esc(a.file)}" target="_blank" rel="noopener"><img src="${esc(a.file)}" alt="${esc(a.name)}" loading="lazy"></a>`
+        : '<span class="ph">未出图</span>'}
+      <figcaption><b>${esc(a.id)}</b>${esc(a.name)}</figcaption>
+    </figure>`).join('')}</div>`;
+}
+
+function assetsSection(){
+  const A = DATA.assets || {};
+  const chars = A.characters || [], arts = A.art || [];
+  if(!chars.length && !arts.length) return '';
+  const got = [...chars, ...arts].filter(a => a.file).length;
+  const all = chars.length + arts.length;
+  return `<div class="sect">
+    <div class="h"><span class="n">ASSETS</span><h3>设定资产</h3><span class="line"></span>
+      <span style="font:500 10px/1 var(--mono);color:var(--ink-3);letter-spacing:.08em">${got}/${all}</span></div>
+    ${chars.length ? `<div class="sub-h">角色<i></i></div>${assetGrid(chars)}` : ''}
+    ${arts.length ? `<div class="sub-h">场景与道具<i></i></div>${assetGrid(arts)}` : ''}
+  </div>`;
+}
+
+  const warnHTML = (DATA.warnings || []).length
+    ? `<ul class="warns">${DATA.warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul>`
+    : '';
+
+  document.getElementById('ovWrap').innerHTML = `
+    <div class="hero">
+      <div>
+        <h2>${esc(DATA.heroTitle || '从一份剧本到一条可下单的流水线')}</h2>
+        <p class="lead">${esc(DATA.heroLead || '五个环节串成一条链，上一层的产出就是下一层的输入；每层都有脚本级质量门把关。点任意环节进入它的完整报告。')}</p>
+      </div>
+      <div class="facts">${facts}</div>
+    </div>
+    ${warnHTML}
+
+    <div class="sect">
+      <div class="h"><span class="n">PIPELINE</span><h3>生产链</h3><span class="line"></span></div>
+      <ol class="pipe">${steps}</ol>
+    </div>
+
+    <div class="cols">
+      <div class="box">
+        <div class="bh"><h4>交付进度</h4><span class="st ${full ? 'ok' : ''}">${DATA.total ? (full ? '已齐' : `待补 ${DATA.total - DATA.done} 张`) : '未导出投产包'}</span></div>
+        <div class="bd">
+          <div class="pg"><span>分镜首帧 / 切点帧</span><b>${DATA.done} / ${DATA.total}</b></div>
+          <div class="pbar"><i style="width:${DATA.total ? (DATA.done / DATA.total * 100).toFixed(1) : 0}%"></i></div>
+          <ul class="milestones">${milestone}</ul>
+        </div>
+      </div>
+      <div class="box">
+        <div class="bh"><h4>产物清单</h4><span class="st">${DATA.files.filter(f => f.exists).length}/${DATA.files.length}</span></div>
+        <div class="bd">${DATA.files.length ? `<ul class="files">${files}</ul>` : '<p class="empty">这个目录里没有找到产物。</p>'}</div>
+      </div>
+    </div>
+
+    ${assetsSection()}`;
+
+  document.querySelectorAll('#ovWrap [data-view]').forEach(el => {
+    el.addEventListener('click', () => show(el.dataset.view));
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); show(el.dataset.view); }
+    });
+  });
+}
+
+/* ---- 投产包 ---- */
+function buildPkg(){
+  const host = document.getElementById('pkgWrap');
+  if(!DATA.segs.length){
+    host.innerHTML = `<div class="pkgbar"><span class="t">投产包</span><span class="s">未导出</span></div>
+      <p class="empty">还没有 ${'manifest.json'}。先跑 <code>export</code> 把每段的提示词和分镜图清单导出来，这个页面才会长出卡片。</p>`;
+    return;
+  }
+  const byEp = {};
+  DATA.segs.forEach(s => { (byEp[String(s.id).slice(0,3)] ||= []).push(s); });
+  let html = `<div class="pkgbar">
+      <span class="t">投产包</span>
+      <span class="s">MANIFEST · ${DATA.segs.length} SEGMENTS</span>
+      <div class="leg">
+        <span><i style="background:#8a3324"></i>待出图</span>
+        <span><i style="background:#3d6b4f"></i>已出图</span>
+      </div>
+    </div>
+    <p class="empty" style="margin-bottom:20px">每段一个文件夹，内含 prompt.md（视频提示词 + 切点时刻表）与 f1…fN 站位。点卡片打开该段提示词；把图按文件名放进去，进度与配色自动更新。</p>`;
+
+  Object.keys(byEp).forEach(ep => {
+    const rows = byEp[ep];
+    const secs = rows.reduce((a, r) => a + r.seconds, 0);
+    const cuts = rows.reduce((a, r) => a + r.cuts, 0);
+    const imgs = rows.reduce((a, r) => a + r.cuts, 0);
+    const got = rows.reduce((a, r) => a + r.done, 0);
+    html += `<div class="epblk">
+      <div class="eh">
+        <h4>第 ${Number(ep.slice(1)) || ep} 集</h4>
+        <span class="m">${rows.length} 段 · ${cuts} 切 · ${secs.toFixed(1)}s · 图 ${got}/${imgs}</span>
+        <a class="btn go" href="${esc(DATA.boardHref || '#')}" target="_blank" rel="noopener">看分镜表</a>
+      </div><div class="segs">`;
+    rows.forEach(s => {
+      const frames = Array.from({length: s.cuts}, (_, i) => {
+        const ok = i < s.done;
+        return `<s class="${ok ? 'ok' : 'pend'}" title="${esc(s.id)}/f${i+1}.png ${ok ? '已出图' : '待出图'}">f${i+1}</s>`;
+      }).join('');
+      html += `<a class="seg" href="${esc(s.prompt)}" target="_blank" rel="noopener" title="打开 ${esc(s.id)} 的提示词">
+        <div class="id"><span class="dot ${s.done >= s.cuts ? 'ok' : ''}"></span><b>${esc(s.id)}</b></div>
+        <div class="kv"><span>${s.seconds.toFixed(1)}s</span><span>${s.cuts} 切</span><span>${(s.seconds / s.cuts).toFixed(1)}s/切</span></div>
+        <div class="fs">${frames}</div>
+      </a>`;
+    });
+    html += '</div></div>';
+  });
+  host.innerHTML = html;
+}
+
+/* ---- 切换 ---- */
+const frame = document.getElementById('frame');
+const crumb = document.getElementById('crumb');
+const linkOpen = document.getElementById('open');
+const linkRaw = document.getElementById('raw');
+let current = 'overview';
+
+function placeholder(text){
+  frame.removeAttribute('src');
+  frame.srcdoc = `<!doctype html><meta charset="utf-8"><body style="margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#eceded;color:#5b636a;font:13px/1.9 'PingFang SC',system-ui,sans-serif"><div style="text-align:center;max-width:420px"><p style="margin:0 0 6px;font-size:15px;color:#191d21">这一层还没有单页报告</p><p style="margin:0">${esc(text)}</p></div></body>`;
+}
+
+function show(key, push){
+  if(!ORDER.includes(key)) key = 'overview';
+  current = key;
+  const isOv = key === 'overview', isPkg = key === 'pkg';
+  const layer = byKey[key];
+
+  document.querySelectorAll('.item').forEach(el => {
+    el.setAttribute('aria-current', String(el.dataset.view === key));
+  });
+  const name = isOv ? '总览看板' : isPkg ? '投产包' : layer.name;
+  crumb.innerHTML = `<b>${esc(DATA.title)}</b><span class="sep">/</span>${esc(name)}`;
+
+  if(isOv || isPkg){
+    frame.style.display = 'none';
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === paneOf(key)));
+    linkOpen.href = isPkg ? (DATA.manifestHref || '#') : (DATA.outlineHref || '#');
+    linkOpen.textContent = isPkg ? '导出清单' : '独立打开';
+    linkRaw.href = isPkg ? (DATA.manifestHref || '#') : (DATA.outlineHref || '#');
+  } else {
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+    frame.style.display = 'block';
+    if(layer.href){ frame.removeAttribute('srcdoc'); frame.src = layer.href; }
+    else placeholder(`${layer.file || '这一层'} 已经生成，但还没有渲染单页报告。跑一次 render 就会有。`);
+    linkOpen.href = layer.href || layer.json;
+    linkOpen.textContent = layer.href ? '独立打开' : '看源文件';
+    linkRaw.href = layer.json || '#';
+  }
+  if(push !== false) history.replaceState(null, '', '#' + key);
+}
+
+/* ---- 启动 ---- */
+buildRail();
+buildOverview();
+buildPkg();
+
+const pct = DATA.total ? Math.round(DATA.done / DATA.total * 100) : 0;
+document.getElementById('pct').textContent = pct + '%';
+document.getElementById('barfill').style.width = pct + '%';
+document.getElementById('footNote').textContent = DATA.total
+  ? (pct === 100 ? `${DATA.total} 张分镜图已全部就位。` : `${DATA.total - DATA.done} 个分镜位还是空的，出图后重新跑一次面板就会更新。`)
+  : '还没有投产包。';
+
+window.addEventListener('keydown', e => {
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  const t = e.target.tagName;
+  if(t === 'INPUT' || t === 'TEXTAREA') return;
+  const n = Number(e.key);
+  if(n >= 1 && n <= 6) show(ORDER[n - 1]);
+});
+
+show((location.hash || '#overview').slice(1), false);
+</script>
+</body>
+</html>

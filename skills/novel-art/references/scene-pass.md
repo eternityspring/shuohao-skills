@@ -34,11 +34,11 @@
 6. **提示词里不写渲染风格，只写这个地方的状态。**不要出现 `Semi-realistic environment concept art` / `painterly rendering` 这类句子，也不要给 `image.tags` 打 `semi-realistic`、`painterly` 这种风格标。画风是出图那一刻才定的，整批共用一段风格指令由调用方附加——写进每条提示词只会跟当时选的风格打架，而且换风格要逐条改。
 
    要整段带上的是**表面处理**，它讲的是这个空间被谁在用、用了多久，换任何画风都成立。
-   **两档二选一，按这个空间的实际保养水平选**——不是两种画风，是两种事实：
+   **三档二选一，按这个空间的实际保养水平选**——不是三种画风，是三种事实：
 
-   **A · 日常使用**（民居、客栈、码头、作坊、久无人修的宅子）：
+   **A · 普通使用·保持整洁（默认档）**（仍在正常使用的民居、客栈、宿舍、铺面——绝大多数日常空间都是这一档）：
    ```
-   Weathered, lived-in materials: chipped paint, water stains, patina on metal, worn wood grain, dust in corners and light shafts; fabric and paper props show creases and age; nothing looks factory-new. Atmospheric depth with haze or volumetric light where the space allows
+   Modest, well-cared-for materials: clean and tidy surfaces, intact finishes, only faint traces of everyday use; the space is properly looked after, neat, clean and orderly. Atmospheric depth with haze or volumetric light where the space allows
    ```
 
    **B · 持续维护**（宫殿、官署、显贵府邸的前厅、新建或刚整修的空间）：
@@ -46,22 +46,29 @@
    Well-kept, actively maintained materials: sound lacquer with an even sheen, swept stone and timber, polished metal fittings, tight joinery, no peeling paint and no water staining; wear confined to the traffic a space like this really takes — thresholds, handrails, the stone directly inside a doorway. Atmospheric depth with haze or volumetric light where the space allows
    ```
 
-   **别把 A 当默认。**一整部戏全上 A，金銮殿会出成漏雨的废殿——实测《状元是买的》里 S06 金銮殿拿到了「漆面剥落」和「门框下部有浅淡水渍」，那是全国维护最勤的一栋建筑。这跟「每条提示词必须逐字包含同一句画风」是同一个错误：把一个该按对象决定的事实，写成了一句对谁都成立的常量。
+   **C · 失修**（确属久无人修的废宅、废墟、烂尾空间才用——是少数例外，不是常态）：
+   ```
+   Weathered, lived-in materials: chipped paint, water stains, patina on metal, worn wood grain, dust in corners and light shafts; fabric and paper props show creases and age; nothing looks factory-new. Atmospheric depth with haze or volumetric light where the space allows
+   ```
 
-   选了 B 仍然要写磨损，只是**磨在该磨的地方**：门槛正中、栏杆扶手、台阶踏面——人走出来的，不是年久失修出来的。
+   **默认选 A，别顺手写 C。**年代早 ≠ 脏破：物质不丰富的年代，在用的空间也是天天打扫、物见本色的，只有些擦不掉的使用痕迹。C 档的掉漆、水渍、积灰是「这地方已经没人管了」的视觉声明，选它必须能从剧情里说出来为什么失修。反例教训：1998 年的宾馆客房和大学宿舍全上 C，出来的图满墙霉斑、被褥拖地——直接被用户打回。金銮殿同理，那要选 B。这跟「每条提示词必须逐字包含同一句画风」是同一个错误：把一个该按对象决定的事实，写成了一句对谁都成立的常量。
+
+   选了 A 或 B 仍然可以写磨损，只是**磨在该磨的地方**：门槛正中、栏杆扶手、台阶踏面、桌沿——人手和人流量磨出来的，不是年久失修出来的；剧情锚点要求的特定痕迹（烫痕、划痕、裂口）照写，但它是局部的一处，不是全屋的底色。
+
+   负向提示词打底里已有 `sterile showroom cleanliness` 防止矫枉过正变成样板间；对 A 档空间，负向再追加 `heavy grime, dirt and filth, rust everywhere, decay, mould, garbage, messy clutter, filthy surfaces` 把脏破方向压住。
 
    反向提示词打底（按场景再补）：
    ```
    people, human figures, characters, crowds, silhouettes of people, oversaturated colours, sterile showroom cleanliness, warped perspective, melted geometry, floating objects, text, watermark, signature
    ```
 
-   `image.tags` 打底：`environment sheet`、`weathered materials`、`cinematic`——描述这是什么图、什么状态，不描述它用什么笔法画。
+   `image.tags` 打底：`environment sheet`、`cinematic`，再按所选表面处理档位补一个状态标（A→`well-cared-for materials`、B→`actively maintained`、C→`weathered materials`）——描述这是什么图、什么状态，不描述它用什么笔法画。
 
    **反向提示词里绝不能禁画风词**（`photorealistic`、`3d render`、`anime` 这些）——出图时选的就可能正是它，禁掉等于自己跟自己打架。
 
 7. **能做变体就别开新景。**AI 生成一个新环境很便宜，但**每多一个独立环境就多一份一致性维护**。outline 里带复用方案的场景（seedNote 会提示），用 `variantOf` + `changes` 挂到母场景上：改时段、换天气、换前景、删道具，桥板细节这类资产直接复用。
 
-8. **不要把角色 skill 的表面处理带进来。**毛孔、皮下散射是皮肤的事；环境的可信度来自**用旧的材质**——掉漆、水渍、包浆、磨白的木纹。「要整段带上的是表面处理」那两档已经写好了，按这个空间的保养水平选一档照抄。
+8. **不要把角色 skill 的表面处理带进来。**毛孔、皮下散射是皮肤的事；环境的可信度来自**材质与保养状态**——按上面三档选一档照抄，别自造磨损句子。
 
 ## 输入格式
 

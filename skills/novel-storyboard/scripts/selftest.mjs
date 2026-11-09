@@ -23,6 +23,8 @@ import {
   h3AlignmentLine,
   h3CutSlices,
   h3CutTime,
+  deriveH3,
+  h3Of,
   h3Remainder,
   loadRecipes,
   parseCardFields,
@@ -30,8 +32,14 @@ import {
   recipeDrift,
   renderHtml,
   renderMarkdown,
+  SEEDANCE_IDENTITY_LOCK,
+  SEEDANCE_INNER_STATE,
   SEEDANCE_NO_SUBTITLES,
   SEEDANCE_NO_TWINS,
+  SEEDANCE_PACING,
+  frameFaceWarnings,
+  cameraShotWarnings,
+  pacingWarnings,
   seedancePrompt,
   seedFromScript,
   segSeconds,
@@ -94,6 +102,39 @@ eq(h3AlignmentLine([{ seconds: 5 }], 'zh'), '目标视频在 0.00 秒处完全�
   ok(slices[1].includes('bb') && !slices[1].includes('x'), '切片不吃到声景字段');
   const zh = h3CutSlices('整体视听描述：\n[镜头 1] aa\n[镜头 2] bb\n\n整体音景：x', 2, 'zh');
   ok(zh[0].includes('aa') && zh[1].includes('bb'), 'zh 模式按 [镜头 k] 切片');
+}
+
+/* ---------------- deriveH3：数据派生，退役手写 h3Prompt ---------------- */
+{
+  // 一段两切、zh 模式：对齐指令由切点推导，每镜段落含运镜词 + shot + 表演 + 台词 <d> 块
+  const seg = {
+    cuts: [
+      { seconds: 3, camera: 'Static Shot', shot: '一名男子走出门', performance: '脚步快半拍', beats: [1, 1] },
+      { seconds: 4, camera: 'Push In', shot: '镜头推近他的脸', performance: '下颌绷着', beats: [2, 2] },
+    ],
+    soundscape: '街面风声',
+    music: '低音提琴',
+  };
+  const scene = {
+    beats: [
+      { kind: 'line', text: '我要报警。' },
+      { kind: 'line', text: '人走了。' },
+    ],
+  };
+  const h3 = deriveH3(seg, { scene, promptLang: 'zh' });
+  ok(h3.startsWith('参考图与目标视频的对齐'), '派生 H3 首行是对齐指令（由切点推导）');
+  ok(h3.includes('图 2（来自镜头 2）对齐目标视频 3.00 秒处'), '多切对齐指令钉在累计秒数上');
+  ok(h3.includes('[镜头 1]') && h3.includes('[镜头 2] 于 00:03.000'), '每镜有 [镜头 k] 段落与切点时刻');
+  ok(h3.includes('固定机位') && h3.includes('镜头推近'), '运镜词进自己的 [镜头 k] 段落');
+  ok(h3.includes('一名男子走出门') && h3.includes('镜头推近他的脸'), 'shot（画面）进提示词');
+  ok(h3.includes('脚步快半拍') && h3.includes('下颌绷着'), 'performance（表演）进提示词');
+  ok(h3.includes('<d>[Chinese] 我要报警。 </d>') && h3.includes('<d>[Chinese] 人走了。 </d>'), '台词逐字进 <d> 块');
+  ok(h3.includes('整体视听描述：') && h3.includes('整体音景：街面风声') && h3.includes('非叙事配乐：低音提琴'), '三字段齐全、音景与配乐来自段级数据');
+  // 没有手写 h3Prompt 时 h3Of 退回派生
+  eq(h3Of(seg, { scene, promptLang: 'zh' }), h3, 'h3Of 在无手写时等于派生结果');
+  // 手写优先：存在则不被派生覆盖
+  const withHand = { ...seg, h3Prompt: '手写覆盖' };
+  eq(h3Of(withHand, { scene, promptLang: 'zh' }), '手写覆盖', 'h3Of 在手写存在时优先，不被派生覆盖');
 }
 eq(segSeconds({ cuts: [{ seconds: 3 }, { seconds: 4.5 }] }), 7.5, '段秒数 = 分镜求和');
 
@@ -599,8 +640,22 @@ eq(GATE_LOG, '.gates.jsonl', '日志文件名固定');
   ok(e06.prompt.includes('稳定性：稳定'), '稳定性枚举转中文');
   ok(e06.prompt.includes(`<${segOf('E01-06').soundscape}>`), '段级声景套 <>');
   ok(!/^（/m.test(e06.prompt), '没有配乐就没有配乐行');
-  ok(e06.prompt.endsWith(`【约束】\n1. ${SEEDANCE_NO_SUBTITLES}\n2. ${SEEDANCE_NO_TWINS}`), '约束编号：无字幕；多人同框加禁双胞胎');
+  ok(e06.prompt.endsWith(`【约束】\n1. ${SEEDANCE_NO_SUBTITLES}\n2. ${SEEDANCE_NO_TWINS}\n3. ${SEEDANCE_PACING}\n4. ${SEEDANCE_INNER_STATE}`), '约束编号：无字幕；多人同框禁双胞胎；多切加节奏；表演口径');
   ok(!/视觉风格|画风|cinematic/i.test(e06.prompt), '不写画风——视觉风格由调用方附加');
+
+  // 表演层：剧本的 delivery 与切级的 performance / hold 必须有出口
+  {
+    const seg = clone(segOf('E01-10'));
+    seg.cuts[0].performance = '呼吸很浅，喉结动了一下';
+    seg.cuts[0].hold = '说完停一拍，眼神不收回';
+    const p = seedancePrompt(seg, { scene: sceneOf(seg), names }).prompt;
+    ok(p.includes('表演：呼吸很浅，喉结动了一下'), '切级 performance 进「表演」行');
+    ok(p.includes('停顿：说完停一拍，眼神不收回'), 'hold 进「停顿」行');
+    const c2 = clone(segOf('E01-10'));
+    delete c2.cuts[0].performance;
+    c2.cuts[0].beats = c2.cuts[0].beats ?? [1, 1];
+    ok(!/表演：/.test(seedancePrompt({ ...c2, cuts: [{ ...c2.cuts[0], beats: [] }] }, { names }).prompt), '既无 performance 又无 delivery 时不出空「表演」行');
+  }
 
   // 画外音：{} 外面标「以画外音说」
   ok(build('E01-10').prompt.includes('台词：以画外音说{谁都别碰它。到了县城，它就是我全部的话。}'), '画外音按官方写法标在 {} 外');
@@ -609,16 +664,23 @@ eq(GATE_LOG, '.gates.jsonl', '日志文件名固定');
   // 单人段不加禁双胞胎；调用方约束排在前面、不重复
   {
     const e10 = build('E01-10', { constraints: ['画面比例 16:9', SEEDANCE_NO_SUBTITLES] });
-    ok(e10.prompt.endsWith(`【约束】\n1. 画面比例 16:9\n2. ${SEEDANCE_NO_SUBTITLES}`), '调用方约束在前、默认约束不重复、单人段不加禁双胞胎');
+    // 多切段才加节奏约束，表演口径两档都有
+    const tail10 = segOf('E01-10').cuts.length >= 2
+      ? `2. ${SEEDANCE_NO_SUBTITLES}\n3. ${SEEDANCE_PACING}\n4. ${SEEDANCE_INNER_STATE}`
+      : `2. ${SEEDANCE_NO_SUBTITLES}\n3. ${SEEDANCE_INNER_STATE}`;
+    ok(e10.prompt.endsWith(`【约束】\n1. 画面比例 16:9\n${tail10}`), '调用方约束在前、默认约束不重复、单人段不加禁双胞胎');
   }
-  // 光影：镜级有才出
+  // 光影：镜级有才出；镜级没写就继承场次光照——美术层的设定要一路带到视频提示词
   ok(build('E01-10').prompt.includes('光影：远处一点暖黄灯光熄灭后只剩铜扣的冷光'), '镜级光影有才出');
+  ok(build('E01-06').prompt.includes('光影：晨雾'), '镜级没写光影时继承场次光照');
 
   // 分镜路径：这一段每切都有分镜图 → 只挂分镜图，并在画面行注明构图参考
   {
     const all = build('E01-10', { image: (kind, rel) => (kind === 'frame' ? rel : null) });
     eq(all.refs.map((r) => r.file).join(','), 'E01-10/f1.png,E01-10/f2.png', '分镜路径只挂分镜图');
     ok(all.prompt.includes('（构图参考 @图片1）') && all.prompt.includes('（构图参考 @图片2）'), '每镜注明构图参考哪张');
+    ok(all.prompt.includes(`【约束】\n1. ${SEEDANCE_NO_SUBTITLES}\n2. ${SEEDANCE_IDENTITY_LOCK}`), '挂分镜图参考时追加身份连续性约束');
+    ok(!build('E01-10').prompt.includes(SEEDANCE_IDENTITY_LOCK), '没挂参考图不加身份锁——无从执行的话不稀释约束');
   }
   {
     const part = build('E01-10', { image: (kind, rel) => (rel === 'E01-10/f2.png' ? rel : null) });
@@ -774,20 +836,20 @@ ok(html.includes(`<p class="seg-block"><b>走位</b>${FIXTURE.episodes[0].segmen
 ok(html.includes('<p class="scomp">35mm 广角，中景深 · 年轻女子 + 背后平视跟随 · 中心构图 · 视线 前方雾中 · 焦点 锁定年轻女子背影与怀中皮箱 · 微晃</p>'), '切行显示构图量化字段');
 ok(html.includes('class="rseg"'), '节奏带按段分组（粗分隔）');
 ok(html.includes('#seg-E01-01'), '节奏带段可跳转');
-ok(html.includes('主分镜图 · #1 未生成'), '主分镜图缺图时显示占位不装有');
-ok(html.includes('#2 未生成'), '子分镜图缺图有小占位');
-// 主分镜图区：无图时每切各占一整行提示词卡 + 复制按钮（PR 核心目标）
+ok(html.includes('<b>#1 未生成</b>'), '缺图的那一格显示占位，不装有');
+// 分镜图位：每一切自带一格，贴在它自己的描述右侧（不再有段首主图 / 子分镜条）
 {
   const nCuts = FIXTURE.episodes.reduce((n, e) => n + e.segments.reduce((m, s) => m + s.cuts.length, 0), 0);
-  ok((html.match(/class="frame ph fcell"/g) ?? []).length === nCuts, '无图时每切都是整宽提示词卡');
+  ok((html.match(/class="cut-fig"/g) ?? []).length === nCuts, '每切一格分镜图位');
+  ok((html.match(/class="frame ph"/g) ?? []).length === nCuts, '无图时每格都是占位卡');
   const c0 = FIXTURE.episodes[0].segments[0].cuts;
-  ok(html.includes(`data-copy="${c0[0].frame}"`), '主分镜格复制按钮带该切 frame 原文');
-  ok(html.includes(`data-copy="${c0[1].frame}"`), '子分镜格复制按钮同样带 frame 原文');
+  ok(html.includes(`data-copy="${c0[0].frame}"`), '第 1 格复制按钮带该切 frame 原文');
+  ok(html.includes(`data-copy="${c0[1].frame}"`), '第 2 格复制按钮同样带 frame 原文');
 }
 ok(html.includes('class="shots clip"'), '段卡区默认截断');
 ok(html.includes('展开全部段'), '每集自带展开按钮');
 ok(html.includes('H3 提示词'), '段卡带 H3 提示词面板');
-ok(html.includes('class="duo"'), '分镜列表与提示词面板五五分栏');
+ok(html.includes('class="duo"'), '分镜列表在上、提示词面板在下');
 ok(html.includes('static shot'), '英文提示词正文进面板');
 ok(html.includes('integrated_multimodal_description'), '官方骨架字段进面板');
 ok(html.includes('[Shot 2] At'), '逐镜换行的结构化正文进面板');
@@ -799,12 +861,22 @@ ok(html.includes('@media print'), '打印样式');
 ok(html.includes('老周'), 'html 里 ID 换成名字');
 {
   const withImg = renderHtml(FIXTURE, { ...CTX, image: (kind, rel) => rel });
-  ok(withImg.includes('"E01-01/f1.png"'), '主分镜图从段文件夹读');
-  ok(withImg.includes('"E01-01/f2.png"'), '子分镜图同样从段文件夹读');
+  ok(withImg.includes('"E01-01/f1.png"'), '第 1 格分镜图从段文件夹读');
+  ok(withImg.includes('"E01-01/f2.png"'), '第 2 格分镜图同样从段文件夹读');
   ok(!withImg.includes('未生成'), '有图时不再显示占位');
-  ok(!withImg.includes('class="frame ph fcell"'), '图出全时不再走整宽提示词卡');
-  ok(withImg.includes('class="subs"'), '图出全时保留子分镜条');
-  ok(withImg.includes('class="subf"'), '子分镜条用小缩略图');
+}
+// 段级成片：ctx.video 命中 <段号>/<段号>.mp4 时出播放器，切点时间戳变跳播按钮
+{
+  ok(!html.includes('class="segvid"'), '默认无成片：不插播放器块');
+  ok(!html.includes('class="cut-t seek"'), '默认无成片：切点时间戳仍是纯文本');
+  const withVid = renderHtml(FIXTURE, { ...CTX, image: (kind, rel) => rel, video: (rel) => rel });
+  ok(withVid.includes('.segvid'), '有成片：插播放器样式');
+  ok(withVid.includes('<video src="E01-01/E01-01.mp4"'), '成片按 <段号>/<段号>.mp4 解析');
+  ok(withVid.includes('poster="E01-01/f1.png"'), '播放器海报用该段第 1 切分镜图');
+  const card1 = withVid.slice(withVid.indexOf('id="seg-E01-01"'), withVid.indexOf('id="seg-E01-02"'));
+  const seg1 = FIXTURE.episodes[0].segments.find((s) => s.id === 'E01-01');
+  ok((card1.match(/class="cut-t seek"/g) || []).length === seg1.cuts.length, '每一切的切点都变成跳播按钮');
+  ok(card1.includes('data-t="6"'), '跳播按钮带切点秒数');
 }
 // 分镜图位跟着正式画幅走；旧 _meta 和 frame 尾缀只保留为兼容路径
 {
@@ -816,8 +888,8 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   const port = clone(FIXTURE);
   port.aspectRatio = '9:16';
   const ph = renderHtml(port, { ...CTX, image: (kind, rel) => rel });
-  ok(ph.includes('.frame,.subf{aspect-ratio:9/16}'), 'aspectRatio=9:16：主图与子分镜条图位改 9:16');
-  ok(ph.includes('img.frame{width:min(100%,300px)'), '竖屏主图收窄，不撑成一屏多高');
+  ok(ph.includes('.frame{aspect-ratio:9/16}'), 'aspectRatio=9:16：每格分镜图位改 9:16');
+  ok(ph.includes('img.frame{width:100%'), '竖屏图位铺满格子，不撑出一屏高');
   ok(ph.includes('.bimg{width:100%;aspect-ratio:16/9;'), '场景设定图仍是 16:9，不跟剧的画幅走');
   port._meta = { orientation: 'landscape' };
   ok(renderHtml(port, CTX).includes('aspect-ratio:9/16'), '正式 aspectRatio 比旧 _meta.orientation 优先');
@@ -928,5 +1000,77 @@ ok(html.includes('老周'), 'html 里 ID 换成名字');
   const doc = withRecipe();
   ok(renderMarkdown(doc, CTX).includes('| ots-shot-reverse |'), '不挂卡库时配方列退回裸 id');
   ok(renderMarkdown(FIXTURE, CTX).includes('| — |'), '没引用配方的切在配方列写 —');
+}
+// 节奏告警：动作过密 / 语速 / 整段偏赶 / 缺停顿镜——只提示不设门，成片「赶」就靠这四条抓
+{
+  const w = pacingWarnings(FIXTURE, SCRIPT);
+  ok(w.length > 0, '样例数据能算出节奏告警');
+  ok(w.some((x) => x.includes('动作过密')), '动作过密能被识别');
+  ok(w.some((x) => x.includes('没有停顿镜')), '缺停顿镜能被识别');
+  ok(w.every((x) => !x.includes('undefined') && !x.includes('NaN')), '告警文案不带 undefined / NaN');
+  const fixed = clone(FIXTURE);
+  fixed.episodes[0].segments[0].cuts[1].hold = '说完停一拍';
+  const id0 = fixed.episodes[0].segments[0].id;
+  ok(!pacingWarnings(fixed, SCRIPT).some((x) => x.startsWith(`${id0} 没有停顿镜`)), '补了 hold 就撤掉该段的缺停顿告警');
+  // 语速：故意给 4 秒切塞 20 音节确实触发；同样台词放进 8 秒切就不该再报
+  const slow = clone(FIXTURE);
+  const seg = slow.episodes[0].segments.find((s) => s.cuts.some((c) => (c.beats ?? []).length < 3)) ?? slow.episodes[0].segments[0];
+  seg.cuts[0].seconds = 8;
+  ok(!pacingWarnings({ episodes: [{ ep: 1, segments: [seg] }] }, SCRIPT).some((x) => x.includes('语速偏快')), '切拉长后不再报语速偏快');
+}
+// 静帧神情告警：分镜图照 frame 生成，frame 平，图平，视频平——第一现场在提示词
+{
+  const b = { episodes: [{ ep: 1, segments: [{ id: 'E01-01', cuts: [
+    { frame: '特写，一个男人站在马路边，早春阴天的平光压在肩上。' },
+    { frame: '特写，他侧脸贴着手机，脸上没有任何起伏。' },
+    { frame: '特写，他下颌咬住，眉压低，眼睛盯死画面上方那扇窗。' },
+  ] }] }] };
+  const w = frameFaceWarnings(b);
+  ok(w.some((x) => x.startsWith('E01-01#1 静帧没写神情')), '没写脸就告警');
+  ok(w.some((x) => x.includes('否定式写表情')), '「没有任何起伏」这种否定式写法单独告警');
+  ok(!w.some((x) => x.startsWith('E01-01#3')), '写清肌群状态的切不告警');
+  // 手部/物件特写走各自的标准：手查力道，物件直接豁免
+  const b2 = { episodes: [{ ep: 1, segments: [{ id: 'E01-02', cuts: [
+    { frame: '特写，一只手抓住被角。', frameFocus: 'hand' },
+    { frame: '特写，指节顶得发白、手背青筋绷起，被单攥出褶。', frameFocus: 'hand' },
+    { frame: '大特写，报案回执的纸面，右下角压着一枚红章。', frameFocus: 'prop' },
+  ] }] }] };
+  const w2 = frameFaceWarnings(b2);
+  ok(w2.some((x) => x.includes('手部特写没写张力')), '手部特写没力道要告警');
+  ok(!w2.some((x) => x.startsWith('E01-02#2')), '写了指节/青筋的手部特写不告警');
+  ok(!w2.some((x) => x.startsWith('E01-02#3')), '物件特写豁免，不逼着写脸');
+  ok(frameFaceWarnings(FIXTURE).length >= 0 && !frameFaceWarnings(FIXTURE).some((x) => x.includes('undefined')), '真实样例跑得通');
+}
+
+// 卡片只显示真正进生成的两层：出图（frame）→ 出片（shot）；不进提示词的剧本动作拍不上卡片
+{
+  const seg = FIXTURE.episodes[0].segments.find((s) => s.id === 'E01-01');
+  const html = renderHtml(FIXTURE, { ...CTX, image: () => null });
+  ok(html.includes(seg.cuts[0].frame), '卡片显示分镜图提示词全文');
+  ok(html.includes(seg.cuts[0].shot), '卡片显示视频画面提示词全文');
+  ok(html.includes('class="spr sf"') && html.includes('class="spr sv"'), '两层各带出图／出片标签');
+  ok(!html.includes('class="sact"'), '剧本动作拍不再上卡片');
+  ok(!html.includes('冷开场：一个年轻女人抱着旧皮箱'), '不进提示词的剧本节拍不冒充提示词');
+
+  const md = renderMarkdown(FIXTURE, { ...CTX, image: () => null });
+  ok(md.includes('分镜图提示词') && md.includes('视频画面'), 'md 表头列出出图／出片两列');
+  ok(md.includes(seg.cuts[0].shot.slice(0, 12)), 'md 行内有视频画面正文');
+  ok(!md.includes('冷开场：一个年轻女人抱着旧皮箱'), 'md 也不再列剧本动作拍');
+}
+
+// 运镜与画面句不能各说一套：运镜归 camera，画面只写发生了什么
+{
+  const b = { episodes: [{ ep: 1, segments: [{ id: 'E01-01', cuts: [
+    { camera: 'Static Shot', shot: '镜头跟着他走出门。' },
+    { camera: 'Static Shot', shot: '他低头看手机。' },
+    { camera: 'Push In', shot: '镜头缓缓拉出，他转身。' },
+    { camera: 'Push In', shot: '他抬眼说话。' },
+  ] }] }] };
+  const w = cameraShotWarnings(b);
+  ok(w.some((x) => x.startsWith('E01-01#1') && x.includes('运镜=固定')), '固定机位却写跟镜头要告警');
+  ok(!w.some((x) => x.startsWith('E01-01#2')), '画面不重复运镜不告警');
+  ok(w.some((x) => x.startsWith('E01-01#3') && x.includes('不是同一个动作')), '推近却写拉出要告警');
+  ok(!w.some((x) => x.startsWith('E01-01#4')), '运镜只在字段里也放行');
+  ok(cameraShotWarnings(FIXTURE).length >= 0, '真实样例跑得通');
 }
 console.log(`✓ ${passed} 项自测全部通过`);

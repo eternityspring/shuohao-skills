@@ -1,6 +1,6 @@
 ---
 name: novel-art
-version: 2.0.0
+version: 2.1.1
 description: |
   给 AI 短剧出美术设定集（场景 + 叙事道具）：场景的设计意图、一致性锚点、光照时段变体、
   空景提示词；道具的戏剧功能、状态变体、尺度参照、白底无手提示词。
@@ -8,7 +8,7 @@ description: |
   为 AI 生成而设计，不是实拍——环境和道具都是生成资产，交付的是让它们跨集长一样的一致性方案；
   10 道质量门全部由脚本确定性检查（锚点 3–5、无人无手、白底可抠、尺度短语、提示词英文……）。
   有 novel-outline 的 outline.json 就用 seed 预填场景清单与出现集。
-  零依赖、零 API key、不出图——交付的是提示词，出图在下游。
+  零依赖、零 API key、脚本不出图——出图配方见 references/asset-recipe.md（场景 16:9 无人、道具 1:1 白底无手，两者同目录）。
   Use when asked to 场景设定、出场景、环境设定集、场景一致性、scene bibles for AI short drama。
 allowed-tools:
   - Read
@@ -98,7 +98,7 @@ node {baseDir}/scripts/novel-art.mjs validate <art.json> --cast <cast.json>
 
 **有违规逐条修，改完重跑，直到通过。**
 
-### Step 4 — 输出与汇报
+### Step 4 — 输出
 
 ```bash
 cd <输出目录>
@@ -106,11 +106,22 @@ node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --md   > <剧名>-
 node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --html > art-report.html
 ```
 
-报告界面默认中文；用户要英文界面就加 `--lang en`（或在 art.json 顶层写 `"lang": "en"`，`--lang` 优先）。`render` 默认去 art.json 同级的 `images/<slug>-sheet.png` 找图（场景和道具都找），图在别处就用 `--images <目录>` 指过去——**本 skill 不产生这些文件**，下游出完图重跑一次 render 就能嵌进报告。报告含：KPI 带、场景清单、场景设定卡、道具清单、道具设定卡（锚点核对表 / 状态变体 / 提示词包全带复制按钮）、质量门面板、导出 JSON（下载的就是 art.json 原样）。
+报告界面默认中文；用户要英文界面就加 `--lang en`（或在 art.json 顶层写 `"lang": "en"`，`--lang` 优先）。`render` 默认去 art.json 同级的 `images/<slug>-sheet.png` 找图（场景和道具都找、**必须在同一个目录**），图在别处就用 `--images <目录>` 指过去——**脚本不产生这些文件**，出完图重跑一次 render 就能嵌进报告。报告含：KPI 带、场景清单、场景设定卡、道具清单、道具设定卡（锚点核对表 / 状态变体 / 提示词包全带复制按钮）、质量门面板、导出 JSON（下载的就是 art.json 原样）。
 
-汇报一句话说清：几个场景（主场景/变体各几）、几件道具、锚点总数、报告路径；没过的门明说。
+### Step 5 — 出图（环境有出图能力时才做）
 
-**不要说「已出图」**——这一步不存在了，交付的是提示词。
+照 `{baseDir}/references/asset-recipe.md` 走，要点：
+
+1. **场景 16:9、画面里绝对不能有人**；**道具 1:1、纯白底、不出现手**——这两条错了参考图就废了
+2. 提示词直接取 `art.json` 的 `image.prompt` / `image.sheet`，不要重写；道具必须带尺度短语（`handheld scale` / `tabletop scale`）
+3. **场景和道具放同一个 `images/` 目录**（`--images` 只有一个参数，分开放就是一半找不到）
+4. 只出这一集要用的资产（看 `usage.episodes`），出完逐张看人形/手、去水印，再重跑 `render --images`
+
+### Step 6 — 汇报
+
+汇报一句话说清：几个场景（主场景/变体各几）、几件道具、锚点总数、报告路径、出了几张图；没过的门明说。
+
+**没真出图就不要说「已出图」**——交付的是提示词和挂图清单，出没出按实际说。
 
 最终落地：
 
@@ -119,8 +130,9 @@ node {baseDir}/scripts/novel-art.mjs render <剧名>-art.json --html > art-repor
 ├── <剧名>-art.json
 ├── <剧名>-art.md
 ├── art-report.html                ← 双击就能开
-└── images/                        ← 本 skill 不写这个目录
-    └── <slug>-sheet.png           ← 下游出完图放这儿，render 会捡起来
+└── images/                        ← 脚本不写这个目录
+    ├── <场景名>-sheet.png        ← 16:9 空景，无人
+    └── <道具名>-sheet.png        ← 1:1 白底无手，和场景同目录
 ```
 
 ---
@@ -138,7 +150,7 @@ seed 吃 outline.json 的场景与道具两块（大纲没有 `props` 时道具�
 ## 边界
 
 - 报告界面内置中英（`--lang`，默认中文、或跟 art.json 的 `lang` 字段）；出图提示词永远英文
-- **本 skill 不出图。**`image.sheet` 是给下游的版面指令，版面规格见 `references/sheet.md`
+- **脚本不出图。**出图配方在 `references/asset-recipe.md`；`image.sheet` 是版面指令，版面规格见 `references/sheet.md`
 - 场景数量不设硬上限——上限在 novel-outline 的主场景门那里管；这里管的是每个资产的质量
 - 道具只收叙事道具，3–8 件为宜——每多一件就多一份跨集一致性维护
 

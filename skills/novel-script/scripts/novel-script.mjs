@@ -413,6 +413,8 @@ const I18N = {
     lightingLabel: '光照',
     showScenes: '▾ 展开全部场次',
     hideScenes: '▴ 收起场次',
+    allEps: '全部',
+    epJumpHint: '只看这一集',
     sceneCols: ['集', '场', '场景', '光照', '人物', '台词句数', '估秒'],
     castCols: ['角色', '台词句数', '字数', '约合秒数'],
     copyAllLines: '复制全部台词',
@@ -469,6 +471,8 @@ const I18N = {
     lightingLabel: 'Lighting',
     showScenes: '▾ Show all scenes',
     hideScenes: '▴ Collapse scenes',
+    allEps: 'All',
+    epJumpHint: 'Show this episode only',
     sceneCols: ['Ep', 'Scene', 'Setting', 'Lighting', 'Cast', 'Lines', 'Est. sec'],
     castCols: ['Character', 'Lines', 'Chars', 'Est. seconds'],
     copyAllLines: 'Copy all lines',
@@ -601,7 +605,7 @@ export function renderHtml(doc, ctx = {}) {
       const pct = (v) => `${r1((v / scaleMax) * 100)}%`;
       const status = inBand ? '' : ` <b class="over">${esc(e.est > hi ? t.overBy(r1(e.est - hi)) : t.underBy(r1(lo - e.est)))}</b>`;
       return `<div class="trow">
-  <span class="tep">E${String(e.ep).padStart(2, '0')}</span>
+  <button class="tep" data-ep="${e.ep}" title="${esc(t.epJumpHint)}">E${String(e.ep).padStart(2, '0')}</button>
   <div class="track">
     <span class="band" style="left:${pct(lo)};width:${pct(hi - lo)}"></span>
     <span class="fill dlg" style="width:${pct(e.dialogueSeconds)}"></span>
@@ -639,7 +643,7 @@ export function renderHtml(doc, ctx = {}) {
 </section>`;
         })
         .join('\n');
-      return `<article class="ep" id="ep-${ep.ep}">
+      return `<article class="ep" id="ep-${ep.ep}" data-ep="${ep.ep}">
   <header class="ep-h">
     <span class="ep-n">E${String(ep.ep).padStart(2, '0')}</span>
     <span class="ep-est">${esc(t.estLabel(st.est, ep.targetSeconds))}</span>
@@ -655,10 +659,17 @@ export function renderHtml(doc, ctx = {}) {
     })
     .join('\n');
 
+  // ---- 集页签：多集时 02 区收成页签，默认全部平铺；≤1 集不出页签 ----
+  const epTabBar = eps.length > 1
+    ? `<div class="eptabs" role="tablist"><button class="eptab on" data-ep="all">${esc(t.allEps)}</button>${eps
+        .map((ep) => `<button class="eptab" data-ep="${ep.ep}">E${String(ep.ep).padStart(2, '0')}</button>`)
+        .join('')}</div>`
+    : '';
+
   // ---- 场次总表 / 台词本 ----
-  const table = (cols, rows) =>
+  const table = (cols, rows, rowAttr) =>
     `<table><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead>
-<tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('\n')}</tbody></table>`;
+<tbody>${rows.map((r, i) => `<tr${rowAttr ? rowAttr(r, i) : ''}>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('\n')}</tbody></table>`;
 
   const sceneRows = stats.sceneTable.map((row) => [
     String(row.ep), String(row.index), esc(`${row.sceneId} ${n.scene(row.sceneId)}`), esc(row.lighting),
@@ -675,7 +686,7 @@ export function renderHtml(doc, ctx = {}) {
     ${n.voice(c.id) ? `<button class="copy" data-copy="${esc(n.voice(c.id))}">${esc(t.voiceBtn)}</button>` : ''}
     <button class="copy" data-copy="${esc(allText)}">${esc(t.copyAllLines)}</button>
   </header>
-  <ol class="cast-lines">${c.lines.map((l) => `<li><i>${esc(t.lineRef(l.ep, l.sceneIndex))}</i><span>${esc(l.line)}</span>${l.delivery ? `<em>${esc(l.delivery)}</em>` : ''}</li>`).join('')}</ol>
+  <ol class="cast-lines">${c.lines.map((l) => `<li data-ep="${l.ep}"><i>${esc(t.lineRef(l.ep, l.sceneIndex))}</i><span>${esc(l.line)}</span>${l.delivery ? `<em>${esc(l.delivery)}</em>` : ''}</li>`).join('')}</ol>
 </section>`;
     })
     .join('\n');
@@ -743,7 +754,17 @@ section.top-sec{margin-top:34px}
 /* duration gauge */
 .timing{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:16px 20px 10px}
 .trow{display:grid;grid-template-columns:44px minmax(0,1fr) 220px;gap:12px;align-items:center;padding:5px 0}
-.tep{font:500 12px/1 var(--mono);color:var(--ink-2)}
+.tep{font:500 12px/1 var(--mono);color:var(--ink-2);appearance:none;background:none;border:0;padding:0;text-align:left;cursor:pointer;transition:.15s}
+.tep:hover{color:var(--seal)}
+.tep:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+/* 集页签：多集时 02 区一次只铺一集（或全部） */
+.eptabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 14px}
+.eptab{font:500 12px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2);background:var(--paper);
+  border:1px solid var(--rule-2);border-radius:2px;padding:6px 12px;cursor:pointer;transition:.15s}
+.eptab:hover{border-color:var(--seal);color:var(--seal)}
+.eptab.on{color:var(--seal);border-color:var(--seal);background:var(--seal-soft)}
+.eptab:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.ep.ep-off{display:none}
 .track{position:relative;height:18px;background:var(--paper);border:1px solid var(--rule);border-radius:2px;overflow:hidden}
 .band{position:absolute;top:0;bottom:0;background:var(--band)}
 .fill{position:absolute;top:2px;bottom:2px;border-radius:1px}
@@ -807,6 +828,9 @@ td:first-child{font-family:var(--mono);font-size:12px;color:var(--ink-2);white-s
 .casts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
 @media(max-width:1100px){.casts{grid-template-columns:minmax(0,1fr)}}
 .cast-blk{background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:14px 18px}
+/* episode-tab filter: 03 scene-table rows and 04 line-book lines follow the tab; */
+/* a character block with no visible line in the selected episode is hidden too */
+.cast-blk.ep-off,.cast-lines li.ep-off,table tr.ep-off{display:none}
 .cast-h{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--rule-2);padding-bottom:8px}
 .cast-h b{font:400 17px/1.2 var(--serif);letter-spacing:.04em}
 .cast-meta{font-size:12px;color:var(--ink-2)}
@@ -843,7 +867,9 @@ td:first-child{font-family:var(--mono);font-size:12px;color:var(--ink-2);white-s
 .foot{margin-top:40px;font-size:11px;color:var(--ink-3);border-top:1px solid var(--rule);padding-top:14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{
-  .expo,.copy,.scmore{display:none!important}
+  .expo,.copy,.scmore,.eptabs{display:none!important}
+  .ep.ep-off,.cast-blk.ep-off{display:block!important}
+  table tr.ep-off,.cast-lines li.ep-off{display:revert!important}
   .scenes.clip{max-height:none}
   .scenes.clip::after{display:none}
   .cast-lines{max-height:none;overflow:visible}
@@ -887,6 +913,7 @@ ${timingRows}
 
 <section class="top-sec" id="sec-script">
   <div class="sec-h"><span class="no">02</span><h2>${esc(t.secScript)}</h2><span class="note">${eps.length > 1 ? esc(t.scriptNote) : ''}</span></div>
+${epTabBar}
   <div class="eps${eps.length > 1 ? '' : ' solo'}">
 ${epBlocks}
   </div>
@@ -894,7 +921,7 @@ ${epBlocks}
 
 <section class="top-sec" id="sec-scenes">
   <div class="sec-h"><span class="no">03</span><h2>${esc(t.secSceneTable)}</h2><span class="note">${esc(t.sceneTableNote)}</span></div>
-  ${table(t.sceneCols, sceneRows)}
+  ${table(t.sceneCols, sceneRows, (r) => ` data-ep="${r[0]}"`)}
 </section>
 
 <section class="top-sec" id="sec-cast">
@@ -916,6 +943,46 @@ ${castBlocks}
 <script type="application/json" id="script-data">${embedDoc(doc)}</script>
 <script>
 const L = ${JSON.stringify({ copied: t.copied, failed: t.copyFailed, show: t.showScenes, hide: t.hideScenes })};
+
+// clipboard: the async API is blocked inside cross-origin iframes (composer panes / previews);
+// fall back to a hidden textarea + execCommand, which still works there
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch {}
+  ta.remove();
+  return ok;
+}
+
+// 集页签：单集 / 全部切换；时长仪表左侧的集号可点，点了直接落到该集
+const epTabBtns = document.querySelectorAll('.eptab');
+const epSecs = document.querySelectorAll('.ep');
+if (epTabBtns.length) {
+  const showEp = (v) => {
+    epTabBtns.forEach((b) => b.classList.toggle('on', b.dataset.ep === v));
+    // 用 data-ep 匹配而不是 id：合成报告会给 id 加面板前缀（ep-1 → script--ep-1）
+    epSecs.forEach((sec) => sec.classList.toggle('ep-off', v !== 'all' && sec.dataset.ep !== v));
+    // 03 scene table / 04 line book follow the tab; hide a cast block with no visible line
+    document.querySelectorAll('tr[data-ep]').forEach((tr) => tr.classList.toggle('ep-off', v !== 'all' && tr.dataset.ep !== v));
+    document.querySelectorAll('.cast-lines li[data-ep]').forEach((li) => li.classList.toggle('ep-off', v !== 'all' && li.dataset.ep !== v));
+    document.querySelectorAll('.cast-blk').forEach((blk) => {
+      if (v === 'all') { blk.classList.remove('ep-off'); return; }
+      blk.classList.toggle('ep-off', !blk.querySelector('.cast-lines li:not(.ep-off)'));
+    });
+  };
+  epTabBtns.forEach((b) => b.addEventListener('click', () => showEp(b.dataset.ep)));
+  document.querySelectorAll('.trow .tep').forEach((b) => {
+    b.addEventListener('click', () => {
+      showEp(b.dataset.ep);
+      document.getElementById('sec-script')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
 
 // episode scripts: scene areas clip at 300px; short ones unclip, tall ones toggle
 document.querySelectorAll('.scmore').forEach((btn) => {
@@ -939,7 +1006,7 @@ document.addEventListener('click', async (e) => {
   e.preventDefault();
   const label = btn.textContent;
   try {
-    await navigator.clipboard.writeText(btn.dataset.copy);
+    await copyText(btn.dataset.copy);
     btn.textContent = L.copied;
     btn.dataset.done = '1';
   } catch {
