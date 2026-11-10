@@ -4,7 +4,7 @@
 
 **面向各类 Agent 的 AI 短剧制作 skill 集合**
 
-[English](README.md) | 中文 | [X @eternityspring](https://x.com/eternityspring)
+[English](README.md) | 中文 | [日本語](README.ja.md) | [X @eternityspring](https://x.com/eternityspring)
 
 **[Skill 一览](#skill-一览) · [安装](#安装) · [前置条件](#前置条件) · [仓库约定](#仓库约定)**
 
