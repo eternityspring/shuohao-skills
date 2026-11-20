@@ -12,6 +12,8 @@
 
 `params` 可省略，省略就用默认值。四个键都只在需要偏离默认时写。
 
+`maxLineChars` 不只管本层的门：台词到了分镜层要装进 novel-storyboard 的单切里——默认切上限 5 秒，按 4.5 字/秒折算 22.5 字，超过它的台词**任何切法都装不下**（一拍台词不能拆进两切），分镜的 dialogue-fit 门必拦。压短台词，或把两边的 `maxLineChars` / `maxCutSeconds` 一起调大。
+
 ## episode
 
 | 字段 | 类型 | 说明 |

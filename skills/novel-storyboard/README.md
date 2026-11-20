@@ -94,7 +94,7 @@ novel-script     → script.json     （戏：场次、节拍、台词）
 novel-storyboard → storyboard.json （怎么拍：段、分镜、分镜图、H3 提示词）
 ```
 
-- `seed <script.json> --eps 1-3 --aspect 16:9` 确定性展开每场的节拍清单（编号、每拍秒数、说话人）当切镜底稿，并把正式画幅写入顶层 `aspectRatio`；可选 `16:9` 或 `9:16`，省略时默认 `16:9`——**每拍几秒是算出来的，不让模型重新估**
+- `seed <script.json> --eps 1-3 --aspect 16:9` 确定性展开每场的节拍清单（编号、每拍秒数、说话人）当切镜底稿，并把正式画幅写入顶层 `aspectRatio`；可选 `16:9` 或 `9:16`，省略时默认 `16:9`——**每拍几秒是算出来的，不让模型重新估**。换视频模型时加 `--max-segment`（可选 `--max-cut` / `--min-cut`）把生成上限写进顶层 `params`，不写就按默认 15 秒
 - `validate --script` 是硬前提（分镜离开剧本没有意义）；`--outline` / `--cast` 查提示词人名，`--art` 让报告显示场景名并在批次单嵌设定图
 - 每格交付画面提示词 + 挂图清单（场景/角色/道具设定图），出图在下游；H3 提示词 + 整套分镜图直接下单给 MiniMax H3
 
@@ -130,7 +130,7 @@ node scripts/novel-storyboard.mjs export sb.json --script script.json   # H3 投
 SKILL.md                 给 agent 读的工作流
 scripts/
   novel-storyboard.mjs   seed / validate / checkup / render / export / slug
-  selftest.mjs           336 项断言，不调模型
+  selftest.mjs           340 项断言，不调模型
 references/
   schema.md              storyboard.json 结构 + 时长约束链
   h3-prompt.md           H3 提示词写法规范（官方方法论内化版）
@@ -149,6 +149,6 @@ assets/
 node scripts/selftest.mjs
 ```
 
-336 项断言，覆盖节拍展开 / H3 骨架推导 / Seedance 拼装 / 统计与批次 / 质量门逐项击穿 / 配方卡库解析与挂载 / seed / 渲染（含中英界面、图位画幅）/ H3 与 Seedance 导出。不调模型、不花额度、1 秒跑完。改完脚本先跑这个。
+340 项断言，覆盖节拍展开 / H3 骨架推导 / Seedance 拼装 / 统计与批次 / 质量门逐项击穿 / 配方卡库解析与挂载 / seed / 渲染（含中英界面、图位画幅）/ H3 与 Seedance 导出。不调模型、不花额度、1 秒跑完。改完脚本先跑这个。
 
 **只在 macOS + Node 24 上实测过。** 代码没有平台相关调用，Linux 和更低版本 Node 理论上没问题，但**没验过**。
