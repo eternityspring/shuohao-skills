@@ -46,7 +46,7 @@ metadata:
 | 交付 | 解决什么 |
 | --- | --- |
 | 节拍认领 | 每个节拍被恰好一个镜头认领、顺序不乱——剧本改了重跑 validate，失效的镜头当场点名 |
-| 单镜头 ≤ 15 秒 | AI 视频单段生成上限，长对话在这里被强制拆镜（`params.maxShotSeconds` 按模型改） |
+| 单段 ≤ 15 秒 | AI 视频单段生成上限，长对话在这里被强制拆镜（`params.maxSegmentSeconds` 按模型改） |
 | 台词装得下 | 认领节拍的台词秒数 ≤ 镜头秒数——逐镜检查，不是拍脑袋 |
 | 分镜图提示词 + 镜头正文 | 分镜图提示词（`frame`，中文，直呼角色名）给图像模型配合设定图出图；镜头正文（`shot`，中文，通用身份）写这几秒发生什么。景别是枚举，中文景别词必须写进分镜图提示词 |
 | **H3 视频提示词（每段一条）** | MiniMax H3 的 I2VA 结构：固定对齐指令 + integrated_multimodal_description + overall_soundscape + non_diegetic_music。**认领节拍的台词逐字进 `<d>[Chinese] …</d>` 块**——对白、声景、配乐一段提示词全带上 |
