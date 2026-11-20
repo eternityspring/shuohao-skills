@@ -183,7 +183,7 @@ node {baseDir}/scripts/novel-storyboard.mjs stats
 node {baseDir}/scripts/selftest.mjs
 ```
 
-336 项断言，不调模型、不花额度。18 道质量门每一道都有击穿用例。改完脚本先跑这个。
+338 项断言，不调模型、不花额度。18 道质量门每一道都有击穿用例。改完脚本先跑这个。
 
 ## 自带样例
 

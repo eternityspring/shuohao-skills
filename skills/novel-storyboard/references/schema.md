@@ -87,3 +87,5 @@ non_diegetic_music: …（1–3 句，没有就 N/A）
 ## 时长约束链
 
 台词秒数（按剧本语速折算）≤ 分镜 `seconds` ≤ 5 秒；段 Σ分镜 ≤ 15 秒；集 Σ段 落在剧本 `targetSeconds` ±15%。全部由 validate 逐级对账。
+
+上游的 `maxLineChars` 要装得进这里的 `maxCutSeconds`：novel-script 默认放行 35 字，按 4.5 字/秒折算 7.8 秒，而超过 `maxCutSeconds`（默认 5 秒 = 22.5 字）的台词**任何切法都装不下**——一拍台词不能拆进两切，加秒又封了顶，dialogue-fit 门必拦。写剧本时把单句压在 `maxCutSeconds × charsPerSecond` 字以内，或两边 params 一起调大。

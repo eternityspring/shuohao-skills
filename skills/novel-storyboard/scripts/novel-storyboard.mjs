@@ -697,7 +697,13 @@ export function gateReport(board, ctx = {}) {
               const re = new RegExp(`<d>\\[[^\\]]+\\]\\s*${b.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*</d>`);
               if (!re.test(h3)) bad.h3d.push(`${sid} 的 h3Prompt 缺台词「${b.text.slice(0, 12)}…」的 <d> 块`);
             }
-            if (dlg > cut.seconds) bad.fit.push(`${cid} 台词 ${r1(dlg)} 秒装不进 ${cut.seconds} 秒`);
+            if (dlg > cut.seconds) {
+              // 台词比单切上限还长时，改切和加秒都救不了——指回剧本层或参数，别让模型在门上空转
+              const stuck = dlg > params.maxCutSeconds
+                ? `；超出单切上限 ${params.maxCutSeconds} 秒，任何切法都装不下——回 novel-script 改短这句台词，或把 novel-script 的 maxLineChars 与本层 maxCutSeconds 一起调大`
+                : '';
+              bad.fit.push(`${cid} 台词 ${r1(dlg)} 秒装不进 ${cut.seconds} 秒${stuck}`);
+            }
           }
         }
       });

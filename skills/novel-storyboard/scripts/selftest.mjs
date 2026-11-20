@@ -189,6 +189,16 @@ eq(gateReport(FIXTURE, CTX).length, 18, '十八道门');
   ok(!g.ok, '台词装不进分镜被拦');
   ok(g.detail.includes('E01-05#1'), '点名到切');
 }
+{
+  // 死锁台词：比单切上限还长，加秒与改切都无解——消息要指回剧本层或参数
+  const doc = clone(FIXTURE);
+  doc.params = { maxCutSeconds: 4 };
+  const seg = doc.episodes[0].segments.find((s) => s.id === 'E01-05');
+  seg.cuts[0].seconds = 4; // 台词 4.4 秒 > 单切上限 4 秒
+  const g = gate(doc, 'dialogue-fit');
+  ok(!g.ok, '台词长过单切上限也被拦');
+  ok(g.detail.includes('任何切法都装不下'), '死锁台词点名改剧本或调参数');
+}
 // ep-duration
 {
   const doc = clone(FIXTURE);
