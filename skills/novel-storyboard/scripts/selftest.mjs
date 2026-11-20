@@ -743,6 +743,8 @@ eq(seedFromScript(SCRIPT, [2, 3]).episodes.map((e) => e.ep).join(','), '2,3', '-
 eq(seedFromScript(SCRIPT, null, '9:16').aspectRatio, '9:16', '--aspect 写入正式竖屏画幅');
 ok((() => { try { seedFromScript(SCRIPT, null, '1:1'); return false; } catch (e) { return /aspectRatio/.test(e.message); } })(), 'seed 拒绝不支持的画幅');
 eq(seedFromScript({}).episodes.length, 0, '空剧本不崩');
+eq(seedFromScript(SCRIPT, null, '16:9', { maxSegmentSeconds: 8 }).params.maxSegmentSeconds, 8, 'seed 可把自定义上限写进 params');
+ok(!('params' in seedFromScript(SCRIPT)), '不给参数时 seed 不写 params，默认回退行为不变');
 
 /* ---------------- slug / 枚举 ---------------- */
 

@@ -861,7 +861,7 @@ export function validateStoryboard(board, ctx = {}) {
 /* seed — 从 script.json 确定性预填                                      */
 /* ------------------------------------------------------------------ */
 
-export function seedFromScript(script, epRange = null, aspectRatio = '16:9') {
+export function seedFromScript(script, epRange = null, aspectRatio = '16:9', params = null) {
   if (!ASPECT_RATIOS.has(aspectRatio)) {
     throw new Error(`aspectRatio 只能是 16:9 或 9:16，实际是「${aspectRatio}」`);
   }
@@ -889,7 +889,10 @@ export function seedFromScript(script, epRange = null, aspectRatio = '16:9') {
       })),
     });
   }
-  return { source: script?.source ?? '', aspectRatio, episodes };
+  const out = { source: script?.source ?? '', aspectRatio, episodes };
+  // params 只在调用方显式给出时写入——底稿带上真实上限，切镜模型和 validate 就不用猜
+  if (params && Object.keys(params).length) out.params = params;
+  return out;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1931,7 +1934,7 @@ function main(argv) {
 
   if (cmd === 'seed') {
     const [path] = rest;
-    if (!path) throw new Error('使用方法：seed <script.json> [--eps 1-3] [--aspect 16:9|9:16]');
+    if (!path) throw new Error('使用方法：seed <script.json> [--eps 1-3] [--aspect 16:9|9:16] [--max-segment 8] [--max-cut 5] [--min-cut 2]');
     const range = flag(rest, '--eps');
     const aspectRatio = flag(rest, '--aspect', '16:9');
     let epRange = null;
@@ -1940,7 +1943,21 @@ function main(argv) {
       if (!m) throw new Error('--eps 形如 3 或 1-6');
       epRange = m[2] ? [Number(m[1]), Number(m[2])] : [Number(m[1]), Number(m[1])];
     }
-    console.log(JSON.stringify(seedFromScript(readJson(path), epRange, aspectRatio), null, 2));
+    // 换视频模型时把上限直接写进 params——不写的话，切镜模型照 schema.md 的默认值切，
+    // validate 也按默认值拦，直到有人手工往 JSON 里补 params 才对上
+    const seedParams = {};
+    for (const [key, flagName] of [
+      ['maxSegmentSeconds', '--max-segment'],
+      ['maxCutSeconds', '--max-cut'],
+      ['minCutSeconds', '--min-cut'],
+    ]) {
+      const raw = flag(rest, flagName);
+      if (raw == null) continue;
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n <= 0) throw new Error(`${flagName} 需要正数，实际「${raw}」`);
+      seedParams[key] = n;
+    }
+    console.log(JSON.stringify(seedFromScript(readJson(path), epRange, aspectRatio, Object.keys(seedParams).length ? seedParams : null), null, 2));
     return;
   }
 

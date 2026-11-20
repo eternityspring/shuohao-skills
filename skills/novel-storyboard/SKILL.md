@@ -81,6 +81,8 @@ node {baseDir}/scripts/novel-storyboard.mjs seed <script.json> --eps 1-3 --aspec
 
 确定性展开：每场的节拍清单（编号、动作/台词、每拍秒数、说话人）进 `seedScenes`，这就是切镜时的工作底稿；同时把 `--aspect` 写进顶层 `aspectRatio`，省略时默认 `16:9`。**每拍几秒是算出来的，不要让模型重新估。** shots 留空，切镜才是模型的活。
 
+**换视频模型时**加 `--max-segment 8`（可选 `--max-cut` / `--min-cut`），把生成上限直接写进顶层 `params`——不写的话，底稿里没有 params，切镜模型照 schema.md 的默认 15 秒切段，validate 也按默认值拦，直到有人手工往 JSON 里补 params 才对上。
+
 ### Step 2 — 逐集分段切镜
 
 每集一份任务，能并发就并发。每份任务拿到：
@@ -183,7 +185,7 @@ node {baseDir}/scripts/novel-storyboard.mjs stats
 node {baseDir}/scripts/selftest.mjs
 ```
 
-338 项断言，不调模型、不花额度。18 道质量门每一道都有击穿用例。改完脚本先跑这个。
+340 项断言，不调模型、不花额度。18 道质量门每一道都有击穿用例。改完脚本先跑这个。
 
 ## 自带样例
 
