@@ -170,6 +170,17 @@ cd shuohao-skills
 ./scripts/install.sh --uninstall        # 取消软链
 ```
 
+Windows 上没有 `ln -s`（除非开启开发者模式或以管理员身份运行），仓库提供了 PowerShell 版本，用**目录联接**代替软链接——同样不需要管理员权限，`git pull` 之后立即生效：
+
+```powershell
+.\scripts\install.ps1                     # 安装全部，安装到检测到的所有 agent
+.\scripts\install.ps1 novel-characters    # 只安装某一个
+.\scripts\install.ps1 --claude            # 只安装到 Claude Code
+.\scripts\install.ps1 --codex             # 只安装到 codex
+.\scripts\install.ps1 --uninstall         # 取消联接
+.\scripts\install.ps1 --dry-run           # 只打印将要执行的操作，不做任何改动
+```
+
 也可以手动创建软链接：
 
 ```bash
