@@ -169,6 +169,17 @@ The installer currently detects Claude Code and Codex and **symlinks** every ski
 ./scripts/install.sh --uninstall        # remove the symlinks
 ```
 
+On Windows there is no `ln -s` unless Developer Mode is on or you are running elevated. The repository ships a PowerShell version that creates **directory junctions** instead — no administrator rights, equally live after `git pull`:
+
+```powershell
+.\scripts\install.ps1                     # all skills, into every detected agent
+.\scripts\install.ps1 novel-characters    # just one skill
+.\scripts\install.ps1 --claude            # only into Claude Code
+.\scripts\install.ps1 --codex             # only into codex
+.\scripts\install.ps1 --uninstall         # remove the junctions
+.\scripts\install.ps1 --dry-run           # print what would happen, change nothing
+```
+
 Prefer to do it by hand:
 
 ```bash
