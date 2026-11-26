@@ -178,7 +178,7 @@ const EP_TEXT_FIELDS = ['synopsis', 'hook', 'suspense'];
 export function gateReport(outline) {
   const th = thresholdsOf(outline);
   const gates = [];
-  // enKey：中文标签会随条件变化的门（目前只有 refs），英文查表要另给一个键。
+  // enKey：门标签随条件变化时，为英文查表另给一个键。
   // 门 id 保持稳定不动——它是日志与下游对账的凭据。
   const add = (id, label, ok, detail = '', enKey = null) =>
     gates.push({ id, label, ok, detail, ...(enKey ? { enKey } : {}) });
@@ -264,13 +264,19 @@ export function gateReport(outline) {
   // G5 第 1 集有钩子
   add('ep1-hook', '第 1 集有钩子', eps.length > 0 && thText(eps[0]?.hook), '');
 
-  // G6 大爆点不能到最后一集才第一次出现
-  const majors = beats.filter((b) => (b?.weight ?? 'minor') === 'major').map((b) => b.episode);
+  // G6 至少有一个大爆点；多集项目的首个大爆点须早于最后一集。
+  const singleEpisode = total === 1;
+  const majors = beats
+    .filter((b) => b?.weight === 'major' && (!singleEpisode || b.episode === 1))
+    .map((b) => b.episode);
+  const firstMajor = Math.min(...majors);
+  const missingMajor = singleEpisode ? '第 1 集没有 major 爽点' : '没有 major 爽点';
   add(
     'major-early',
-    '大爆点不在最后一集才首次出现',
-    majors.length > 0 && Math.min(...majors) < total,
-    majors.length ? `最早在第 ${Math.min(...majors)} 集` : '没有 major 爽点',
+    singleEpisode ? '单集至少有一个大爆点（跨集时序不适用）' : '大爆点不在最后一集才首次出现',
+    majors.length > 0 && (singleEpisode || firstMajor < total),
+    majors.length ? `最早在第 ${firstMajor} 集` : missingMajor,
+    singleEpisode ? 'major-single' : null,
   );
 
   // G7 每集三栏齐全（钩子/悬念必填）
@@ -581,7 +587,7 @@ export function computeAssets(outline) {
  * 只翻译界面：outline.json 里的数据（爽点类型、改编幅度、质量门 label）原样出。
  */
 
-/* 门标签与「跳过」提示的英文映射：质量门面板是报告的一部分，出英文报告时
+/* 门标签与诊断提示的英文映射：质量门面板是报告的一部分，出英文报告时
  * 这里做展示层翻译——gateReport 的逻辑与中文诊断文案一行不动（CLI 仍是中文）。
  * 动态阈值由门自己算，映射里只写固定语义；未命中的 id 回落到原标签。 */
 const GATE_LABELS_EN = {
@@ -593,6 +599,7 @@ const GATE_LABELS_EN = {
   'beat-gap': 'Beat gap ≤ {0} episodes, no dead zone',
   'ep1-hook': 'Episode 1 has a hook',
   'major-early': 'Major beats do not first appear only in the final episode',
+  'major-single': 'Single episode has at least one major beat (cross-episode timing does not apply)',
   'ep-fields': 'All three fields per episode (synopsis, hook, suspense)',
   'crowd-plan': 'Three or more on screen carries a breakdown plan',
   'risk-flag': 'Production risks flagged in the warning list',
@@ -601,7 +608,8 @@ const GATE_LABELS_EN = {
   'refs-props': 'Scene / character / prop references complete — no jobless characters, no unused scenes, no unused props',
   'no-dialogue': 'Synopses in narrative prose, no quoted dialogue',
 };
-const GATE_SKIPS_EN = {
+const GATE_DETAILS_EN = {
+    '第 1 集没有 major 爽点': 'No major beat in episode 1',
     '未提供 outline.json，本门跳过（视为通过）': 'outline.json not provided — gate skipped (treated as passing)',
     '未提供 art.json，本门跳过（视为通过）': 'art.json not provided — gate skipped (treated as passing)',
     '未提供 script.json，本门跳过（视为通过）': 'script.json not provided — gate skipped (treated as passing)',
@@ -615,7 +623,7 @@ const gateText = (g, lang) => {
   // 阈值仍由门自己算：把中文标签里出现的数字按序填进 {0} {1}
   const nums = String(g.label).match(/\d+(?:\.\d+)?/g) ?? [];
   const label = en ? en.replace(/\{(\d)\}/g, (m, i) => nums[Number(i)] ?? m) : g.label;
-  return { label, detail: GATE_SKIPS_EN[g.detail] ?? g.detail };
+  return { label, detail: GATE_DETAILS_EN[g.detail] ?? g.detail };
 };
 
 const I18N = {
@@ -1214,11 +1222,12 @@ export function renderHtml(outline, lang) {
   // ---- 质量门 ----
   const gateList = `<ul class="gate">
   ${gates
-    .map(
-      (g) => `<li class="${g.ok ? 'ok' : 'bad'}"><span class="m">${g.ok ? '✓' : '✗'}</span><span>${esc(gateText(g, t.langCode).label)}${
-        !g.ok && g.detail ? `<small>${esc(g.detail)}</small>` : ''
-      }</span></li>`,
-    )
+    .map((g) => {
+      const { label, detail } = gateText(g, t.langCode);
+      return `<li class="${g.ok ? 'ok' : 'bad'}"><span class="m">${g.ok ? '✓' : '✗'}</span><span>${esc(label)}${
+        !g.ok && detail ? `<small>${esc(detail)}</small>` : ''
+      }</span></li>`;
+    })
     .join('\n  ')}
 </ul>`;
 
