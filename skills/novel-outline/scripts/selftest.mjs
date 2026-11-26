@@ -271,6 +271,66 @@ eq(primarySceneCap(undefined), 8, '没有集数信息给居中值 8');
 }
 
 // G6 大爆点时机
+for (const [total, firstMajor, expected] of [
+  [1, 1, true],
+  [1, null, false],
+  [2, 2, false],
+  [2, 1, true],
+  [3, 2, true],
+  [3, 3, false],
+]) {
+  const o = clone();
+  o.params.episodes = total;
+  o.characters = o.characters.slice(0, 1);
+  o.scenes = [{ ...o.scenes[0], reusePlan: '复用船舱背景' }];
+  delete o.props;
+  o.episodes = o.episodes.slice(0, total).map((e) => ({
+    ...e, characterIds: ['C01'], sceneIds: ['S01'], propIds: [],
+  }));
+  o.beats = o.beats.slice(0, total).map((b, i) => ({
+    ...b, episode: i + 1, weight: i + 1 === firstMajor ? 'major' : 'minor',
+  }));
+
+  const name = `${total} 集，首个大爆点：${firstMajor ?? '无'}`;
+  const gates = gateReport(o);
+  const major = gates.find((g) => g.id === 'major-early');
+  eq(major.ok, expected, `${name}：G6 判定`);
+  eq(gates.length, 14, `${name}：质量门共 14 项`);
+  const problems = expected ? [] : [`质量门未过：${major.label}（${major.detail}）`];
+  const { episodes, ...beatsOnly } = o;
+  for (const [stage, input] of [['beats', beatsOnly], ['full', o]]) {
+    assert.deepEqual(validateOutline(input, stage), problems, `${name}：${stage} 档校验`);
+    passed++;
+  }
+
+  if (total === 1) {
+    ok(major.label.includes('跨集时序不适用'), `${name}：质量门说明单集例外`);
+    if (!expected) eq(major.detail, '第 1 集没有 major 爽点', `${name}：诊断说明缺少大爆点`);
+    for (const [lang, label, detail] of [
+      ['zh', '单集至少有一个大爆点（跨集时序不适用）', '第 1 集没有 major 爽点'],
+      ['en', 'Single episode has at least one major beat (cross-episode timing does not apply)', 'No major beat in episode 1'],
+    ]) {
+      const html = renderHtml(o, lang);
+      const gateList = html.match(/<ul class="gate">([\s\S]*?)<\/ul>/)[1];
+      eq((gateList.match(/<li /g) ?? []).length, 14, `${name}：${lang} HTML 有 14 项质量门`);
+      const status = expected ? 'ok' : 'bad';
+      const marker = expected ? '✓' : '✗';
+      ok(gateList.includes(`<li class="${status}"><span class="m">${marker}</span><span>${label}${expected ? '' : `<small>${detail}</small>`}</span></li>`),
+        `${name}：${lang} HTML 质量门文案与诊断`);
+      if (!expected) ok(html.includes(`<span>${label} — ${detail}</span>`), `${name}：${lang} HTML 失败横幅`);
+      ok(renderMarkdown(o, lang).split('\n').includes(`- ${expected ? '✅' : '❌'} ${label}${expected ? '' : ` — ${detail}`}`),
+        `${name}：${lang} Markdown 质量门文案与诊断`);
+    }
+    if (expected) {
+      o.beats[0].episode = 2;
+      ok(!gate(o, 'major-early').ok, '单集项目的第 2 集不计入大爆点');
+      ok(validateOutline(beatsOnly, 'beats').some((x) => x.includes('第 1 集没有 major 爽点')),
+        'beats 档指出唯一一集没有大爆点');
+      ok(validateOutline(o).some((x) => x.includes('落在不存在的第 2 集')),
+        'full 档仍报越界引用');
+    }
+  }
+}
 {
   const o = clone();
   o.beats.forEach((b) => (b.weight = 'minor'));

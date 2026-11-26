@@ -82,7 +82,7 @@
 
 - `id` 格式 `B01`；`type` 自由文本（打脸/揭破/反转…）；`weight` 只能 `major` / `minor`（缺省算 minor）
 - `episode` 是**唯一数据源**——分集不再列 beatIds，节奏条和资产清单都从这里算
-- 硬规则：相邻爽点间隔 ≤ `maxBeatGap`，开头结尾无真空；**至少一个 major，且最早的 major 不能落在最后一集**
+- 硬规则：相邻爽点间隔 ≤ `maxBeatGap`，开头结尾无真空；**至少一个 major，多集项目的首个 major 须早于最后一集**。
 
 ## episodes 分集梗概
 
